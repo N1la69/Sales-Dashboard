@@ -1,10 +1,10 @@
-const Dashboard = () => {
+const ForecastPage = () => {
   return (
     <div className="pt-3 mx-5 z-10 dark:text-gray-200">
-      Dashboard
+      Forecast
       <h1>Page</h1>
     </div>
   );
 };
 
-export default Dashboard;
+export default ForecastPage;
