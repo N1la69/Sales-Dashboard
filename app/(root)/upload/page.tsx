@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 
 const UploadPage = () => {
   const [channelFile, setChannelFile] = useState<File | null>(null);
+  const [storeFile, setStoreFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -15,6 +16,14 @@ const UploadPage = () => {
   const handleChannelFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setChannelFile(e.target.files[0]);
+      setError("");
+      setSuccess("");
+    }
+  };
+
+  const handleStoreFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setStoreFile(e.target.files[0]);
       setError("");
       setSuccess("");
     }
@@ -56,6 +65,42 @@ const UploadPage = () => {
     }
   };
 
+  const handleStoreUpload = async () => {
+    if (!storeFile) {
+      setError("Please select a store mapping file to upload.");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const formData = new FormData();
+      formData.append("file", storeFile);
+      formData.append("type", "store");
+
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const resData = await response.json();
+        throw new Error(resData.error || "Failed to upload store mapping");
+      }
+
+      const resData = await response.json();
+      setSuccess(
+        `Store mapping upload successful: ${resData.rowsParsed} rows processed`
+      );
+    } catch (err: any) {
+      setError(err.message || "An error occurred during store mapping upload.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="pt-3 mx-5 z-10 dark:text-gray-200">
       <h1 className="text-center text-2xl font-bold">
@@ -81,6 +126,27 @@ const UploadPage = () => {
               onClick={handleChannelUpload}
               disabled={loading}
             >
+              {loading ? "Uploading..." : "Upload"}
+            </Button>
+            <Button disabled>Download Template</Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Store Mapping Data Upload */}
+      <Card className="shadow-lg mt-5">
+        <CardHeader>
+          <CardTitle>Upload Store Mapping Data</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Input
+            type="file"
+            accept=".xlsx"
+            onChange={handleStoreFileChange}
+            className="cursor-pointer border border-amber-100"
+          />
+          <div className="flex space-x-3">
+            <Button onClick={handleStoreUpload} disabled={loading}>
               {loading ? "Uploading..." : "Upload"}
             </Button>
             <Button disabled>Download Template</Button>

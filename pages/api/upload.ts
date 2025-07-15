@@ -73,7 +73,30 @@ export default async function handler(
       } else if (type === "psr") {
         console.log("PSR processing to be implemented.");
       } else if (type === "store") {
-        console.log("Store processing to be implemented.");
+        console.log("Store Mapping parsed rows:", data.length);
+
+        // Clear existing store_mapping data
+        await prisma.$executeRaw`DELETE FROM store_mapping`;
+
+        // Prepare data for insertion
+        const mappedData = data.map((row) => ({
+          Old_Store_Code: row[1]?.toString() || "",
+          New_Store_Code: row[2]?.toString() || "",
+          New_Branch: row[3]?.toString() || "",
+          DSE_Code: row[4]?.toString() || "",
+          ZM: row[5]?.toString() || "",
+          SM: row[6]?.toString() || "",
+          BE: row[7]?.toString() || "",
+          STL: row[8]?.toString() || "",
+        }));
+
+        const chunkSize = 5000;
+        for (let i = 0; i < mappedData.length; i += chunkSize) {
+          const chunk = mappedData.slice(i, i + chunkSize);
+          await prisma.store_mapping.createMany({ data: chunk });
+        }
+
+        console.log(`Inserted ${mappedData.length} store mapping rows`);
       } else {
         return res.status(400).json({ error: "Invalid type provided" });
       }
