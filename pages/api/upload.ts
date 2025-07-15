@@ -71,7 +71,34 @@ export default async function handler(
 
         console.log(`Inserted ${mappedData.length} channel mapping rows`);
       } else if (type === "psr") {
-        console.log("PSR processing to be implemented.");
+        console.log("PSR Data parsed rows:", data.length);
+
+        // Prepare the data for insertion based on your psr_data model
+        const mappedData = data.map((row) => ({
+          document_no: row[1]?.toString() || "",
+          document_date: new Date(row[2]),
+          subbrandform_name: row[3]?.toString() || "",
+          customer_name: row[4]?.toString() || "",
+          customer_code: row[5]?.toString() || "",
+          channel_description: row[6]?.toString() || "",
+          customer_type: row[7]?.toString() || "",
+          category: row[8]?.toString() || "",
+          brand: row[9]?.toString() || "",
+          brandform: row[10]?.toString() || "",
+          retailing: Number(row[11]) || 0,
+        }));
+
+        // Clear psr_data_temp before inserting fresh data
+        await prisma.$executeRaw`DELETE FROM psr_data_temp`;
+
+        const chunkSize = 5000;
+        for (let i = 0; i < mappedData.length; i += chunkSize) {
+          const chunk = mappedData.slice(i, i + chunkSize);
+          console.log(`Inserting PSR rows: ${i + 1} to ${i + chunk.length}`);
+          await prisma.psr_data_temp.createMany({ data: chunk });
+        }
+
+        console.log(`Inserted ${mappedData.length} PSR data rows into temp`);
       } else if (type === "store") {
         console.log("Store Mapping parsed rows:", data.length);
 
