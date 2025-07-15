@@ -49,3 +49,18 @@ model store_mapping {
   BE             String @db.VarChar(45)
   STL            String @db.VarChar(45)
 }
+
+model psr_data_temp {
+  psr_id              Int      @id @default(autoincrement())
+  document_no         String   @db.VarChar(45)
+  document_date       DateTime
+  subbrandform_name   String   @db.VarChar(90)
+  customer_name       String   @db.VarChar(120)
+  customer_code       String   @db.VarChar(45)
+  channel_description String   @db.VarChar(45)
+  customer_type       String   @db.VarChar(90)
+  category            String   @db.VarChar(45)
+  brand               String   @db.VarChar(45)
+  brandform           String   @db.VarChar(45)
+  retailing           Decimal  @db.Decimal(12, 2)
+}
