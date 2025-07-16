@@ -10,48 +10,30 @@ const UploadPage = () => {
   const [channelFile, setChannelFile] = useState<File | null>(null);
   const [storeFile, setStoreFile] = useState<File | null>(null);
   const [psrFile, setPsrFile] = useState<File | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loadingType, setLoadingType] = useState<
+    "" | "psr" | "channel" | "store" | "merge"
+  >("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const handlePsrFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setPsrFile(e.target.files[0]);
-      setError("");
-      setSuccess("");
-    }
+  const resetMessages = () => {
+    setError("");
+    setSuccess("");
   };
 
-  const handleChannelFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setChannelFile(e.target.files[0]);
-      setError("");
-      setSuccess("");
-    }
-  };
-
-  const handleStoreFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      setStoreFile(e.target.files[0]);
-      setError("");
-      setSuccess("");
-    }
-  };
-
-  const handlePsrUpload = async () => {
-    if (!psrFile) {
-      setError("Please select a PSR data file to upload.");
+  const uploadFile = async (file: File, type: "psr" | "channel" | "store") => {
+    if (!file) {
+      setError(`Please select a ${type} file to upload.`);
       return;
     }
 
-    setLoading(true);
-    setError("");
-    setSuccess("");
+    setLoadingType(type);
+    resetMessages();
 
     try {
       const formData = new FormData();
-      formData.append("file", psrFile);
-      formData.append("type", "psr");
+      formData.append("file", file);
+      formData.append("type", type);
 
       const response = await fetch("/api/upload", {
         method: "POST",
@@ -60,94 +42,22 @@ const UploadPage = () => {
 
       if (!response.ok) {
         const resData = await response.json();
-        throw new Error(resData.error || "Failed to upload PSR data");
+        throw new Error(resData.error || `Failed to upload ${type} data`);
       }
 
-      const resData = await response.json();
-      setSuccess(`PSR Data Upload Successful: ${resData.rowsParsed} rows`);
-    } catch (err: any) {
-      setError(err.message || "An error occurred during PSR upload.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleChannelUpload = async () => {
-    if (!channelFile) {
-      setError("Please select a channel mapping file to upload.");
-      return;
-    }
-
-    setLoading(true);
-    setError("");
-    setSuccess("");
-
-    try {
-      const formData = new FormData();
-      formData.append("file", channelFile);
-      formData.append("type", "channel");
-
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      const responseText = await response.text();
-      console.log("Raw upload response:", responseText);
-
-      if (!response.ok) {
-        throw new Error("Failed to upload channel mapping");
-      }
-
-      const resData = JSON.parse(responseText);
-      setSuccess(`Upload successful: ${resData.rowsParsed} rows processed`);
-    } catch (err: any) {
-      setError(err.message || "An error occurred during upload.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleStoreUpload = async () => {
-    if (!storeFile) {
-      setError("Please select a store mapping file to upload.");
-      return;
-    }
-
-    setLoading(true);
-    setError("");
-    setSuccess("");
-
-    try {
-      const formData = new FormData();
-      formData.append("file", storeFile);
-      formData.append("type", "store");
-
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const resData = await response.json();
-        throw new Error(resData.error || "Failed to upload store mapping");
-      }
-
-      const resData = await response.json();
       setSuccess(
-        `Store mapping upload successful: ${resData.rowsParsed} rows processed`
+        `${type.toUpperCase()} file received. Processing in background.`
       );
     } catch (err: any) {
-      setError(err.message || "An error occurred during store mapping upload.");
+      setError(err.message || `An error occurred during ${type} upload.`);
     } finally {
-      setLoading(false);
+      setLoadingType("");
     }
   };
 
   const handleMergePsrData = async () => {
-    setLoading(true);
-    setError("");
-    setSuccess("");
+    setLoadingType("merge");
+    resetMessages();
 
     try {
       const response = await fetch("/api/merge-psr", {
@@ -164,101 +74,128 @@ const UploadPage = () => {
     } catch (err: any) {
       setError(err.message || "An error occurred while merging data.");
     } finally {
-      setLoading(false);
+      setLoadingType("");
     }
   };
 
   return (
-    <div className="pt-3 mx-5 z-10 dark:text-gray-200">
+    <div className="pt-3 mx-5 z-20 dark:text-gray-200">
       <h1 className="text-center text-2xl font-bold">
         Upload Analytics Data Here
       </h1>
 
       {/* PSR Data Upload */}
-      <Card className="shadow-lg mt-5">
+      <Card className="mt-5 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
-          <CardTitle>Upload PSR Data</CardTitle>
+          <CardTitle className="text-lg font-semibold dark:text-gray-200">
+            Upload PSR Data
+          </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+
+        <CardContent className="space-y-5">
           <Input
             type="file"
             accept=".xlsx"
-            onChange={handlePsrFileChange}
-            className="cursor-pointer border border-amber-100"
+            onChange={(e) => {
+              if (e.target.files) {
+                setPsrFile(e.target.files[0]);
+                resetMessages();
+              }
+            }}
+            className="cursor-pointer border border-primary/30 dark:border-primary/50 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
           />
           <div className="flex space-x-3">
             <Button
-              className="cursor-pointer"
-              onClick={handlePsrUpload}
-              disabled={loading}
+              onClick={() => psrFile && uploadFile(psrFile, "psr")}
+              disabled={loadingType === "psr"}
             >
-              {loading ? "Uploading..." : "Upload"}
+              {loadingType === "psr" ? "Uploading..." : "Upload"}
             </Button>
 
             <Button
-              className="cursor-pointer"
               onClick={handleMergePsrData}
-              disabled={loading}
+              disabled={loadingType === "merge"}
             >
-              {loading ? "Merging..." : "Merge to Main Data"}
+              {loadingType === "merge" ? "Merging..." : "Merge to Main Data"}
             </Button>
 
-            <Button disabled>Download Template</Button>
+            <Button variant="outline" disabled>
+              Download Template
+            </Button>
           </div>
         </CardContent>
       </Card>
 
-      {/* Channel Mapping Data Upload */}
-      <Card className="shadow-lg mt-5">
+      {/* Channel Mapping Upload */}
+      <Card className="mt-5 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
-          <CardTitle>Upload Channel Mapping Data</CardTitle>
+          <CardTitle className="text-lg font-semibold dark:text-gray-200">
+            Upload Channel Mapping Data
+          </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-5">
           <Input
             type="file"
             accept=".xlsx"
-            onClick={() => console.log("Clicked")}
-            onChange={handleChannelFileChange}
-            className="cursor-pointer border border-amber-100"
+            onChange={(e) => {
+              if (e.target.files) {
+                setChannelFile(e.target.files[0]);
+                resetMessages();
+              }
+            }}
+            className="cursor-pointer border border-primary/30 dark:border-primary/50 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
           />
           <div className="flex space-x-3">
             <Button
-              className="cursor-pointer"
-              onClick={handleChannelUpload}
-              disabled={loading}
+              onClick={() => channelFile && uploadFile(channelFile, "channel")}
+              disabled={loadingType === "channel"}
             >
-              {loading ? "Uploading..." : "Upload"}
+              {loadingType === "channel" ? "Uploading..." : "Upload"}
             </Button>
-            <Button disabled>Download Template</Button>
+
+            <Button variant="outline" disabled>
+              Download Template
+            </Button>
           </div>
         </CardContent>
       </Card>
 
-      {/* Store Mapping Data Upload */}
-      <Card className="shadow-lg mt-5">
+      {/* Store Mapping Upload */}
+      <Card className="mt-5 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
-          <CardTitle>Upload Store Mapping Data</CardTitle>
+          <CardTitle className="text-lg font-semibold dark:text-gray-200">
+            Upload Store Mapping Data
+          </CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-5">
           <Input
             type="file"
             accept=".xlsx"
-            onChange={handleStoreFileChange}
-            className="cursor-pointer border border-amber-100"
+            onChange={(e) => {
+              if (e.target.files) {
+                setStoreFile(e.target.files[0]);
+                resetMessages();
+              }
+            }}
+            className="cursor-pointer border border-primary/30 dark:border-primary/50 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
           />
           <div className="flex space-x-3">
-            <Button onClick={handleStoreUpload} disabled={loading}>
-              {loading ? "Uploading..." : "Upload"}
+            <Button
+              onClick={() => storeFile && uploadFile(storeFile, "store")}
+              disabled={loadingType === "store"}
+            >
+              {loadingType === "store" ? "Uploading..." : "Upload"}
             </Button>
-            <Button disabled>Download Template</Button>
+
+            <Button variant="outline" disabled>
+              Download Template
+            </Button>
           </div>
         </CardContent>
       </Card>
 
-      {/* Success Message */}
+      {/* Status Messages */}
       {success && <p className="text-green-500 text-center mt-4">{success}</p>}
-
-      {/* Error Message */}
       {error && <p className="text-red-500 text-center mt-4">{error}</p>}
     </div>
   );

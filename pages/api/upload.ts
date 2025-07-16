@@ -33,110 +33,111 @@ export default async function handler(
       return res.status(500).json({ error: "File upload error" });
     }
 
-    try {
-      const type = fields.type?.[0]; // 'channel', 'psr', 'store'
-      const file = files.file?.[0];
+    const type = fields.type?.[0]; // 'channel', 'psr', 'store'
+    const file = files.file?.[0];
 
-      if (!file || !type) {
-        return res.status(400).json({ error: "File or type missing" });
-      }
-
-      const workbook = new ExcelJS.Workbook();
-      await workbook.xlsx.readFile(file.filepath);
-      const worksheet = workbook.worksheets[0];
-
-      const data: any[] = [];
-      worksheet.eachRow((row, rowNumber) => {
-        if (rowNumber === 1) return; // skip header
-        data.push(row.values as any[]);
-      });
-
-      console.log(`Parsed ${data.length} rows for type: ${type}`);
-
-      if (type === "channel") {
-        await prisma.$executeRaw`DELETE FROM channel_mapping`;
-
-        const mappedData = data.map((row) => ({
-          customer_type: row[1]?.toString() || "",
-          channel: row[2]?.toString() || "",
-          broad_channel: row[3]?.toString() || "",
-          short_channel: row[4]?.toString() || "",
-        }));
-
-        const chunkSize = 1000;
-        for (let i = 0; i < mappedData.length; i += chunkSize) {
-          const chunk = mappedData.slice(i, i + chunkSize);
-          await prisma.channel_mapping.createMany({ data: chunk });
-        }
-
-        console.log(`Inserted ${mappedData.length} channel mapping rows`);
-      } else if (type === "psr") {
-        console.log("PSR Data parsed rows:", data.length);
-
-        // Prepare the data for insertion based on your psr_data model
-        const mappedData = data.map((row) => ({
-          document_no: row[1]?.toString() || "",
-          document_date: new Date(row[2]),
-          subbrandform_name: row[3]?.toString() || "",
-          customer_name: row[4]?.toString() || "",
-          customer_code: row[5]?.toString() || "",
-          channel_description: row[6]?.toString() || "",
-          customer_type: row[7]?.toString() || "",
-          category: row[8]?.toString() || "",
-          brand: row[9]?.toString() || "",
-          brandform: row[10]?.toString() || "",
-          retailing: Number(row[11]) || 0,
-        }));
-
-        // Clear psr_data_temp before inserting fresh data
-        await prisma.$executeRaw`DELETE FROM psr_data_temp`;
-
-        const chunkSize = 5000;
-        for (let i = 0; i < mappedData.length; i += chunkSize) {
-          const chunk = mappedData.slice(i, i + chunkSize);
-          console.log(`Inserting PSR rows: ${i + 1} to ${i + chunk.length}`);
-          await prisma.psr_data_temp.createMany({ data: chunk });
-        }
-
-        console.log(`Inserted ${mappedData.length} PSR data rows into temp`);
-      } else if (type === "store") {
-        console.log("Store Mapping parsed rows:", data.length);
-
-        // Clear existing store_mapping data
-        await prisma.$executeRaw`DELETE FROM store_mapping`;
-
-        // Prepare data for insertion
-        const mappedData = data.map((row) => ({
-          Old_Store_Code: row[1]?.toString() || "",
-          New_Store_Code: row[2]?.toString() || "",
-          New_Branch: row[3]?.toString() || "",
-          DSE_Code: row[4]?.toString() || "",
-          ZM: row[5]?.toString() || "",
-          SM: row[6]?.toString() || "",
-          BE: row[7]?.toString() || "",
-          STL: row[8]?.toString() || "",
-        }));
-
-        const chunkSize = 5000;
-        for (let i = 0; i < mappedData.length; i += chunkSize) {
-          const chunk = mappedData.slice(i, i + chunkSize);
-          await prisma.store_mapping.createMany({ data: chunk });
-        }
-
-        console.log(`Inserted ${mappedData.length} store mapping rows`);
-      } else {
-        return res.status(400).json({ error: "Invalid type provided" });
-      }
-
-      fs.unlinkSync(file.filepath);
-
-      return res.status(200).json({
-        message: `${type} data uploaded successfully`,
-        rowsParsed: data.length,
-      });
-    } catch (error: any) {
-      console.error("Upload processing error:", error);
-      return res.status(500).json({ error: "Internal Server Error" });
+    if (!file || !type) {
+      return res.status(400).json({ error: "File or type missing" });
     }
+
+    // Send immediate response
+    res
+      .status(202)
+      .json({
+        message: `File received, processing ${type} data in background`,
+      });
+
+    // Background processing
+    setImmediate(async () => {
+      try {
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.readFile(file.filepath);
+        const worksheet = workbook.worksheets[0];
+
+        const data: any[] = [];
+        worksheet.eachRow((row, rowNumber) => {
+          if (rowNumber === 1) return; // skip header
+          data.push(row.values as any[]);
+        });
+
+        console.log(`Parsed ${data.length} rows for type: ${type}`);
+
+        if (type === "channel") {
+          await prisma.$executeRaw`DELETE FROM channel_mapping`;
+
+          const mappedData = data.map((row) => ({
+            customer_type: row[1]?.toString() || "",
+            channel: row[2]?.toString() || "",
+            broad_channel: row[3]?.toString() || "",
+            short_channel: row[4]?.toString() || "",
+          }));
+
+          const chunkSize = 1000;
+          for (let i = 0; i < mappedData.length; i += chunkSize) {
+            const chunk = mappedData.slice(i, i + chunkSize);
+            await prisma.channel_mapping.createMany({ data: chunk });
+          }
+
+          console.log(`Inserted ${mappedData.length} channel mapping rows`);
+        } else if (type === "psr") {
+          console.log("PSR Data parsed rows:", data.length);
+
+          const mappedData = data.map((row) => ({
+            document_no: row[1]?.toString() || "",
+            document_date: new Date(row[2]),
+            subbrandform_name: row[3]?.toString() || "",
+            customer_name: row[4]?.toString() || "",
+            customer_code: row[5]?.toString() || "",
+            channel_description: row[6]?.toString() || "",
+            customer_type: row[7]?.toString() || "",
+            category: row[8]?.toString() || "",
+            brand: row[9]?.toString() || "",
+            brandform: row[10]?.toString() || "",
+            retailing: Number(row[11]) || 0,
+          }));
+
+          await prisma.$executeRaw`DELETE FROM psr_data_temp`;
+
+          const chunkSize = 5000;
+          for (let i = 0; i < mappedData.length; i += chunkSize) {
+            const chunk = mappedData.slice(i, i + chunkSize);
+            console.log(`Inserting PSR rows: ${i + 1} to ${i + chunk.length}`);
+            await prisma.psr_data_temp.createMany({ data: chunk });
+          }
+
+          console.log(`Inserted ${mappedData.length} PSR data rows into temp`);
+        } else if (type === "store") {
+          console.log("Store Mapping parsed rows:", data.length);
+
+          await prisma.$executeRaw`DELETE FROM store_mapping`;
+
+          const mappedData = data.map((row) => ({
+            Old_Store_Code: row[1]?.toString() || "",
+            New_Store_Code: row[2]?.toString() || "",
+            New_Branch: row[3]?.toString() || "",
+            DSE_Code: row[4]?.toString() || "",
+            ZM: row[5]?.toString() || "",
+            SM: row[6]?.toString() || "",
+            BE: row[7]?.toString() || "",
+            STL: row[8]?.toString() || "",
+          }));
+
+          const chunkSize = 5000;
+          for (let i = 0; i < mappedData.length; i += chunkSize) {
+            const chunk = mappedData.slice(i, i + chunkSize);
+            await prisma.store_mapping.createMany({ data: chunk });
+          }
+
+          console.log(`Inserted ${mappedData.length} store mapping rows`);
+        } else {
+          console.error("Invalid type provided:", type);
+        }
+
+        fs.unlinkSync(file.filepath);
+        console.log(`Background processing for ${type} completed`);
+      } catch (error: any) {
+        console.error("Background processing error:", error);
+      }
+    });
   });
 }
