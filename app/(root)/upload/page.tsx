@@ -10,8 +10,11 @@ const UploadPage = () => {
   const [channelFile, setChannelFile] = useState<File | null>(null);
   const [storeFile, setStoreFile] = useState<File | null>(null);
   const [psrFile, setPsrFile] = useState<File | null>(null);
+  const [psrAction, setPsrAction] = useState<"append" | "overwrite">(
+    "overwrite"
+  );
   const [loadingType, setLoadingType] = useState<
-    "" | "psr" | "channel" | "store" | "merge"
+    "" | "psr" | "channel" | "store" | "merge" | "clear"
   >("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -21,7 +24,11 @@ const UploadPage = () => {
     setSuccess("");
   };
 
-  const uploadFile = async (file: File, type: "psr" | "channel" | "store") => {
+  const uploadFile = async (
+    file: File,
+    type: "psr" | "channel" | "store",
+    action: "append" | "overwrite" = "overwrite"
+  ) => {
     if (!file) {
       setError(`Please select a ${type} file to upload.`);
       return;
@@ -34,6 +41,10 @@ const UploadPage = () => {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("type", type);
+
+      if (type === "psr") {
+        formData.append("action", action);
+      }
 
       const response = await fetch("/api/upload", {
         method: "POST",
@@ -78,6 +89,31 @@ const UploadPage = () => {
     }
   };
 
+  const handleClearPsrTemp = async () => {
+    setLoadingType("clear");
+    resetMessages();
+
+    try {
+      const response = await fetch("/api/clear-psr-temp", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        const resData = await response.json();
+        throw new Error(resData.error || "Failed to clear PSR temp data.");
+      }
+
+      const resData = await response.json();
+      setSuccess(resData.message);
+    } catch (err: any) {
+      setError(
+        err.message || "An error occurred while clearing PSR temp data."
+      );
+    } finally {
+      setLoadingType("");
+    }
+  };
+
   return (
     <div className="pt-3 mx-5 z-20 dark:text-gray-200">
       <h1 className="text-center text-2xl font-bold">
@@ -104,9 +140,25 @@ const UploadPage = () => {
             }}
             className="cursor-pointer border border-primary/30 dark:border-primary/50 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
           />
-          <div className="flex space-x-3">
+
+          <div className="flex space-x-2">
             <Button
-              onClick={() => psrFile && uploadFile(psrFile, "psr")}
+              variant={psrAction === "overwrite" ? "default" : "outline"}
+              onClick={() => setPsrAction("overwrite")}
+            >
+              Overwrite
+            </Button>
+            <Button
+              variant={psrAction === "append" ? "default" : "outline"}
+              onClick={() => setPsrAction("append")}
+            >
+              Append
+            </Button>
+          </div>
+
+          <div className="flex flex-wrap gap-3 mt-3">
+            <Button
+              onClick={() => psrFile && uploadFile(psrFile, "psr", psrAction)}
               disabled={loadingType === "psr"}
             >
               {loadingType === "psr" ? "Uploading..." : "Upload"}
@@ -117,6 +169,14 @@ const UploadPage = () => {
               disabled={loadingType === "merge"}
             >
               {loadingType === "merge" ? "Merging..." : "Merge to Main Data"}
+            </Button>
+
+            <Button
+              onClick={handleClearPsrTemp}
+              disabled={loadingType === "clear"}
+              variant="destructive"
+            >
+              {loadingType === "clear" ? "Clearing..." : "Clear Temp Data"}
             </Button>
 
             <Button variant="outline" disabled>

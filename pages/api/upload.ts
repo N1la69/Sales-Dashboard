@@ -34,20 +34,18 @@ export default async function handler(
     }
 
     const type = fields.type?.[0]; // 'channel', 'psr', 'store'
+    const action = fields.action?.[0] || "overwrite"; // default to 'overwrite'
     const file = files.file?.[0];
 
     if (!file || !type) {
       return res.status(400).json({ error: "File or type missing" });
     }
 
-    // Send immediate response
-    res
-      .status(202)
-      .json({
-        message: `File received, processing ${type} data in background`,
-      });
+    // Immediate response
+    res.status(202).json({
+      message: `File received for ${type}, processing in background`,
+    });
 
-    // Background processing
     setImmediate(async () => {
       try {
         const workbook = new ExcelJS.Workbook();
@@ -74,13 +72,17 @@ export default async function handler(
 
           const chunkSize = 1000;
           for (let i = 0; i < mappedData.length; i += chunkSize) {
-            const chunk = mappedData.slice(i, i + chunkSize);
-            await prisma.channel_mapping.createMany({ data: chunk });
+            await prisma.channel_mapping.createMany({
+              data: mappedData.slice(i, i + chunkSize),
+            });
           }
 
           console.log(`Inserted ${mappedData.length} channel mapping rows`);
         } else if (type === "psr") {
-          console.log("PSR Data parsed rows:", data.length);
+          if (action === "overwrite") {
+            console.log("Clearing psr_data_temp for overwrite...");
+            await prisma.$executeRaw`DELETE FROM psr_data_temp`;
+          }
 
           const mappedData = data.map((row) => ({
             document_no: row[1]?.toString() || "",
@@ -96,19 +98,18 @@ export default async function handler(
             retailing: Number(row[11]) || 0,
           }));
 
-          await prisma.$executeRaw`DELETE FROM psr_data_temp`;
-
           const chunkSize = 5000;
           for (let i = 0; i < mappedData.length; i += chunkSize) {
-            const chunk = mappedData.slice(i, i + chunkSize);
-            console.log(`Inserting PSR rows: ${i + 1} to ${i + chunk.length}`);
-            await prisma.psr_data_temp.createMany({ data: chunk });
+            console.log(`Inserting PSR rows: ${i + 1} to ${i + chunkSize}`);
+            await prisma.psr_data_temp.createMany({
+              data: mappedData.slice(i, i + chunkSize),
+            });
           }
 
-          console.log(`Inserted ${mappedData.length} PSR data rows into temp`);
+          console.log(
+            `PSR data ${action} completed with ${mappedData.length} rows`
+          );
         } else if (type === "store") {
-          console.log("Store Mapping parsed rows:", data.length);
-
           await prisma.$executeRaw`DELETE FROM store_mapping`;
 
           const mappedData = data.map((row) => ({
@@ -124,8 +125,9 @@ export default async function handler(
 
           const chunkSize = 5000;
           for (let i = 0; i < mappedData.length; i += chunkSize) {
-            const chunk = mappedData.slice(i, i + chunkSize);
-            await prisma.store_mapping.createMany({ data: chunk });
+            await prisma.store_mapping.createMany({
+              data: mappedData.slice(i, i + chunkSize),
+            });
           }
 
           console.log(`Inserted ${mappedData.length} store mapping rows`);
@@ -134,7 +136,7 @@ export default async function handler(
         }
 
         fs.unlinkSync(file.filepath);
-        console.log(`Background processing for ${type} completed`);
+        console.log(`Background processing for ${type} (${action}) completed.`);
       } catch (error: any) {
         console.error("Background processing error:", error);
       }
