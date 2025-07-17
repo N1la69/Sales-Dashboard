@@ -10,10 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useState } from "react";
 
 const GET_TOTAL_RETAILING = gql`
-  query GetTotalRetailing {
-    totalRetailing
+  query GetTotalRetailing($filters: FilterInput) {
+    totalRetailing(filters: $filters)
   }
 `;
 
@@ -33,7 +34,22 @@ const filters = [
 ];
 
 const Dashboard = () => {
-  const { data, loading, error } = useQuery(GET_TOTAL_RETAILING);
+  const [selectedFilters, setSelectedFilters] = useState<{
+    [key: string]: string | number;
+  }>({});
+
+  const { data, loading, error } = useQuery(GET_TOTAL_RETAILING, {
+    variables: {
+      filters: selectedFilters,
+    },
+  });
+
+  const handleFilterChange = (label: string, value: string | number) => {
+    setSelectedFilters((prev) => ({
+      ...prev,
+      [label]: value,
+    }));
+  };
 
   return (
     <div className="pt-3 mx-5 z-10 dark:text-gray-200">
@@ -46,11 +62,17 @@ const Dashboard = () => {
       </div>
 
       {/* FILTERS */}
-      <div className="my-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="flex justify-center items-center gap-2 mt-4 pb-4">
         {filters.map((filter) => (
-          <Select key={filter.label}>
+          <Select
+            key={filter.label}
+            onValueChange={(value) => handleFilterChange(filter.label, value)}
+          >
             <SelectTrigger>
-              <SelectValue placeholder={`Select ${filter.label}`} />
+              <SelectValue
+                placeholder={`Select ${filter.label}`}
+                defaultValue={selectedFilters[filter.label]}
+              />
             </SelectTrigger>
             <SelectContent>
               {filter.values.map((val: string | number) => (
