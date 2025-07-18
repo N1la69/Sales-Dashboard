@@ -4,7 +4,7 @@ import prisma from "@/lib/utils";
 export const resolvers = {
   Query: {
     totalRetailing: async (_: any, { filters }: any) => {
-      if (filters.ZM) {
+      if (filters.ZM?.length) {
         return await getRetailingWithZM(filters);
       } else {
         return await getRetailingWithPrisma(filters);
@@ -24,64 +24,74 @@ async function getRetailingWithZM(filters: any): Promise<number> {
   `;
   const params: any[] = [];
 
-  if (filters.ZM) {
-    query += ` AND s.ZM = ?`;
-    params.push(filters.ZM);
+  // Store mapping filters
+  if (filters.ZM?.length) {
+    query += ` AND s.ZM IN (${filters.ZM.map(() => "?").join(",")})`;
+    params.push(...filters.ZM);
+  }
+  if (filters.Branch?.length) {
+    query += ` AND s.New_Branch IN (${filters.Branch.map(() => "?").join(
+      ","
+    )})`;
+    params.push(...filters.Branch);
+  }
+  if (filters.SM?.length) {
+    query += ` AND s.SM IN (${filters.SM.map(() => "?").join(",")})`;
+    params.push(...filters.SM);
+  }
+  if (filters.BE?.length) {
+    query += ` AND s.BE IN (${filters.BE.map(() => "?").join(",")})`;
+    params.push(...filters.BE);
   }
 
-  if (filters.Year) {
-    query += ` AND YEAR(p.document_date) = ?`;
-    params.push(filters.Year);
+  // Date filters
+  if (filters.Year?.length) {
+    query += ` AND YEAR(p.document_date) IN (${filters.Year.map(() => "?").join(
+      ","
+    )})`;
+    params.push(...filters.Year);
+  }
+  if (filters.Month?.length) {
+    query += ` AND MONTH(p.document_date) IN (${filters.Month.map(
+      () => "?"
+    ).join(",")})`;
+    params.push(...filters.Month);
   }
 
-  if (filters.Month) {
-    query += ` AND MONTH(p.document_date) = ?`;
-    params.push(filters.Month);
+  // PSR data fields
+  if (filters.Category?.length) {
+    query += ` AND p.category IN (${filters.Category.map(() => "?").join(
+      ","
+    )})`;
+    params.push(...filters.Category);
+  }
+  if (filters.Brand?.length) {
+    query += ` AND p.brand IN (${filters.Brand.map(() => "?").join(",")})`;
+    params.push(...filters.Brand);
+  }
+  if (filters.Brandform?.length) {
+    query += ` AND p.brandform IN (${filters.Brandform.map(() => "?").join(
+      ","
+    )})`;
+    params.push(...filters.Brandform);
   }
 
-  if (filters.Category) {
-    query += ` AND p.category = ?`;
-    params.push(filters.Category);
+  // Channel mapping filters
+  if (filters.Channel?.length) {
+    query += ` AND c.channel IN (${filters.Channel.map(() => "?").join(",")})`;
+    params.push(...filters.Channel);
   }
-
-  if (filters.Brand) {
-    query += ` AND p.brand = ?`;
-    params.push(filters.Brand);
+  if (filters.BroadChannel?.length) {
+    query += ` AND c.broad_channel IN (${filters.BroadChannel.map(
+      () => "?"
+    ).join(",")})`;
+    params.push(...filters.BroadChannel);
   }
-
-  if (filters.Brandform) {
-    query += ` AND p.brandform = ?`;
-    params.push(filters.Brandform);
-  }
-
-  if (filters.Branch) {
-    query += ` AND s.New_Branch = ?`;
-    params.push(filters.Branch);
-  }
-
-  if (filters.SM) {
-    query += ` AND s.SM = ?`;
-    params.push(filters.SM);
-  }
-
-  if (filters.BE) {
-    query += ` AND s.BE = ?`;
-    params.push(filters.BE);
-  }
-
-  if (filters.Channel) {
-    query += ` AND c.channel = ?`;
-    params.push(filters.Channel);
-  }
-
-  if (filters.BroadChannel) {
-    query += ` AND c.broad_channel = ?`;
-    params.push(filters.BroadChannel);
-  }
-
-  if (filters.ShortChannel) {
-    query += ` AND c.short_channel = ?`;
-    params.push(filters.ShortChannel);
+  if (filters.ShortChannel?.length) {
+    query += ` AND c.short_channel IN (${filters.ShortChannel.map(
+      () => "?"
+    ).join(",")})`;
+    params.push(...filters.ShortChannel);
   }
 
   const result: any[] = await prisma.$queryRawUnsafe(query, ...params);
@@ -92,74 +102,76 @@ async function getRetailingWithZM(filters: any): Promise<number> {
 async function getRetailingWithPrisma(filters: any): Promise<number> {
   const whereClause: any = {};
 
-  if (filters.Year) {
+  if (filters.Year && filters.Month?.length) {
+    whereClause.OR = filters.Month.map((month: number) => ({
+      document_date: {
+        gte: new Date(
+          `${filters.Year}-${month.toString().padStart(2, "0")}-01`
+        ),
+        lte: new Date(
+          `${filters.Year}-${month.toString().padStart(2, "0")}-31`
+        ),
+      },
+    }));
+  } else if (filters.Year) {
     whereClause.document_date = {
       gte: new Date(`${filters.Year}-01-01`),
       lte: new Date(`${filters.Year}-12-31`),
     };
+  } else if (filters.Month?.length) {
+    const year = new Date().getFullYear();
+    whereClause.OR = filters.Month.map((month: number) => ({
+      document_date: {
+        gte: new Date(`${year}-${month.toString().padStart(2, "0")}-01`),
+        lte: new Date(`${year}-${month.toString().padStart(2, "0")}-31`),
+      },
+    }));
   }
 
-  if (filters.Month) {
-    const month = parseInt(filters.Month, 10);
-    whereClause.document_date = whereClause.document_date || {};
-    whereClause.document_date.gte = new Date(
-      `${filters.Year || new Date().getFullYear()}-${month
-        .toString()
-        .padStart(2, "0")}-01`
-    );
-    whereClause.document_date.lte = new Date(
-      `${filters.Year || new Date().getFullYear()}-${month
-        .toString()
-        .padStart(2, "0")}-31`
-    );
-  }
-
-  if (filters.Category) whereClause.category = filters.Category;
-  if (filters.Brand) whereClause.brand = filters.Brand;
-  if (filters.Brandform) whereClause.brandform = filters.Brandform;
+  if (filters.Category?.length) whereClause.category = { in: filters.Category };
+  if (filters.Brand?.length) whereClause.brand = { in: filters.Brand };
+  if (filters.Brandform?.length)
+    whereClause.brandform = { in: filters.Brandform };
 
   let customerCodes: string[] = [];
-
-  if (filters.Branch) {
+  if (filters.Branch?.length) {
     const codes = await getStoreCodesByFilter("New_Branch", filters.Branch);
     customerCodes = mergeFilterResults(customerCodes, codes);
   }
-  if (filters.SM) {
+  if (filters.SM?.length) {
     const codes = await getStoreCodesByFilter("SM", filters.SM);
     customerCodes = mergeFilterResults(customerCodes, codes);
   }
-  if (filters.BE) {
+  if (filters.BE?.length) {
     const codes = await getStoreCodesByFilter("BE", filters.BE);
     customerCodes = mergeFilterResults(customerCodes, codes);
   }
-
   if (customerCodes.length) {
     whereClause.customer_code = { in: customerCodes };
   }
 
   let customerTypes: string[] = [];
-  if (filters.Channel) {
+  if (filters.Channel?.length) {
     const types = await getCustomerTypesByChannelFilter(
       "channel",
       filters.Channel
     );
     customerTypes = mergeFilterResults(customerTypes, types);
   }
-  if (filters.BroadChannel) {
+  if (filters.BroadChannel?.length) {
     const types = await getCustomerTypesByChannelFilter(
       "broad_channel",
       filters.BroadChannel
     );
     customerTypes = mergeFilterResults(customerTypes, types);
   }
-  if (filters.ShortChannel) {
+  if (filters.ShortChannel?.length) {
     const types = await getCustomerTypesByChannelFilter(
       "short_channel",
       filters.ShortChannel
     );
     customerTypes = mergeFilterResults(customerTypes, types);
   }
-
   if (customerTypes.length) {
     whereClause.customer_type = { in: customerTypes };
   }
@@ -174,29 +186,26 @@ async function getRetailingWithPrisma(filters: any): Promise<number> {
   return result._sum.retailing ? Number(result._sum.retailing.toString()) : 0;
 }
 
-// Helper to fetch store codes from store_mapping
+// ===== Helper Functions =====
 async function getStoreCodesByFilter(
   column: string,
-  value: string
+  values: string[]
 ): Promise<string[]> {
   const stores = await prisma.store_mapping.findMany({
-    where: { [column]: value },
+    where: { [column]: { in: values } },
     select: { Old_Store_Code: true },
   });
-
   return stores.map((store) => store.Old_Store_Code);
 }
 
-// Helper to fetch customer types from channel_mapping
 async function getCustomerTypesByChannelFilter(
   column: string,
-  value: string
+  values: string[]
 ): Promise<string[]> {
   const mappings = await prisma.channel_mapping.findMany({
-    where: { [column]: value },
+    where: { [column]: { in: values } },
     select: { customer_type: true },
   });
-
   return mappings.map((map) => map.customer_type);
 }
 
