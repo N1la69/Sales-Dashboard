@@ -9,8 +9,8 @@ import { X } from "lucide-react";
 import MultiSelect from "@/components/MultiSelect";
 
 const GET_TOTAL_RETAILING = gql`
-  query GetTotalRetailing($filters: FilterInput) {
-    totalRetailing(filters: $filters)
+  query GetTotalRetailing($filters: FilterInput, $source: String) {
+    totalRetailing(filters: $filters, source: $source)
   }
 `;
 
@@ -44,9 +44,12 @@ export default function Dashboard() {
   const [appliedFilters, setAppliedFilters] = useState<{
     [key: string]: (string | number)[];
   }>({});
+  const [dataSource, setDataSource] = useState<"combined" | "main" | "temp">(
+    "combined"
+  );
 
   const { data, loading, error, refetch } = useQuery(GET_TOTAL_RETAILING, {
-    variables: { filters: appliedFilters },
+    variables: { filters: appliedFilters, source: dataSource },
   });
 
   const handleFilterChange = (key: string, values: (string | number)[]) => {
@@ -58,13 +61,13 @@ export default function Dashboard() {
 
   const applyFilters = () => {
     setAppliedFilters(pendingFilters);
-    refetch({ filters: pendingFilters });
+    refetch({ filters: pendingFilters, source: dataSource });
   };
 
   const clearAllFilters = () => {
     setPendingFilters({});
     setAppliedFilters({});
-    refetch({ filters: {} });
+    refetch({ filters: {}, source: dataSource });
   };
 
   const removeFilter = (key: string, value: string | number) => {
@@ -74,6 +77,11 @@ export default function Dashboard() {
     };
     if (updated[key].length === 0) delete updated[key];
     setPendingFilters(updated);
+  };
+
+  const handleSourceChange = (source: "combined" | "main" | "temp") => {
+    setDataSource(source);
+    refetch({ filters: appliedFilters, source });
   };
 
   const hasPendingChanges =
@@ -87,6 +95,28 @@ export default function Dashboard() {
         <p className="text-gray-500 font-semibold text-xl">
           Your current sales summary and activity
         </p>
+      </div>
+
+      {/* DATA SOURCE TOGGLE */}
+      <div className="flex justify-center gap-3 my-4">
+        <Button
+          variant={dataSource === "combined" ? "default" : "outline"}
+          onClick={() => handleSourceChange("combined")}
+        >
+          Combined
+        </Button>
+        <Button
+          variant={dataSource === "main" ? "default" : "outline"}
+          onClick={() => handleSourceChange("main")}
+        >
+          Main DB
+        </Button>
+        <Button
+          variant={dataSource === "temp" ? "default" : "outline"}
+          onClick={() => handleSourceChange("temp")}
+        >
+          Temp DB
+        </Button>
       </div>
 
       {/* MULTI-SELECT FILTERS */}

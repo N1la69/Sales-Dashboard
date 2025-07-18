@@ -17,6 +17,6 @@ export const typeDefs = gql`
   }
 
   type Query {
-    totalRetailing(filters: FilterInput): Float!
+    totalRetailing(filters: FilterInput, source: String): Float
   }
 `;

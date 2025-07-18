@@ -3,103 +3,85 @@ import prisma from "@/lib/utils";
 
 export const resolvers = {
   Query: {
-    totalRetailing: async (_: any, { filters }: any) => {
+    totalRetailing: async (_: any, { filters, source }: any) => {
       if (filters.ZM?.length) {
-        return await getRetailingWithZM(filters);
+        return await getRetailingZM(filters, source);
       } else {
-        return await getRetailingWithPrisma(filters);
+        return await getRetailingPrisma(filters, source);
       }
     },
   },
 };
 
-// ========= Raw SQL for ZM =========
-async function getRetailingWithZM(filters: any): Promise<number> {
+// ========= RAW SQL for ZM =========
+async function getRetailingZM(filters: any, source: string): Promise<number> {
+  const tables = resolveTables(source);
+
+  let total = 0;
+  for (const table of tables) {
+    const subtotal = await getRetailingWithZM(table, filters);
+    total += subtotal;
+  }
+  return total;
+}
+
+async function getRetailingWithZM(
+  table: string,
+  filters: any
+): Promise<number> {
   let query = `
     SELECT SUM(p.retailing) AS total
-    FROM psr_data p
+    FROM ${table} p
     LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
     LEFT JOIN channel_mapping c ON p.customer_type = c.customer_type
     WHERE 1=1
   `;
   const params: any[] = [];
 
-  // Store mapping filters
-  if (filters.ZM?.length) {
-    query += ` AND s.ZM IN (${filters.ZM.map(() => "?").join(",")})`;
-    params.push(...filters.ZM);
-  }
-  if (filters.Branch?.length) {
-    query += ` AND s.New_Branch IN (${filters.Branch.map(() => "?").join(
-      ","
-    )})`;
-    params.push(...filters.Branch);
-  }
-  if (filters.SM?.length) {
-    query += ` AND s.SM IN (${filters.SM.map(() => "?").join(",")})`;
-    params.push(...filters.SM);
-  }
-  if (filters.BE?.length) {
-    query += ` AND s.BE IN (${filters.BE.map(() => "?").join(",")})`;
-    params.push(...filters.BE);
-  }
+  // Store filters
+  query = addInClause(query, params, filters.ZM, "s.ZM");
+  query = addInClause(query, params, filters.Branch, "s.New_Branch");
+  query = addInClause(query, params, filters.SM, "s.SM");
+  query = addInClause(query, params, filters.BE, "s.BE");
 
   // Date filters
-  if (filters.Year?.length) {
-    query += ` AND YEAR(p.document_date) IN (${filters.Year.map(() => "?").join(
-      ","
-    )})`;
-    params.push(...filters.Year);
-  }
-  if (filters.Month?.length) {
-    query += ` AND MONTH(p.document_date) IN (${filters.Month.map(
-      () => "?"
-    ).join(",")})`;
-    params.push(...filters.Month);
-  }
+  query = addInClause(query, params, filters.Year, "YEAR(p.document_date)");
+  query = addInClause(query, params, filters.Month, "MONTH(p.document_date)");
 
-  // PSR data fields
-  if (filters.Category?.length) {
-    query += ` AND p.category IN (${filters.Category.map(() => "?").join(
-      ","
-    )})`;
-    params.push(...filters.Category);
-  }
-  if (filters.Brand?.length) {
-    query += ` AND p.brand IN (${filters.Brand.map(() => "?").join(",")})`;
-    params.push(...filters.Brand);
-  }
-  if (filters.Brandform?.length) {
-    query += ` AND p.brandform IN (${filters.Brandform.map(() => "?").join(
-      ","
-    )})`;
-    params.push(...filters.Brandform);
-  }
+  // PSR filters
+  query = addInClause(query, params, filters.Category, "p.category");
+  query = addInClause(query, params, filters.Brand, "p.brand");
+  query = addInClause(query, params, filters.Brandform, "p.brandform");
 
-  // Channel mapping filters
-  if (filters.Channel?.length) {
-    query += ` AND c.channel IN (${filters.Channel.map(() => "?").join(",")})`;
-    params.push(...filters.Channel);
-  }
-  if (filters.BroadChannel?.length) {
-    query += ` AND c.broad_channel IN (${filters.BroadChannel.map(
-      () => "?"
-    ).join(",")})`;
-    params.push(...filters.BroadChannel);
-  }
-  if (filters.ShortChannel?.length) {
-    query += ` AND c.short_channel IN (${filters.ShortChannel.map(
-      () => "?"
-    ).join(",")})`;
-    params.push(...filters.ShortChannel);
-  }
+  // Channel mapping
+  query = addInClause(query, params, filters.Channel, "c.channel");
+  query = addInClause(query, params, filters.BroadChannel, "c.broad_channel");
+  query = addInClause(query, params, filters.ShortChannel, "c.short_channel");
 
   const result: any[] = await prisma.$queryRawUnsafe(query, ...params);
-  return result[0]?.total || 0;
+  const total = result[0]?.total;
+  return total ? Number(total) : 0;
 }
 
-// ========= Prisma for other filters =========
-async function getRetailingWithPrisma(filters: any): Promise<number> {
+// ========= Prisma Query =========
+async function getRetailingPrisma(
+  filters: any,
+  source: string
+): Promise<number> {
+  const tables = resolveTables(source);
+
+  let total = 0;
+  for (const table of tables) {
+    const subtotal = await getRetailingWithPrisma(table, filters);
+    total += subtotal;
+  }
+  return total;
+}
+
+async function getRetailingWithPrisma(
+  table: "psr_data" | "psr_data_temp",
+  filters: any
+): Promise<number> {
   const whereClause: any = {};
 
   if (filters.Year && filters.Month?.length) {
@@ -135,16 +117,17 @@ async function getRetailingWithPrisma(filters: any): Promise<number> {
 
   let customerCodes: string[] = [];
   if (filters.Branch?.length) {
-    const codes = await getStoreCodesByFilter("New_Branch", filters.Branch);
-    customerCodes = mergeFilterResults(customerCodes, codes);
+    customerCodes = await mergeCustomerCodes(
+      customerCodes,
+      "New_Branch",
+      filters.Branch
+    );
   }
   if (filters.SM?.length) {
-    const codes = await getStoreCodesByFilter("SM", filters.SM);
-    customerCodes = mergeFilterResults(customerCodes, codes);
+    customerCodes = await mergeCustomerCodes(customerCodes, "SM", filters.SM);
   }
   if (filters.BE?.length) {
-    const codes = await getStoreCodesByFilter("BE", filters.BE);
-    customerCodes = mergeFilterResults(customerCodes, codes);
+    customerCodes = await mergeCustomerCodes(customerCodes, "BE", filters.BE);
   }
   if (customerCodes.length) {
     whereClause.customer_code = { in: customerCodes };
@@ -152,33 +135,31 @@ async function getRetailingWithPrisma(filters: any): Promise<number> {
 
   let customerTypes: string[] = [];
   if (filters.Channel?.length) {
-    const types = await getCustomerTypesByChannelFilter(
+    customerTypes = await mergeCustomerTypes(
+      customerTypes,
       "channel",
       filters.Channel
     );
-    customerTypes = mergeFilterResults(customerTypes, types);
   }
   if (filters.BroadChannel?.length) {
-    const types = await getCustomerTypesByChannelFilter(
+    customerTypes = await mergeCustomerTypes(
+      customerTypes,
       "broad_channel",
       filters.BroadChannel
     );
-    customerTypes = mergeFilterResults(customerTypes, types);
   }
   if (filters.ShortChannel?.length) {
-    const types = await getCustomerTypesByChannelFilter(
+    customerTypes = await mergeCustomerTypes(
+      customerTypes,
       "short_channel",
       filters.ShortChannel
     );
-    customerTypes = mergeFilterResults(customerTypes, types);
   }
   if (customerTypes.length) {
     whereClause.customer_type = { in: customerTypes };
   }
 
-  console.log("WHERE CLAUSE (Prisma):", JSON.stringify(whereClause, null, 2));
-
-  const result = await prisma.psr_data.aggregate({
+  const result = await (prisma as any)[table].aggregate({
     _sum: { retailing: true },
     where: whereClause,
   });
@@ -186,7 +167,44 @@ async function getRetailingWithPrisma(filters: any): Promise<number> {
   return result._sum.retailing ? Number(result._sum.retailing.toString()) : 0;
 }
 
-// ===== Helper Functions =====
+// ========= Utility & Helper Functions =========
+function resolveTables(source: string): Array<"psr_data" | "psr_data_temp"> {
+  if (source === "main") return ["psr_data"];
+  if (source === "temp") return ["psr_data_temp"];
+  return ["psr_data", "psr_data_temp"]; // combined
+}
+
+function addInClause(
+  query: string,
+  params: any[],
+  values: any[],
+  field: string
+): string {
+  if (values?.length) {
+    query += ` AND ${field} IN (${values.map(() => "?").join(",")})`;
+    params.push(...values);
+  }
+  return query;
+}
+
+async function mergeCustomerCodes(
+  existing: string[],
+  column: string,
+  values: string[]
+) {
+  const codes = await getStoreCodesByFilter(column, values);
+  return mergeFilterResults(existing, codes);
+}
+
+async function mergeCustomerTypes(
+  existing: string[],
+  column: string,
+  values: string[]
+) {
+  const types = await getCustomerTypesByChannelFilter(column, values);
+  return mergeFilterResults(existing, types);
+}
+
 async function getStoreCodesByFilter(
   column: string,
   values: string[]
