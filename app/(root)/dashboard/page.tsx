@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 "use client";
 
 import StatCard from "@/components/structures/StatCard";
-import filterValues from "@/constants/filterValues";
 import { useQuery, gql } from "@apollo/client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import MultiSelect from "@/components/MultiSelect";
+import { filters } from "@/constants/data";
 
 const GET_TOTAL_RETAILING = gql`
   query GetTotalRetailing($filters: FilterInput, $source: String) {
@@ -14,28 +16,23 @@ const GET_TOTAL_RETAILING = gql`
   }
 `;
 
-const filters = [
-  { label: "Year", key: "Year", values: filterValues.years },
-  { label: "Month", key: "Month", values: filterValues.months },
-  { label: "Category", key: "Category", values: filterValues.categories },
-  { label: "Brand", key: "Brand", values: filterValues.brands },
-  { label: "Brandform", key: "Brandform", values: filterValues.brandforms },
-  { label: "Branch", key: "Branch", values: filterValues.branches },
-  { label: "ZM", key: "ZM", values: filterValues.zms },
-  { label: "SM", key: "SM", values: filterValues.sms },
-  { label: "BE", key: "BE", values: filterValues.bes },
-  { label: "Channel", key: "Channel", values: filterValues.channels },
-  {
-    label: "Broad Channel",
-    key: "BroadChannel",
-    values: filterValues.broadChannels,
-  },
-  {
-    label: "Short Channel",
-    key: "ShortChannel",
-    values: filterValues.shortChannels,
-  },
-];
+const GET_HIGHEST_BRANCH = gql`
+  query GetHighestRetailingBranch($filters: FilterInput, $source: String) {
+    highestRetailingBranch(filters: $filters, source: $source) {
+      branch
+      retailing
+    }
+  }
+`;
+
+const GET_HIGHEST_BRAND = gql`
+  query GetHighestRetailingBrand($filters: FilterInput, $source: String) {
+    highestRetailingBrand(filters: $filters, source: $source) {
+      brand
+      retailing
+    }
+  }
+`;
 
 export default function Dashboard() {
   const [pendingFilters, setPendingFilters] = useState<{
@@ -49,6 +46,24 @@ export default function Dashboard() {
   );
 
   const { data, loading, error, refetch } = useQuery(GET_TOTAL_RETAILING, {
+    variables: { filters: appliedFilters, source: dataSource },
+  });
+
+  const {
+    data: highestBranchData,
+    loading: highestBranchLoading,
+    error: highestBranchError,
+    refetch: refetchHighestBranch,
+  } = useQuery(GET_HIGHEST_BRANCH, {
+    variables: { filters: appliedFilters, source: dataSource },
+  });
+
+  const {
+    data: highestBrandData,
+    loading: highestBrandLoading,
+    error: highestBrandError,
+    refetch: refetchHighestBrand,
+  } = useQuery(GET_HIGHEST_BRAND, {
     variables: { filters: appliedFilters, source: dataSource },
   });
 
@@ -166,12 +181,43 @@ export default function Dashboard() {
         </div>
       )}
 
-      <div>
-        {loading && <p>Loading...</p>}
-        {error && <p>Error fetching data: {error.message}</p>}
-        {data && (
-          <StatCard title="Total Retailing" value={data.totalRetailing} />
-        )}
+      {/* MAIN CONTENT */}
+      <div className="grid grid-cols-4 gap-3">
+        <div className="col-span-1">
+          {loading && <p>Loading...</p>}
+          {error && <p>Error fetching data: {error.message}</p>}
+          {data && (
+            <StatCard title="Total Retailing" value={data.totalRetailing} />
+          )}
+        </div>
+
+        <div className="col-span-2"></div>
+
+        <div className="col-span-1 flex flex-col gap-2">
+          <div>
+            {highestBranchLoading && <p>Loading highest branch...</p>}
+            {highestBranchError && <p>Error: {highestBranchError.message}</p>}
+            {highestBranchData && (
+              <StatCard
+                title="Highest Retailing Branch"
+                value={highestBranchData.highestRetailingBranch.retailing}
+                description={`Branch: ${highestBranchData.highestRetailingBranch.branch}`}
+              />
+            )}
+          </div>
+
+          <div>
+            {highestBrandLoading && <p>Loading highest brand...</p>}
+            {highestBrandError && <p>Error: {highestBrandError.message}</p>}
+            {highestBrandData && (
+              <StatCard
+                title="Highest Retailing Brand"
+                value={highestBrandData.highestRetailingBrand.retailing}
+                description={`Brand: ${highestBrandData.highestRetailingBrand.brand}`}
+              />
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

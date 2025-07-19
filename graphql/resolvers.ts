@@ -1,4 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+  addInClause,
+  getHighestRetailingBranch,
+  getHighestRetailingBrand,
+  mergeCustomerCodes,
+  mergeCustomerTypes,
+  resolveTables,
+} from "@/lib/helpers";
 import prisma from "@/lib/utils";
 
 export const resolvers = {
@@ -9,6 +17,12 @@ export const resolvers = {
       } else {
         return await getRetailingPrisma(filters, source);
       }
+    },
+    highestRetailingBranch: async (_: any, { filters, source }: any) => {
+      return await getHighestRetailingBranch(filters, source);
+    },
+    highestRetailingBrand: async (_: any, { filters, source }: any) => {
+      return await getHighestRetailingBrand(filters, source);
     },
   },
 };
@@ -165,69 +179,4 @@ async function getRetailingWithPrisma(
   });
 
   return result._sum.retailing ? Number(result._sum.retailing.toString()) : 0;
-}
-
-// ========= Utility & Helper Functions =========
-function resolveTables(source: string): Array<"psr_data" | "psr_data_temp"> {
-  if (source === "main") return ["psr_data"];
-  if (source === "temp") return ["psr_data_temp"];
-  return ["psr_data", "psr_data_temp"]; // combined
-}
-
-function addInClause(
-  query: string,
-  params: any[],
-  values: any[],
-  field: string
-): string {
-  if (values?.length) {
-    query += ` AND ${field} IN (${values.map(() => "?").join(",")})`;
-    params.push(...values);
-  }
-  return query;
-}
-
-async function mergeCustomerCodes(
-  existing: string[],
-  column: string,
-  values: string[]
-) {
-  const codes = await getStoreCodesByFilter(column, values);
-  return mergeFilterResults(existing, codes);
-}
-
-async function mergeCustomerTypes(
-  existing: string[],
-  column: string,
-  values: string[]
-) {
-  const types = await getCustomerTypesByChannelFilter(column, values);
-  return mergeFilterResults(existing, types);
-}
-
-async function getStoreCodesByFilter(
-  column: string,
-  values: string[]
-): Promise<string[]> {
-  const stores = await prisma.store_mapping.findMany({
-    where: { [column]: { in: values } },
-    select: { Old_Store_Code: true },
-  });
-  return stores.map((store) => store.Old_Store_Code);
-}
-
-async function getCustomerTypesByChannelFilter(
-  column: string,
-  values: string[]
-): Promise<string[]> {
-  const mappings = await prisma.channel_mapping.findMany({
-    where: { [column]: { in: values } },
-    select: { customer_type: true },
-  });
-  return mappings.map((map) => map.customer_type);
-}
-
-function mergeFilterResults(existing: string[], incoming: string[]): string[] {
-  if (existing.length === 0) return incoming;
-  return existing.filter((item) => incoming.includes(item));
 }
