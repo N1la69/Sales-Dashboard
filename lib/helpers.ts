@@ -219,3 +219,37 @@ export async function getRetailingByCategory(filters: any, source: string) {
     retailing,
   }));
 }
+
+export async function getRetailingByBroadChannel(filters: any, source: string) {
+  const tables = resolveTables(source);
+  const broadChannelTotals: Record<string, number> = {};
+
+  for (const table of tables) {
+    let query = `
+      SELECT c.broad_channel, SUM(p.retailing) AS total
+      FROM ${table} p
+      LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
+      LEFT JOIN channel_mapping c ON p.customer_type = c.customer_type
+      WHERE 1=1
+    `;
+
+    const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
+    query += whereClause;
+    query += ` GROUP BY c.broad_channel`;
+
+    const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
+
+    for (const row of results) {
+      const broad_channel = row.broad_channel || "Unknown";
+      broadChannelTotals[broad_channel] =
+        (broadChannelTotals[broad_channel] || 0) + Number(row.total);
+    }
+  }
+
+  return Object.entries(broadChannelTotals).map(
+    ([broad_channel, retailing]) => ({
+      broad_channel,
+      retailing,
+    })
+  );
+}

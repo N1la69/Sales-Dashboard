@@ -10,6 +10,7 @@ import { X } from "lucide-react";
 import MultiSelect from "@/components/MultiSelect";
 import { filters } from "@/constants/data";
 import RetailingCategoryPie from "@/components/visuals/RetailingCategoryPie";
+import RetailingChannelPie from "@/components/visuals/RetailingChannelPie";
 
 const GET_TOTAL_RETAILING = gql`
   query GetTotalRetailing($filters: FilterInput, $source: String) {
@@ -39,6 +40,18 @@ const GET_CATEGORY_PERCENTAGE = gql`
   query GetCategoryRetailingPercentage($filters: FilterInput, $source: String) {
     retailingByCategory(filters: $filters, source: $source) {
       category
+      retailing
+    }
+  }
+`;
+
+const GET_BROAD_CHANNEL_PERCENTAGE = gql`
+  query GetBroadChannelRetailingPercentage(
+    $filters: FilterInput
+    $source: String
+  ) {
+    retailingByBroadChannel(filters: $filters, source: $source) {
+      broad_channel
       retailing
     }
   }
@@ -83,6 +96,15 @@ export default function Dashboard() {
     error: categoryError,
     refetch: refetchCategory,
   } = useQuery(GET_CATEGORY_PERCENTAGE, {
+    variables: { filters: appliedFilters, source: dataSource },
+  });
+
+  const {
+    data: broadChannelData,
+    loading: broadChannelLoading,
+    error: broadChannelError,
+    refetch: refetchBroadChannel,
+  } = useQuery(GET_BROAD_CHANNEL_PERCENTAGE, {
     variables: { filters: appliedFilters, source: dataSource },
   });
 
@@ -210,12 +232,21 @@ export default function Dashboard() {
           )}
         </div>
 
-        <div className="col-span-2">
-          <RetailingCategoryPie
-            data={categoryData?.retailingByCategory}
-            loading={categoryLoading}
-            error={categoryError}
-          />
+        <div className="col-span-2 flex justify-around gap-2">
+          <div className="w-1/2">
+            <RetailingCategoryPie
+              data={categoryData?.retailingByCategory}
+              loading={categoryLoading}
+              error={categoryError}
+            />
+          </div>
+          <div className="w-1/2">
+            <RetailingChannelPie
+              data={broadChannelData?.retailingByBroadChannel}
+              loading={broadChannelLoading}
+              error={broadChannelError}
+            />
+          </div>
         </div>
 
         <div className="col-span-1 flex flex-col gap-2">

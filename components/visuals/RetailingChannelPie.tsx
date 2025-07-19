@@ -13,30 +13,30 @@ const COLORS = [
   "#ffc0cb",
 ];
 
-interface RetailingCategoryPieProps {
-  data: { category: string; retailing: number }[];
+interface RetailingChannelPieProps {
+  data: { broad_channel: string; retailing: number }[];
   loading?: boolean;
   error?: { message: string };
 }
 
-export default function RetailingCategoryPie({
+export default function RetailingChannelPie({
   data = [],
   loading,
   error,
-}: RetailingCategoryPieProps) {
-  if (loading) return <p>Loading category data...</p>;
-  if (error) return <p>Error loading category data: {error.message}</p>;
-  if (!data.length) return <p>No category data available.</p>;
+}: RetailingChannelPieProps) {
+  if (loading) return <p>Loading channel data...</p>;
+  if (error) return <p>Error loading channel data: {error.message}</p>;
+  if (!data.length) return <p>No channel data available.</p>;
 
   const total = data.reduce((sum, item) => sum + item.retailing, 0);
   const pieData = data.map((item) => ({
-    name: item.category,
+    name: item.broad_channel,
     value: Number(((item.retailing / total) * 100).toFixed(2)), // percentage
   }));
 
   return (
     <div className="flex flex-col items-center">
-      <h2 className="text-xl font-semibold">Retailing by Category</h2>
+      <h2 className="text-xl font-semibold">Retailing by Channel (Broad)</h2>
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie

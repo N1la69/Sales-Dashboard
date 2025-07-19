@@ -31,6 +31,11 @@ export const typeDefs = gql`
     retailing: Float
   }
 
+  type BroadChannelRetailing {
+    broad_channel: String
+    retailing: Float
+  }
+
   type Query {
     totalRetailing(filters: FilterInput, source: String): Float
     highestRetailingBranch(filters: FilterInput, source: String): HighestBranch
@@ -39,5 +44,9 @@ export const typeDefs = gql`
       filters: FilterInput
       source: String
     ): [CategoryRetailing]
+    retailingByBroadChannel(
+      filters: FilterInput
+      source: String
+    ): [BroadChannelRetailing]
   }
 `;
