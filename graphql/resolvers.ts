@@ -3,6 +3,7 @@ import {
   addInClause,
   getHighestRetailingBranch,
   getHighestRetailingBrand,
+  getRetailingByCategory,
   mergeCustomerCodes,
   mergeCustomerTypes,
   resolveTables,
@@ -23,6 +24,9 @@ export const resolvers = {
     },
     highestRetailingBrand: async (_: any, { filters, source }: any) => {
       return await getHighestRetailingBrand(filters, source);
+    },
+    retailingByCategory: async (_: any, { filters, source }: any) => {
+      return await getRetailingByCategory(filters, source);
     },
   },
 };

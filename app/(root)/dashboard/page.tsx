@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
 import MultiSelect from "@/components/MultiSelect";
 import { filters } from "@/constants/data";
+import RetailingCategoryPie from "@/components/visuals/RetailingCategoryPie";
 
 const GET_TOTAL_RETAILING = gql`
   query GetTotalRetailing($filters: FilterInput, $source: String) {
@@ -29,6 +30,15 @@ const GET_HIGHEST_BRAND = gql`
   query GetHighestRetailingBrand($filters: FilterInput, $source: String) {
     highestRetailingBrand(filters: $filters, source: $source) {
       brand
+      retailing
+    }
+  }
+`;
+
+const GET_CATEGORY_PERCENTAGE = gql`
+  query GetCategoryRetailingPercentage($filters: FilterInput, $source: String) {
+    retailingByCategory(filters: $filters, source: $source) {
+      category
       retailing
     }
   }
@@ -64,6 +74,15 @@ export default function Dashboard() {
     error: highestBrandError,
     refetch: refetchHighestBrand,
   } = useQuery(GET_HIGHEST_BRAND, {
+    variables: { filters: appliedFilters, source: dataSource },
+  });
+
+  const {
+    data: categoryData,
+    loading: categoryLoading,
+    error: categoryError,
+    refetch: refetchCategory,
+  } = useQuery(GET_CATEGORY_PERCENTAGE, {
     variables: { filters: appliedFilters, source: dataSource },
   });
 
@@ -191,7 +210,13 @@ export default function Dashboard() {
           )}
         </div>
 
-        <div className="col-span-2"></div>
+        <div className="col-span-2">
+          <RetailingCategoryPie
+            data={categoryData?.retailingByCategory}
+            loading={categoryLoading}
+            error={categoryError}
+          />
+        </div>
 
         <div className="col-span-1 flex flex-col gap-2">
           <div>

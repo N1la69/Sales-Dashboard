@@ -26,9 +26,18 @@ export const typeDefs = gql`
     retailing: Float
   }
 
+  type CategoryRetailing {
+    category: String
+    retailing: Float
+  }
+
   type Query {
     totalRetailing(filters: FilterInput, source: String): Float
     highestRetailingBranch(filters: FilterInput, source: String): HighestBranch
     highestRetailingBrand(filters: FilterInput, source: String): HighestBrand
+    retailingByCategory(
+      filters: FilterInput
+      source: String
+    ): [CategoryRetailing]
   }
 `;

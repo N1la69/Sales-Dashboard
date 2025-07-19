@@ -107,9 +107,7 @@ export async function buildWhereClauseForRawSQL(filters: any) {
 
 export async function getHighestRetailingBranch(filters: any, source: string) {
   const tables = resolveTables(source);
-
-  let maxBranch = "";
-  let maxRetailing = 0;
+  const branchTotals: Record<string, number> = {};
 
   for (const table of tables) {
     let query = `
@@ -122,17 +120,24 @@ export async function getHighestRetailingBranch(filters: any, source: string) {
 
     const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
     query += whereClause;
-    query += `
-      GROUP BY s.New_Branch
-      ORDER BY total DESC
-      LIMIT 1
-    `;
+    query += ` GROUP BY s.New_Branch`;
 
-    const result: any[] = await prisma.$queryRawUnsafe(query, ...params);
+    const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
 
-    if (result.length && Number(result[0].total) > maxRetailing) {
-      maxBranch = result[0].branch || "Unknown";
-      maxRetailing = Number(result[0].total);
+    for (const row of results) {
+      const branch = row.branch || "Unknown";
+      const retailing = Number(row.total);
+      branchTotals[branch] = (branchTotals[branch] || 0) + retailing;
+    }
+  }
+
+  let maxBranch = "";
+  let maxRetailing = 0;
+
+  for (const [branch, total] of Object.entries(branchTotals)) {
+    if (total > maxRetailing) {
+      maxRetailing = total;
+      maxBranch = branch;
     }
   }
 
@@ -144,9 +149,7 @@ export async function getHighestRetailingBranch(filters: any, source: string) {
 
 export async function getHighestRetailingBrand(filters: any, source: string) {
   const tables = resolveTables(source);
-
-  let maxBrand = "";
-  let maxRetailing = 0;
+  const brandTotals: Record<string, number> = {};
 
   for (const table of tables) {
     let query = `
@@ -159,17 +162,24 @@ export async function getHighestRetailingBrand(filters: any, source: string) {
 
     const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
     query += whereClause;
-    query += `
-      GROUP BY p.brand
-      ORDER BY total DESC
-      LIMIT 1
-    `;
+    query += ` GROUP BY p.brand`;
 
-    const result: any[] = await prisma.$queryRawUnsafe(query, ...params);
+    const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
 
-    if (result.length && Number(result[0].total) > maxRetailing) {
-      maxBrand = result[0].brand || "Unknown";
-      maxRetailing = Number(result[0].total);
+    for (const row of results) {
+      const brand = row.brand || "Unknown";
+      const retailing = Number(row.total);
+      brandTotals[brand] = (brandTotals[brand] || 0) + retailing;
+    }
+  }
+
+  let maxBrand = "";
+  let maxRetailing = 0;
+
+  for (const [brand, total] of Object.entries(brandTotals)) {
+    if (total > maxRetailing) {
+      maxRetailing = total;
+      maxBrand = brand;
     }
   }
 
@@ -177,4 +187,35 @@ export async function getHighestRetailingBrand(filters: any, source: string) {
     brand: maxBrand,
     retailing: maxRetailing,
   };
+}
+
+export async function getRetailingByCategory(filters: any, source: string) {
+  const tables = resolveTables(source);
+  const categoryTotals: Record<string, number> = {};
+
+  for (const table of tables) {
+    let query = `
+      SELECT p.category, SUM(p.retailing) AS total
+      FROM ${table} p
+      LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
+      LEFT JOIN channel_mapping c ON p.customer_type = c.customer_type
+      WHERE 1=1
+    `;
+
+    const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
+    query += whereClause;
+    query += ` GROUP BY p.category`;
+
+    const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
+
+    for (const row of results) {
+      categoryTotals[row.category] =
+        (categoryTotals[row.category] || 0) + Number(row.total);
+    }
+  }
+
+  return Object.entries(categoryTotals).map(([category, retailing]) => ({
+    category,
+    retailing,
+  }));
 }
