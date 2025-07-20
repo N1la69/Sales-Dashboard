@@ -3,6 +3,7 @@ import {
   addInClause,
   getHighestRetailingBranch,
   getHighestRetailingBrand,
+  getMonthlyRetailingTrend,
   getRetailingByBroadChannel,
   getRetailingByCategory,
   mergeCustomerCodes,
@@ -31,6 +32,9 @@ export const resolvers = {
     },
     retailingByBroadChannel: async (_: any, { filters, source }: any) => {
       return await getRetailingByBroadChannel(filters, source);
+    },
+    monthlyRetailingTrend: async (_: any, { filters, source }: any) => {
+      return await getMonthlyRetailingTrend(filters, source);
     },
   },
 };

@@ -253,3 +253,51 @@ export async function getRetailingByBroadChannel(filters: any, source: string) {
     })
   );
 }
+
+export async function getMonthlyRetailingTrend(filters: any, source: string) {
+  const tables = resolveTables(source);
+  const monthlyTotals: Record<string, Record<number, number>> = {};
+
+  for (const table of tables) {
+    let query = `
+      SELECT YEAR(p.document_date) AS year, MONTH(p.document_date) AS month, SUM(p.retailing) AS total
+      FROM ${table} p
+      LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
+      LEFT JOIN channel_mapping c ON p.customer_type = c.customer_type
+      WHERE 1=1
+    `;
+
+    const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
+    query += whereClause;
+    query += ` GROUP BY YEAR(p.document_date), MONTH(p.document_date) ORDER BY year, month`;
+
+    const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
+
+    for (const row of results) {
+      const year = String(row.year);
+      const month = Number(row.month);
+      const retailing = Number(row.total);
+
+      if (!monthlyTotals[year]) {
+        monthlyTotals[year] = {};
+      }
+
+      monthlyTotals[year][month] =
+        (monthlyTotals[year][month] || 0) + retailing;
+    }
+  }
+
+  // Format as array of { year, month, retailing }
+  const trendData = [];
+  for (const year of Object.keys(monthlyTotals)) {
+    for (const month of Object.keys(monthlyTotals[year])) {
+      trendData.push({
+        year,
+        month: Number(month),
+        retailing: monthlyTotals[year][Number(month)],
+      });
+    }
+  }
+
+  return trendData;
+}

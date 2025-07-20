@@ -7,7 +7,7 @@ const StatCard = ({
   value: number | string;
   description?: string;
 }) => (
-  <div className="bg-primary/10 rounded-lg shadow p-4 text-left">
+  <div className="bg-primary/10 rounded-lg shadow p-4 text-left h-40">
     <h2 className="text-lg font-semibold">{title}</h2>
     <p className="text-2xl font-bold">{value.toLocaleString()}</p>
     {description && <p className="text-gray-500">{description}</p>}

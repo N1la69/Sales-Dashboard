@@ -24,16 +24,16 @@ const SignInPage = () => {
   }, [user, router]);
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50">
+    <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-950">
       <SignIn.Root>
-        <Card className="w-full max-w-sm border-0 shadow-sm">
+        <Card className="w-full max-w-sm border-0 shadow-sm bg-white dark:bg-gray-800">
           <SignIn.Step name="start">
             <CardHeader>
               <CardTitle className="text-center space-y-2 mb-3">
-                <h1 className="text-2xl font-medium text-gray-800">
+                <h1 className="text-2xl font-medium text-gray-800 dark:text-gray-100">
                   BG Sales Dashboard
                 </h1>
-                <h2 className="text-gray-500 font-normal">
+                <h2 className="text-gray-500 dark:text-gray-300 font-normal">
                   Sign in to your account
                 </h2>
               </CardTitle>
@@ -46,13 +46,13 @@ const SignInPage = () => {
                 name="identifier"
                 className="space-y-2 flex flex-col"
               >
-                <Clerk.Label className="text-sm font-medium text-gray-700">
+                <Clerk.Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Username
                 </Clerk.Label>
                 <Clerk.Input
                   type="text"
                   required
-                  className="border border-gray-400 rounded-md py-2 px-2"
+                  className="border border-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md py-2 px-2"
                 />
                 <Clerk.FieldError className="block text-sm text-red-400" />
               </Clerk.Field>
@@ -61,20 +61,20 @@ const SignInPage = () => {
                 name="password"
                 className="space-y-2 flex flex-col pb-3"
               >
-                <Clerk.Label className="text-sm font-medium text-gray-700">
+                <Clerk.Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Password
                 </Clerk.Label>
                 <Clerk.Input
                   type="password"
                   required
-                  className="border border-gray-400 rounded-md py-2 px-2"
+                  className="border border-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md py-2 px-2"
                 />
                 <Clerk.FieldError className="block text-sm text-red-400" />
               </Clerk.Field>
 
               <SignIn.Action
                 submit
-                className="w-full bg-gray-900 hover:bg-gray-600 text-white font-medium py-2.5 rounded-md cursor-pointer"
+                className="w-full bg-gray-900 dark:bg-gray-700 hover:bg-gray-600 dark:hover:bg-gray-600 text-white font-medium py-2.5 rounded-md cursor-pointer"
               >
                 Sign In
               </SignIn.Action>

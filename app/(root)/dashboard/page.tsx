@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-
 "use client";
 
 import StatCard from "@/components/structures/StatCard";
@@ -11,7 +9,9 @@ import MultiSelect from "@/components/MultiSelect";
 import { filters } from "@/constants/data";
 import RetailingCategoryPie from "@/components/visuals/RetailingCategoryPie";
 import RetailingChannelPie from "@/components/visuals/RetailingChannelPie";
+import MonthlyTrendLineChart from "@/components/visuals/MonthlyTrendLineChart";
 
+// ================= GraphQL Queries =================
 const GET_TOTAL_RETAILING = gql`
   query GetTotalRetailing($filters: FilterInput, $source: String) {
     totalRetailing(filters: $filters, source: $source)
@@ -57,62 +57,71 @@ const GET_BROAD_CHANNEL_PERCENTAGE = gql`
   }
 `;
 
+const GET_MONTHLY_TREND = gql`
+  query GetMonthlyRetailingTrend($filters: FilterInput, $source: String) {
+    monthlyRetailingTrend(filters: $filters, source: $source) {
+      year
+      month
+      retailing
+    }
+  }
+`;
+
+// ================= Component =================
 export default function Dashboard() {
-  const [pendingFilters, setPendingFilters] = useState<{
-    [key: string]: (string | number)[];
-  }>({});
-  const [appliedFilters, setAppliedFilters] = useState<{
-    [key: string]: (string | number)[];
-  }>({});
+  const [pendingFilters, setPendingFilters] = useState<
+    Record<string, (string | number)[]>
+  >({});
+  const [appliedFilters, setAppliedFilters] = useState<
+    Record<string, (string | number)[]>
+  >({});
   const [dataSource, setDataSource] = useState<"combined" | "main" | "temp">(
     "combined"
   );
 
-  const { data, loading, error, refetch } = useQuery(GET_TOTAL_RETAILING, {
+  const queryOptions = {
     variables: { filters: appliedFilters, source: dataSource },
-  });
+  };
+
+  const { data, loading, error, refetch } = useQuery(
+    GET_TOTAL_RETAILING,
+    queryOptions
+  );
 
   const {
     data: highestBranchData,
     loading: highestBranchLoading,
     error: highestBranchError,
-    refetch: refetchHighestBranch,
-  } = useQuery(GET_HIGHEST_BRANCH, {
-    variables: { filters: appliedFilters, source: dataSource },
-  });
+  } = useQuery(GET_HIGHEST_BRANCH, queryOptions);
 
   const {
     data: highestBrandData,
     loading: highestBrandLoading,
     error: highestBrandError,
-    refetch: refetchHighestBrand,
-  } = useQuery(GET_HIGHEST_BRAND, {
-    variables: { filters: appliedFilters, source: dataSource },
-  });
+  } = useQuery(GET_HIGHEST_BRAND, queryOptions);
 
   const {
     data: categoryData,
     loading: categoryLoading,
     error: categoryError,
-    refetch: refetchCategory,
-  } = useQuery(GET_CATEGORY_PERCENTAGE, {
-    variables: { filters: appliedFilters, source: dataSource },
-  });
+  } = useQuery(GET_CATEGORY_PERCENTAGE, queryOptions);
 
   const {
     data: broadChannelData,
     loading: broadChannelLoading,
     error: broadChannelError,
-    refetch: refetchBroadChannel,
-  } = useQuery(GET_BROAD_CHANNEL_PERCENTAGE, {
+  } = useQuery(GET_BROAD_CHANNEL_PERCENTAGE, queryOptions);
+
+  const {
+    data: monthlyTrendData,
+    loading: monthlyTrendLoading,
+    error: monthlyTrendError,
+  } = useQuery(GET_MONTHLY_TREND, {
     variables: { filters: appliedFilters, source: dataSource },
   });
 
   const handleFilterChange = (key: string, values: (string | number)[]) => {
-    setPendingFilters((prev) => ({
-      ...prev,
-      [key]: values,
-    }));
+    setPendingFilters((prev) => ({ ...prev, [key]: values }));
   };
 
   const applyFilters = () => {
@@ -153,29 +162,20 @@ export default function Dashboard() {
         </p>
       </div>
 
-      {/* DATA SOURCE TOGGLE */}
       <div className="flex justify-center gap-3 my-4">
-        <Button
-          variant={dataSource === "combined" ? "default" : "outline"}
-          onClick={() => handleSourceChange("combined")}
-        >
-          Combined
-        </Button>
-        <Button
-          variant={dataSource === "main" ? "default" : "outline"}
-          onClick={() => handleSourceChange("main")}
-        >
-          Main DB
-        </Button>
-        <Button
-          variant={dataSource === "temp" ? "default" : "outline"}
-          onClick={() => handleSourceChange("temp")}
-        >
-          Temp DB
-        </Button>
+        {["combined", "main", "temp"].map((source) => (
+          <Button
+            key={source}
+            variant={dataSource === source ? "default" : "outline"}
+            onClick={() =>
+              handleSourceChange(source as "combined" | "main" | "temp")
+            }
+          >
+            {source.charAt(0).toUpperCase() + source.slice(1)} DB
+          </Button>
+        ))}
       </div>
 
-      {/* MULTI-SELECT FILTERS */}
       <div className="flex flex-wrap justify-center items-center gap-2 mt-4 pb-4">
         {filters.map((filter) => (
           <MultiSelect
@@ -188,7 +188,6 @@ export default function Dashboard() {
         ))}
       </div>
 
-      {/* SELECTED FILTERS */}
       {hasAnyPendingFilter && (
         <div className="flex justify-center items-center gap-3 flex-wrap mb-4">
           {Object.entries(pendingFilters).flatMap(([key, values]) =>
@@ -210,7 +209,6 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Apply & Clear Buttons */}
       {hasAnyPendingFilter && (
         <div className="flex gap-2 my-4 justify-center">
           {hasPendingChanges && (
@@ -223,58 +221,72 @@ export default function Dashboard() {
       )}
 
       {/* MAIN CONTENT */}
-      <div className="grid grid-cols-4 gap-3">
-        <div className="col-span-1">
-          {loading && <p>Loading...</p>}
-          {error && <p>Error fetching data: {error.message}</p>}
-          {data && (
-            <StatCard title="Total Retailing" value={data.totalRetailing} />
-          )}
-        </div>
-
-        <div className="col-span-2 flex justify-around gap-2">
-          <div className="w-1/2">
-            <RetailingCategoryPie
-              data={categoryData?.retailingByCategory}
-              loading={categoryLoading}
-              error={categoryError}
-            />
-          </div>
-          <div className="w-1/2">
-            <RetailingChannelPie
-              data={broadChannelData?.retailingByBroadChannel}
-              loading={broadChannelLoading}
-              error={broadChannelError}
-            />
-          </div>
-        </div>
-
-        <div className="col-span-1 flex flex-col gap-2">
-          <div>
-            {highestBranchLoading && <p>Loading highest branch...</p>}
-            {highestBranchError && <p>Error: {highestBranchError.message}</p>}
-            {highestBranchData && (
-              <StatCard
-                title="Highest Retailing Branch"
-                value={highestBranchData.highestRetailingBranch.retailing}
-                description={`Branch: ${highestBranchData.highestRetailingBranch.branch}`}
-              />
+      <>
+        {/* TOP SECTION */}
+        <section className="grid grid-cols-4 gap-3 items-stretch">
+          <div className="col-span-1 h-full">
+            {loading && <p>Loading...</p>}
+            {error && <p>Error fetching data: {error.message}</p>}
+            {data && (
+              <StatCard title="Total Retailing" value={data.totalRetailing} />
             )}
           </div>
 
-          <div>
-            {highestBrandLoading && <p>Loading highest brand...</p>}
-            {highestBrandError && <p>Error: {highestBrandError.message}</p>}
-            {highestBrandData && (
-              <StatCard
-                title="Highest Retailing Brand"
-                value={highestBrandData.highestRetailingBrand.retailing}
-                description={`Brand: ${highestBrandData.highestRetailingBrand.brand}`}
+          <div className="col-span-2 flex justify-around gap-2">
+            <div className="w-1/2 h-full">
+              <RetailingCategoryPie
+                data={categoryData?.retailingByCategory}
+                loading={categoryLoading}
+                error={categoryError}
               />
-            )}
+            </div>
+            <div className="w-1/2 h-full">
+              <RetailingChannelPie
+                data={broadChannelData?.retailingByBroadChannel}
+                loading={broadChannelLoading}
+                error={broadChannelError}
+              />
+            </div>
           </div>
-        </div>
-      </div>
+
+          <div className="col-span-1 flex flex-col justify-between gap-2 h-full">
+            <div>
+              {highestBranchLoading && <p>Loading highest branch...</p>}
+              {highestBranchError && <p>Error: {highestBranchError.message}</p>}
+              {highestBranchData && (
+                <StatCard
+                  title="Highest Retailing Branch"
+                  value={highestBranchData.highestRetailingBranch.retailing}
+                  description={`Branch: ${highestBranchData.highestRetailingBranch.branch}`}
+                />
+              )}
+            </div>
+
+            <div>
+              {highestBrandLoading && <p>Loading highest brand...</p>}
+              {highestBrandError && <p>Error: {highestBrandError.message}</p>}
+              {highestBrandData && (
+                <StatCard
+                  title="Highest Retailing Brand"
+                  value={highestBrandData.highestRetailingBrand.retailing}
+                  description={`Brand: ${highestBrandData.highestRetailingBrand.brand}`}
+                />
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* BOTTOM SECTION */}
+        <section className="pt-5 grid grid-cols-5 gap-3">
+          <div className="col-span-3">
+            <MonthlyTrendLineChart
+              data={monthlyTrendData?.monthlyRetailingTrend}
+              loading={monthlyTrendLoading}
+              error={monthlyTrendError}
+            />
+          </div>
+        </section>
+      </>
     </div>
   );
 }
