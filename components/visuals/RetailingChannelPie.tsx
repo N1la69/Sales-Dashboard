@@ -31,7 +31,7 @@ export default function RetailingChannelPie({
   const total = data.reduce((sum, item) => sum + item.retailing, 0);
   const pieData = data.map((item) => ({
     name: item.broad_channel,
-    value: Number(((item.retailing / total) * 100).toFixed(2)), // percentage
+    value: Math.round((item.retailing / total) * 100), // percentage to nearest integer
   }));
 
   return (

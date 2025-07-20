@@ -10,6 +10,7 @@ import { filters } from "@/constants/data";
 import RetailingCategoryPie from "@/components/visuals/RetailingCategoryPie";
 import RetailingChannelPie from "@/components/visuals/RetailingChannelPie";
 import MonthlyTrendLineChart from "@/components/visuals/MonthlyTrendLineChart";
+import TopBrandforms from "@/components/structures/TopBrandforms";
 
 // ================= GraphQL Queries =================
 const GET_TOTAL_RETAILING = gql`
@@ -67,6 +68,15 @@ const GET_MONTHLY_TREND = gql`
   }
 `;
 
+const GET_TOP_BRANDFORMS = gql`
+  query GetTopBrandforms($filters: FilterInput, $source: String) {
+    topBrandforms(filters: $filters, source: $source) {
+      brandform
+      retailing
+    }
+  }
+`;
+
 // ================= Component =================
 export default function Dashboard() {
   const [pendingFilters, setPendingFilters] = useState<
@@ -117,6 +127,14 @@ export default function Dashboard() {
     loading: monthlyTrendLoading,
     error: monthlyTrendError,
   } = useQuery(GET_MONTHLY_TREND, {
+    variables: { filters: appliedFilters, source: dataSource },
+  });
+
+  const {
+    data: brandformData,
+    loading: brandformLoading,
+    error: brandformError,
+  } = useQuery(GET_TOP_BRANDFORMS, {
     variables: { filters: appliedFilters, source: dataSource },
   });
 
@@ -223,12 +241,15 @@ export default function Dashboard() {
       {/* MAIN CONTENT */}
       <>
         {/* TOP SECTION */}
-        <section className="grid grid-cols-4 gap-3 items-stretch">
+        <section className="grid grid-cols-4 gap-3 items-stretch px-5">
           <div className="col-span-1 h-full">
-            {loading && <p>Loading...</p>}
+            {loading && <p>Loading Total Retailing...</p>}
             {error && <p>Error fetching data: {error.message}</p>}
             {data && (
-              <StatCard title="Total Retailing" value={data.totalRetailing} />
+              <StatCard
+                title="Total Retailing (in Lakhs)"
+                value={data.totalRetailing / 100000}
+              />
             )}
           </div>
 
@@ -255,8 +276,10 @@ export default function Dashboard() {
               {highestBranchError && <p>Error: {highestBranchError.message}</p>}
               {highestBranchData && (
                 <StatCard
-                  title="Highest Retailing Branch"
-                  value={highestBranchData.highestRetailingBranch.retailing}
+                  title="Highest Retailing Branch (in Lakhs)"
+                  value={
+                    highestBranchData.highestRetailingBranch.retailing / 100000
+                  }
                   description={`Branch: ${highestBranchData.highestRetailingBranch.branch}`}
                 />
               )}
@@ -267,8 +290,10 @@ export default function Dashboard() {
               {highestBrandError && <p>Error: {highestBrandError.message}</p>}
               {highestBrandData && (
                 <StatCard
-                  title="Highest Retailing Brand"
-                  value={highestBrandData.highestRetailingBrand.retailing}
+                  title="Highest Retailing Brand (in Lakhs)"
+                  value={
+                    highestBrandData.highestRetailingBrand.retailing / 100000
+                  }
                   description={`Brand: ${highestBrandData.highestRetailingBrand.brand}`}
                 />
               )}
@@ -277,12 +302,20 @@ export default function Dashboard() {
         </section>
 
         {/* BOTTOM SECTION */}
-        <section className="pt-5 grid grid-cols-5 gap-3">
+        <section className="pt-5 grid grid-cols-5 gap-3 px-6">
           <div className="col-span-3">
             <MonthlyTrendLineChart
               data={monthlyTrendData?.monthlyRetailingTrend}
               loading={monthlyTrendLoading}
               error={monthlyTrendError}
+            />
+          </div>
+
+          <div className="col-span-2">
+            <TopBrandforms
+              data={brandformData?.topBrandforms}
+              loading={brandformLoading}
+              error={brandformError}
             />
           </div>
         </section>

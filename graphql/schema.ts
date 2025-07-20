@@ -42,6 +42,11 @@ export const typeDefs = gql`
     retailing: Float
   }
 
+  type TopBrandform {
+    brandform: String
+    retailing: Float
+  }
+
   type Query {
     totalRetailing(filters: FilterInput, source: String): Float
     highestRetailingBranch(filters: FilterInput, source: String): HighestBranch
@@ -58,5 +63,6 @@ export const typeDefs = gql`
       filters: FilterInput
       source: String
     ): [MonthlyRetailingTrend]
+    topBrandforms(filters: FilterInput, source: String): [TopBrandform]
   }
 `;

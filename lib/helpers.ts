@@ -301,3 +301,41 @@ export async function getMonthlyRetailingTrend(filters: any, source: string) {
 
   return trendData;
 }
+
+export async function getTopBrandforms(filters: any, source: string) {
+  const tables = resolveTables(source);
+  const brandformTotals: Record<string, number> = {};
+
+  for (const table of tables) {
+    let query = `
+      SELECT p.brandform, SUM(p.retailing) AS total
+      FROM ${table} p
+      LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
+      LEFT JOIN channel_mapping c ON p.customer_type = c.customer_type
+      WHERE 1=1
+    `;
+
+    const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
+    query += whereClause;
+    query += ` GROUP BY p.brandform`;
+
+    const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
+
+    for (const row of results) {
+      const brandform = row.brandform || "Unknown";
+      brandformTotals[brandform] =
+        (brandformTotals[brandform] || 0) + Number(row.total);
+    }
+  }
+
+  // Sort descending by retailing and pick top 10
+  const topBrandforms = Object.entries(brandformTotals)
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 10)
+    .map(([brandform, retailing]) => ({
+      brandform,
+      retailing,
+    }));
+
+  return topBrandforms;
+}

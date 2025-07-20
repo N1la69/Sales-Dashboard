@@ -6,6 +6,7 @@ import {
   getMonthlyRetailingTrend,
   getRetailingByBroadChannel,
   getRetailingByCategory,
+  getTopBrandforms,
   mergeCustomerCodes,
   mergeCustomerTypes,
   resolveTables,
@@ -35,6 +36,9 @@ export const resolvers = {
     },
     monthlyRetailingTrend: async (_: any, { filters, source }: any) => {
       return await getMonthlyRetailingTrend(filters, source);
+    },
+    topBrandforms: async (_: any, { filters, source }: any) => {
+      return await getTopBrandforms(filters, source);
     },
   },
 };
