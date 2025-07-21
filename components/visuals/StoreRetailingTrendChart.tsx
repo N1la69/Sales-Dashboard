@@ -85,6 +85,7 @@ export default function StoreRetailingTrendChart({
             position: "insideLeft",
           }}
           tick={{ fill: "currentColor" }}
+          domain={[(dataMin: number) => Math.floor(dataMin * 0.9), "auto"]}
         />
         <Tooltip />
         <Legend />

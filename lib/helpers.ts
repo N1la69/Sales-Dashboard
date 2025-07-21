@@ -23,6 +23,24 @@ export function addInClause(
   return query;
 }
 
+export function monthNumberToName(month: number): string {
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  return monthNames[month - 1] || "Unknown";
+}
+
 export async function mergeCustomerCodes(
   existing: string[],
   column: string,
@@ -391,4 +409,95 @@ export async function getStoreRetailingTrend(storeCode: string) {
     month: parseInt(String(r.month), 10),
     retailing: Number(r.total),
   }));
+}
+
+export async function getStoreDetails(storeCode: string) {
+  const result = await prisma.psr_data.findFirst({
+    where: { customer_code: storeCode },
+    select: {
+      customer_name: true,
+    },
+  });
+
+  return {
+    storeCode,
+    storeName: result?.customer_name || "Unknown",
+  };
+}
+
+export async function getStoreStats(storeCode: string) {
+  // Highest Retailing Month
+  const highestMonth = await prisma.$queryRawUnsafe<any[]>(
+    `
+    SELECT YEAR(document_date) AS year, MONTH(document_date) AS month, SUM(retailing) AS total
+    FROM psr_data
+    WHERE customer_code = ?
+    GROUP BY year, month
+    ORDER BY total DESC
+    LIMIT 1
+  `,
+    storeCode
+  );
+
+  // Lowest Retailing Month
+  const lowestMonth = await prisma.$queryRawUnsafe<any[]>(
+    `
+    SELECT YEAR(document_date) AS year, MONTH(document_date) AS month, SUM(retailing) AS total
+    FROM psr_data
+    WHERE customer_code = ?
+    GROUP BY year, month
+    ORDER BY total ASC
+    LIMIT 1
+  `,
+    storeCode
+  );
+
+  // Highest Retailing Brand
+  const highestBrand = await prisma.psr_data.groupBy({
+    by: ["brand"],
+    where: { customer_code: storeCode },
+    _sum: { retailing: true },
+    orderBy: { _sum: { retailing: "desc" } },
+    take: 1,
+  });
+
+  // Lowest Retailing Brand
+  const lowestBrand = await prisma.psr_data.groupBy({
+    by: ["brand"],
+    where: { customer_code: storeCode },
+    _sum: { retailing: true },
+    orderBy: { _sum: { retailing: "asc" } },
+    take: 1,
+  });
+
+  return {
+    highestRetailingMonth: highestMonth[0]
+      ? {
+          year: Number(highestMonth[0].year),
+          month: Number(highestMonth[0].month),
+          monthName: monthNumberToName(Number(highestMonth[0].month)),
+          retailing: Number(highestMonth[0].total),
+        }
+      : null,
+    lowestRetailingMonth: lowestMonth[0]
+      ? {
+          year: Number(lowestMonth[0].year),
+          month: Number(lowestMonth[0].month),
+          monthName: monthNumberToName(Number(lowestMonth[0].month)),
+          retailing: Number(lowestMonth[0].total),
+        }
+      : null,
+    highestRetailingBrand: highestBrand[0]
+      ? {
+          brand: highestBrand[0].brand,
+          retailing: Number(highestBrand[0]._sum.retailing),
+        }
+      : null,
+    lowestRetailingBrand: lowestBrand[0]
+      ? {
+          brand: lowestBrand[0].brand,
+          retailing: Number(lowestBrand[0]._sum.retailing),
+        }
+      : null,
+  };
 }

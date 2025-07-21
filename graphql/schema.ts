@@ -66,6 +66,30 @@ export const typeDefs = gql`
     retailing: Float
   }
 
+  type StoreRetailingStat {
+    year: Int
+    month: Int
+    monthName: String
+    retailing: Float
+  }
+
+  type StoreBrandStat {
+    brand: String
+    retailing: Float
+  }
+
+  type StoreStats {
+    highestRetailingMonth: StoreRetailingStat
+    lowestRetailingMonth: StoreRetailingStat
+    highestRetailingBrand: StoreBrandStat
+    lowestRetailingBrand: StoreBrandStat
+  }
+
+  type StoreDetails {
+    storeCode: String
+    storeName: String
+  }
+
   type Query {
     totalRetailing(filters: FilterInput, source: String): Float
     highestRetailingBranch(filters: FilterInput, source: String): HighestBranch
@@ -87,5 +111,7 @@ export const typeDefs = gql`
     suggestStores(branch: String, query: String!): [Store]
     allBranches: [String]
     storeRetailingTrend(storeCode: String!): [StoreRetailingTrend]
+    getStoreStats(storeCode: String!): StoreStats
+    getStoreDetails(storeCode: String!): StoreDetails
   }
 `;

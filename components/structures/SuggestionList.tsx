@@ -16,7 +16,7 @@ export default function SuggestionList({
         {suggestions.map((store) => (
           <li
             key={store}
-            className="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 p-1"
+            className="cursor-pointer hover:rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 p-1"
             onClick={() => onSelectSuggestion?.(store)}
           >
             {store}

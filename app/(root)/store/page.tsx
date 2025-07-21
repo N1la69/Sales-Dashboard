@@ -4,6 +4,7 @@
 
 import BranchSelector from "@/components/structures/BranchSelector";
 import StoreSearchInput from "@/components/structures/StoreSearchInput";
+import StoreStatsCard from "@/components/structures/StoreStatsCard";
 import SuggestionList from "@/components/structures/SuggestionList";
 import StoreRetailingTrendChart from "@/components/visuals/StoreRetailingTrendChart";
 import { gql, useQuery, useLazyQuery } from "@apollo/client";
@@ -34,12 +35,49 @@ const GET_STORE_TREND = gql`
   }
 `;
 
+const GET_ADDITIONAL_STATS = gql`
+  query GetStoreStats($storeCode: String!) {
+    getStoreStats(storeCode: $storeCode) {
+      highestRetailingMonth {
+        year
+        month
+        monthName
+        retailing
+      }
+      lowestRetailingMonth {
+        year
+        month
+        monthName
+        retailing
+      }
+      highestRetailingBrand {
+        brand
+        retailing
+      }
+      lowestRetailingBrand {
+        brand
+        retailing
+      }
+    }
+  }
+`;
+
+const GET_STORE_DETAILS = gql`
+  query GetStoreDetails($storeCode: String!) {
+    getStoreDetails(storeCode: $storeCode) {
+      storeCode
+      storeName
+    }
+  }
+`;
+
 // ================= Component =================
 const StorePage = () => {
   const [branch, setBranch] = useState<string>("");
   const [storeQuery, setStoreQuery] = useState<string>("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [selectedStore, setSelectedStore] = useState<string>("");
+  const [storeName, setStoreName] = useState<string | null>(null);
 
   const {
     data: branchData,
@@ -60,6 +98,26 @@ const StorePage = () => {
   } = useQuery(GET_STORE_TREND, {
     variables: { storeCode: selectedStore },
     skip: !selectedStore,
+  });
+
+  const {
+    data: additionalStatsData,
+    loading: statsLoading,
+    error: statsError,
+    refetch: refetchStats,
+  } = useQuery(GET_ADDITIONAL_STATS, {
+    variables: { storeCode: selectedStore },
+    skip: !selectedStore,
+  });
+
+  const { refetch: refetchStoreDetails } = useQuery(GET_STORE_DETAILS, {
+    variables: { storeCode: selectedStore },
+    skip: !selectedStore,
+    onCompleted: (data) => {
+      if (data?.getStoreDetails) {
+        setStoreName(data.getStoreDetails.storeName);
+      }
+    },
   });
 
   useEffect(() => {
@@ -88,7 +146,10 @@ const StorePage = () => {
 
   const handleStoreSelect = (storeCode: string) => {
     setSelectedStore(storeCode);
+    setSuggestions([]);
     refetchTrend();
+    refetchStats();
+    refetchStoreDetails();
   };
 
   return (
@@ -147,18 +208,34 @@ const StorePage = () => {
           </div>
 
           {selectedStore && (
-            <div className="mt-6">
-              <h2 className="text-xl font-semibold mb-3">
-                Retailing Trend for:{" "}
-                <span className="text-blue-600 dark:text-blue-400">
-                  {selectedStore}
-                </span>
-              </h2>
-              <StoreRetailingTrendChart
-                data={trendData?.storeRetailingTrend}
-                loading={trendLoading}
-                error={trendError}
-              />
+            <div className="grid grid-cols-5 gap-2 mt-6">
+              <div className="col-span-3">
+                <h2 className="text-xl font-semibold mb-3">
+                  Retailing Trend for:{" "}
+                  <span className="text-blue-600 dark:text-blue-400">
+                    {selectedStore} {storeName && ` - ${storeName}`}
+                  </span>
+                </h2>
+                <StoreRetailingTrendChart
+                  data={trendData?.storeRetailingTrend}
+                  loading={trendLoading}
+                  error={trendError}
+                />
+              </div>
+
+              <div className="col-span-2">
+                <h2 className="text-xl font-semibold mb-3">
+                  Additional Details for:{" "}
+                  <span className="text-blue-600 dark:text-blue-400">
+                    {selectedStore}
+                  </span>
+                </h2>
+                <StoreStatsCard
+                  data={additionalStatsData?.getStoreStats}
+                  loading={statsLoading}
+                  error={statsError}
+                />
+              </div>
             </div>
           )}
         </section>

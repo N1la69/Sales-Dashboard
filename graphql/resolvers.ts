@@ -7,7 +7,9 @@ import {
   getMonthlyRetailingTrend,
   getRetailingByBroadChannel,
   getRetailingByCategory,
+  getStoreDetails,
   getStoreRetailingTrend,
+  getStoreStats,
   getTopBrandforms,
   mergeCustomerCodes,
   mergeCustomerTypes,
@@ -59,6 +61,12 @@ export const resolvers = {
       { storeCode }: { storeCode: string }
     ) => {
       return await getStoreRetailingTrend(storeCode);
+    },
+    getStoreStats: async (_: any, { storeCode }: { storeCode: string }) => {
+      return await getStoreStats(storeCode);
+    },
+    getStoreDetails: async (_: any, { storeCode }: { storeCode: string }) => {
+      return await getStoreDetails(storeCode);
     },
   },
 };
