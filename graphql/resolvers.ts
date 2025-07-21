@@ -58,15 +58,21 @@ export const resolvers = {
     },
     storeRetailingTrend: async (
       _: any,
-      { storeCode }: { storeCode: string }
+      { storeCode, source }: { storeCode: string; source: string }
     ) => {
-      return await getStoreRetailingTrend(storeCode);
+      return await getStoreRetailingTrend(storeCode, source);
     },
-    getStoreStats: async (_: any, { storeCode }: { storeCode: string }) => {
-      return await getStoreStats(storeCode);
+    getStoreStats: async (
+      _: any,
+      { storeCode, source }: { storeCode: string; source: string }
+    ) => {
+      return await getStoreStats(storeCode, source);
     },
-    getStoreDetails: async (_: any, { storeCode }: { storeCode: string }) => {
-      return await getStoreDetails(storeCode);
+    getStoreDetails: async (
+      _: any,
+      { storeCode, source }: { storeCode: string; source: string }
+    ) => {
+      return await getStoreDetails(storeCode, source);
     },
   },
 };

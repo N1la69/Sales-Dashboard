@@ -6,6 +6,7 @@ import BranchSelector from "@/components/structures/BranchSelector";
 import StoreSearchInput from "@/components/structures/StoreSearchInput";
 import StoreStatsCard from "@/components/structures/StoreStatsCard";
 import SuggestionList from "@/components/structures/SuggestionList";
+import { Button } from "@/components/ui/button";
 import StoreRetailingTrendChart from "@/components/visuals/StoreRetailingTrendChart";
 import { gql, useQuery, useLazyQuery } from "@apollo/client";
 import { useState, useEffect } from "react";
@@ -26,8 +27,8 @@ const SEARCH_STORE_CODES = gql`
 `;
 
 const GET_STORE_TREND = gql`
-  query GetStoreRetailingTrend($storeCode: String!) {
-    storeRetailingTrend(storeCode: $storeCode) {
+  query GetStoreRetailingTrend($storeCode: String!, $source: String) {
+    storeRetailingTrend(storeCode: $storeCode, source: $source) {
       year
       month
       retailing
@@ -36,8 +37,8 @@ const GET_STORE_TREND = gql`
 `;
 
 const GET_ADDITIONAL_STATS = gql`
-  query GetStoreStats($storeCode: String!) {
-    getStoreStats(storeCode: $storeCode) {
+  query GetStoreStats($storeCode: String!, $source: String) {
+    getStoreStats(storeCode: $storeCode, source: $source) {
       highestRetailingMonth {
         year
         month
@@ -63,8 +64,8 @@ const GET_ADDITIONAL_STATS = gql`
 `;
 
 const GET_STORE_DETAILS = gql`
-  query GetStoreDetails($storeCode: String!) {
-    getStoreDetails(storeCode: $storeCode) {
+  query GetStoreDetails($storeCode: String!, $source: String) {
+    getStoreDetails(storeCode: $storeCode, source: $source) {
       storeCode
       storeName
     }
@@ -73,6 +74,9 @@ const GET_STORE_DETAILS = gql`
 
 // ================= Component =================
 const StorePage = () => {
+  const [dataSource, setDataSource] = useState<"combined" | "main" | "temp">(
+    "combined"
+  );
   const [branch, setBranch] = useState<string>("");
   const [storeQuery, setStoreQuery] = useState<string>("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -96,7 +100,7 @@ const StorePage = () => {
     error: trendError,
     refetch: refetchTrend,
   } = useQuery(GET_STORE_TREND, {
-    variables: { storeCode: selectedStore },
+    variables: { storeCode: selectedStore, source: dataSource },
     skip: !selectedStore,
   });
 
@@ -106,12 +110,12 @@ const StorePage = () => {
     error: statsError,
     refetch: refetchStats,
   } = useQuery(GET_ADDITIONAL_STATS, {
-    variables: { storeCode: selectedStore },
+    variables: { storeCode: selectedStore, source: dataSource },
     skip: !selectedStore,
   });
 
   const { refetch: refetchStoreDetails } = useQuery(GET_STORE_DETAILS, {
-    variables: { storeCode: selectedStore },
+    variables: { storeCode: selectedStore, source: dataSource },
     skip: !selectedStore,
     onCompleted: (data) => {
       if (data?.getStoreDetails) {
@@ -152,6 +156,15 @@ const StorePage = () => {
     refetchStoreDetails();
   };
 
+  const handleSourceChange = (source: "combined" | "main" | "temp") => {
+    setDataSource(source);
+    if (selectedStore) {
+      refetchTrend();
+      refetchStats();
+      refetchStoreDetails();
+    }
+  };
+
   return (
     <div className="pt-3 mx-5 z-10 dark:text-gray-200">
       <div className="flex flex-col text-center space-y-1 mb-6">
@@ -159,6 +172,21 @@ const StorePage = () => {
         <p className="text-gray-500 dark:text-gray-400 font-medium text-lg">
           Your current stores&apos; summary & activity
         </p>
+      </div>
+
+      <div className="flex justify-center gap-3 my-4">
+        {["combined", "main", "temp"].map((source) => (
+          <Button
+            key={source}
+            variant={dataSource === source ? "default" : "outline"}
+            onClick={() =>
+              handleSourceChange(source as "combined" | "main" | "temp")
+            }
+            className="cursor-pointer"
+          >
+            {source.charAt(0).toUpperCase() + source.slice(1)} DB
+          </Button>
+        ))}
       </div>
 
       {/* MAIN CONTENT */}

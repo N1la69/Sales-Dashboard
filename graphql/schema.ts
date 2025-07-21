@@ -110,8 +110,11 @@ export const typeDefs = gql`
 
     suggestStores(branch: String, query: String!): [Store]
     allBranches: [String]
-    storeRetailingTrend(storeCode: String!): [StoreRetailingTrend]
-    getStoreStats(storeCode: String!): StoreStats
-    getStoreDetails(storeCode: String!): StoreDetails
+    storeRetailingTrend(
+      storeCode: String!
+      source: String
+    ): [StoreRetailingTrend]
+    getStoreStats(storeCode: String!, source: String): StoreStats
+    getStoreDetails(storeCode: String!, source: String): StoreDetails
   }
 `;
