@@ -1,15 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   addInClause,
+  getAllBranches,
   getHighestRetailingBranch,
   getHighestRetailingBrand,
   getMonthlyRetailingTrend,
   getRetailingByBroadChannel,
   getRetailingByCategory,
+  getStoreRetailingTrend,
   getTopBrandforms,
   mergeCustomerCodes,
   mergeCustomerTypes,
   resolveTables,
+  suggestStores,
 } from "@/lib/helpers";
 import prisma from "@/lib/utils";
 
@@ -39,6 +42,23 @@ export const resolvers = {
     },
     topBrandforms: async (_: any, { filters, source }: any) => {
       return await getTopBrandforms(filters, source);
+    },
+
+    // STORE
+    allBranches: async () => {
+      return await getAllBranches();
+    },
+    suggestStores: async (
+      _: any,
+      { branch, query }: { branch?: string; query: string }
+    ) => {
+      return await suggestStores(branch || null, query);
+    },
+    storeRetailingTrend: async (
+      _: any,
+      { storeCode }: { storeCode: string }
+    ) => {
+      return await getStoreRetailingTrend(storeCode);
     },
   },
 };

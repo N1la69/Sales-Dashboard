@@ -339,3 +339,56 @@ export async function getTopBrandforms(filters: any, source: string) {
 
   return topBrandforms;
 }
+
+// STORE page
+export async function getAllBranches(): Promise<string[]> {
+  const branches = await prisma.store_mapping.findMany({
+    distinct: ["New_Branch"],
+    select: { New_Branch: true },
+  });
+
+  return branches.map((b) => b.New_Branch).filter(Boolean);
+}
+
+export async function suggestStores(branch: string | null, query: string) {
+  const whereClause: any = {
+    Old_Store_Code: {
+      endsWith: query,
+    },
+  };
+
+  if (branch) {
+    whereClause.New_Branch = branch;
+  }
+
+  const stores = await prisma.store_mapping.findMany({
+    where: whereClause,
+    take: 10,
+  });
+
+  return stores;
+}
+
+export async function getStoreRetailingTrend(storeCode: string) {
+  const results = await prisma.$queryRawUnsafe<
+    { year: number; month: number; total: number }[]
+  >(
+    `
+    SELECT 
+      YEAR(document_date) as year, 
+      MONTH(document_date) as month, 
+      SUM(retailing) as total
+    FROM psr_data
+    WHERE customer_code = ?
+    GROUP BY year, month
+    ORDER BY year, month
+    `,
+    storeCode
+  );
+
+  return results.map((r) => ({
+    year: parseInt(String(r.year), 10),
+    month: parseInt(String(r.month), 10),
+    retailing: Number(r.total),
+  }));
+}
