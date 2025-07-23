@@ -10,6 +10,9 @@ import { Button } from "@/components/ui/button";
 import StoreRetailingTrendChart from "@/components/visuals/StoreRetailingTrendChart";
 import { gql, useQuery, useLazyQuery } from "@apollo/client";
 import { useState, useEffect } from "react";
+import MultiSelect from "@/components/MultiSelect";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 // ================= GraphQL Queries =================
 const GET_ALL_BRANCHES = gql`
@@ -27,8 +30,18 @@ const SEARCH_STORE_CODES = gql`
 `;
 
 const GET_STORE_TREND = gql`
-  query GetStoreRetailingTrend($storeCode: String!, $source: String) {
-    storeRetailingTrend(storeCode: $storeCode, source: $source) {
+  query GetStoreRetailingTrend(
+    $storeCode: String!
+    $source: String
+    $year: [Int]
+    $month: [Int]
+  ) {
+    storeRetailingTrend(
+      storeCode: $storeCode
+      source: $source
+      year: $year
+      month: $month
+    ) {
       year
       month
       retailing
@@ -37,8 +50,18 @@ const GET_STORE_TREND = gql`
 `;
 
 const GET_ADDITIONAL_STATS = gql`
-  query GetStoreStats($storeCode: String!, $source: String) {
-    getStoreStats(storeCode: $storeCode, source: $source) {
+  query GetStoreStats(
+    $storeCode: String!
+    $source: String
+    $year: [Int]
+    $month: [Int]
+  ) {
+    getStoreStats(
+      storeCode: $storeCode
+      source: $source
+      year: $year
+      month: $month
+    ) {
       highestRetailingMonth {
         year
         month
@@ -72,6 +95,37 @@ const GET_STORE_DETAILS = gql`
   }
 `;
 
+const GET_TOP_STORES = gql`
+  query GetTopStores(
+    $source: String!
+    $months: Int!
+    $zm: String
+    $sm: String
+    $be: String
+    $category: String
+    $page: Int!
+    $pageSize: Int!
+  ) {
+    topStores(
+      source: $source
+      months: $months
+      zm: $zm
+      sm: $sm
+      be: $be
+      category: $category
+      page: $page
+      pageSize: $pageSize
+    ) {
+      totalCount
+      stores {
+        store_code
+        store_name
+        average_retailing
+      }
+    }
+  }
+`;
+
 // ================= Component =================
 const StorePage = () => {
   const [dataSource, setDataSource] = useState<"combined" | "main" | "temp">(
@@ -83,11 +137,36 @@ const StorePage = () => {
   const [selectedStore, setSelectedStore] = useState<string>("");
   const [storeName, setStoreName] = useState<string | null>(null);
 
-  const {
-    data: branchData,
-    loading: branchLoading,
-    error: branchError,
-  } = useQuery(GET_ALL_BRANCHES);
+  const [pendingFilters, setPendingFilters] = useState<{
+    year: number[];
+    month: number[];
+  }>({
+    year: [],
+    month: [],
+  });
+  const [appliedFilters, setAppliedFilters] = useState<{
+    year: number[];
+    month: number[];
+  }>({
+    year: [],
+    month: [],
+  });
+
+  const [zm, setZm] = useState<string | undefined>(undefined);
+  const [sm, setSm] = useState<string | undefined>(undefined);
+  const [be, setBe] = useState<string | undefined>(undefined);
+  const [category, setCategory] = useState<string | undefined>(undefined);
+  const [months, setMonths] = useState(3);
+
+  const [page, setPage] = useState(0);
+  const pageSize = 20;
+
+  const yearsList = [2023, 2024, 2025];
+
+  const monthsList = Array.from({ length: 12 }, (_, i) => i + 1);
+
+  const { data: branchData, loading: branchLoading } =
+    useQuery(GET_ALL_BRANCHES);
 
   const [
     searchStores,
@@ -100,7 +179,12 @@ const StorePage = () => {
     error: trendError,
     refetch: refetchTrend,
   } = useQuery(GET_STORE_TREND, {
-    variables: { storeCode: selectedStore, source: dataSource },
+    variables: {
+      storeCode: selectedStore,
+      source: dataSource,
+      year: appliedFilters.year,
+      month: appliedFilters.month,
+    },
     skip: !selectedStore,
   });
 
@@ -110,7 +194,12 @@ const StorePage = () => {
     error: statsError,
     refetch: refetchStats,
   } = useQuery(GET_ADDITIONAL_STATS, {
-    variables: { storeCode: selectedStore, source: dataSource },
+    variables: {
+      storeCode: selectedStore,
+      source: dataSource,
+      year: appliedFilters.year,
+      month: appliedFilters.month,
+    },
     skip: !selectedStore,
   });
 
@@ -124,6 +213,20 @@ const StorePage = () => {
     },
   });
 
+  const { data, loading, error, refetch } = useQuery(GET_TOP_STORES, {
+    variables: {
+      source: dataSource,
+      months,
+      zm,
+      sm,
+      be,
+      category,
+      page,
+      pageSize,
+    },
+    fetchPolicy: "network-only",
+  });
+
   useEffect(() => {
     const handler = setTimeout(() => {
       if (storeQuery.trim().length >= 2) {
@@ -134,7 +237,7 @@ const StorePage = () => {
       } else {
         setSuggestions([]);
       }
-    }, 300); // debounce by 300ms
+    }, 300);
 
     return () => clearTimeout(handler);
   }, [storeQuery, branch, searchStores]);
@@ -147,6 +250,10 @@ const StorePage = () => {
       setSuggestions(storeCodes);
     }
   }, [searchData]);
+
+  useEffect(() => {
+    refetch(); // refetch topStores whenever page changes
+  }, [page, refetch]);
 
   const handleStoreSelect = (storeCode: string) => {
     setSelectedStore(storeCode);
@@ -163,6 +270,33 @@ const StorePage = () => {
       refetchStats();
       refetchStoreDetails();
     }
+  };
+
+  const applyFilters = () => {
+    setAppliedFilters(pendingFilters);
+    if (selectedStore) {
+      refetchTrend();
+      refetchStats();
+    }
+  };
+
+  const clearFilters = () => {
+    setPendingFilters({ year: [], month: [] });
+    setAppliedFilters({ year: [], month: [] });
+    if (selectedStore) {
+      refetchTrend();
+      refetchStats();
+    }
+  };
+
+  const handleNext = () => {
+    if ((page + 1) * pageSize < (data?.topStores?.totalCount || 0)) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (page > 0) setPage((prev) => prev - 1);
   };
 
   return (
@@ -189,54 +323,73 @@ const StorePage = () => {
         ))}
       </div>
 
-      {/* MAIN CONTENT */}
-      <>
-        {/* TOP SECTION */}
-        <section className="space-y-5 px-5">
-          <h2 className="font-semibold text-2xl mb-4">Store Lookup</h2>
+      {/* TOP SECTION */}
+      <section className="space-y-5 px-5">
+        <h2 className="font-semibold text-2xl mb-4">Store Lookup</h2>
 
-          <div className="flex flex-col gap-4 max-w-3xl">
-            <div className="flex gap-3">
-              <StoreSearchInput value={storeQuery} onChange={setStoreQuery} />
+        <div className="flex flex-col gap-4 max-w-3xl">
+          <div className="flex gap-3">
+            <StoreSearchInput value={storeQuery} onChange={setStoreQuery} />
 
-              {branchLoading ? (
-                <p className="text-sm text-gray-500 self-center">
-                  Loading branches...
-                </p>
-              ) : branchError ? (
-                <p className="text-sm text-red-500 self-center">
-                  Error loading branches: {branchError.message}
-                </p>
-              ) : (
-                <BranchSelector
-                  branches={branchData?.allBranches || []}
-                  selectedBranch={branch}
-                  onChange={setBranch}
-                />
-              )}
-
-              {searchLoading && (
-                <p className="text-sm text-gray-500 self-center">
-                  Searching...
-                </p>
-              )}
-              {searchError && (
-                <p className="text-sm text-red-500 self-center">
-                  Error searching: {searchError.message}
-                </p>
-              )}
-            </div>
-
-            <div>
-              <SuggestionList
-                suggestions={suggestions}
-                onSelectSuggestion={handleStoreSelect}
+            {branchLoading ? (
+              <p>Loading branches...</p>
+            ) : (
+              <BranchSelector
+                branches={branchData?.allBranches || []}
+                selectedBranch={branch}
+                onChange={setBranch}
               />
-            </div>
+            )}
+
+            {searchLoading && <p>Searching...</p>}
+            {searchError && <p>Error searching: {searchError.message}</p>}
           </div>
 
-          {selectedStore && (
-            <div className="grid grid-cols-5 gap-2 mt-6">
+          <SuggestionList
+            suggestions={suggestions}
+            onSelectSuggestion={handleStoreSelect}
+          />
+        </div>
+
+        {selectedStore && (
+          <div className="space-y-4">
+            <div className="flex gap-3">
+              <MultiSelect
+                label="Year"
+                options={yearsList}
+                selected={pendingFilters.year}
+                onChange={(values) =>
+                  setPendingFilters((prev) => ({
+                    ...prev,
+                    year: values as number[],
+                  }))
+                }
+              />
+
+              <MultiSelect
+                label="Month"
+                options={monthsList}
+                selected={pendingFilters.month}
+                onChange={(values) =>
+                  setPendingFilters((prev) => ({
+                    ...prev,
+                    month: values as number[],
+                  }))
+                }
+              />
+            </div>
+
+            {(pendingFilters.year.length > 0 ||
+              pendingFilters.month.length > 0) && (
+              <div className="flex gap-2">
+                <Button onClick={applyFilters}>Apply Filters</Button>
+                <Button variant="outline" onClick={clearFilters}>
+                  Clear Filters
+                </Button>
+              </div>
+            )}
+
+            <div className="grid grid-cols-5 gap-2 mt-4">
               <div className="col-span-3">
                 <h2 className="text-xl font-semibold mb-3">
                   Retailing Trend for:{" "}
@@ -265,12 +418,101 @@ const StorePage = () => {
                 />
               </div>
             </div>
-          )}
-        </section>
+          </div>
+        )}
+      </section>
 
-        {/* BOTTOM SECTION */}
-        <section className="px-4"></section>
-      </>
+      {/* BOTTOM SECTION */}
+      <section className="py-4 px-4">
+        <h2 className="font-semibold text-2xl mb-4">Top 100 Stores</h2>
+
+        <div className="flex flex-col gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <Input
+              type="number"
+              value={months}
+              onChange={(e) => setMonths(parseInt(e.target.value))}
+              placeholder="Months"
+            />
+            <Input
+              value={zm || ""}
+              onChange={(e) => setZm(e.target.value)}
+              placeholder="ZM"
+            />
+            <Input
+              value={sm || ""}
+              onChange={(e) => setSm(e.target.value)}
+              placeholder="SM"
+            />
+            <Input
+              value={be || ""}
+              onChange={(e) => setBe(e.target.value)}
+              placeholder="BE"
+            />
+            <Input
+              value={category || ""}
+              onChange={(e) => setCategory(e.target.value)}
+              placeholder="Category"
+            />
+            <Button
+              onClick={() => {
+                setPage(0);
+                refetch();
+              }}
+            >
+              Apply Filters
+            </Button>
+          </div>
+
+          {loading ? (
+            <p>Loading top stores...</p>
+          ) : error ? (
+            <p>Error loading top stores: {error.message}</p>
+          ) : (
+            <div className="overflow-auto">
+              <table className="w-full border text-sm">
+                <thead>
+                  <tr className="bg-gray-100 dark:bg-gray-800">
+                    <th className="px-4 py-2">Sl. No.</th>
+                    <th className="px-4 py-2">Store Code</th>
+                    <th className="px-4 py-2">Store Name</th>
+                    <th className="px-4 py-2 text-right">Avg. Retailing</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data?.topStores?.stores?.map((store: any, idx: number) => (
+                    <tr key={idx} className="border-t">
+                      <td className="px-4 py-2">{page * pageSize + idx + 1}</td>
+                      <td className="px-4 py-2">{store.store_code}</td>
+                      <td className="px-4 py-2">{store.store_name}</td>
+                      <td className="px-4 py-2 text-right">
+                        ₹ {store.average_retailing.toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div className="flex justify-between items-center mt-4">
+                <Button onClick={handlePrev} disabled={page === 0}>
+                  <ChevronLeft className="h-4 w-4" /> Prev
+                </Button>
+                <span className="text-muted-foreground text-sm">
+                  Page {page + 1} of{" "}
+                  {Math.ceil((data?.topStores?.totalCount || 0) / pageSize)}
+                </span>
+                <Button
+                  onClick={handleNext}
+                  disabled={
+                    (page + 1) * pageSize >= (data?.topStores?.totalCount || 0)
+                  }
+                >
+                  Next <ChevronRight className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
     </div>
   );
 };

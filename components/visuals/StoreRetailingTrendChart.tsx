@@ -3,8 +3,8 @@
 "use client";
 
 import {
-  LineChart,
-  Line,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -49,7 +49,6 @@ export default function StoreRetailingTrendChart({
   if (error) return <p>Error loading trend data: {error.message}</p>;
   if (!data || data.length === 0) return <p>No trend data available.</p>;
 
-  // Prepare months
   const uniqueMonths = Array.from(new Set(data.map((d) => d.month))).sort(
     (a, b) => a - b
   );
@@ -72,7 +71,7 @@ export default function StoreRetailingTrendChart({
 
   return (
     <ResponsiveContainer width="100%" height={400}>
-      <LineChart
+      <BarChart
         data={chartData}
         margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
       >
@@ -90,16 +89,14 @@ export default function StoreRetailingTrendChart({
         <Tooltip />
         <Legend />
         {years.map((year, idx) => (
-          <Line
+          <Bar
             key={year}
-            type="monotone"
             dataKey={String(year)}
-            stroke={getColor(idx)}
-            strokeWidth={2}
-            activeDot={{ r: 5 }}
+            fill={getColor(idx)}
+            radius={[4, 4, 0, 0]}
           />
         ))}
-      </LineChart>
+      </BarChart>
     </ResponsiveContainer>
   );
 }

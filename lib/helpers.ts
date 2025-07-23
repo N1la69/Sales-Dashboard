@@ -2,6 +2,18 @@
 import prisma from "./utils";
 
 // ========= Utility & Helper Functions =========
+interface TopStoresQueryParams {
+  source: string;
+  months: number;
+  zm?: string;
+  sm?: string;
+  be?: string;
+  category?: string;
+  page: number;
+  pageSize: number;
+  countOnly?: boolean;
+}
+
 export function resolveTables(
   source: string
 ): Array<"psr_data" | "psr_data_temp"> {
@@ -389,46 +401,59 @@ export async function suggestStores(branch: string | null, query: string) {
 
 export async function getStoreRetailingTrend(
   storeCode: string,
-  source: string
+  source: string,
+  year?: number[],
+  month?: number[]
 ) {
   const tables = resolveTables(source);
-  const aggregated: Record<
-    string,
-    { year: number; month: number; retailing: number }
-  > = {};
 
-  for (const table of tables) {
-    const results = await prisma.$queryRawUnsafe<
-      { year: number; month: number; total: number }[]
-    >(
-      `
-      SELECT 
-        YEAR(document_date) as year, 
-        MONTH(document_date) as month, 
-        SUM(retailing) as total
-      FROM ${table}
-      WHERE customer_code = ?
-      GROUP BY year, month
-    `,
-      storeCode
+  const conditions = [`customer_code = ?`];
+  const params: any[] = [storeCode];
+
+  if (year && year.length > 0) {
+    conditions.push(
+      `YEAR(document_date) IN (${year.map(() => "?").join(",")})`
     );
-
-    results.forEach((r) => {
-      const key = `${r.year}-${r.month}`;
-      if (!aggregated[key]) {
-        aggregated[key] = {
-          year: parseInt(String(r.year), 10),
-          month: parseInt(String(r.month), 10),
-          retailing: 0,
-        };
-      }
-      aggregated[key].retailing += Number(r.total);
-    });
+    params.push(...year);
   }
 
-  return Object.values(aggregated).sort(
-    (a, b) => a.year - b.year || a.month - b.month
-  );
+  if (month && month.length > 0) {
+    conditions.push(
+      `MONTH(document_date) IN (${month.map(() => "?").join(",")})`
+    );
+    params.push(...month);
+  }
+
+  const conditionString =
+    conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+
+  const unionQuery = tables
+    .map((t) => `SELECT * FROM ${t}`)
+    .join(" UNION ALL ");
+
+  const query = `
+    SELECT 
+      YEAR(document_date) as year, 
+      MONTH(document_date) as month, 
+      SUM(retailing) as total
+    FROM (${unionQuery}) AS combined
+    ${conditionString}
+    GROUP BY year, month
+    ORDER BY year, month
+  `;
+
+  const results = await prisma.$queryRawUnsafe<
+    { year: number; month: number; total: number | bigint }[]
+  >(query, ...params);
+
+  return results.map((r) => ({
+    year: Number(r.year),
+    month: Number(r.month),
+    retailing:
+      typeof r.total === "bigint"
+        ? Number(r.total.toString())
+        : Number(r.total),
+  }));
 }
 
 export async function getStoreDetails(storeCode: string, source: string) {
@@ -460,110 +485,207 @@ export async function getStoreDetails(storeCode: string, source: string) {
   };
 }
 
-export async function getStoreStats(storeCode: string, source: string) {
+export async function getStoreStats(
+  storeCode: string,
+  source: string,
+  year?: number[],
+  month?: number[]
+) {
   const tables = resolveTables(source);
 
-  const monthTotals: Record<
-    string,
-    { year: number; month: number; total: number }
-  > = {};
-  const brandTotals: Record<string, number> = {};
+  const yearFilter = year?.length
+    ? `AND YEAR(document_date) IN (${year.join(",")})`
+    : "";
+  const monthFilter = month?.length
+    ? `AND MONTH(document_date) IN (${month.join(",")})`
+    : "";
 
-  for (const table of tables) {
-    const monthlyResults = await prisma.$queryRawUnsafe<any[]>(
-      `
+  const monthQueries = tables.map(
+    (table) => `
       SELECT YEAR(document_date) AS year, MONTH(document_date) AS month, SUM(retailing) AS total
       FROM ${table}
-      WHERE customer_code = ?
+      WHERE customer_code = ? ${yearFilter} ${monthFilter}
       GROUP BY year, month
-    `,
-      storeCode
-    );
+    `
+  );
 
-    monthlyResults.forEach((r) => {
-      const key = `${r.year}-${r.month}`;
-      if (!monthTotals[key]) {
-        monthTotals[key] = {
-          year: Number(r.year),
-          month: Number(r.month),
-          total: 0,
-        };
-      }
-      monthTotals[key].total += Number(r.total);
-    });
-
-    const brandResults = await prisma.$queryRawUnsafe<any[]>(
-      `
-      SELECT brand, SUM(retailing) as total
+  const brandQueries = tables.map(
+    (table) => `
+      SELECT brand, SUM(retailing) AS total
       FROM ${table}
-      WHERE customer_code = ?
+      WHERE customer_code = ? ${yearFilter} ${monthFilter}
       GROUP BY brand
-    `,
-      storeCode
-    );
+    `
+  );
 
-    brandResults.forEach((r) => {
-      if (!r.brand) return;
-      brandTotals[r.brand] = (brandTotals[r.brand] || 0) + Number(r.total);
-    });
-  }
+  // Fetch months
+  const monthResults = (
+    await Promise.all(
+      monthQueries.map((query) =>
+        prisma.$queryRawUnsafe<any[]>(query, storeCode)
+      )
+    )
+  ).flat();
 
-  // Process highest and lowest months
-  const monthStats = Object.values(monthTotals);
-  const highestMonth = monthStats.reduce(
-    (max, curr) => (!max || curr.total > max.total ? curr : max),
+  // Highest & Lowest Month
+  const highestMonth = monthResults.reduce(
+    (prev, curr) => ((prev?.total ?? 0) < curr.total ? curr : prev),
     null as any
   );
 
-  const lowestMonth = monthStats.reduce(
-    (min, curr) => (!min || curr.total < min.total ? curr : min),
+  const lowestMonth = monthResults.reduce(
+    (prev, curr) => ((prev?.total ?? Infinity) > curr.total ? curr : prev),
     null as any
   );
 
-  // Process highest and lowest brands
-  const brands = Object.keys(brandTotals).map((brand) => ({
-    brand,
-    total: brandTotals[brand],
-  }));
+  // Fetch brands
+  const brandResults = (
+    await Promise.all(
+      brandQueries.map((query) =>
+        prisma.$queryRawUnsafe<any[]>(query, storeCode)
+      )
+    )
+  ).flat();
 
-  const highestBrand = brands.reduce(
-    (max, curr) => (!max || curr.total > max.total ? curr : max),
+  // Highest & Lowest Brand
+  const highestBrand = brandResults.reduce(
+    (prev, curr) => ((prev?.total ?? 0) < curr.total ? curr : prev),
     null as any
   );
 
-  const lowestBrand = brands.reduce(
-    (min, curr) => (!min || curr.total < min.total ? curr : min),
+  const lowestBrand = brandResults.reduce(
+    (prev, curr) => ((prev?.total ?? Infinity) > curr.total ? curr : prev),
     null as any
   );
 
   return {
     highestRetailingMonth: highestMonth
       ? {
-          year: highestMonth.year,
-          month: highestMonth.month,
-          monthName: monthNumberToName(highestMonth.month),
-          retailing: highestMonth.total,
+          year: Number(highestMonth.year),
+          month: Number(highestMonth.month),
+          monthName: monthNumberToName(Number(highestMonth.month)),
+          retailing: Number(highestMonth.total),
         }
       : null,
     lowestRetailingMonth: lowestMonth
       ? {
-          year: lowestMonth.year,
-          month: lowestMonth.month,
-          monthName: monthNumberToName(lowestMonth.month),
-          retailing: lowestMonth.total,
+          year: Number(lowestMonth.year),
+          month: Number(lowestMonth.month),
+          monthName: monthNumberToName(Number(lowestMonth.month)),
+          retailing: Number(lowestMonth.total),
         }
       : null,
     highestRetailingBrand: highestBrand
       ? {
           brand: highestBrand.brand,
-          retailing: highestBrand.total,
+          retailing: Number(highestBrand.total),
         }
       : null,
     lowestRetailingBrand: lowestBrand
       ? {
           brand: lowestBrand.brand,
-          retailing: lowestBrand.total,
+          retailing: Number(lowestBrand.total),
         }
       : null,
   };
 }
+
+export const getTopStoresQuery = async ({
+  source,
+  months,
+  zm,
+  sm,
+  be,
+  category,
+  page,
+  pageSize,
+  countOnly = false,
+}: TopStoresQueryParams): Promise<{ query: string; values: any[] }> => {
+  const values: any[] = [];
+  const filters: string[] = [];
+
+  const tables = resolveTables(source);
+
+  // Get latest N months
+  const dateQuery = `
+    SELECT DISTINCT DATE_FORMAT(document_date, '%Y-%m') as ym
+    FROM psr_data
+    ORDER BY ym DESC
+    LIMIT ?
+  `;
+  const dateRows: any[] = await prisma.$queryRawUnsafe(dateQuery, months);
+  const latestMonths = dateRows.map((r) => r.ym);
+  if (latestMonths.length === 0) throw new Error("No recent months found.");
+
+  // Dynamic Filters
+  if (zm) filters.push("sm.ZM = ?");
+  if (sm) filters.push("sm.SM = ?");
+  if (be) filters.push("sm.BE = ?");
+  if (category) filters.push("p.category = ?");
+
+  values.push(...[zm, sm, be, category].filter(Boolean));
+
+  const filterClause = filters.length ? `AND ${filters.join(" AND ")}` : "";
+  const monthsCondition = latestMonths
+    .map(() => `DATE_FORMAT(p.document_date, '%Y-%m') = ?`)
+    .join(" OR ");
+  const monthsValues = [...latestMonths];
+
+  // Flatten values per table
+  const baseValues = tables.flatMap(() => [...monthsValues, ...values]);
+
+  // Subqueries per source
+  const subQueries = tables
+    .map(
+      (table) => `
+      SELECT
+        p.customer_code,
+        MAX(p.customer_name) AS store_name,
+        SUM(p.retailing) AS total_retailing
+      FROM ${table} p
+      JOIN store_mapping sm ON p.customer_code = sm.Old_Store_Code
+      WHERE (${monthsCondition}) ${filterClause}
+      GROUP BY p.customer_code
+    `
+    )
+    .join(" UNION ALL ");
+
+  const topStoresCTE = `
+    WITH ranked_stores AS (
+      SELECT
+        customer_code,
+        store_name,
+        SUM(total_retailing) AS total_retailing,
+        ROUND(SUM(total_retailing) / ?, 2) AS avg_retailing
+      FROM (${subQueries}) as combined
+      GROUP BY customer_code, store_name
+      ORDER BY avg_retailing DESC
+      LIMIT 100
+    )
+  `;
+
+  if (countOnly) {
+    const countQuery = `
+      ${topStoresCTE}
+      SELECT COUNT(*) as count FROM ranked_stores
+    `;
+    return { query: countQuery, values: [months, ...baseValues] };
+  }
+
+  const paginatedQuery = `
+    ${topStoresCTE}
+    SELECT
+      customer_code AS store_code,
+      store_name,
+      avg_retailing AS average_retailing
+    FROM ranked_stores
+    ORDER BY avg_retailing DESC
+    LIMIT ?
+    OFFSET ?
+  `;
+
+  return {
+    query: paginatedQuery,
+    values: [months, ...baseValues, pageSize, page * pageSize],
+  };
+};

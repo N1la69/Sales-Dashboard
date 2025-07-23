@@ -11,6 +11,7 @@ import {
   getStoreRetailingTrend,
   getStoreStats,
   getTopBrandforms,
+  getTopStoresQuery,
   mergeCustomerCodes,
   mergeCustomerTypes,
   resolveTables,
@@ -58,21 +59,106 @@ export const resolvers = {
     },
     storeRetailingTrend: async (
       _: any,
-      { storeCode, source }: { storeCode: string; source: string }
+      {
+        storeCode,
+        source,
+        year,
+        month,
+      }: {
+        storeCode: string;
+        source: string;
+        year?: number[];
+        month?: number[];
+      }
     ) => {
-      return await getStoreRetailingTrend(storeCode, source);
+      return await getStoreRetailingTrend(storeCode, source, year, month);
     },
     getStoreStats: async (
       _: any,
-      { storeCode, source }: { storeCode: string; source: string }
+      {
+        storeCode,
+        source,
+        year,
+        month,
+      }: {
+        storeCode: string;
+        source: string;
+        year?: number[];
+        month?: number[];
+      }
     ) => {
-      return await getStoreStats(storeCode, source);
+      return await getStoreStats(storeCode, source, year, month);
     },
     getStoreDetails: async (
       _: any,
       { storeCode, source }: { storeCode: string; source: string }
     ) => {
       return await getStoreDetails(storeCode, source);
+    },
+    topStores: async (
+      _: any,
+      {
+        source,
+        months = 3,
+        zm,
+        sm,
+        be,
+        category,
+        page,
+        pageSize,
+      }: {
+        source: string;
+        months: number;
+        zm?: string;
+        sm?: string;
+        be?: string;
+        category?: string;
+        page: number;
+        pageSize: number;
+      }
+    ) => {
+      try {
+        const { query, values } = await getTopStoresQuery({
+          source,
+          months,
+          zm,
+          sm,
+          be,
+          category,
+          page,
+          pageSize,
+        });
+
+        const stores = await prisma.$queryRawUnsafe(query, ...values);
+
+        // Count total records without pagination
+        const { query: countQuery, values: countValues } =
+          await getTopStoresQuery({
+            source,
+            months,
+            zm,
+            sm,
+            be,
+            category,
+            page: 0,
+            pageSize: 0,
+            countOnly: true,
+          });
+
+        const countResult: any = await prisma.$queryRawUnsafe(
+          countQuery,
+          ...countValues
+        );
+        const totalCount = parseInt(countResult[0]?.count ?? "0", 10);
+
+        return {
+          totalCount,
+          stores,
+        };
+      } catch (error) {
+        console.error("Error fetching top stores:", error);
+        throw new Error("Failed to fetch top stores");
+      }
     },
   },
 };
