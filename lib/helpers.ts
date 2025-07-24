@@ -638,30 +638,32 @@ export const getTopStoresQuery = async ({
   const subQueries = tables
     .map(
       (table) => `
-      SELECT
-        p.customer_code,
-        MAX(p.customer_name) AS store_name,
-        SUM(p.retailing) AS total_retailing
-      FROM ${table} p
-      JOIN store_mapping sm ON p.customer_code = sm.Old_Store_Code
-      WHERE (${monthsCondition}) ${filterClause}
-      GROUP BY p.customer_code
-    `
+    SELECT
+      p.customer_code,
+      MAX(p.customer_name) AS store_name,
+      sm.New_Branch AS branch_name,
+      SUM(p.retailing) AS total_retailing
+    FROM ${table} p
+    JOIN store_mapping sm ON p.customer_code = sm.Old_Store_Code
+    WHERE (${monthsCondition}) ${filterClause}
+    GROUP BY p.customer_code, sm.New_Branch
+  `
     )
     .join(" UNION ALL ");
 
   const topStoresCTE = `
-    WITH ranked_stores AS (
-      SELECT
-        customer_code,
-        store_name,
-        SUM(total_retailing) AS total_retailing,
-        ROUND(SUM(total_retailing) / ?, 2) AS avg_retailing
-      FROM (${subQueries}) as combined
-      GROUP BY customer_code, store_name
-      ORDER BY avg_retailing DESC
-      LIMIT 100
-    )
+  WITH ranked_stores AS (
+    SELECT
+      customer_code,
+      store_name,
+      branch_name,
+      SUM(total_retailing) AS total_retailing,
+      ROUND(SUM(total_retailing) / ?, 2) AS avg_retailing
+    FROM (${subQueries}) as combined
+    GROUP BY customer_code, store_name, branch_name
+    ORDER BY avg_retailing DESC
+    LIMIT 100
+  )
   `;
 
   if (countOnly) {
@@ -673,15 +675,16 @@ export const getTopStoresQuery = async ({
   }
 
   const paginatedQuery = `
-    ${topStoresCTE}
-    SELECT
-      customer_code AS store_code,
-      store_name,
-      avg_retailing AS average_retailing
-    FROM ranked_stores
-    ORDER BY avg_retailing DESC
-    LIMIT ?
-    OFFSET ?
+  ${topStoresCTE}
+  SELECT
+    customer_code AS store_code,
+    store_name,
+    branch_name,
+    avg_retailing AS average_retailing
+  FROM ranked_stores
+  ORDER BY avg_retailing DESC
+  LIMIT ?
+  OFFSET ?
   `;
 
   return {

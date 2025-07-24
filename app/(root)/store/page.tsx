@@ -133,6 +133,7 @@ const GET_TOP_STORES = gql`
       stores {
         store_code
         store_name
+        branch_name
         average_retailing
       }
     }
@@ -158,6 +159,7 @@ const GET_DOWNLOAD_TOP_STORES = gql`
     ) {
       store_code
       store_name
+      branch_name
       average_retailing
     }
   }
@@ -284,6 +286,7 @@ const StorePage = () => {
         worksheet.columns = [
           { header: "Store Code", key: "store_code", width: 20 },
           { header: "Store Name", key: "store_name", width: 30 },
+          { header: "Branch Name", key: "branch_name", width: 30 },
           { header: "Average Retailing", key: "average_retailing", width: 20 },
         ];
 
@@ -291,6 +294,7 @@ const StorePage = () => {
           (row: {
             store_code: string;
             store_name: string;
+            branch_name: string;
             average_retailing: number;
           }) => {
             worksheet.addRow(row);
@@ -679,6 +683,7 @@ const StorePage = () => {
                     <th className="px-4 py-2">Sl. No.</th>
                     <th className="px-4 py-2">Store Code</th>
                     <th className="px-4 py-2">Store Name</th>
+                    <th className="px-4 py-2">Branch Name</th>
                     <th className="px-4 py-2 text-right">Avg. Retailing</th>
                   </tr>
                 </thead>
@@ -688,6 +693,7 @@ const StorePage = () => {
                       <td className="px-4 py-2">{page * pageSize + idx + 1}</td>
                       <td className="px-4 py-2">{store.store_code}</td>
                       <td className="px-4 py-2">{store.store_name}</td>
+                      <td className="px-4 py-2">{store.branch_name}</td>
                       <td className="px-4 py-2 text-right">
                         ₹ {store.average_retailing.toLocaleString()}
                       </td>

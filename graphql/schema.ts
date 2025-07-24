@@ -93,6 +93,7 @@ export const typeDefs = gql`
   type TopStore {
     store_code: String
     store_name: String
+    branch_name: String
     average_retailing: Float
   }
 
@@ -104,6 +105,7 @@ export const typeDefs = gql`
   type DownloadTopStore {
     store_code: String
     store_name: String
+    branch_name: String
     average_retailing: Float
   }
 
