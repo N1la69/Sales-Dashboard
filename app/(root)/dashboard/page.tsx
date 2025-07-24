@@ -248,7 +248,7 @@ export default function Dashboard() {
             {data && (
               <StatCard
                 title="Total Retailing (in Lakhs)"
-                value={data.totalRetailing / 100000}
+                value={(data.totalRetailing / 100000).toFixed(1)}
               />
             )}
           </div>
@@ -277,9 +277,9 @@ export default function Dashboard() {
               {highestBranchData && (
                 <StatCard
                   title="Highest Retailing Branch (in Lakhs)"
-                  value={
+                  value={(
                     highestBranchData.highestRetailingBranch.retailing / 100000
-                  }
+                  ).toFixed(1)}
                   description={`Branch: ${highestBranchData.highestRetailingBranch.branch}`}
                 />
               )}
@@ -291,9 +291,9 @@ export default function Dashboard() {
               {highestBrandData && (
                 <StatCard
                   title="Highest Retailing Brand (in Lakhs)"
-                  value={
+                  value={(
                     highestBrandData.highestRetailingBrand.retailing / 100000
-                  }
+                  ).toFixed(1)}
                   description={`Brand: ${highestBrandData.highestRetailingBrand.brand}`}
                 />
               )}

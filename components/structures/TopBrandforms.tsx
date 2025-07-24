@@ -27,7 +27,7 @@ export default function TopBrandforms({
     <Card className="shadow-md">
       <CardHeader>
         <CardTitle className="text-xl font-semibold text-center">
-          Top 10 Brandforms
+          Top 10 Brandforms (in Lakhs)
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -38,7 +38,7 @@ export default function TopBrandforms({
               className="flex justify-between border-b border-gray-200 dark:border-gray-700 pb-1"
             >
               <span className="font-medium">{item.brandform || "Unknown"}</span>
-              <span>{(item.retailing / 100000).toFixed(2)} Lakhs</span>
+              <span>{(item.retailing / 100000).toFixed(2)} </span>
             </li>
           ))}
         </ul>
