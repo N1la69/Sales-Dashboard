@@ -37,7 +37,7 @@ export default function StoreStatsCard({
   if (!data) return <p>No stats available.</p>;
 
   return (
-    <div className="grid grid-cols-2 gap-4 mt-4">
+    <div className="flex flex-col gap-4 mt-4">
       <div className="p-4 border rounded shadow">
         <h3 className="font-semibold">Highest Retailing Month</h3>
         {data.highestRetailingMonth ? (

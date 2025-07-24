@@ -95,6 +95,10 @@ const GET_ADDITIONAL_STATS = gql`
         brand
         retailing
       }
+      categoryRetailing {
+        category
+        retailing
+      }
     }
   }
 `;
@@ -243,6 +247,8 @@ const StorePage = () => {
     },
     skip: !selectedStore,
   });
+  const categoryStats =
+    additionalStatsData?.getStoreStats?.categoryRetailing ?? [];
 
   const { refetch: refetchStoreDetails } = useQuery(GET_STORE_DETAILS, {
     variables: { storeCode: selectedStore, source: dataSource },
@@ -290,6 +296,7 @@ const StorePage = () => {
           { header: "Average Retailing", key: "average_retailing", width: 20 },
         ];
 
+        // Add rows
         rows.forEach(
           (row: {
             store_code: string;
@@ -301,12 +308,38 @@ const StorePage = () => {
           }
         );
 
+        // Style header row
+        const headerRow = worksheet.getRow(1);
+        headerRow.eachCell((cell) => {
+          cell.fill = {
+            type: "pattern",
+            pattern: "solid",
+            fgColor: { argb: "FFFFCC00" }, // Yellow fill
+          };
+          cell.alignment = { vertical: "middle", horizontal: "center" };
+          cell.font = { bold: true };
+          cell.border = {
+            top: { style: "thin" },
+            left: { style: "thin" },
+            bottom: { style: "thin" },
+            right: { style: "thin" },
+          };
+        });
+
+        // Center align all data cells
+        worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+          row.eachCell((cell) => {
+            cell.alignment = { vertical: "middle", horizontal: "center" };
+          });
+        });
+
         const buffer = await workbook.xlsx.writeBuffer();
         const blob = new Blob([buffer], {
           type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         });
         saveAs(blob, "top_stores.xlsx");
       },
+
       onError: (err) => {
         console.error("Download error:", err);
         alert("Error downloading data");
@@ -520,7 +553,7 @@ const StorePage = () => {
                 </div>
               )}
 
-              <div className="grid grid-cols-5 gap-2 mt-4">
+              <div className="grid grid-cols-5 mt-4 space-x-4">
                 <div className="col-span-3">
                   <h2 className="text-xl font-semibold mb-3">
                     Retailing Trend for:{" "}
@@ -540,12 +573,9 @@ const StorePage = () => {
                   )}
                 </div>
 
-                <div className="col-span-2">
+                <div className="col-span-1">
                   <h2 className="text-xl font-semibold mb-3">
-                    Additional Details for:{" "}
-                    <span className="text-blue-600 dark:text-blue-400">
-                      {selectedStore}
-                    </span>
+                    Additional Details:
                   </h2>
 
                   {statsLoading ? (
@@ -560,6 +590,24 @@ const StorePage = () => {
                       loading={statsLoading}
                       error={statsError}
                     />
+                  )}
+                </div>
+
+                <div className="col-span-1 pl-3">
+                  {categoryStats.length > 0 && (
+                    <div className="">
+                      <h2 className="text-xl font-semibold mb-3">
+                        Category-wise retailing:
+                      </h2>
+                      <ul className="space-y-1 h-96 overflow-y-auto">
+                        {categoryStats.map((item: any, index: number) => (
+                          <li key={index} className="flex justify-between">
+                            <span>{item.category}</span>
+                            <span>₹ {item.retailing.toLocaleString()}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   )}
                 </div>
               </div>
