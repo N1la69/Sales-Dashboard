@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 "use client";
@@ -13,6 +14,18 @@ import { useState, useEffect } from "react";
 import MultiSelect from "@/components/MultiSelect";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import filterValues from "@/constants/filterValues";
+import ExcelJS from "exceljs";
+import { saveAs } from "file-saver";
+import client from "@/lib/apollo-client";
 
 // ================= GraphQL Queries =================
 const GET_ALL_BRANCHES = gql`
@@ -126,6 +139,30 @@ const GET_TOP_STORES = gql`
   }
 `;
 
+const GET_DOWNLOAD_TOP_STORES = gql`
+  query DownloadTopStores(
+    $source: String!
+    $months: Int!
+    $zm: String
+    $sm: String
+    $be: String
+    $category: String
+  ) {
+    downloadTopStores(
+      source: $source
+      months: $months
+      zm: $zm
+      sm: $sm
+      be: $be
+      category: $category
+    ) {
+      store_code
+      store_name
+      average_retailing
+    }
+  }
+`;
+
 // ================= Component =================
 const StorePage = () => {
   const [dataSource, setDataSource] = useState<"combined" | "main" | "temp">(
@@ -152,11 +189,13 @@ const StorePage = () => {
     month: [],
   });
 
+  const [topStores, setTopStores] = useState<any[]>([]);
   const [zm, setZm] = useState<string | undefined>(undefined);
   const [sm, setSm] = useState<string | undefined>(undefined);
   const [be, setBe] = useState<string | undefined>(undefined);
   const [category, setCategory] = useState<string | undefined>(undefined);
   const [months, setMonths] = useState(3);
+  const [downloadData, setDownloadData] = useState<any[]>([]);
 
   const [page, setPage] = useState(0);
   const pageSize = 20;
@@ -226,6 +265,69 @@ const StorePage = () => {
     },
     fetchPolicy: "network-only",
   });
+
+  const [fetchDownloadData, { loading: downloadLoading }] = useLazyQuery(
+    GET_DOWNLOAD_TOP_STORES,
+    {
+      fetchPolicy: "network-only",
+      onCompleted: async (data) => {
+        const rows = data.downloadTopStores;
+
+        if (!rows || rows.length === 0) {
+          alert("No data available to download");
+          return;
+        }
+
+        const workbook = new ExcelJS.Workbook();
+        const worksheet = workbook.addWorksheet("Top Stores");
+
+        worksheet.columns = [
+          { header: "Store Code", key: "store_code", width: 20 },
+          { header: "Store Name", key: "store_name", width: 30 },
+          { header: "Average Retailing", key: "average_retailing", width: 20 },
+        ];
+
+        rows.forEach(
+          (row: {
+            store_code: string;
+            store_name: string;
+            average_retailing: number;
+          }) => {
+            worksheet.addRow(row);
+          }
+        );
+
+        const buffer = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([buffer], {
+          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        saveAs(blob, "top_stores.xlsx");
+      },
+      onError: (err) => {
+        console.error("Download error:", err);
+        alert("Error downloading data");
+      },
+    }
+  );
+
+  const handleExcelDownload = () => {
+    fetchDownloadData({
+      variables: {
+        source: dataSource,
+        months,
+        zm,
+        sm,
+        be,
+        category,
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (data?.topStores?.stores) {
+      setTopStores(data.topStores.stores);
+    }
+  }, [data]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -299,6 +401,30 @@ const StorePage = () => {
     if (page > 0) setPage((prev) => prev - 1);
   };
 
+  useEffect(() => {
+    client
+      .query({
+        query: GET_TOP_STORES,
+        variables: {
+          source: dataSource,
+          months,
+          zm,
+          sm,
+          be,
+          category,
+          page: 0,
+          pageSize: 100,
+        },
+        fetchPolicy: "network-only",
+      })
+      .then((res) => {
+        setDownloadData(res.data.topStores.stores);
+      })
+      .catch((err) => {
+        console.error("Error fetching data for download", err);
+      });
+  }, [dataSource, months, zm, sm, be, category]);
+
   return (
     <div className="pt-3 mx-5 z-10 dark:text-gray-200">
       <div className="flex flex-col text-center space-y-1 mb-6">
@@ -351,75 +477,105 @@ const StorePage = () => {
           />
         </div>
 
-        {selectedStore && (
-          <div className="space-y-4">
-            <div className="flex gap-3">
-              <MultiSelect
-                label="Year"
-                options={yearsList}
-                selected={pendingFilters.year}
-                onChange={(values) =>
-                  setPendingFilters((prev) => ({
-                    ...prev,
-                    year: values as number[],
-                  }))
-                }
-              />
-
-              <MultiSelect
-                label="Month"
-                options={monthsList}
-                selected={pendingFilters.month}
-                onChange={(values) =>
-                  setPendingFilters((prev) => ({
-                    ...prev,
-                    month: values as number[],
-                  }))
-                }
-              />
-            </div>
-
-            {(pendingFilters.year.length > 0 ||
-              pendingFilters.month.length > 0) && (
-              <div className="flex gap-2">
-                <Button onClick={applyFilters}>Apply Filters</Button>
-                <Button variant="outline" onClick={clearFilters}>
-                  Clear Filters
-                </Button>
+        {/* Content Section */}
+        <div className="space-y-4">
+          {selectedStore ? (
+            <>
+              <div className="flex gap-3">
+                <MultiSelect
+                  label="Year"
+                  options={yearsList}
+                  selected={pendingFilters.year}
+                  onChange={(values) =>
+                    setPendingFilters((prev) => ({
+                      ...prev,
+                      year: values as number[],
+                    }))
+                  }
+                />
+                <MultiSelect
+                  label="Month"
+                  options={monthsList}
+                  selected={pendingFilters.month}
+                  onChange={(values) =>
+                    setPendingFilters((prev) => ({
+                      ...prev,
+                      month: values as number[],
+                    }))
+                  }
+                />
               </div>
-            )}
 
+              {(pendingFilters.year.length > 0 ||
+                pendingFilters.month.length > 0) && (
+                <div className="flex gap-2">
+                  <Button onClick={applyFilters}>Apply Filters</Button>
+                  <Button variant="outline" onClick={clearFilters}>
+                    Clear Filters
+                  </Button>
+                </div>
+              )}
+
+              <div className="grid grid-cols-5 gap-2 mt-4">
+                <div className="col-span-3">
+                  <h2 className="text-xl font-semibold mb-3">
+                    Retailing Trend for:{" "}
+                    <span className="text-blue-600 dark:text-blue-400">
+                      {selectedStore} {storeName && ` - ${storeName}`}
+                    </span>
+                  </h2>
+
+                  {trendLoading ? (
+                    <Skeleton className="h-60 w-full rounded-xl" />
+                  ) : (
+                    <StoreRetailingTrendChart
+                      data={trendData?.storeRetailingTrend}
+                      loading={trendLoading}
+                      error={trendError}
+                    />
+                  )}
+                </div>
+
+                <div className="col-span-2">
+                  <h2 className="text-xl font-semibold mb-3">
+                    Additional Details for:{" "}
+                    <span className="text-blue-600 dark:text-blue-400">
+                      {selectedStore}
+                    </span>
+                  </h2>
+
+                  {statsLoading ? (
+                    <div className="space-y-4">
+                      <Skeleton className="h-12 w-full rounded-md" />
+                      <Skeleton className="h-12 w-full rounded-md" />
+                      <Skeleton className="h-12 w-full rounded-md" />
+                    </div>
+                  ) : (
+                    <StoreStatsCard
+                      data={additionalStatsData?.getStoreStats}
+                      loading={statsLoading}
+                      error={statsError}
+                    />
+                  )}
+                </div>
+              </div>
+            </>
+          ) : (
+            // Initial loading placeholder before store is selected
             <div className="grid grid-cols-5 gap-2 mt-4">
-              <div className="col-span-3">
-                <h2 className="text-xl font-semibold mb-3">
-                  Retailing Trend for:{" "}
-                  <span className="text-blue-600 dark:text-blue-400">
-                    {selectedStore} {storeName && ` - ${storeName}`}
-                  </span>
-                </h2>
-                <StoreRetailingTrendChart
-                  data={trendData?.storeRetailingTrend}
-                  loading={trendLoading}
-                  error={trendError}
-                />
+              <div className="col-span-3 space-y-4">
+                <Skeleton className="h-6 w-1/2" />
+                <Skeleton className="h-60 w-full rounded-xl" />
               </div>
-
-              <div className="col-span-2">
-                <h2 className="text-xl font-semibold mb-3">
-                  Additional Details for:{" "}
-                  <span className="text-blue-600 dark:text-blue-400">
-                    {selectedStore}
-                  </span>
-                </h2>
-                <StoreStatsCard
-                  data={additionalStatsData?.getStoreStats}
-                  loading={statsLoading}
-                  error={statsError}
-                />
+              <div className="col-span-2 space-y-4">
+                <Skeleton className="h-6 w-1/2" />
+                <Skeleton className="h-12 w-full rounded-md" />
+                <Skeleton className="h-12 w-full rounded-md" />
+                <Skeleton className="h-12 w-full rounded-md" />
               </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </section>
 
       {/* BOTTOM SECTION */}
@@ -427,40 +583,87 @@ const StorePage = () => {
         <h2 className="font-semibold text-2xl mb-4">Top 100 Stores</h2>
 
         <div className="flex flex-col gap-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="flex gap-4">
             <Input
               type="number"
               value={months}
               onChange={(e) => setMonths(parseInt(e.target.value))}
               placeholder="Months"
+              className="w-48"
             />
-            <Input
-              value={zm || ""}
-              onChange={(e) => setZm(e.target.value)}
-              placeholder="ZM"
-            />
-            <Input
-              value={sm || ""}
-              onChange={(e) => setSm(e.target.value)}
-              placeholder="SM"
-            />
-            <Input
-              value={be || ""}
-              onChange={(e) => setBe(e.target.value)}
-              placeholder="BE"
-            />
-            <Input
-              value={category || ""}
-              onChange={(e) => setCategory(e.target.value)}
-              placeholder="Category"
-            />
+
+            <Select value={zm} onValueChange={(value) => setZm(value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select ZM" />
+              </SelectTrigger>
+              <SelectContent>
+                {filterValues.zms.map((z) => (
+                  <SelectItem key={z} value={z}>
+                    {z}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={sm} onValueChange={(value) => setSm(value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select SM" />
+              </SelectTrigger>
+              <SelectContent>
+                {filterValues.sms.map((s) => (
+                  <SelectItem key={s} value={s}>
+                    {s}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select value={be} onValueChange={(value) => setBe(value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select BE" />
+              </SelectTrigger>
+              <SelectContent>
+                {filterValues.bes.map((b) => (
+                  <SelectItem key={b} value={b}>
+                    {b}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select
+              value={category}
+              onValueChange={(value) => setCategory(value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Category" />
+              </SelectTrigger>
+              <SelectContent>
+                {filterValues.categories.map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {c}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
             <Button
+              variant="default"
+              className="cursor-pointer"
               onClick={() => {
+                setZm("");
+                setSm("");
+                setBe("");
+                setCategory("");
+                setMonths(3);
                 setPage(0);
-                refetch();
               }}
             >
-              Apply Filters
+              Clear All Filters
+            </Button>
+
+            <Button onClick={handleExcelDownload} disabled={downloadLoading}>
+              {downloadLoading ? "Downloading..." : "Download Excel"}
             </Button>
           </div>
 
@@ -481,7 +684,7 @@ const StorePage = () => {
                 </thead>
                 <tbody>
                   {data?.topStores?.stores?.map((store: any, idx: number) => (
-                    <tr key={idx} className="border-t">
+                    <tr key={idx} className="border-t text-center">
                       <td className="px-4 py-2">{page * pageSize + idx + 1}</td>
                       <td className="px-4 py-2">{store.store_code}</td>
                       <td className="px-4 py-2">{store.store_name}</td>

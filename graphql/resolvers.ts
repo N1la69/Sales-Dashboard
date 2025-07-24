@@ -160,6 +160,43 @@ export const resolvers = {
         throw new Error("Failed to fetch top stores");
       }
     },
+    downloadTopStores: async (
+      _: any,
+      {
+        source,
+        months = 3,
+        zm,
+        sm,
+        be,
+        category,
+      }: {
+        source: string;
+        months: number;
+        zm?: string;
+        sm?: string;
+        be?: string;
+        category?: string;
+      }
+    ) => {
+      try {
+        const { query, values } = await getTopStoresQuery({
+          source,
+          months,
+          zm,
+          sm,
+          be,
+          category,
+          page: 0,
+          pageSize: 100, // Always fetch all top 100
+        });
+
+        const stores = await prisma.$queryRawUnsafe(query, ...values);
+        return stores;
+      } catch (error) {
+        console.error("Error downloading top stores:", error);
+        throw new Error("Failed to download top stores");
+      }
+    },
   },
 };
 
