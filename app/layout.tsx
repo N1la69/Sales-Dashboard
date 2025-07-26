@@ -28,7 +28,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-100 dark:bg-gray-950`}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-orange-50 dark:bg-gray-950`}
         >
           <ApolloWrapper>{children}</ApolloWrapper>
         </body>

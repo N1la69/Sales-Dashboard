@@ -502,7 +502,10 @@ export async function getStoreStats(
 
   const monthQueries = tables.map(
     (table) => `
-      SELECT YEAR(document_date) AS year, MONTH(document_date) AS month, SUM(retailing) AS total
+      SELECT 
+        YEAR(document_date) AS year, 
+        MONTH(document_date) AS month, 
+        CAST(SUM(retailing) AS DECIMAL(15,2)) AS total
       FROM ${table}
       WHERE customer_code = ? ${yearFilter} ${monthFilter}
       GROUP BY year, month
@@ -511,7 +514,9 @@ export async function getStoreStats(
 
   const brandQueries = tables.map(
     (table) => `
-      SELECT brand, SUM(retailing) AS total
+      SELECT 
+        brand, 
+        CAST(SUM(retailing) AS DECIMAL(15,2)) AS total
       FROM ${table}
       WHERE customer_code = ? ${yearFilter} ${monthFilter}
       GROUP BY brand
@@ -520,7 +525,9 @@ export async function getStoreStats(
 
   const categoryQueries = tables.map(
     (table) => `
-      SELECT category, SUM(retailing) AS total
+      SELECT 
+        category, 
+        CAST(SUM(retailing) AS DECIMAL(15,2)) AS total
       FROM ${table}
       WHERE customer_code = ? ${yearFilter} ${monthFilter}
       GROUP BY category
@@ -551,36 +558,51 @@ export async function getStoreStats(
     )
   ).flat();
 
+  // Convert totals to numbers
+  const parsedMonthResults = monthResults.map((r) => ({
+    ...r,
+    total: Number(r.total),
+  }));
+  const parsedBrandResults = brandResults.map((r) => ({
+    ...r,
+    total: Number(r.total),
+  }));
+  const parsedCategoryResults = categoryResults.map((r) => ({
+    ...r,
+    total: Number(r.total),
+  }));
+
   // Sort categories by total retailing in descending order
   const categoryMap = new Map<string, number>();
-
-  for (const { category, total } of categoryResults) {
-    if (!category) continue;
+  for (const { category, total } of parsedCategoryResults) {
+    if (!category || isNaN(total)) continue;
     const current = categoryMap.get(category) || 0;
-    categoryMap.set(category, current + Number(total));
+    categoryMap.set(category, current + total);
   }
 
   const categoriesByRetailing = Array.from(categoryMap.entries())
     .map(([category, retailing]) => ({ category, retailing }))
     .sort((a, b) => b.retailing - a.retailing);
 
-  const highestMonth = monthResults.reduce(
-    (prev, curr) => ((prev?.total ?? 0) < curr.total ? curr : prev),
+  // Safely compute highest and lowest months
+  const highestMonth = parsedMonthResults.reduce(
+    (prev, curr) => (!prev || curr.total > prev.total ? curr : prev),
     null as any
   );
 
-  const lowestMonth = monthResults.reduce(
-    (prev, curr) => ((prev?.total ?? Infinity) > curr.total ? curr : prev),
+  const lowestMonth = parsedMonthResults.reduce(
+    (prev, curr) => (!prev || curr.total < prev.total ? curr : prev),
     null as any
   );
 
-  const highestBrand = brandResults.reduce(
-    (prev, curr) => ((prev?.total ?? 0) < curr.total ? curr : prev),
+  // Safely compute highest and lowest brands
+  const highestBrand = parsedBrandResults.reduce(
+    (prev, curr) => (!prev || curr.total > prev.total ? curr : prev),
     null as any
   );
 
-  const lowestBrand = brandResults.reduce(
-    (prev, curr) => ((prev?.total ?? Infinity) > curr.total ? curr : prev),
+  const lowestBrand = parsedBrandResults.reduce(
+    (prev, curr) => (!prev || curr.total < prev.total ? curr : prev),
     null as any
   );
 
@@ -590,7 +612,7 @@ export async function getStoreStats(
           year: Number(highestMonth.year),
           month: Number(highestMonth.month),
           monthName: monthNumberToName(Number(highestMonth.month)),
-          retailing: Number(highestMonth.total),
+          retailing: highestMonth.total,
         }
       : null,
     lowestRetailingMonth: lowestMonth
@@ -598,19 +620,19 @@ export async function getStoreStats(
           year: Number(lowestMonth.year),
           month: Number(lowestMonth.month),
           monthName: monthNumberToName(Number(lowestMonth.month)),
-          retailing: Number(lowestMonth.total),
+          retailing: lowestMonth.total,
         }
       : null,
     highestRetailingBrand: highestBrand
       ? {
           brand: highestBrand.brand,
-          retailing: Number(highestBrand.total),
+          retailing: highestBrand.total,
         }
       : null,
     lowestRetailingBrand: lowestBrand
       ? {
           brand: lowestBrand.brand,
-          retailing: Number(lowestBrand.total),
+          retailing: lowestBrand.total,
         }
       : null,
     categoryRetailing: categoriesByRetailing,
