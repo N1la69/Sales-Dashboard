@@ -59,11 +59,12 @@ cache_key = f"sales_forecast_{args.type}"
 cached_data = load_cache(cache_key)
 
 if cached_data is not None:
-    print(json.dumps(cached_data))  # ✅ Only one print
+    print(json.dumps(cached_data))
     sys.exit(0)
 
 # === SQL and Forecast Logic ===
 if args.type == "forecast":
+    # 1. Load data
     sql = """
     SELECT
       DATE_FORMAT(document_date, '%%Y-%%m') AS month,
@@ -76,13 +77,31 @@ if args.type == "forecast":
     df["month"] = pd.to_datetime(df["month"])
     df = df.rename(columns={"month": "ds", "retailing": "y"})
 
+    # 2. Determine allowed months (e.g., [7, 8, 9])
+    allowed_months = sorted(df["ds"].dt.month.unique())
+
+    # 3. Determine next forecast year
+    last_actual_year = df["ds"].dt.year.max()
+    forecast_year = last_actual_year + 1
+
+    # 4. Fit Prophet and generate enough future periods
     model = Prophet()
     model.fit(df)
-    future = model.make_future_dataframe(periods=6, freq="MS")
+    future = model.make_future_dataframe(periods=18, freq="MS")  # Ensures next year's Jul–Sep is covered
     forecast = model.predict(future)
-    forecast = forecast[["ds", "yhat"]].tail(6)
-    forecast["month"] = forecast["ds"].dt.strftime("%Y-%m")
-    result = forecast[["month", "yhat"]].rename(columns={"yhat": "forecast"})
+
+    # 5. Filter forecast for target months and year
+    forecast["year"] = forecast["ds"].dt.year
+    forecast["month_num"] = forecast["ds"].dt.month
+
+    filtered_forecast = forecast[
+        (forecast["year"] == forecast_year) &
+        (forecast["month_num"].isin(allowed_months))
+    ]
+
+    # 6. Format result
+    filtered_forecast["month"] = filtered_forecast["ds"].dt.strftime("%Y-%m")
+    result = filtered_forecast[["month", "yhat"]].rename(columns={"yhat": "forecast"})
     result = result.to_dict(orient="records")
 
 elif args.type == "actual":
