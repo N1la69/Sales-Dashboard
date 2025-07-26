@@ -36,7 +36,7 @@ export default function RetailingChannelPie({
 
   return (
     <div className="flex flex-col items-center">
-      <h2 className="text-xl font-semibold">Retailing by Channel (Broad)</h2>
+      <h2 className="text-xl font-semibold">Retailing by Channel (Base)</h2>
       <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie

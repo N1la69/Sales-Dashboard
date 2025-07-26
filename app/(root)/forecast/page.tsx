@@ -129,6 +129,18 @@ const ForecastPage = () => {
     loadData();
   }, []);
 
+  const currentYr = new Date().getFullYear();
+  const prevYr = currentYr - 1;
+  const prevPrevYr = currentYr - 2;
+
+  const showActualGrowth =
+    lines.some((l) => l.key.includes(`${prevYr} Actual`)) &&
+    lines.some((l) => l.key.includes(`${prevPrevYr} Actual`));
+
+  const showProjectedGrowth =
+    lines.some((l) => l.key.includes(`${prevYr} Actual`)) &&
+    lines.some((l) => l.key.includes(`${currentYr} Forecast`));
+
   if (loading)
     return <p className="p-4 dark:text-gray-200">Loading forecast...</p>;
 
@@ -179,6 +191,88 @@ const ForecastPage = () => {
       </ResponsiveContainer>
 
       {/* FORECAST TABLE */}
+      <div className="mt-8 overflow-x-auto rounded-xl border border-gray-300 dark:border-gray-600">
+        <table className="min-w-full divide-y divide-gray-300 dark:divide-gray-600">
+          <thead className="bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-sm font-semibold">
+            <tr className="text-center">
+              <th className="px-4 py-2">Month</th>
+              <th className="px-4 py-2">{prevPrevYr} Actual Sales</th>
+              <th className="px-4 py-2">{prevYr} Actual Sales</th>
+              {showActualGrowth && (
+                <th className="px-4 py-2">Actual Growth %</th>
+              )}
+              <th className="px-4 py-2">{currentYr} Projected Sales</th>
+              {showProjectedGrowth && (
+                <th className="px-4 py-2">Projected Growth %</th>
+              )}
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-200 dark:divide-gray-700 text-sm text-gray-800 dark:text-gray-100 text-center">
+            {data.map((row) => {
+              const month = row.month;
+              const actualPrevPrev = row[`${prevPrevYr} Actual`] as
+                | number
+                | undefined;
+              const actualPrev = row[`${prevYr} Actual`] as number | undefined;
+              const forecastCurrent = row[`${currentYr} Forecast`] as
+                | number
+                | undefined;
+
+              const actualGrowth =
+                actualPrevPrev && actualPrev
+                  ? ((actualPrev - actualPrevPrev) / actualPrevPrev) * 100
+                  : undefined;
+
+              const projectedGrowth =
+                actualPrev && forecastCurrent
+                  ? ((forecastCurrent - actualPrev) / actualPrev) * 100
+                  : undefined;
+
+              return (
+                <tr
+                  key={month}
+                  className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                >
+                  <td className="px-4 py-2 font-medium">{month}</td>
+                  <td className="px-4 py-2">
+                    {actualPrevPrev !== undefined
+                      ? actualPrevPrev.toFixed(2)
+                      : "-"}
+                  </td>
+                  <td className="px-4 py-2">
+                    {actualPrev !== undefined ? actualPrev.toFixed(2) : "-"}
+                  </td>
+                  {showActualGrowth && (
+                    <td
+                      className={`px-4 py-2 ${
+                        actualGrowth && actualGrowth > 0
+                          ? "text-green-600 dark:text-green-400"
+                          : "text-red-600 dark:text-red-400"
+                      }`}
+                    >
+                      {actualGrowth !== undefined
+                        ? `${actualGrowth.toFixed(2)}%`
+                        : "-"}
+                    </td>
+                  )}
+                  <td className="px-4 py-2">
+                    {forecastCurrent !== undefined
+                      ? forecastCurrent.toFixed(2)
+                      : "-"}
+                  </td>
+                  {showProjectedGrowth && (
+                    <td className="px-4 py-2 text-blue-600 dark:text-blue-400">
+                      {projectedGrowth !== undefined
+                        ? `${projectedGrowth.toFixed(2)}%`
+                        : "-"}
+                    </td>
+                  )}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
