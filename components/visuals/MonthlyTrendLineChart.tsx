@@ -72,7 +72,7 @@ export default function MonthlyTrendLineChart({
   return (
     <>
       <h2 className="text-xl font-semibold mb-3 text-center">
-        Monthly Retailing Trend by Year
+        Monthly Retailing Trend by Year (in Lakhs)
       </h2>
 
       {/* LEGEND */}
@@ -106,7 +106,7 @@ export default function MonthlyTrendLineChart({
           />
           <YAxis
             label={{
-              value: "Retailing (Lakhs)",
+              value: "Retailing",
               angle: -90,
               position: "insideLeft",
               fill: "currentColor",
