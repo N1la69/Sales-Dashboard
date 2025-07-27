@@ -22,6 +22,19 @@ const COLOR_PALETTE = [
   "text-emerald-500 dark:text-emerald-400",
 ];
 
+const BG_COLORS = [
+  "bg-indigo-100/50 dark:bg-indigo-900/30",
+  "bg-emerald-100/50 dark:bg-emerald-900/30",
+  "bg-amber-100/50 dark:bg-amber-900/30",
+  "bg-rose-100/50 dark:bg-rose-900/30",
+  "bg-sky-100/50 dark:bg-sky-900/30",
+  "bg-violet-100/50 dark:bg-violet-900/30",
+  "bg-pink-100/50 dark:bg-pink-900/30",
+  "bg-lime-100/50 dark:bg-lime-900/30",
+  "bg-purple-100/50 dark:bg-purple-900/30",
+  "bg-cyan-100/50 dark:bg-cyan-900/30",
+];
+
 export default function CategoryTable({
   data = [],
   loading,
@@ -37,45 +50,41 @@ export default function CategoryTable({
     );
 
   return (
-    <Card className="bg-red-100/20 dark:bg-rose-300/5 shadow-md border-transparent">
+    <Card className="shadow-md bg-slate-100/40 dark:bg-slate-800/30 border-transparent">
       <CardHeader>
         <CardTitle className="text-xl font-semibold text-center">
           Retailing by Category
         </CardTitle>
       </CardHeader>
       <CardContent>
-        {!loading && !error && (
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="text-left border-b border-muted">
-                <th className="py-1">Category</th>
-                <th className="py-1">Retailing (Lakhs)</th>
-                <th className="py-1">% Share</th>
-              </tr>
-            </thead>
-            <tbody>
-              {sortedData.map(({ category, retailing }, index) => (
-                <tr
-                  key={category}
-                  className="border-b border-muted hover:bg-muted/50 transition-colors"
+        <div className="grid grid-cols-3 font-semibold text-sm text-gray-900 dark:text-gray-300 px-2 pb-2">
+          <div>Category</div>
+          <div className="text-right">Value (Lakhs)</div>
+          <div className="text-right">% Share</div>
+        </div>
+        <ul className="space-y-2">
+          {sortedData.map(({ category, retailing }, index) => {
+            const percent = total > 0 ? (retailing / total) * 100 : 0;
+            return (
+              <li
+                key={category}
+                className={`grid grid-cols-3 items-center rounded-md px-3 py-1.5 text-sm font-medium hover:bg-muted transition-colors ${
+                  BG_COLORS[index % BG_COLORS.length]
+                }`}
+              >
+                <span
+                  className={`${COLOR_PALETTE[index % COLOR_PALETTE.length]}`}
                 >
-                  <td
-                    className={`py-1 font-medium ${
-                      COLOR_PALETTE[index % COLOR_PALETTE.length]
-                    }`}
-                  >
-                    {category || "Unknown"}
-                  </td>
-                  <td className="py-1">{(retailing / 100000).toFixed(2)}</td>
-                  <td className="py-1">
-                    {total > 0 ? ((retailing / total) * 100).toFixed(1) : "0.0"}
-                    %
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
+                  {category || "Unknown"}
+                </span>
+                <span className="text-right">
+                  {(retailing / 100000).toFixed(2)}
+                </span>
+                <span className="text-right">{percent.toFixed(1)}%</span>
+              </li>
+            );
+          })}
+        </ul>
       </CardContent>
     </Card>
   );

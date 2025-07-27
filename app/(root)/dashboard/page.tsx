@@ -337,7 +337,7 @@ export default function Dashboard() {
 
         {/* MIDDLE SECTION */}
         <section className="pt-5 px-6">
-          <div className="bg-indigo-100/20 dark:bg-indigo-900/10 p-2 rounded-lg shadow">
+          <div className="bg-yellow-100/20 dark:bg-indigo-900/10 p-2 rounded-lg shadow">
             <MonthlyTrendLineChart
               data={monthlyTrendData?.monthlyRetailingTrend}
               loading={monthlyTrendLoading}
