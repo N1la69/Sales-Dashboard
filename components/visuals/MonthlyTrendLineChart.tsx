@@ -9,7 +9,6 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 
@@ -49,13 +48,11 @@ export default function MonthlyTrendLineChart({
   if (error) return <p>Error loading monthly trend data: {error.message}</p>;
   if (!data?.length) return <p>No trend data available.</p>;
 
-  // Prepare unique months and years
   const uniqueMonths = [...new Set(data.map((d) => d.month))].sort(
     (a, b) => a - b
   );
   const uniqueYears = [...new Set(data.map((d) => d.year))];
 
-  // Prepare chart data month-wise
   const chartData = uniqueMonths.map((month) => {
     const monthEntry: Record<string, number | string> = {
       month: monthNames[month - 1],
@@ -68,16 +65,29 @@ export default function MonthlyTrendLineChart({
     return monthEntry;
   });
 
-  // Determine min Y value (retailing in Lakhs)
   const allValues = data.map((d) => d.retailing / 100000);
   const minRetailing = Math.min(...allValues);
   const yAxisMin = minRetailing > 5 ? minRetailing - 5 : 0;
 
   return (
     <>
-      <h2 className="text-xl font-semibold mb-2 text-center">
+      <h2 className="text-xl font-semibold mb-3 text-center">
         Monthly Retailing Trend by Year
       </h2>
+
+      {/* LEGEND */}
+      <div className="flex flex-wrap justify-center gap-4 mb-1 text-base text-gray-700 dark:text-gray-300">
+        {uniqueYears.map((year, idx) => (
+          <div key={year} className="flex items-center gap-2">
+            <span
+              className="inline-block w-4 h-1.5 rounded-sm"
+              style={{ backgroundColor: getColor(idx) }}
+            />
+            <span>{year}</span>
+          </div>
+        ))}
+      </div>
+
       <ResponsiveContainer width="100%" height={550}>
         <LineChart
           data={chartData}
@@ -112,7 +122,6 @@ export default function MonthlyTrendLineChart({
             }}
             labelStyle={{ color: "var(--foreground)" }}
           />
-          <Legend wrapperStyle={{ color: "currentColor" }} />
           {uniqueYears.map((year, idx) => (
             <Line
               key={year}
@@ -130,14 +139,16 @@ export default function MonthlyTrendLineChart({
 }
 
 function getColor(index: number): string {
-  // Adjust colors for better light/dark contrast
   const colors = [
-    "#3b82f6", // Blue
-    "#10b981", // Green
-    "#f97316", // Orange
-    "#f43f5e", // Rose
-    "#a855f7", // Purple
-    "#14b8a6", // Teal
+    "#60a5fa", // blue-400
+    "#34d399", // emerald-400
+    "#fbbf24", // amber-400
+    "#f87171", // red-400
+    "#c084fc", // purple-400
+    "#38bdf8", // sky-400
+    "#fb7185", // rose-400
+    "#f472b6", // pink-400
+    "#4ade80", // green-400
   ];
   return colors[index % colors.length];
 }

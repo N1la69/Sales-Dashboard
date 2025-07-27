@@ -2,22 +2,33 @@
 
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
-const COLORS = [
-  "#8884d8",
-  "#82ca9d",
-  "#ffc658",
-  "#ff8042",
-  "#8dd1e1",
-  "#a4de6c",
-  "#d0ed57",
-  "#ffc0cb",
-];
-
 interface RetailingCategoryPieProps {
   data: { category: string; retailing: number }[];
   loading?: boolean;
   error?: { message: string };
 }
+
+const LIGHT_COLORS = [
+  "#4f46e5", // indigo
+  "#06b6d4", // cyan
+  "#22c55e", // green
+  "#facc15", // yellow
+  "#f97316", // orange
+  "#ec4899", // pink
+  "#8b5cf6", // violet
+  "#10b981", // emerald
+];
+
+const DARK_COLORS = [
+  "#3b82f6", // bright blue
+  "#0ea5e9", // sky blue
+  "#22c55e", // green
+  "#eab308", // amber
+  "#f97316", // orange
+  "#ec4899", // pink
+  "#8b5cf6", // violet
+  "#14b8a6", // teal
+];
 
 export default function RetailingCategoryPie({
   data = [],
@@ -31,34 +42,64 @@ export default function RetailingCategoryPie({
   const total = data.reduce((sum, item) => sum + item.retailing, 0);
   const pieData = data.map((item) => ({
     name: item.category,
-    value: Math.round((item.retailing / total) * 100), // percentage to nearest integer
+    value: Math.round((item.retailing / total) * 100),
   }));
 
   return (
     <div className="flex flex-col items-center">
-      <h2 className="text-xl font-semibold">Retailing by Category</h2>
-      <ResponsiveContainer width="100%" height={300}>
-        <PieChart>
-          <Pie
-            data={pieData}
-            dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            outerRadius={100}
-            fill="#8884d8"
-            label
-          >
-            {pieData.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-              />
-            ))}
-          </Pie>
-          <Tooltip formatter={(value: number) => `${value}%`} />
-        </PieChart>
-      </ResponsiveContainer>
+      <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+        Retailing by Category
+      </h2>
+
+      {/* Light Mode Chart */}
+      <div className="w-full h-[20rem] dark:hidden">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie
+              data={pieData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={100}
+              label
+            >
+              {pieData.map((_, index) => (
+                <Cell
+                  key={`cell-light-${index}`}
+                  fill={LIGHT_COLORS[index % LIGHT_COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip formatter={(value: number) => `${value}%`} />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Dark Mode Chart */}
+      <div className="w-full h-[20rem] hidden dark:block">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <Pie
+              data={pieData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={100}
+              label
+            >
+              {pieData.map((_, index) => (
+                <Cell
+                  key={`cell-dark-${index}`}
+                  fill={DARK_COLORS[index % DARK_COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip formatter={(value: number) => `${value}%`} />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }

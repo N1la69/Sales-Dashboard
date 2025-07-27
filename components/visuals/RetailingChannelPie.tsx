@@ -2,15 +2,26 @@
 
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 
-const COLORS = [
-  "#8884d8",
-  "#82ca9d",
-  "#ffc658",
-  "#ff8042",
-  "#8dd1e1",
-  "#a4de6c",
-  "#d0ed57",
-  "#ffc0cb",
+const LIGHT_COLORS = [
+  "#4f46e5", // indigo-600
+  "#059669", // green-600
+  "#f59e0b", // amber-500
+  "#ef4444", // red-500
+  "#0ea5e9", // sky-500
+  "#8b5cf6", // violet-500
+  "#f43f5e", // rose-500
+  "#10b981", // emerald-500
+];
+
+const DARK_COLORS = [
+  "#60a5fa", // blue-400
+  "#38bdf8", // sky-400
+  "#4ade80", // green-400
+  "#facc15", // yellow-400 (good contrast)
+  "#fb923c", // orange-400
+  "#f472b6", // pink-400
+  "#a78bfa", // violet-400
+  "#2dd4bf", // teal-400
 ];
 
 interface RetailingChannelPieProps {
@@ -36,29 +47,66 @@ export default function RetailingChannelPie({
 
   return (
     <div className="flex flex-col items-center">
-      <h2 className="text-xl font-semibold">Retailing by Channel (Base)</h2>
-      <ResponsiveContainer width="100%" height={300}>
-        <PieChart>
-          <Pie
-            data={pieData}
-            dataKey="value"
-            nameKey="name"
-            cx="50%"
-            cy="50%"
-            outerRadius={100}
-            fill="#8884d8"
-            label
-          >
-            {pieData.map((entry, index) => (
-              <Cell
-                key={`cell-${index}`}
-                fill={COLORS[index % COLORS.length]}
-              />
-            ))}
-          </Pie>
-          <Tooltip formatter={(value: number) => `${value}%`} />
-        </PieChart>
-      </ResponsiveContainer>
+      <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+        Retailing by Channel (Base)
+      </h2>
+
+      {/* Light Mode Pie Chart */}
+      <div className="block dark:hidden w-full h-[20rem]">
+        <ResponsiveContainer>
+          <PieChart>
+            <Pie
+              data={pieData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={100}
+              label
+            >
+              {pieData.map((_, index) => (
+                <Cell
+                  key={index}
+                  fill={LIGHT_COLORS[index % LIGHT_COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip formatter={(value: number) => `${value}%`} />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Dark Mode Pie Chart */}
+      <div className="hidden dark:block w-full h-[20rem]">
+        <ResponsiveContainer>
+          <PieChart>
+            <Pie
+              data={pieData}
+              dataKey="value"
+              nameKey="name"
+              cx="50%"
+              cy="50%"
+              outerRadius={100}
+              label
+            >
+              {pieData.map((_, index) => (
+                <Cell
+                  key={index}
+                  fill={DARK_COLORS[index % DARK_COLORS.length]}
+                />
+              ))}
+            </Pie>
+            <Tooltip
+              contentStyle={{
+                backgroundColor: "#1f2937", // gray-800
+                borderColor: "#374151", // gray-700
+                color: "#f9fafb", // gray-50
+              }}
+              formatter={(value: number) => `${value}%`}
+            />
+          </PieChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 }

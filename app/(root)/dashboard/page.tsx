@@ -174,10 +174,10 @@ export default function Dashboard() {
   const hasAnyPendingFilter = Object.keys(pendingFilters).length > 0;
 
   return (
-    <div className="pt-3 mx-5 z-10 dark:text-gray-200">
+    <div className="pt-3 mx-5 z-10 text-gray-900 dark:text-gray-200">
       <div className="flex flex-col text-center">
         <h1 className="text-3xl font-bold">Sales Overview</h1>
-        <p className="text-gray-500 font-semibold text-xl">
+        <p className="text-gray-600 dark:text-gray-400 font-semibold text-xl">
           Your current sales summary and activity
         </p>
       </div>
@@ -189,6 +189,11 @@ export default function Dashboard() {
             variant={dataSource === source ? "default" : "outline"}
             onClick={() =>
               handleSourceChange(source as "combined" | "main" | "temp")
+            }
+            className={
+              dataSource === source
+                ? "bg-indigo text-white hover:bg-indigo-hover"
+                : "border border-gray-200 text-gray-900 dark:text-gray-100 hover:border-indigo"
             }
           >
             {source.charAt(0).toUpperCase() + source.slice(1)} DB
@@ -214,12 +219,12 @@ export default function Dashboard() {
             values.map((value) => (
               <span
                 key={`${key}-${value}`}
-                className="flex items-center bg-primary text-primary-foreground rounded-full px-3 py-1 text-sm"
+                className="flex items-center bg-indigo text-white rounded-full px-3 py-1 text-sm"
               >
                 {`${key}: ${value}`}
                 <button
                   onClick={() => removeFilter(key, value)}
-                  className="ml-2 hover:text-red-400"
+                  className="ml-2 hover:text-error"
                 >
                   <X size={14} />
                 </button>
@@ -232,9 +237,18 @@ export default function Dashboard() {
       {hasAnyPendingFilter && (
         <div className="flex gap-2 my-4 justify-center">
           {hasPendingChanges && (
-            <Button onClick={applyFilters}>Apply Filters</Button>
+            <Button
+              className="bg-indigo text-white hover:bg-indigo-hover"
+              onClick={applyFilters}
+            >
+              Apply Filters
+            </Button>
           )}
-          <Button variant="outline" onClick={clearAllFilters}>
+          <Button
+            variant="outline"
+            onClick={clearAllFilters}
+            className="border border-gray-200 text-gray-900 dark:text-gray-100 hover:border-error"
+          >
             Clear All Filters
           </Button>
         </div>
@@ -245,8 +259,14 @@ export default function Dashboard() {
         {/* TOP SECTION */}
         <section className="grid grid-cols-4 gap-3 items-stretch px-5">
           <div className="col-span-1 h-full">
-            {loading && <p>Loading Total Retailing...</p>}
-            {error && <p>Error fetching data: {error.message}</p>}
+            {loading && (
+              <p className="dark:text-gray-200">Loading Total Retailing...</p>
+            )}
+            {error && (
+              <p className="dark:text-red-400">
+                Error fetching data: {error.message}
+              </p>
+            )}
             {data && (
               <StatCard
                 title="Total Retailing (in Lakhs)"
@@ -274,8 +294,14 @@ export default function Dashboard() {
 
           <div className="col-span-1 flex flex-col justify-between gap-2 h-full">
             <div>
-              {highestBranchLoading && <p>Loading highest branch...</p>}
-              {highestBranchError && <p>Error: {highestBranchError.message}</p>}
+              {highestBranchLoading && (
+                <p className="dark:text-gray-200">Loading highest branch...</p>
+              )}
+              {highestBranchError && (
+                <p className="dark:text-red-400">
+                  Error: {highestBranchError.message}
+                </p>
+              )}
               {highestBranchData && (
                 <StatCard
                   title="Highest Retailing Branch (in Lakhs)"
@@ -288,8 +314,14 @@ export default function Dashboard() {
             </div>
 
             <div>
-              {highestBrandLoading && <p>Loading highest brand...</p>}
-              {highestBrandError && <p>Error: {highestBrandError.message}</p>}
+              {highestBrandLoading && (
+                <p className="dark:text-gray-200">Loading highest brand...</p>
+              )}
+              {highestBrandError && (
+                <p className="dark:text-red-400">
+                  Error: {highestBrandError.message}
+                </p>
+              )}
               {highestBrandData && (
                 <StatCard
                   title="Highest Retailing Brand (in Lakhs)"
@@ -305,7 +337,7 @@ export default function Dashboard() {
 
         {/* MIDDLE SECTION */}
         <section className="pt-5 px-6">
-          <div className="">
+          <div className="bg-indigo-100/20 dark:bg-indigo-900/10 py-2 rounded-lg shadow">
             <MonthlyTrendLineChart
               data={monthlyTrendData?.monthlyRetailingTrend}
               loading={monthlyTrendLoading}
@@ -315,7 +347,7 @@ export default function Dashboard() {
         </section>
 
         {/* BOTTOM SECTION */}
-        <section className="py-5 grid grid-cols-3 gap-5 px-6">
+        <section className="py-5 pt-8 grid grid-cols-3 gap-5 px-6">
           <div className="col-span-1">
             <TopBrandforms
               data={brandformData?.topBrandforms}

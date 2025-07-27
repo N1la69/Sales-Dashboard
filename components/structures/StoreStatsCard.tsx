@@ -43,8 +43,7 @@ export default function StoreStatsCard({
         {data.highestRetailingMonth ? (
           <p>
             {data.highestRetailingMonth.month}/{data.highestRetailingMonth.year}{" "}
-            - ₹{(data.highestRetailingMonth.retailing / 100000).toFixed(2)}{" "}
-            Lakhs
+            - ₹{data.highestRetailingMonth.retailing.toFixed(2)}
           </p>
         ) : (
           <p>No data</p>
@@ -56,7 +55,7 @@ export default function StoreStatsCard({
         {data.lowestRetailingMonth ? (
           <p>
             {data.lowestRetailingMonth.month}/{data.lowestRetailingMonth.year} -
-            ₹{(data.lowestRetailingMonth.retailing / 100000).toFixed(2)} Lakhs
+            ₹{data.lowestRetailingMonth.retailing.toFixed(2)}
           </p>
         ) : (
           <p>No data</p>
@@ -67,7 +66,7 @@ export default function StoreStatsCard({
         <h3 className="font-semibold">Highest Retailing Brand</h3>
         <p>
           {data.highestRetailingBrand.brand} - ₹
-          {(data.highestRetailingBrand.retailing / 100000).toFixed(2)} Lakhs
+          {data.highestRetailingBrand.retailing.toFixed(2)}
         </p>
       </div>
 
@@ -75,7 +74,7 @@ export default function StoreStatsCard({
         <h3 className="font-semibold">Lowest Retailing Brand</h3>
         <p>
           {data.lowestRetailingBrand.brand} - ₹
-          {(data.lowestRetailingBrand.retailing / 100000).toFixed(2)} Lakhs
+          {data.lowestRetailingBrand.retailing.toFixed(2)}
         </p>
       </div>
     </div>

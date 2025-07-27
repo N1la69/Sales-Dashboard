@@ -41,6 +41,66 @@
   --color-sidebar-ring: var(--sidebar-ring);
 }
 
+/* === BASE COLOR PALETTE === */
+@theme {
+  /* Light Mode Colors */
+
+  /* Neutrals */
+  --color-white: oklch(0.99 0 0); /* #FFFFFF */
+  --color-background-light: oklch(0.985 0.005 270); /* #F9FAFB */
+  --color-surface-light: var(--color-white);
+  --color-gray-200: oklch(0.92 0.01 270); /* #E5E7EB */
+  --color-gray-600: oklch(0.7 0.02 270); /* #4B5563 */
+  --color-gray-900: oklch(0.14 0.005 260); /* #111827 */
+
+  /* Primary / Accent */
+  --color-indigo: oklch(0.48 0.1 275); /* #4F46E5 */
+  --color-indigo-hover: oklch(0.42 0.09 275); /* #4338CA */
+
+  /* Secondary */
+  --color-slate: oklch(0.65 0.02 250); /* #64748B */
+
+  /* Status Colors */
+  --color-success: oklch(0.6 0.2 160); /* #10B981 */
+  --color-warning: oklch(0.8 0.2 80); /* #F59E0B */
+  --color-error: oklch(0.65 0.18 27); /* #EF4444 */
+
+  /* Chart Colors (Light) */
+  --color-chart-blue: oklch(0.65 0.22 240); /* #3B82F6 */
+  --color-chart-green: var(--color-success); /* #10B981 */
+  --color-chart-purple: oklch(0.55 0.18 295); /* #8B5CF6 */
+  --color-chart-orange: oklch(0.75 0.2 60); /* #F97316 */
+  --color-chart-coral: oklch(0.75 0.2 25); /* #F43F5E */
+
+  /* Dark Mode Colors */
+
+  --color-background-dark: oklch(0.22 0.01 260); /* #0F172A */
+  --color-surface-dark: oklch(0.3 0.01 260); /* #1E293B */
+  --color-gray-100: oklch(0.97 0.005 270); /* #F1F5F9 */
+  --color-gray-400: oklch(0.75 0.01 270); /* #94A3B8 */
+  --color-border-dark: oklch(0.4 0.01 260); /* #334155 */
+
+  --color-indigo-light: oklch(0.6 0.09 275); /* #6366F1 */
+  --color-indigo-dark-hover: var(--color-indigo); /* #4F46E5 */
+  --color-slate-light: var(--color-gray-400); /* #94A3B8 */
+
+  --color-success-dark: oklch(0.7 0.2 160); /* #34D399 */
+  --color-warning-dark: oklch(0.85 0.2 80); /* #FBBF24 */
+  --color-error-dark: oklch(0.75 0.18 27); /* #F87171 */
+
+  /* Chart Colors (Dark) */
+  --color-chart-blue-dark: oklch(0.72 0.22 240); /* #60A5FA */
+  --color-chart-green-dark: var(--color-success-dark); /* #34D399 */
+  --color-chart-purple-dark: oklch(0.65 0.18 295); /* #A78BFA */
+  --color-chart-orange-dark: oklch(0.82 0.2 60); /* #FB923C */
+  --color-chart-coral-dark: oklch(0.82 0.2 25); /* #FB7185 */
+
+  /* Utility */
+  --color-ring-focus: var(--color-indigo);
+  --color-border-light: var(--color-gray-200);
+  --color-input-dark: oklch(0.3 0.01 270 / 60%);
+}
+
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);
