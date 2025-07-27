@@ -78,7 +78,7 @@ export default function MonthlyTrendLineChart({
       <h2 className="text-xl font-semibold mb-2 text-center">
         Monthly Retailing Trend by Year
       </h2>
-      <ResponsiveContainer width="100%" height={450}>
+      <ResponsiveContainer width="100%" height={550}>
         <LineChart
           data={chartData}
           margin={{ top: 20, right: 30, left: 0, bottom: 5 }}

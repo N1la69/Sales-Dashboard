@@ -11,6 +11,8 @@ import RetailingCategoryPie from "@/components/visuals/RetailingCategoryPie";
 import RetailingChannelPie from "@/components/visuals/RetailingChannelPie";
 import MonthlyTrendLineChart from "@/components/visuals/MonthlyTrendLineChart";
 import TopBrandforms from "@/components/structures/TopBrandforms";
+import CategoryTable from "@/components/structures/CategoryTable";
+import BroadChannelTable from "@/components/structures/BroadChannelTable";
 
 // ================= GraphQL Queries =================
 const GET_TOTAL_RETAILING = gql`
@@ -301,21 +303,38 @@ export default function Dashboard() {
           </div>
         </section>
 
-        {/* BOTTOM SECTION */}
-        <section className="pt-5 grid grid-cols-5 gap-3 px-6">
-          <div className="col-span-3">
+        {/* MIDDLE SECTION */}
+        <section className="pt-5 px-6">
+          <div className="">
             <MonthlyTrendLineChart
               data={monthlyTrendData?.monthlyRetailingTrend}
               loading={monthlyTrendLoading}
               error={monthlyTrendError}
             />
           </div>
+        </section>
 
-          <div className="col-span-2">
+        {/* BOTTOM SECTION */}
+        <section className="py-5 grid grid-cols-3 gap-5 px-6">
+          <div className="col-span-1">
             <TopBrandforms
               data={brandformData?.topBrandforms}
               loading={brandformLoading}
               error={brandformError}
+            />
+          </div>
+          <div className="col-span-1">
+            <CategoryTable
+              data={categoryData?.retailingByCategory || []}
+              loading={categoryLoading}
+              error={categoryError}
+            />
+          </div>
+          <div className="col-span-1">
+            <BroadChannelTable
+              data={broadChannelData?.retailingByBroadChannel || []}
+              loading={broadChannelLoading}
+              error={broadChannelError}
             />
           </div>
         </section>
