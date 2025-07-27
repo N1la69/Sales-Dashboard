@@ -130,6 +130,7 @@ const GET_TOP_STORES = gql`
     $category: String
     $branch: String
     $broadChannel: String
+    $brand: String
     $startDate: String
     $endDate: String
     $page: Int!
@@ -144,6 +145,7 @@ const GET_TOP_STORES = gql`
       category: $category
       branch: $branch
       broadChannel: $broadChannel
+      brand: $brand
       startDate: $startDate
       endDate: $endDate
       page: $page
@@ -168,6 +170,11 @@ const GET_DOWNLOAD_TOP_STORES = gql`
     $sm: String
     $be: String
     $category: String
+    $branch: String
+    $broadChannel: String
+    $brand: String
+    $startDate: String
+    $endDate: String
   ) {
     downloadTopStores(
       source: $source
@@ -176,6 +183,11 @@ const GET_DOWNLOAD_TOP_STORES = gql`
       sm: $sm
       be: $be
       category: $category
+      branch: $branch
+      broadChannel: $broadChannel
+      brand: $brand
+      startDate: $startDate
+      endDate: $endDate
     ) {
       store_code
       store_name
@@ -221,6 +233,7 @@ const StorePage = () => {
   const [broadChannel, setBroadChannel] = useState<string | undefined>(
     undefined
   );
+  const [brand, setBrand] = useState<string | undefined>(undefined);
   const [category, setCategory] = useState<string | undefined>(undefined);
   const [months, setMonths] = useState(3);
   const [downloadData, setDownloadData] = useState<any[]>([]);
@@ -295,6 +308,7 @@ const StorePage = () => {
       category,
       branch: branchBottom,
       broadChannel,
+      brand,
       startDate: startDate ? startDate.toISOString().slice(0, 10) : undefined,
       endDate: endDate ? endDate.toISOString().slice(0, 10) : undefined,
       page,
@@ -385,6 +399,10 @@ const StorePage = () => {
         sm,
         be,
         category,
+        branchBottom,
+        broadChannel,
+        startDate,
+        endDate,
       },
     });
   };
@@ -774,6 +792,19 @@ const StorePage = () => {
               </SelectContent>
             </Select>
 
+            <Select value={brand} onValueChange={(value) => setBrand(value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select Brand" />
+              </SelectTrigger>
+              <SelectContent>
+                {filterValues.brands.map((b) => (
+                  <SelectItem key={b} value={b}>
+                    {b}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
             <Select
               value={broadChannel}
               onValueChange={(value) => setBroadChannel(value)}
@@ -799,6 +830,7 @@ const StorePage = () => {
                 setCategory("");
                 setBranchBottom("");
                 setBroadChannel("");
+                setBrand("");
                 setMonths(3);
                 setDateRange(undefined);
                 setPage(0);

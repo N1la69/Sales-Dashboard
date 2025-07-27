@@ -157,6 +157,7 @@ export const typeDefs = gql`
       category: String
       branch: String
       broadChannel: String
+      brand: String
       startDate: String
       endDate: String
       page: Int!
@@ -169,6 +170,11 @@ export const typeDefs = gql`
       sm: String
       be: String
       category: String
+      branch: String
+      brand: String
+      broadChannel: String
+      startDate: String
+      endDate: String
     ): [DownloadTopStore!]!
   }
 `;

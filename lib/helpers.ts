@@ -11,6 +11,7 @@ interface TopStoresQueryParams {
   category?: string;
   branch?: string;
   broadChannel?: string;
+  brand?: string;
   startDate?: string;
   endDate?: string;
   page: number;
@@ -652,6 +653,7 @@ export const getTopStoresQuery = async ({
   category,
   branch,
   broadChannel,
+  brand,
   startDate,
   endDate,
   page,
@@ -705,6 +707,7 @@ export const getTopStoresQuery = async ({
   if (category) filters.push("p.category = ?");
   if (branch) filters.push("sm.New_Branch = ?");
   if (broadChannel) filters.push("cm.broad_channel = ?");
+  if (brand) filters.push("p.brand = ?");
 
   const dynamicFilterValues = [
     zm,
@@ -713,6 +716,7 @@ export const getTopStoresQuery = async ({
     category,
     branch,
     broadChannel,
+    brand,
   ].filter(Boolean);
   values.push(...dynamicFilterValues);
 

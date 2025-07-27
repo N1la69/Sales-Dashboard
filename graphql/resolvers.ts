@@ -106,6 +106,7 @@ export const resolvers = {
         category,
         branch,
         broadChannel,
+        brand,
         startDate,
         endDate,
         page,
@@ -119,6 +120,7 @@ export const resolvers = {
         category?: string;
         branch?: string;
         broadChannel?: string;
+        brand?: string;
         startDate?: string;
         endDate?: string;
         page: number;
@@ -135,6 +137,7 @@ export const resolvers = {
           category,
           branch,
           broadChannel,
+          brand,
           startDate,
           endDate,
           page,
@@ -153,6 +156,7 @@ export const resolvers = {
             category,
             branch,
             broadChannel,
+            brand,
             startDate,
             endDate,
             page: 0,
@@ -184,6 +188,11 @@ export const resolvers = {
         sm,
         be,
         category,
+        branch,
+        broadChannel,
+        brand,
+        startDate,
+        endDate,
       }: {
         source: string;
         months: number;
@@ -191,6 +200,11 @@ export const resolvers = {
         sm?: string;
         be?: string;
         category?: string;
+        branch?: string;
+        broadChannel?: string;
+        brand?: string;
+        startDate?: string;
+        endDate?: string;
       }
     ) => {
       try {
@@ -201,6 +215,11 @@ export const resolvers = {
           sm,
           be,
           category,
+          branch,
+          broadChannel,
+          brand,
+          startDate,
+          endDate,
           page: 0,
           pageSize: 100, // Always fetch all top 100
         });
