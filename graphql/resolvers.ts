@@ -99,11 +99,15 @@ export const resolvers = {
       _: any,
       {
         source,
-        months = 3,
+        months,
         zm,
         sm,
         be,
         category,
+        branch,
+        broadChannel,
+        startDate,
+        endDate,
         page,
         pageSize,
       }: {
@@ -113,6 +117,10 @@ export const resolvers = {
         sm?: string;
         be?: string;
         category?: string;
+        branch?: string;
+        broadChannel?: string;
+        startDate?: string;
+        endDate?: string;
         page: number;
         pageSize: number;
       }
@@ -125,13 +133,16 @@ export const resolvers = {
           sm,
           be,
           category,
+          branch,
+          broadChannel,
+          startDate,
+          endDate,
           page,
           pageSize,
         });
 
         const stores = await prisma.$queryRawUnsafe(query, ...values);
 
-        // Count total records without pagination
         const { query: countQuery, values: countValues } =
           await getTopStoresQuery({
             source,
@@ -140,6 +151,10 @@ export const resolvers = {
             sm,
             be,
             category,
+            branch,
+            broadChannel,
+            startDate,
+            endDate,
             page: 0,
             pageSize: 0,
             countOnly: true,

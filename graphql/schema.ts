@@ -150,11 +150,15 @@ export const typeDefs = gql`
     getStoreDetails(storeCode: String!, source: String): StoreDetails
     topStores(
       source: String!
-      months: Int!
+      months: Int
       zm: String
       sm: String
       be: String
       category: String
+      branch: String
+      broadChannel: String
+      startDate: String
+      endDate: String
       page: Int!
       pageSize: Int!
     ): TopStoresResponse

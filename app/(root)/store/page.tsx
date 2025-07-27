@@ -12,7 +12,7 @@ import StoreRetailingTrendChart from "@/components/visuals/StoreRetailingTrendCh
 import { gql, useQuery, useLazyQuery } from "@apollo/client";
 import { useState, useEffect } from "react";
 import MultiSelect from "@/components/MultiSelect";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, CalendarIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -22,6 +22,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { DateRange } from "react-day-picker";
+import { format } from "date-fns";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover";
 import filterValues from "@/constants/filterValues";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
@@ -115,11 +123,15 @@ const GET_STORE_DETAILS = gql`
 const GET_TOP_STORES = gql`
   query GetTopStores(
     $source: String!
-    $months: Int!
+    $months: Int
     $zm: String
     $sm: String
     $be: String
     $category: String
+    $branch: String
+    $broadChannel: String
+    $startDate: String
+    $endDate: String
     $page: Int!
     $pageSize: Int!
   ) {
@@ -130,6 +142,10 @@ const GET_TOP_STORES = gql`
       sm: $sm
       be: $be
       category: $category
+      branch: $branch
+      broadChannel: $broadChannel
+      startDate: $startDate
+      endDate: $endDate
       page: $page
       pageSize: $pageSize
     ) {
@@ -199,9 +215,18 @@ const StorePage = () => {
   const [zm, setZm] = useState<string | undefined>(undefined);
   const [sm, setSm] = useState<string | undefined>(undefined);
   const [be, setBe] = useState<string | undefined>(undefined);
+  const [branchBottom, setBranchBottom] = useState<string | undefined>(
+    undefined
+  );
+  const [broadChannel, setBroadChannel] = useState<string | undefined>(
+    undefined
+  );
   const [category, setCategory] = useState<string | undefined>(undefined);
   const [months, setMonths] = useState(3);
   const [downloadData, setDownloadData] = useState<any[]>([]);
+  const [dateRange, setDateRange] = useState<DateRange | undefined>();
+  const startDate = dateRange?.from;
+  const endDate = dateRange?.to;
 
   const [page, setPage] = useState(0);
   const pageSize = 20;
@@ -263,11 +288,15 @@ const StorePage = () => {
   const { data, loading, error, refetch } = useQuery(GET_TOP_STORES, {
     variables: {
       source: dataSource,
-      months,
+      months: startDate && endDate ? undefined : months,
       zm,
       sm,
       be,
       category,
+      branch: branchBottom,
+      broadChannel,
+      startDate: startDate ? startDate.toISOString().slice(0, 10) : undefined,
+      endDate: endDate ? endDate.toISOString().slice(0, 10) : undefined,
       page,
       pageSize,
     },
@@ -642,7 +671,37 @@ const StorePage = () => {
               onChange={(e) => setMonths(parseInt(e.target.value))}
               placeholder="Months"
               className="w-48"
+              disabled={!!startDate && !!endDate}
             />
+
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  id="date"
+                  variant={"outline"}
+                  className="w-[260px] justify-start text-left font-normal"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {startDate && endDate ? (
+                    `${format(startDate, "LLL dd, yyyy")} - ${format(
+                      endDate,
+                      "LLL dd, yyyy"
+                    )}`
+                  ) : (
+                    <span>Select date range</span>
+                  )}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar
+                  initialFocus
+                  mode="range"
+                  selected={dateRange}
+                  onSelect={setDateRange}
+                  numberOfMonths={2}
+                />
+              </PopoverContent>
+            </Popover>
 
             <Select value={zm} onValueChange={(value) => setZm(value)}>
               <SelectTrigger>
@@ -684,6 +743,22 @@ const StorePage = () => {
             </Select>
 
             <Select
+              value={branchBottom}
+              onValueChange={(value) => setBranchBottom(value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Branch" />
+              </SelectTrigger>
+              <SelectContent>
+                {filterValues.branches.map((br) => (
+                  <SelectItem key={br} value={br}>
+                    {br}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
+            <Select
               value={category}
               onValueChange={(value) => setCategory(value)}
             >
@@ -699,15 +774,33 @@ const StorePage = () => {
               </SelectContent>
             </Select>
 
+            <Select
+              value={broadChannel}
+              onValueChange={(value) => setBroadChannel(value)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select Channel (Base)" />
+              </SelectTrigger>
+              <SelectContent>
+                {filterValues.broadChannels.map((bc) => (
+                  <SelectItem key={bc} value={bc}>
+                    {bc}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+
             <Button
               variant="default"
-              className="cursor-pointer"
               onClick={() => {
                 setZm("");
                 setSm("");
                 setBe("");
                 setCategory("");
+                setBranchBottom("");
+                setBroadChannel("");
                 setMonths(3);
+                setDateRange(undefined);
                 setPage(0);
               }}
             >

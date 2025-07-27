@@ -4,11 +4,15 @@ import prisma from "./utils";
 // ========= Utility & Helper Functions =========
 interface TopStoresQueryParams {
   source: string;
-  months: number;
+  months?: number;
   zm?: string;
   sm?: string;
   be?: string;
   category?: string;
+  branch?: string;
+  broadChannel?: string;
+  startDate?: string;
+  endDate?: string;
   page: number;
   pageSize: number;
   countOnly?: boolean;
@@ -641,11 +645,15 @@ export async function getStoreStats(
 
 export const getTopStoresQuery = async ({
   source,
-  months,
+  months = 3,
   zm,
   sm,
   be,
   category,
+  branch,
+  broadChannel,
+  startDate,
+  endDate,
   page,
   pageSize,
   countOnly = false,
@@ -655,36 +663,72 @@ export const getTopStoresQuery = async ({
 
   const tables = resolveTables(source);
 
-  // Get latest N months from the first table in the resolved source
-  const dateQuery = `
-    SELECT DISTINCT DATE_FORMAT(document_date, '%Y-%m') as ym
-    FROM ${tables[0]}
-    ORDER BY ym DESC
-    LIMIT ?
-  `;
-  const dateRows: any[] = await prisma.$queryRawUnsafe(dateQuery, months);
-  const latestMonths = dateRows.map((r) => r.ym);
-  if (latestMonths.length === 0)
-    throw new Error(`No recent months found in ${tables[0]}.`);
+  // Month filtering
+  let monthsValues: string[] = [];
+  let monthsCondition = "";
+
+  if (startDate && endDate) {
+    const dateQuery = `
+      SELECT DISTINCT DATE_FORMAT(document_date, '%Y-%m') as ym
+      FROM ${tables[0]}
+      WHERE document_date BETWEEN ? AND ?
+      ORDER BY ym DESC
+    `;
+    const dateRows: any[] = await prisma.$queryRawUnsafe(
+      dateQuery,
+      startDate,
+      endDate
+    );
+    monthsValues = dateRows.map((r) => r.ym);
+    if (monthsValues.length === 0)
+      throw new Error("No data in selected date range.");
+  } else {
+    const dateQuery = `
+      SELECT DISTINCT DATE_FORMAT(document_date, '%Y-%m') as ym
+      FROM ${tables[0]}
+      ORDER BY ym DESC
+      LIMIT ?
+    `;
+    const dateRows: any[] = await prisma.$queryRawUnsafe(dateQuery, months);
+    monthsValues = dateRows.map((r) => r.ym);
+    if (monthsValues.length === 0) throw new Error("No recent data found.");
+  }
+
+  monthsCondition = monthsValues
+    .map(() => `DATE_FORMAT(p.document_date, '%Y-%m') = ?`)
+    .join(" OR ");
 
   // Dynamic Filters
   if (zm) filters.push("sm.ZM = ?");
   if (sm) filters.push("sm.SM = ?");
   if (be) filters.push("sm.BE = ?");
   if (category) filters.push("p.category = ?");
+  if (branch) filters.push("sm.New_Branch = ?");
+  if (broadChannel) filters.push("cm.broad_channel = ?");
 
-  values.push(...[zm, sm, be, category].filter(Boolean));
+  const dynamicFilterValues = [
+    zm,
+    sm,
+    be,
+    category,
+    branch,
+    broadChannel,
+  ].filter(Boolean);
+  values.push(...dynamicFilterValues);
 
   const filterClause = filters.length ? `AND ${filters.join(" AND ")}` : "";
-  const monthsCondition = latestMonths
-    .map(() => `DATE_FORMAT(p.document_date, '%Y-%m') = ?`)
-    .join(" OR ");
-  const monthsValues = [...latestMonths];
 
-  // Flatten values per table
-  const baseValues = tables.flatMap(() => [...monthsValues, ...values]);
+  // Flatten values for all tables
+  const baseValues = tables.flatMap(() => [
+    ...monthsValues,
+    ...dynamicFilterValues,
+  ]);
 
-  // Subqueries per source
+  const joinClause = broadChannel
+    ? `JOIN store_mapping sm ON p.customer_code = sm.Old_Store_Code
+       JOIN channel_mapping cm ON p.channel = cm.channel`
+    : `JOIN store_mapping sm ON p.customer_code = sm.Old_Store_Code`;
+
   const subQueries = tables
     .map(
       (table) => `
@@ -694,7 +738,7 @@ export const getTopStoresQuery = async ({
           sm.New_Branch AS branch_name,
           SUM(p.retailing) AS total_retailing
         FROM ${table} p
-        JOIN store_mapping sm ON p.customer_code = sm.Old_Store_Code
+        ${joinClause}
         WHERE (${monthsCondition}) ${filterClause}
         GROUP BY p.customer_code, sm.New_Branch
       `
@@ -709,7 +753,7 @@ export const getTopStoresQuery = async ({
         branch_name,
         SUM(total_retailing) AS total_retailing,
         ROUND(SUM(total_retailing) / ?, 2) AS avg_retailing
-      FROM (${subQueries}) as combined
+      FROM (${subQueries}) AS combined
       GROUP BY customer_code, store_name, branch_name
       ORDER BY avg_retailing DESC
       LIMIT 100
@@ -721,7 +765,10 @@ export const getTopStoresQuery = async ({
       ${topStoresCTE}
       SELECT COUNT(*) as count FROM ranked_stores
     `;
-    return { query: countQuery, values: [months, ...baseValues] };
+    return {
+      query: countQuery,
+      values: [monthsValues.length, ...baseValues],
+    };
   }
 
   const paginatedQuery = `
@@ -739,6 +786,6 @@ export const getTopStoresQuery = async ({
 
   return {
     query: paginatedQuery,
-    values: [months, ...baseValues, pageSize, page * pageSize],
+    values: [monthsValues.length, ...baseValues, pageSize, page * pageSize],
   };
 };
