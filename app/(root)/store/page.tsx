@@ -510,14 +510,15 @@ const StorePage = () => {
   }, [dataSource, months, zm, sm, be, category]);
 
   return (
-    <div className="pt-3 mx-5 z-10 dark:text-gray-200">
+    <div className="pt-3 mx-5 z-10 text-gray-900 dark:text-gray-200">
       <div className="flex flex-col text-center space-y-1 mb-6">
-        <h1 className="text-3xl font-bold">Store at Fingertips</h1>
-        <p className="text-gray-500 dark:text-gray-400 font-medium text-lg">
+        <h1 className="text-3xl font-bold text-primary">Store at Fingertips</h1>
+        <p className="text-muted-foreground font-medium text-lg">
           Your current stores&apos; summary & activity
         </p>
       </div>
 
+      {/* Data Source Selection */}
       <div className="flex justify-center gap-3 my-4">
         {["combined", "main", "temp"].map((source) => (
           <Button
@@ -526,7 +527,11 @@ const StorePage = () => {
             onClick={() =>
               handleSourceChange(source as "combined" | "main" | "temp")
             }
-            className="cursor-pointer"
+            className={
+              dataSource === source
+                ? "bg-indigo text-white hover:bg-indigo-hover"
+                : "border border-gray-200 text-gray-900 dark:text-gray-100 hover:border-indigo"
+            }
           >
             {source.charAt(0).toUpperCase() + source.slice(1)} DB
           </Button>
@@ -648,7 +653,10 @@ const StorePage = () => {
                       </h2>
                       <ul className="space-y-1 h-96 overflow-y-auto">
                         {categoryStats.map((item: any, index: number) => (
-                          <li key={index} className="flex justify-between">
+                          <li
+                            key={index}
+                            className="flex justify-between text-indigo-800 dark:text-indigo-200"
+                          >
                             <span>{item.category}</span>
                             <span>₹ {item.retailing.toLocaleString()}</span>
                           </li>
@@ -688,12 +696,19 @@ const StorePage = () => {
               value={months}
               onChange={(e) => setMonths(parseInt(e.target.value))}
               placeholder="Months"
-              className="w-48"
+              className="w-48 py-2.5 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 
+                     focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all placeholder:text-indigo-400 
+                     dark:placeholder:text-indigo-500 text-indigo-700 dark:text-indigo-200"
               disabled={!!startDate && !!endDate}
             />
 
             <Popover>
-              <PopoverTrigger asChild>
+              <PopoverTrigger
+                asChild
+                className="py-2.5 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 
+                     focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all placeholder:text-indigo-400 
+                     dark:placeholder:text-indigo-500 text-indigo-700 dark:text-indigo-200"
+              >
                 <Button
                   id="date"
                   variant={"outline"}
@@ -722,10 +737,15 @@ const StorePage = () => {
             </Popover>
 
             <Select value={zm} onValueChange={(value) => setZm(value)}>
-              <SelectTrigger>
+              <SelectTrigger
+                className="rounded-xl border border-indigo-300 dark:border-indigo-700 
+                   bg-indigo-50/30 dark:bg-indigo-950/20 py-2.5 px-4 text-indigo-700 
+                   dark:text-indigo-200 placeholder:text-indigo-400 dark:placeholder:text-indigo-500 
+                   focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all"
+              >
                 <SelectValue placeholder="Select ZM" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white dark:bg-zinc-900 border border-indigo-200 dark:border-indigo-700 text-indigo-800 dark:text-indigo-200">
                 {filterValues.zms.map((z) => (
                   <SelectItem key={z} value={z}>
                     {z}
@@ -735,10 +755,15 @@ const StorePage = () => {
             </Select>
 
             <Select value={sm} onValueChange={(value) => setSm(value)}>
-              <SelectTrigger>
+              <SelectTrigger
+                className="rounded-xl border border-indigo-300 dark:border-indigo-700 
+                   bg-indigo-50/30 dark:bg-indigo-950/20 py-2.5 px-4 text-indigo-700 
+                   dark:text-indigo-200 placeholder:text-indigo-400 dark:placeholder:text-indigo-500 
+                   focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all"
+              >
                 <SelectValue placeholder="Select SM" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white dark:bg-zinc-900 border border-indigo-200 dark:border-indigo-700 text-indigo-800 dark:text-indigo-200">
                 {filterValues.sms.map((s) => (
                   <SelectItem key={s} value={s}>
                     {s}
@@ -748,10 +773,15 @@ const StorePage = () => {
             </Select>
 
             <Select value={be} onValueChange={(value) => setBe(value)}>
-              <SelectTrigger>
+              <SelectTrigger
+                className="rounded-xl border border-indigo-300 dark:border-indigo-700 
+                   bg-indigo-50/30 dark:bg-indigo-950/20 py-2.5 px-4 text-indigo-700 
+                   dark:text-indigo-200 placeholder:text-indigo-400 dark:placeholder:text-indigo-500 
+                   focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all"
+              >
                 <SelectValue placeholder="Select BE" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white dark:bg-zinc-900 border border-indigo-200 dark:border-indigo-700 text-indigo-800 dark:text-indigo-200">
                 {filterValues.bes.map((b) => (
                   <SelectItem key={b} value={b}>
                     {b}
@@ -764,10 +794,15 @@ const StorePage = () => {
               value={branchBottom}
               onValueChange={(value) => setBranchBottom(value)}
             >
-              <SelectTrigger>
+              <SelectTrigger
+                className="rounded-xl border border-indigo-300 dark:border-indigo-700 
+                   bg-indigo-50/30 dark:bg-indigo-950/20 py-2.5 px-4 text-indigo-700 
+                   dark:text-indigo-200 placeholder:text-indigo-400 dark:placeholder:text-indigo-500 
+                   focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all"
+              >
                 <SelectValue placeholder="Select Branch" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white dark:bg-zinc-900 border border-indigo-200 dark:border-indigo-700 text-indigo-800 dark:text-indigo-200">
                 {filterValues.branches.map((br) => (
                   <SelectItem key={br} value={br}>
                     {br}
@@ -780,10 +815,15 @@ const StorePage = () => {
               value={category}
               onValueChange={(value) => setCategory(value)}
             >
-              <SelectTrigger>
+              <SelectTrigger
+                className="rounded-xl border border-indigo-300 dark:border-indigo-700 
+                   bg-indigo-50/30 dark:bg-indigo-950/20 py-2.5 px-4 text-indigo-700 
+                   dark:text-indigo-200 placeholder:text-indigo-400 dark:placeholder:text-indigo-500 
+                   focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all"
+              >
                 <SelectValue placeholder="Select Category" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white dark:bg-zinc-900 border border-indigo-200 dark:border-indigo-700 text-indigo-800 dark:text-indigo-200">
                 {filterValues.categories.map((c) => (
                   <SelectItem key={c} value={c}>
                     {c}
@@ -793,10 +833,15 @@ const StorePage = () => {
             </Select>
 
             <Select value={brand} onValueChange={(value) => setBrand(value)}>
-              <SelectTrigger>
+              <SelectTrigger
+                className="rounded-xl border border-indigo-300 dark:border-indigo-700 
+                   bg-indigo-50/30 dark:bg-indigo-950/20 py-2.5 px-4 text-indigo-700 
+                   dark:text-indigo-200 placeholder:text-indigo-400 dark:placeholder:text-indigo-500 
+                   focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all"
+              >
                 <SelectValue placeholder="Select Brand" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white dark:bg-zinc-900 border border-indigo-200 dark:border-indigo-700 text-indigo-800 dark:text-indigo-200">
                 {filterValues.brands.map((b) => (
                   <SelectItem key={b} value={b}>
                     {b}
@@ -809,10 +854,15 @@ const StorePage = () => {
               value={broadChannel}
               onValueChange={(value) => setBroadChannel(value)}
             >
-              <SelectTrigger>
+              <SelectTrigger
+                className="rounded-xl border border-indigo-300 dark:border-indigo-700 
+                   bg-indigo-50/30 dark:bg-indigo-950/20 py-2.5 px-4 text-indigo-700 
+                   dark:text-indigo-200 placeholder:text-indigo-400 dark:placeholder:text-indigo-500 
+                   focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all"
+              >
                 <SelectValue placeholder="Select Channel (Base)" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white dark:bg-zinc-900 border border-indigo-200 dark:border-indigo-700 text-indigo-800 dark:text-indigo-200">
                 {filterValues.broadChannels.map((bc) => (
                   <SelectItem key={bc} value={bc}>
                     {bc}
@@ -835,11 +885,16 @@ const StorePage = () => {
                 setDateRange(undefined);
                 setPage(0);
               }}
+              className="bg-indigo text-white hover:bg-indigo-hover"
             >
               Clear All Filters
             </Button>
 
-            <Button onClick={handleExcelDownload} disabled={downloadLoading}>
+            <Button
+              onClick={handleExcelDownload}
+              disabled={downloadLoading}
+              className="bg-indigo text-white hover:bg-indigo-hover"
+            >
               {downloadLoading ? "Downloading..." : "Download Excel"}
             </Button>
           </div>

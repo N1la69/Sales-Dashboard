@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 
 interface StoreStatsProps {
@@ -32,48 +31,53 @@ export default function StoreStatsCard({
   loading,
   error,
 }: StoreStatsProps) {
-  if (loading) return <p>Loading store stats...</p>;
-  if (error) return <p>Error loading stats: {error.message}</p>;
-  if (!data) return <p>No stats available.</p>;
+  if (loading)
+    return (
+      <p className="text-indigo-600 dark:text-indigo-300">
+        Loading store stats...
+      </p>
+    );
+  if (error)
+    return (
+      <p className="text-red-600 dark:text-red-400">
+        Error loading stats: {error.message}
+      </p>
+    );
+  if (!data)
+    return (
+      <p className="text-gray-500 dark:text-gray-400">No stats available.</p>
+    );
 
   return (
-    <div className="flex flex-col gap-4 mt-4">
-      <div className="p-4 border rounded shadow">
-        <h3 className="font-semibold">Highest Retailing Month</h3>
-        {data.highestRetailingMonth ? (
-          <p>
-            {data.highestRetailingMonth.month}/{data.highestRetailingMonth.year}{" "}
-            - ₹{data.highestRetailingMonth.retailing.toFixed(2)}
-          </p>
-        ) : (
-          <p>No data</p>
-        )}
-      </div>
-
-      <div className="p-4 border rounded shadow">
-        <h3 className="font-semibold">Lowest Retailing Month</h3>
-        {data.lowestRetailingMonth ? (
-          <p>
-            {data.lowestRetailingMonth.month}/{data.lowestRetailingMonth.year} -
-            ₹{data.lowestRetailingMonth.retailing.toFixed(2)}
-          </p>
-        ) : (
-          <p>No data</p>
-        )}
-      </div>
-
-      <div className="p-4 border rounded shadow">
-        <h3 className="font-semibold">Highest Retailing Brand</h3>
+    <div className="flex flex-col gap-4">
+      <div className="p-4 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-800 dark:text-indigo-200 shadow-sm">
+        <h3 className="font-semibold mb-1">Highest Retailing Month</h3>
         <p>
-          {data.highestRetailingBrand.brand} - ₹
+          {data.highestRetailingMonth.month}/{data.highestRetailingMonth.year} –
+          ₹{data.highestRetailingMonth.retailing.toFixed(2)}
+        </p>
+      </div>
+
+      <div className="p-4 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-800 dark:text-indigo-200 shadow-sm">
+        <h3 className="font-semibold mb-1">Lowest Retailing Month</h3>
+        <p>
+          {data.lowestRetailingMonth.month}/{data.lowestRetailingMonth.year} – ₹
+          {data.lowestRetailingMonth.retailing.toFixed(2)}
+        </p>
+      </div>
+
+      <div className="p-4 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-800 dark:text-indigo-200 shadow-sm">
+        <h3 className="font-semibold mb-1">Highest Retailing Brand</h3>
+        <p>
+          {data.highestRetailingBrand.brand} – ₹
           {data.highestRetailingBrand.retailing.toFixed(2)}
         </p>
       </div>
 
-      <div className="p-4 border rounded shadow">
-        <h3 className="font-semibold">Lowest Retailing Brand</h3>
+      <div className="p-4 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-800 dark:text-indigo-200 shadow-sm">
+        <h3 className="font-semibold mb-1">Lowest Retailing Brand</h3>
         <p>
-          {data.lowestRetailingBrand.brand} - ₹
+          {data.lowestRetailingBrand.brand} – ₹
           {data.lowestRetailingBrand.retailing.toFixed(2)}
         </p>
       </div>

@@ -56,9 +56,7 @@ const UploadPage = () => {
         throw new Error(resData.error || `Failed to upload ${type} data`);
       }
 
-      setSuccess(
-        `${type.toUpperCase()} file received. Processing in background.`
-      );
+      setSuccess(`${type.toUpperCase()} file uploaded successfully!`);
     } catch (err: any) {
       setError(err.message || `An error occurred during ${type} upload.`);
     } finally {
@@ -115,7 +113,7 @@ const UploadPage = () => {
   };
 
   return (
-    <div className="pt-3 mx-5 z-20 dark:text-gray-200">
+    <div className="pt-3 mx-5 z-20 dark:text-blue-100">
       <h1 className="text-center text-2xl font-bold">
         Upload Analytics Data Here
       </h1>
@@ -123,7 +121,7 @@ const UploadPage = () => {
       {/* PSR Data Upload */}
       <Card className="mt-5 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold dark:text-gray-200">
+          <CardTitle className="text-lg font-semibold dark:text-blue-100">
             Upload PSR Data
           </CardTitle>
         </CardHeader>
@@ -138,19 +136,29 @@ const UploadPage = () => {
                 resetMessages();
               }
             }}
-            className="cursor-pointer border border-primary/30 dark:border-primary/50 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+            className="cursor-pointer border border-blue-200 dark:border-blue-700 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/20 file:text-blue-700 dark:file:text-blue-200 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/30"
           />
 
           <div className="flex space-x-2">
             <Button
               variant={psrAction === "overwrite" ? "default" : "outline"}
               onClick={() => setPsrAction("overwrite")}
+              className={`${
+                psrAction === "overwrite"
+                  ? "bg-indigo text-white hover:bg-indigo-hover"
+                  : "border border-gray-200 text-gray-900 dark:text-gray-100 hover:border-indigo"
+              }`}
             >
               Overwrite
             </Button>
             <Button
               variant={psrAction === "append" ? "default" : "outline"}
               onClick={() => setPsrAction("append")}
+              className={`${
+                psrAction === "append"
+                  ? "bg-indigo text-white hover:bg-indigo-hover"
+                  : "border border-gray-200 text-gray-900 dark:text-gray-100 hover:border-indigo"
+              }`}
             >
               Append
             </Button>
@@ -160,6 +168,7 @@ const UploadPage = () => {
             <Button
               onClick={() => psrFile && uploadFile(psrFile, "psr", psrAction)}
               disabled={loadingType === "psr"}
+              className="bg-indigo text-white hover:bg-indigo-hover"
             >
               {loadingType === "psr" ? "Uploading..." : "Upload"}
             </Button>
@@ -167,6 +176,7 @@ const UploadPage = () => {
             <Button
               onClick={handleMergePsrData}
               disabled={loadingType === "merge"}
+              className="bg-indigo text-white hover:bg-indigo-hover"
             >
               {loadingType === "merge" ? "Merging..." : "Merge to Main Data"}
             </Button>
@@ -179,7 +189,10 @@ const UploadPage = () => {
               {loadingType === "clear" ? "Clearing..." : "Clear Temp Data"}
             </Button>
 
-            <Button variant="outline" disabled>
+            <Button
+              variant="outline"
+              className="border border-gray-200 text-gray-900 dark:text-gray-100 hover:border-indigo"
+            >
               Download Template
             </Button>
           </div>
@@ -189,7 +202,7 @@ const UploadPage = () => {
       {/* Channel Mapping Upload */}
       <Card className="mt-5 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold dark:text-gray-200">
+          <CardTitle className="text-lg font-semibold dark:text-blue-100">
             Upload Channel Mapping Data
           </CardTitle>
         </CardHeader>
@@ -203,17 +216,21 @@ const UploadPage = () => {
                 resetMessages();
               }
             }}
-            className="cursor-pointer border border-primary/30 dark:border-primary/50 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+            className="cursor-pointer border border-blue-200 dark:border-blue-700 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/20 file:text-blue-700 dark:file:text-blue-200 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/30"
           />
           <div className="flex space-x-3">
             <Button
               onClick={() => channelFile && uploadFile(channelFile, "channel")}
               disabled={loadingType === "channel"}
+              className="bg-indigo text-white hover:bg-indigo-hover"
             >
               {loadingType === "channel" ? "Uploading..." : "Upload"}
             </Button>
 
-            <Button variant="outline" disabled>
+            <Button
+              variant="outline"
+              className="border border-gray-200 text-gray-900 dark:text-gray-100 hover:border-indigo"
+            >
               Download Template
             </Button>
           </div>
@@ -223,7 +240,7 @@ const UploadPage = () => {
       {/* Store Mapping Upload */}
       <Card className="mt-5 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
-          <CardTitle className="text-lg font-semibold dark:text-gray-200">
+          <CardTitle className="text-lg font-semibold dark:text-blue-100">
             Upload Store Mapping Data
           </CardTitle>
         </CardHeader>
@@ -237,17 +254,21 @@ const UploadPage = () => {
                 resetMessages();
               }
             }}
-            className="cursor-pointer border border-primary/30 dark:border-primary/50 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary/10 file:text-primary hover:file:bg-primary/20"
+            className="cursor-pointer border border-blue-200 dark:border-blue-700 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/20 file:text-blue-700 dark:file:text-blue-200 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/30"
           />
           <div className="flex space-x-3">
             <Button
               onClick={() => storeFile && uploadFile(storeFile, "store")}
               disabled={loadingType === "store"}
+              className="bg-indigo text-white hover:bg-indigo-hover"
             >
               {loadingType === "store" ? "Uploading..." : "Upload"}
             </Button>
 
-            <Button variant="outline" disabled>
+            <Button
+              variant="outline"
+              className="border border-gray-200 text-gray-900 dark:text-gray-100 hover:border-indigo"
+            >
               Download Template
             </Button>
           </div>
