@@ -18,6 +18,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import filterValues from "@/constants/filterValues";
 import { format } from "date-fns";
 import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
@@ -314,36 +320,47 @@ const RankingPage = () => {
   ]);
 
   return (
-    <div className="pt-3 mx-5 z-10 text-gray-900 dark:text-gray-200">
-      <div className="flex flex-col text-center space-y-1 mb-6">
+    <div className="relative pt-3 mx-5 z-10 text-gray-900 dark:text-gray-200">
+      <div className="text-center space-y-1 mb-6">
         <h1 className="text-3xl font-bold text-primary">Top 100 Stores</h1>
         <p className="text-muted-foreground font-medium text-lg">
           Generate rankings based on average retailing
         </p>
       </div>
 
-      {/* Data Source Selection */}
-      <div className="flex justify-center gap-3 my-4">
-        {["combined", "main", "temp"].map((source) => (
-          <Button
-            key={source}
-            variant={dataSource === source ? "default" : "outline"}
-            onClick={() =>
-              handleSourceChange(source as "combined" | "main" | "temp")
-            }
-            className={
-              dataSource === source
-                ? "bg-indigo text-white hover:bg-indigo-hover"
-                : "border border-gray-200 text-gray-900 dark:text-gray-100 hover:border-indigo"
-            }
-          >
-            {source.charAt(0).toUpperCase() + source.slice(1)} DB
-          </Button>
-        ))}
+      {/* Data Source Dropdown */}
+      <div className="absolute right-4 top-7">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              className="border-indigo-300 dark:border-indigo-700 bg-indigo-500 dark:bg-indigo-200 text-indigo-50 dark:text-indigo-900"
+            >
+              {dataSource.charAt(0).toUpperCase() + dataSource.slice(1)} DB
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-36">
+            {["combined", "main", "temp"].map((source) => (
+              <DropdownMenuItem
+                key={source}
+                onClick={() =>
+                  handleSourceChange(source as "combined" | "main" | "temp")
+                }
+                className={`cursor-pointer ${
+                  dataSource === source
+                    ? "bg-indigo-100 dark:bg-indigo-900 font-semibold"
+                    : ""
+                }`}
+              >
+                {source.charAt(0).toUpperCase() + source.slice(1)} DB
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
 
       {/* FILTERS */}
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-2">
         <Input
           type="number"
           value={months}
