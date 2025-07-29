@@ -15,9 +15,16 @@ import CategoryTable from "@/components/structures/CategoryTable";
 import BroadChannelTable from "@/components/structures/BroadChannelTable";
 
 // ================= GraphQL Queries =================
-const GET_TOTAL_RETAILING = gql`
-  query GetTotalRetailing($filters: FilterInput, $source: String) {
-    totalRetailing(filters: $filters, source: $source)
+const GET_RETAILING_STATS = gql`
+  query GetRetailingStats($filters: FilterInput, $source: String) {
+    retailingStats(filters: $filters, source: $source) {
+      total
+      breakdown {
+        year
+        value
+      }
+      growth
+    }
   }
 `;
 
@@ -26,6 +33,11 @@ const GET_HIGHEST_BRANCH = gql`
     highestRetailingBranch(filters: $filters, source: $source) {
       branch
       retailing
+      breakdown {
+        year
+        value
+      }
+      growth
     }
   }
 `;
@@ -35,6 +47,11 @@ const GET_HIGHEST_BRAND = gql`
     highestRetailingBrand(filters: $filters, source: $source) {
       brand
       retailing
+      breakdown {
+        year
+        value
+      }
+      growth
     }
   }
 `;
@@ -96,7 +113,7 @@ export default function Dashboard() {
   };
 
   const { data, loading, error, refetch } = useQuery(
-    GET_TOTAL_RETAILING,
+    GET_RETAILING_STATS,
     queryOptions
   );
 
@@ -182,6 +199,7 @@ export default function Dashboard() {
         </p>
       </div>
 
+      {/* Data Source Selection */}
       <div className="flex justify-center gap-3 my-4">
         {["combined", "main", "temp"].map((source) => (
           <Button
@@ -270,7 +288,9 @@ export default function Dashboard() {
             {data && (
               <StatCard
                 title="Total Retailing (in Lakhs)"
-                value={(data.totalRetailing / 100000).toFixed(1)}
+                value={(data.retailingStats.total / 100000).toFixed(1)}
+                breakdown={data.retailingStats.breakdown}
+                growth={data.retailingStats.growth}
               />
             )}
           </div>
@@ -309,6 +329,8 @@ export default function Dashboard() {
                     highestBranchData.highestRetailingBranch.retailing / 100000
                   ).toFixed(1)}
                   description={`Branch: ${highestBranchData.highestRetailingBranch.branch}`}
+                  breakdown={highestBranchData.highestRetailingBranch.breakdown}
+                  growth={highestBranchData.highestRetailingBranch.growth}
                 />
               )}
             </div>
@@ -329,6 +351,8 @@ export default function Dashboard() {
                     highestBrandData.highestRetailingBrand.retailing / 100000
                   ).toFixed(1)}
                   description={`Brand: ${highestBrandData.highestRetailingBrand.brand}`}
+                  breakdown={highestBrandData.highestRetailingBrand.breakdown}
+                  growth={highestBrandData.highestRetailingBrand.growth}
                 />
               )}
             </div>

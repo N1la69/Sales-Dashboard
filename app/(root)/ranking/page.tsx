@@ -105,6 +105,13 @@ const GET_DOWNLOAD_TOP_STORES = gql`
   }
 `;
 
+// ================= Reusable Styles =================
+const selectFilterTriggerStyles =
+  "rounded-xl cursor-pointer border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 py-2.5 px-4 text-indigo-700 dark:text-indigo-200 placeholder:text-indigo-400 dark:placeholder:text-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all";
+
+const selectFilterContentStyles =
+  "bg-white dark:bg-zinc-900 border border-indigo-200 dark:border-indigo-700 text-indigo-800 dark:text-indigo-200";
+
 // ================= Component =================
 const RankingPage = () => {
   const [dataSource, setDataSource] = useState<"combined" | "main" | "temp">(
@@ -336,13 +343,13 @@ const RankingPage = () => {
       </div>
 
       {/* FILTERS */}
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-3">
         <Input
           type="number"
           value={months}
           onChange={(e) => setMonths(parseInt(e.target.value))}
           placeholder="Months"
-          className="w-48 py-2.5 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 
+          className="w-32 py-2.5 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 
                      focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all placeholder:text-indigo-400 
                      dark:placeholder:text-indigo-500 text-indigo-700 dark:text-indigo-200"
           disabled={!!startDate && !!endDate}
@@ -373,7 +380,6 @@ const RankingPage = () => {
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0">
             <Calendar
-              initialFocus
               mode="range"
               selected={dateRange}
               onSelect={setDateRange}
@@ -383,15 +389,10 @@ const RankingPage = () => {
         </Popover>
 
         <Select value={zm} onValueChange={(value) => setZm(value)}>
-          <SelectTrigger
-            className="rounded-xl border border-indigo-300 dark:border-indigo-700 
-                   bg-indigo-50/30 dark:bg-indigo-950/20 py-2.5 px-4 text-indigo-700 
-                   dark:text-indigo-200 placeholder:text-indigo-400 dark:placeholder:text-indigo-500 
-                   focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all"
-          >
+          <SelectTrigger className={selectFilterTriggerStyles}>
             <SelectValue placeholder="Select ZM" />
           </SelectTrigger>
-          <SelectContent className="bg-white dark:bg-zinc-900 border border-indigo-200 dark:border-indigo-700 text-indigo-800 dark:text-indigo-200">
+          <SelectContent className={selectFilterContentStyles}>
             {filterValues.zms.map((z) => (
               <SelectItem key={z} value={z}>
                 {z}
@@ -401,15 +402,10 @@ const RankingPage = () => {
         </Select>
 
         <Select value={sm} onValueChange={(value) => setSm(value)}>
-          <SelectTrigger
-            className="rounded-xl border border-indigo-300 dark:border-indigo-700 
-                   bg-indigo-50/30 dark:bg-indigo-950/20 py-2.5 px-4 text-indigo-700 
-                   dark:text-indigo-200 placeholder:text-indigo-400 dark:placeholder:text-indigo-500 
-                   focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all"
-          >
+          <SelectTrigger className={selectFilterTriggerStyles}>
             <SelectValue placeholder="Select SM" />
           </SelectTrigger>
-          <SelectContent className="bg-white dark:bg-zinc-900 border border-indigo-200 dark:border-indigo-700 text-indigo-800 dark:text-indigo-200">
+          <SelectContent className={selectFilterContentStyles}>
             {filterValues.sms.map((s) => (
               <SelectItem key={s} value={s}>
                 {s}
@@ -419,15 +415,10 @@ const RankingPage = () => {
         </Select>
 
         <Select value={be} onValueChange={(value) => setBe(value)}>
-          <SelectTrigger
-            className="rounded-xl border border-indigo-300 dark:border-indigo-700 
-                   bg-indigo-50/30 dark:bg-indigo-950/20 py-2.5 px-4 text-indigo-700 
-                   dark:text-indigo-200 placeholder:text-indigo-400 dark:placeholder:text-indigo-500 
-                   focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all"
-          >
+          <SelectTrigger className={selectFilterTriggerStyles}>
             <SelectValue placeholder="Select BE" />
           </SelectTrigger>
-          <SelectContent className="bg-white dark:bg-zinc-900 border border-indigo-200 dark:border-indigo-700 text-indigo-800 dark:text-indigo-200">
+          <SelectContent className={selectFilterContentStyles}>
             {filterValues.bes.map((b) => (
               <SelectItem key={b} value={b}>
                 {b}
@@ -437,15 +428,10 @@ const RankingPage = () => {
         </Select>
 
         <Select value={branch} onValueChange={(value) => setBranch(value)}>
-          <SelectTrigger
-            className="rounded-xl border border-indigo-300 dark:border-indigo-700 
-                   bg-indigo-50/30 dark:bg-indigo-950/20 py-2.5 px-4 text-indigo-700 
-                   dark:text-indigo-200 placeholder:text-indigo-400 dark:placeholder:text-indigo-500 
-                   focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all"
-          >
+          <SelectTrigger className={selectFilterTriggerStyles}>
             <SelectValue placeholder="Select Branch" />
           </SelectTrigger>
-          <SelectContent className="bg-white dark:bg-zinc-900 border border-indigo-200 dark:border-indigo-700 text-indigo-800 dark:text-indigo-200">
+          <SelectContent className={selectFilterContentStyles}>
             {filterValues.branches.map((br) => (
               <SelectItem key={br} value={br}>
                 {br}
@@ -455,15 +441,10 @@ const RankingPage = () => {
         </Select>
 
         <Select value={category} onValueChange={(value) => setCategory(value)}>
-          <SelectTrigger
-            className="rounded-xl border border-indigo-300 dark:border-indigo-700 
-                   bg-indigo-50/30 dark:bg-indigo-950/20 py-2.5 px-4 text-indigo-700 
-                   dark:text-indigo-200 placeholder:text-indigo-400 dark:placeholder:text-indigo-500 
-                   focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all"
-          >
+          <SelectTrigger className={selectFilterTriggerStyles}>
             <SelectValue placeholder="Select Category" />
           </SelectTrigger>
-          <SelectContent className="bg-white dark:bg-zinc-900 border border-indigo-200 dark:border-indigo-700 text-indigo-800 dark:text-indigo-200">
+          <SelectContent className={selectFilterContentStyles}>
             {filterValues.categories.map((c) => (
               <SelectItem key={c} value={c}>
                 {c}
@@ -473,15 +454,10 @@ const RankingPage = () => {
         </Select>
 
         <Select value={brand} onValueChange={(value) => setBrand(value)}>
-          <SelectTrigger
-            className="rounded-xl border border-indigo-300 dark:border-indigo-700 
-                   bg-indigo-50/30 dark:bg-indigo-950/20 py-2.5 px-4 text-indigo-700 
-                   dark:text-indigo-200 placeholder:text-indigo-400 dark:placeholder:text-indigo-500 
-                   focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all"
-          >
+          <SelectTrigger className={selectFilterTriggerStyles}>
             <SelectValue placeholder="Select Brand" />
           </SelectTrigger>
-          <SelectContent className="bg-white dark:bg-zinc-900 border border-indigo-200 dark:border-indigo-700 text-indigo-800 dark:text-indigo-200">
+          <SelectContent className={selectFilterContentStyles}>
             {filterValues.brands.map((b) => (
               <SelectItem key={b} value={b}>
                 {b}
@@ -494,15 +470,10 @@ const RankingPage = () => {
           value={broadChannel}
           onValueChange={(value) => setBroadChannel(value)}
         >
-          <SelectTrigger
-            className="rounded-xl border border-indigo-300 dark:border-indigo-700 
-                   bg-indigo-50/30 dark:bg-indigo-950/20 py-2.5 px-4 text-indigo-700 
-                   dark:text-indigo-200 placeholder:text-indigo-400 dark:placeholder:text-indigo-500 
-                   focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all"
-          >
+          <SelectTrigger className={selectFilterTriggerStyles}>
             <SelectValue placeholder="Select Channel (Base)" />
           </SelectTrigger>
-          <SelectContent className="bg-white dark:bg-zinc-900 border border-indigo-200 dark:border-indigo-700 text-indigo-800 dark:text-indigo-200">
+          <SelectContent className={selectFilterContentStyles}>
             {filterValues.broadChannels.map((bc) => (
               <SelectItem key={bc} value={bc}>
                 {bc}
@@ -545,49 +516,51 @@ const RankingPage = () => {
         ) : error ? (
           <p>Error loading top stores: {error.message}</p>
         ) : (
-          <div className="overflow-auto rounded-xl border border-indigo-300 dark:border-indigo-700">
-            <table className="min-w-full text-sm text-indigo-800 dark:text-indigo-200">
-              <thead className="bg-indigo-100/50 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 text-center">
-                <tr>
-                  <th className="px-4 py-2 border-b border-indigo-200 dark:border-indigo-700">
-                    Sl. No.
-                  </th>
-                  <th className="px-4 py-2 border-b border-indigo-200 dark:border-indigo-700">
-                    Store Code
-                  </th>
-                  <th className="px-4 py-2 border-b border-indigo-200 dark:border-indigo-700">
-                    Store Name
-                  </th>
-                  <th className="px-4 py-2 border-b border-indigo-200 dark:border-indigo-700">
-                    Branch Name
-                  </th>
-                  <th className="px-4 py-2 text-right border-b border-indigo-200 dark:border-indigo-700">
-                    Avg. Retailing
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {topStores.map((store: any, idx: number) => (
-                  <tr
-                    key={idx}
-                    className={`${
-                      idx % 2 === 0
-                        ? "bg-indigo-50/30 dark:bg-indigo-950/20"
-                        : "bg-white dark:bg-zinc-900"
-                    } border-t border-indigo-200 dark:border-indigo-700 text-center`}
-                  >
-                    <td className="px-4 py-2">{page * pageSize + idx + 1}</td>
-                    <td className="px-4 py-2">{store.store_code}</td>
-                    <td className="px-4 py-2">{store.store_name}</td>
-                    <td className="px-4 py-2">{store.branch_name}</td>
-                    <td className="px-4 py-2 text-right">
-                      ₹ {store.average_retailing.toLocaleString()}
-                    </td>
+          <>
+            {" "}
+            <div className="overflow-auto rounded-xl border border-indigo-300 dark:border-indigo-700">
+              <table className="min-w-full text-sm text-indigo-800 dark:text-indigo-200">
+                <thead className="bg-indigo-100/50 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 text-center">
+                  <tr>
+                    <th className="px-4 py-2 border-b border-indigo-200 dark:border-indigo-700">
+                      Sl. No.
+                    </th>
+                    <th className="px-4 py-2 border-b border-indigo-200 dark:border-indigo-700">
+                      Store Code
+                    </th>
+                    <th className="px-4 py-2 border-b border-indigo-200 dark:border-indigo-700">
+                      Store Name
+                    </th>
+                    <th className="px-4 py-2 border-b border-indigo-200 dark:border-indigo-700">
+                      Branch Name
+                    </th>
+                    <th className="px-4 py-2 text-right border-b border-indigo-200 dark:border-indigo-700">
+                      Avg. Retailing
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-
+                </thead>
+                <tbody>
+                  {topStores.map((store: any, idx: number) => (
+                    <tr
+                      key={idx}
+                      className={`${
+                        idx % 2 === 0
+                          ? "bg-indigo-50/30 dark:bg-indigo-950/20"
+                          : "bg-white dark:bg-zinc-900"
+                      } border-t border-indigo-200 dark:border-indigo-700 text-center`}
+                    >
+                      <td className="px-4 py-2">{page * pageSize + idx + 1}</td>
+                      <td className="px-4 py-2">{store.store_code}</td>
+                      <td className="px-4 py-2">{store.store_name}</td>
+                      <td className="px-4 py-2">{store.branch_name}</td>
+                      <td className="px-4 py-2 text-right">
+                        ₹ {store.average_retailing.toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
             {/* PAGINATION */}
             <div className="flex justify-between items-center mt-4 px-2">
               <Button
@@ -613,7 +586,7 @@ const RankingPage = () => {
                 Next <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
             </div>
-          </div>
+          </>
         )}
       </section>
     </div>

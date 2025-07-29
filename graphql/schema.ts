@@ -16,14 +16,29 @@ export const typeDefs = gql`
     ShortChannel: [String]
   }
 
+  type YearlyRetailing {
+    year: Int!
+    value: Float!
+  }
+
+  type RetailingStats {
+    total: Float!
+    breakdown: [YearlyRetailing!]!
+    growth: Float
+  }
+
   type HighestBranch {
-    branch: String
-    retailing: Float
+    branch: String!
+    retailing: Float!
+    breakdown: [YearlyRetailing!]!
+    growth: Float
   }
 
   type HighestBrand {
     brand: String
     retailing: Float
+    breakdown: [YearlyRetailing!]
+    growth: Float
   }
 
   type CategoryRetailing {
@@ -116,7 +131,7 @@ export const typeDefs = gql`
   }
 
   type Query {
-    totalRetailing(filters: FilterInput, source: String): Float
+    retailingStats(filters: FilterInput, source: String): RetailingStats
     highestRetailingBranch(filters: FilterInput, source: String): HighestBranch
     highestRetailingBrand(filters: FilterInput, source: String): HighestBrand
     retailingByCategory(
@@ -148,6 +163,7 @@ export const typeDefs = gql`
       month: [Int]
     ): StoreStats
     getStoreDetails(storeCode: String!, source: String): StoreDetails
+
     topStores(
       source: String!
       months: Int

@@ -21,12 +21,27 @@ import prisma from "@/lib/utils";
 
 export const resolvers = {
   Query: {
-    totalRetailing: async (_: any, { filters, source }: any) => {
-      if (filters.ZM?.length) {
-        return await getRetailingZM(filters, source);
-      } else {
-        return await getRetailingPrisma(filters, source);
+    //DASHBOARD
+    retailingStats: async (_: any, { filters, source }: any) => {
+      const years = filters?.Year?.length ? filters.Year : [2023, 2024]; // Default to 2 years
+      const breakdown: { year: number; value: number }[] = [];
+
+      for (const year of years) {
+        const value = filters.ZM?.length
+          ? await getRetailingZM({ ...filters, Year: [year] }, source)
+          : await getRetailingPrisma({ ...filters, Year: [year] }, source);
+        breakdown.push({ year, value });
       }
+
+      const total = breakdown.reduce((sum, y) => sum + y.value, 0);
+
+      let growth = null;
+      if (breakdown.length === 2 && breakdown[1].value && breakdown[0].value) {
+        const [prev, curr] = breakdown.sort((a, b) => a.year - b.year);
+        growth = (curr.value / prev.value) * 100;
+      }
+
+      return { total, breakdown, growth };
     },
     highestRetailingBranch: async (_: any, { filters, source }: any) => {
       return await getHighestRetailingBranch(filters, source);
@@ -95,6 +110,8 @@ export const resolvers = {
     ) => {
       return await getStoreDetails(storeCode, source);
     },
+
+    // RANKING
     topStores: async (
       _: any,
       {

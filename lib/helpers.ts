@@ -140,55 +140,90 @@ export async function buildWhereClauseForRawSQL(filters: any) {
   return { whereClause, params };
 }
 
+// DASHBOARD page
 export async function getHighestRetailingBranch(filters: any, source: string) {
-  const tables = resolveTables(source);
-  const branchTotals: Record<string, number> = {};
+  const years = filters?.Year?.length ? filters.Year : [2023, 2024];
+  const branchYearMap: Record<string, Record<number, number>> = {}; // { branch: { year: retailing } }
 
-  for (const table of tables) {
-    let query = `
-      SELECT s.New_Branch AS branch, SUM(p.retailing) AS total
-      FROM ${table} p
-      LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
-      LEFT JOIN channel_mapping c ON p.customer_type = c.customer_type
-      WHERE 1=1
-    `;
+  for (const year of years) {
+    const tables = resolveTables(source);
 
-    const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
-    query += whereClause;
-    query += ` GROUP BY s.New_Branch`;
+    for (const table of tables) {
+      let query = `
+        SELECT s.New_Branch AS branch, SUM(p.retailing) AS total
+        FROM ${table} p
+        LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
+        LEFT JOIN channel_mapping c ON p.customer_type = c.customer_type
+        WHERE 1=1
+      `;
 
-    const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
+      const { whereClause, params } = await buildWhereClauseForRawSQL({
+        ...filters,
+        Year: [year],
+      });
 
-    for (const row of results) {
-      const branch = row.branch || "Unknown";
-      const retailing = Number(row.total);
-      branchTotals[branch] = (branchTotals[branch] || 0) + retailing;
+      query += whereClause + ` GROUP BY s.New_Branch`;
+
+      const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
+
+      for (const row of results) {
+        const branch = row.branch || "Unknown";
+        const retailing = Number(row.total);
+
+        if (!branchYearMap[branch]) branchYearMap[branch] = {};
+        branchYearMap[branch][year] =
+          (branchYearMap[branch][year] || 0) + retailing;
+      }
     }
   }
 
+  // Compute total per branch
+  const branchTotalMap: Record<string, number> = {};
+  for (const [branch, yearly] of Object.entries(branchYearMap)) {
+    branchTotalMap[branch] = Object.values(yearly).reduce((a, b) => a + b, 0);
+  }
+
+  // Find max
   let maxBranch = "";
   let maxRetailing = 0;
 
-  for (const [branch, total] of Object.entries(branchTotals)) {
+  for (const [branch, total] of Object.entries(branchTotalMap)) {
     if (total > maxRetailing) {
       maxRetailing = total;
       maxBranch = branch;
     }
   }
 
+  const breakdownRaw = branchYearMap[maxBranch] || {};
+  const breakdown = Object.entries(breakdownRaw).map(([year, value]) => ({
+    year: parseInt(year),
+    value,
+  }));
+
+  // Calculate growth
+  let growth = null;
+  if (breakdown.length === 2) {
+    const [a, b] = breakdown.sort((a, b) => a.year - b.year);
+    if (a.value > 0) {
+      growth = (b.value / a.value) * 100;
+    }
+  }
+
   return {
     branch: maxBranch,
     retailing: maxRetailing,
+    breakdown,
+    growth,
   };
 }
 
 export async function getHighestRetailingBrand(filters: any, source: string) {
   const tables = resolveTables(source);
-  const brandTotals: Record<string, number> = {};
+  const brandYearTotals: Record<string, Record<number, number>> = {};
 
   for (const table of tables) {
     let query = `
-      SELECT p.brand AS brand, SUM(p.retailing) AS total
+      SELECT p.brand AS brand, YEAR(p.document_date) AS year, SUM(p.retailing) AS total
       FROM ${table} p
       LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
       LEFT JOIN channel_mapping c ON p.customer_type = c.customer_type
@@ -197,30 +232,53 @@ export async function getHighestRetailingBrand(filters: any, source: string) {
 
     const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
     query += whereClause;
-    query += ` GROUP BY p.brand`;
+    query += ` GROUP BY p.brand, YEAR(p.document_date)`;
 
     const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
 
     for (const row of results) {
       const brand = row.brand || "Unknown";
+      const year = row.year;
       const retailing = Number(row.total);
-      brandTotals[brand] = (brandTotals[brand] || 0) + retailing;
+      brandYearTotals[brand] = brandYearTotals[brand] || {};
+      brandYearTotals[brand][year] =
+        (brandYearTotals[brand][year] || 0) + retailing;
     }
   }
 
   let maxBrand = "";
-  let maxRetailing = 0;
+  let maxTotal = 0;
+  let maxBreakdown: { year: number; value: number }[] = [];
 
-  for (const [brand, total] of Object.entries(brandTotals)) {
-    if (total > maxRetailing) {
-      maxRetailing = total;
+  for (const [brand, yearMap] of Object.entries(brandYearTotals)) {
+    const total = Object.values(yearMap).reduce((a, b) => a + b, 0);
+    if (total > maxTotal) {
       maxBrand = brand;
+      maxTotal = total;
+      maxBreakdown = Object.entries(yearMap).map(([year, value]) => ({
+        year: Number(year),
+        value,
+      }));
+    }
+  }
+
+  // Sort breakdown by descending year
+  maxBreakdown.sort((a, b) => b.year - a.year);
+
+  let growth: number | null = null;
+  if (maxBreakdown.length >= 2) {
+    const latest = maxBreakdown[0].value;
+    const previous = maxBreakdown[1].value;
+    if (previous !== 0) {
+      growth = (latest / previous) * 100;
     }
   }
 
   return {
     brand: maxBrand,
-    retailing: maxRetailing,
+    retailing: maxTotal,
+    breakdown: maxBreakdown,
+    growth,
   };
 }
 
@@ -644,6 +702,7 @@ export async function getStoreStats(
   };
 }
 
+// RANKING page
 export const getTopStoresQuery = async ({
   source,
   months = 3,
