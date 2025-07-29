@@ -14,6 +14,11 @@ export const pages = [
   },
   {
     id: 2,
+    path: "/ranking",
+    title: "Ranking",
+  },
+  {
+    id: 3,
     path: "/upload",
     title: "Upload",
   },
