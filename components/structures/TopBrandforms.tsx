@@ -88,9 +88,9 @@ export default function TopBrandforms({
                 const growthColor =
                   growth === null
                     ? "text-gray-500"
-                    : growth > 0
+                    : growth > 100
                     ? "text-green-500"
-                    : growth < 0
+                    : growth < 100
                     ? "text-red-500"
                     : "text-gray-500";
 
@@ -119,7 +119,7 @@ export default function TopBrandforms({
                       className={`px-4 py-2 text-right font-medium rounded-r-lg ${growthColor}`}
                     >
                       {growth !== null
-                        ? `${growth > 0 ? "+" : "-"}${growth.toFixed(1)}%`
+                        ? `${growth > 100 ? "+" : "-"}${growth.toFixed(1)}%`
                         : "N/A"}
                     </td>
                   </tr>

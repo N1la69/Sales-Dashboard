@@ -284,11 +284,11 @@ export async function getHighestRetailingBrand(filters: any, source: string) {
 
 export async function getRetailingByCategory(filters: any, source: string) {
   const tables = resolveTables(source);
-  const categoryTotals: Record<string, number> = {};
+  const breakdownMap: Record<string, Record<number, number>> = {};
 
   for (const table of tables) {
     let query = `
-      SELECT p.category, SUM(p.retailing) AS total
+      SELECT p.category, YEAR(p.document_date) as year, SUM(p.retailing) AS total
       FROM ${table} p
       LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
       LEFT JOIN channel_mapping c ON p.customer_type = c.customer_type
@@ -297,20 +297,38 @@ export async function getRetailingByCategory(filters: any, source: string) {
 
     const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
     query += whereClause;
-    query += ` GROUP BY p.category`;
+    query += ` GROUP BY p.category, YEAR(p.document_date)`;
 
     const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
 
     for (const row of results) {
-      categoryTotals[row.category] =
-        (categoryTotals[row.category] || 0) + Number(row.total);
+      const category = row.category || "Unknown";
+      const year = Number(row.year);
+      const value = Number(row.total);
+
+      if (!breakdownMap[category]) breakdownMap[category] = {};
+      breakdownMap[category][year] =
+        (breakdownMap[category][year] || 0) + value;
     }
   }
 
-  return Object.entries(categoryTotals).map(([category, retailing]) => ({
-    category,
-    retailing,
-  }));
+  // Return final structured result
+  return Object.entries(breakdownMap).map(([category, yearlyData]) => {
+    const breakdown = Object.entries(yearlyData)
+      .map(([year, retailing]) => ({
+        year: Number(year),
+        value: retailing,
+      }))
+      .sort((a, b) => b.year - a.year); // descending order: 2024 → 2023
+
+    const total = breakdown.reduce((sum, item) => sum + item.value, 0);
+
+    return {
+      category,
+      retailing: total,
+      breakdown,
+    };
+  });
 }
 
 export async function getRetailingByBroadChannel(filters: any, source: string) {

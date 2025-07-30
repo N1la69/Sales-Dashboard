@@ -67,6 +67,10 @@ const GET_CATEGORY_PERCENTAGE = gql`
     retailingByCategory(filters: $filters, source: $source) {
       category
       retailing
+      breakdown {
+        year
+        value
+      }
     }
   }
 `;

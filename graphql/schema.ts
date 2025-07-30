@@ -44,6 +44,7 @@ export const typeDefs = gql`
   type CategoryRetailing {
     category: String
     retailing: Float
+    breakdown: [YearlyRetailing!]
   }
 
   type BroadChannelRetailing {
