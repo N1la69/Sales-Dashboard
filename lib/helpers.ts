@@ -397,11 +397,11 @@ export async function getMonthlyRetailingTrend(filters: any, source: string) {
 
 export async function getTopBrandforms(filters: any, source: string) {
   const tables = resolveTables(source);
-  const brandformTotals: Record<string, number> = {};
+  const brandformYearlyMap: Record<string, Record<number, number>> = {};
 
   for (const table of tables) {
     let query = `
-      SELECT p.brandform, SUM(p.retailing) AS total
+      SELECT p.brandform, YEAR(p.document_date) as year, SUM(p.retailing) AS total
       FROM ${table} p
       LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
       LEFT JOIN channel_mapping c ON p.customer_type = c.customer_type
@@ -410,27 +410,41 @@ export async function getTopBrandforms(filters: any, source: string) {
 
     const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
     query += whereClause;
-    query += ` GROUP BY p.brandform`;
+    query += ` GROUP BY p.brandform, YEAR(p.document_date)`;
 
     const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
 
     for (const row of results) {
       const brandform = row.brandform || "Unknown";
-      brandformTotals[brandform] =
-        (brandformTotals[brandform] || 0) + Number(row.total);
+      const year = Number(row.year);
+      const retailing = Number(row.total);
+
+      if (!brandformYearlyMap[brandform]) brandformYearlyMap[brandform] = {};
+      brandformYearlyMap[brandform][year] =
+        (brandformYearlyMap[brandform][year] || 0) + retailing;
     }
   }
 
-  // Sort descending by retailing and pick top 10
-  const topBrandforms = Object.entries(brandformTotals)
-    .sort(([, a], [, b]) => b - a)
-    .slice(0, 10)
-    .map(([brandform, retailing]) => ({
+  // Aggregate by total retailing across years for sorting
+  const topBrandforms = Object.entries(brandformYearlyMap)
+    .map(([brandform, yearData]) => ({
       brandform,
-      retailing,
-    }));
+      total: Object.values(yearData).reduce((sum, val) => sum + val, 0),
+      yearData,
+    }))
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 10);
 
-  return topBrandforms;
+  // Flatten the format for frontend
+  const flattened = topBrandforms.flatMap(({ brandform, yearData }) =>
+    Object.entries(yearData).map(([year, retailing]) => ({
+      brandform,
+      year: Number(year),
+      retailing,
+    }))
+  );
+
+  return flattened;
 }
 
 // STORE page

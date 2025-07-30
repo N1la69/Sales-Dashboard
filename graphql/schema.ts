@@ -59,6 +59,7 @@ export const typeDefs = gql`
 
   type TopBrandform {
     brandform: String
+    year: Int
     retailing: Float
   }
 

@@ -97,6 +97,7 @@ const GET_TOP_BRANDFORMS = gql`
   query GetTopBrandforms($filters: FilterInput, $source: String) {
     topBrandforms(filters: $filters, source: $source) {
       brandform
+      year
       retailing
     }
   }
