@@ -50,6 +50,7 @@ export const typeDefs = gql`
   type BroadChannelRetailing {
     broad_channel: String
     retailing: Float
+    breakdown: [YearlyRetailing!]
   }
 
   type MonthlyRetailingTrend {

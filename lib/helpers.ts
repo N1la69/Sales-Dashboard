@@ -333,11 +333,11 @@ export async function getRetailingByCategory(filters: any, source: string) {
 
 export async function getRetailingByBroadChannel(filters: any, source: string) {
   const tables = resolveTables(source);
-  const broadChannelTotals: Record<string, number> = {};
+  const breakdownMap: Record<string, Record<number, number>> = {};
 
   for (const table of tables) {
     let query = `
-      SELECT c.broad_channel, SUM(p.retailing) AS total
+      SELECT c.broad_channel, YEAR(p.document_date) AS year, SUM(p.retailing) AS total
       FROM ${table} p
       LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
       LEFT JOIN channel_mapping c ON p.customer_type = c.customer_type
@@ -346,23 +346,37 @@ export async function getRetailingByBroadChannel(filters: any, source: string) {
 
     const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
     query += whereClause;
-    query += ` GROUP BY c.broad_channel`;
+    query += ` GROUP BY c.broad_channel, YEAR(p.document_date)`;
 
     const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
 
     for (const row of results) {
       const broad_channel = row.broad_channel || "Unknown";
-      broadChannelTotals[broad_channel] =
-        (broadChannelTotals[broad_channel] || 0) + Number(row.total);
+      const year = Number(row.year);
+      const value = Number(row.total);
+
+      if (!breakdownMap[broad_channel]) breakdownMap[broad_channel] = {};
+      breakdownMap[broad_channel][year] =
+        (breakdownMap[broad_channel][year] || 0) + value;
     }
   }
 
-  return Object.entries(broadChannelTotals).map(
-    ([broad_channel, retailing]) => ({
+  return Object.entries(breakdownMap).map(([broad_channel, yearlyData]) => {
+    const breakdown = Object.entries(yearlyData)
+      .map(([year, value]) => ({
+        year: Number(year),
+        value,
+      }))
+      .sort((a, b) => b.year - a.year); // Latest year first
+
+    const total = breakdown.reduce((sum, item) => sum + item.value, 0);
+
+    return {
       broad_channel,
-      retailing,
-    })
-  );
+      retailing: total,
+      breakdown,
+    };
+  });
 }
 
 export async function getMonthlyRetailingTrend(filters: any, source: string) {

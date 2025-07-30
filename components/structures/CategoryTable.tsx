@@ -2,7 +2,6 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useState } from "react";
 
 interface CategoryItem {
   category: string;
@@ -46,8 +45,6 @@ export default function CategoryTable({
   loading,
   error,
 }: CategoryTableProps) {
-  const [expanded, setExpanded] = useState<string | null>(null);
-
   if (loading) return <p className="dark:text-white">Loading categories...</p>;
   if (error)
     return (
@@ -57,26 +54,29 @@ export default function CategoryTable({
   const uniqueYears = Array.from(
     new Set(data.flatMap((item) => item.breakdown.map((b) => b.year)))
   ).sort((a, b) => b - a); // descending
-  const latestYear = uniqueYears[0];
-  const previousYear = uniqueYears[1];
+  const [latestYear, previousYear] = uniqueYears;
 
-  const grandTotal = data.reduce(
-    (sum, item) =>
-      sum + item.breakdown.reduce((s, b) => s + (b?.value || 0), 0),
-    0
-  );
+  const categoryMap: Record<string, Record<number, number>> = {};
+  const allCategories = data.map((item) => item.category);
 
-  const sortedData = [...data].sort((a, b) => {
-    const aTotal = a.breakdown.reduce((sum, b) => sum + (b?.value || 0), 0);
-    const bTotal = b.breakdown.reduce((sum, b) => sum + (b?.value || 0), 0);
-    return bTotal - aTotal;
+  data.forEach(({ category, breakdown }) => {
+    if (!categoryMap[category]) categoryMap[category] = {};
+    breakdown.forEach(({ year, value }) => {
+      categoryMap[category][year] = value;
+    });
+  });
+
+  const sortedCategories = [...allCategories].sort((a, b) => {
+    const sumA = Object.values(categoryMap[a]).reduce((sum, v) => sum + v, 0);
+    const sumB = Object.values(categoryMap[b]).reduce((sum, v) => sum + v, 0);
+    return sumB - sumA;
   });
 
   return (
     <Card className="shadow-md bg-slate-100/40 dark:bg-slate-800/30 border-transparent">
       <CardHeader>
         <CardTitle className="text-xl font-semibold text-center">
-          Retailing by Category
+          Retailing by Category (in Lakhs)
         </CardTitle>
       </CardHeader>
       <CardContent className="overflow-x-auto">
@@ -84,84 +84,70 @@ export default function CategoryTable({
           <thead>
             <tr>
               <th className="px-4 py-2">Category</th>
-              <th className="px-4 py-2 text-right">Total (Lakhs)</th>
-              <th className="px-4 py-2 text-right">% Share</th>
+              <th className="px-4 py-2 text-right">Total</th>
+              {uniqueYears.map((year) => (
+                <th key={year} className="px-4 py-2 text-right">
+                  {year}
+                </th>
+              ))}
+              <th className="px-4 py-2 text-right">Index</th>
             </tr>
           </thead>
           <tbody>
-            {sortedData.map(({ category, breakdown }, index) => {
-              const yearMap = Object.fromEntries(
-                breakdown.map(({ year, value }) => [year, value])
-              );
+            {sortedCategories.map((category, index) => {
+              const yearly = categoryMap[category];
               const total = uniqueYears.reduce(
-                (sum, y) => sum + (yearMap[y] || 0),
+                (sum, y) => sum + (yearly[y] || 0),
                 0
               );
-              const share = grandTotal ? (total / grandTotal) * 100 : 0;
-              const latestVal = yearMap[latestYear] || 0;
-              const prevVal = yearMap[previousYear] || 0;
-              const growth = prevVal > 0 ? (latestVal / prevVal) * 100 : null;
+              const latest = yearly[latestYear] ?? 0;
+              const previous = yearly[previousYear] ?? 0;
+              const growth =
+                previous && previous !== 0 ? (latest / previous) * 100 : null;
 
-              const isExpanded = expanded === category;
+              const growthColor =
+                growth === null
+                  ? "text-gray-500"
+                  : growth > 100
+                  ? "text-green-500"
+                  : growth < 100
+                  ? "text-red-500"
+                  : "text-gray-500";
 
               return (
-                <>
-                  <tr
-                    key={index}
-                    className={`cursor-pointer transition-colors hover:bg-muted ${
-                      BG_COLORS[index % BG_COLORS.length]
-                    }`}
-                    onClick={() => setExpanded(isExpanded ? null : category)}
+                <tr
+                  key={index}
+                  className={`transition-colors hover:bg-muted dark:hover:bg-accent ${
+                    BG_COLORS[index % BG_COLORS.length]
+                  }`}
+                >
+                  <td
+                    className={`px-4 py-2 font-medium ${
+                      COLOR_PALETTE[index % COLOR_PALETTE.length]
+                    } rounded-l-lg`}
                   >
-                    <td
-                      className={`px-4 py-2 font-medium ${
-                        COLOR_PALETTE[index % COLOR_PALETTE.length]
-                      } rounded-l-lg`}
-                    >
-                      {category || "Unknown"}
+                    {category || "Unknown"}
+                  </td>
+                  <td className="px-4 py-2 text-right font-semibold">
+                    {(total / 100000).toFixed(2)}
+                  </td>
+                  {uniqueYears.map((year) => (
+                    <td key={year} className="px-4 py-2 text-right">
+                      <div>
+                        {yearly[year]
+                          ? (yearly[year] / 100000).toFixed(2)
+                          : "0.00"}
+                      </div>
                     </td>
-                    <td className="px-4 py-2 text-right">
-                      {(total / 100000).toFixed(2)}
-                    </td>
-                    <td className="px-4 py-2 text-right rounded-r-lg">
-                      {share.toFixed(1)}%
-                    </td>
-                  </tr>
-                  {isExpanded && (
-                    <tr className="bg-slate-50 dark:bg-slate-800/70">
-                      <td colSpan={3} className="px-6 pb-4 pt-2">
-                        <div className="text-sm space-y-1 text-gray-700 dark:text-gray-200">
-                          <p>
-                            <strong>{latestYear}:</strong>{" "}
-                            {(latestVal / 100000).toFixed(2)} Lakhs (
-                            {((latestVal / grandTotal) * 100).toFixed(1)}%)
-                          </p>
-                          <p>
-                            <strong>{previousYear}:</strong>{" "}
-                            {(prevVal / 100000).toFixed(2)} Lakhs (
-                            {((prevVal / grandTotal) * 100).toFixed(1)}%)
-                          </p>
-                          <p>
-                            <strong>Index:</strong>{" "}
-                            {growth !== null ? (
-                              <span
-                                className={
-                                  growth > 100
-                                    ? "text-green-600 font-semibold"
-                                    : "text-red-600 font-semibold"
-                                }
-                              >
-                                {growth.toFixed(1)}%
-                              </span>
-                            ) : (
-                              "N/A"
-                            )}
-                          </p>
-                        </div>
-                      </td>
-                    </tr>
-                  )}
-                </>
+                  ))}
+                  <td
+                    className={`px-4 py-2 text-right font-medium rounded-r-lg ${growthColor}`}
+                  >
+                    {growth !== null
+                      ? `${growth > 100 ? "+" : "-"}${growth.toFixed(1)}%`
+                      : "N/A"}
+                  </td>
+                </tr>
               );
             })}
           </tbody>

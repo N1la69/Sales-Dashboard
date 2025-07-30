@@ -3,12 +3,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-interface BroadChannelTableProps {
-  data: { broad_channel: string; retailing: number }[];
-  loading: boolean;
-  error: any;
-}
-
 const COLOR_PALETTE = [
   "text-rose-500 dark:text-rose-400",
   "text-orange-500 dark:text-orange-400",
@@ -35,16 +29,23 @@ const BG_COLORS = [
   "bg-cyan-100/50 dark:bg-cyan-900/30",
 ];
 
+interface BroadChannelItem {
+  broad_channel: string;
+  breakdown: { year: number; value: number }[];
+}
+
+interface BroadChannelTableProps {
+  data: BroadChannelItem[];
+  loading: boolean;
+  error: any;
+}
+
 export default function BroadChannelTable({
   data = [],
   loading,
   error,
 }: BroadChannelTableProps) {
-  const total = data.reduce((sum, item) => sum + item.retailing, 0);
-  const sortedData = [...data].sort((a, b) => b.retailing - a.retailing);
-
-  if (loading)
-    return <p className="dark:text-white font-outfit">Loading channels...</p>;
+  if (loading) return <p className="dark:text-white">Loading channels...</p>;
   if (error)
     return (
       <p className="text-red-500 font-outfit">
@@ -52,42 +53,109 @@ export default function BroadChannelTable({
       </p>
     );
 
+  const uniqueYears = Array.from(
+    new Set(data.flatMap((item) => item.breakdown.map((b) => b.year)))
+  ).sort((a, b) => b - a); // descending
+  const [latestYear, previousYear] = uniqueYears;
+
+  const channelMap: Record<string, Record<number, number>> = {};
+  const allChannels = data.map((item) => item.broad_channel);
+
+  data.forEach(({ broad_channel, breakdown }) => {
+    if (!channelMap[broad_channel]) channelMap[broad_channel] = {};
+    breakdown.forEach(({ year, value }) => {
+      channelMap[broad_channel][year] = value;
+    });
+  });
+
+  const sortedChannels = [...allChannels].sort((a, b) => {
+    const sumA = Object.values(channelMap[a]).reduce((sum, v) => sum + v, 0);
+    const sumB = Object.values(channelMap[b]).reduce((sum, v) => sum + v, 0);
+    return sumB - sumA;
+  });
+
   return (
     <Card className="shadow-md bg-slate-100/40 dark:bg-slate-800/30 border-transparent">
       <CardHeader>
         <CardTitle className="text-xl font-semibold text-center">
-          Retailing by Channel (Base)
+          Retailing by Base Channel (in Lakhs)
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-3 font-semibold text-sm text-gray-900 dark:text-gray-300 px-2 pb-2">
-          <div>Base Channel</div>
-          <div className="text-right">Value (Lakhs)</div>
-          <div className="text-right">% Share</div>
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-sm text-left border-separate border-spacing-y-2">
+            <thead>
+              <tr>
+                <th className="px-4 py-2">Base Channel</th>
+                <th className="px-4 py-2 text-right">Total</th>
+                {uniqueYears.map((year) => (
+                  <th key={year} className="px-4 py-2 text-right">
+                    {year}
+                  </th>
+                ))}
+                <th className="px-4 py-2 text-right">Index</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedChannels.map((channel, index) => {
+                const yearly = channelMap[channel];
+                const total = uniqueYears.reduce(
+                  (sum, y) => sum + (yearly[y] || 0),
+                  0
+                );
+                const latest = yearly[latestYear] ?? 0;
+                const previous = yearly[previousYear] ?? 0;
+                const growth =
+                  previous && previous !== 0 ? (latest / previous) * 100 : null;
+
+                const growthColor =
+                  growth === null
+                    ? "text-gray-500"
+                    : growth > 100
+                    ? "text-green-500"
+                    : growth < 100
+                    ? "text-red-500"
+                    : "text-gray-500";
+
+                return (
+                  <tr
+                    key={channel}
+                    className={`hover:bg-muted transition-colors ${
+                      BG_COLORS[index % BG_COLORS.length]
+                    } rounded-lg`}
+                  >
+                    <td
+                      className={`px-4 py-2 font-medium rounded-l-lg ${
+                        COLOR_PALETTE[index % COLOR_PALETTE.length]
+                      }`}
+                    >
+                      {channel || "Unknown"}
+                    </td>
+                    <td className="px-4 py-2 text-right font-semibold">
+                      {(total / 100000).toFixed(2)}
+                    </td>
+                    {uniqueYears.map((year) => (
+                      <td key={year} className="px-4 py-2 text-right">
+                        <div>
+                          {yearly[year]
+                            ? (yearly[year] / 100000).toFixed(2)
+                            : "0.00"}
+                        </div>
+                      </td>
+                    ))}
+                    <td
+                      className={`px-4 py-2 text-right font-medium rounded-r-lg ${growthColor}`}
+                    >
+                      {growth !== null
+                        ? `${growth > 100 ? "+" : "-"}${growth.toFixed(1)}%`
+                        : "N/A"}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
-        <ul className="space-y-2">
-          {sortedData.map(({ broad_channel, retailing }, index) => {
-            const percent = total > 0 ? (retailing / total) * 100 : 0;
-            return (
-              <li
-                key={broad_channel}
-                className={`grid grid-cols-3 items-center rounded-md px-3 py-1.5 text-sm font-medium hover:bg-muted transition-colors ${
-                  BG_COLORS[index % BG_COLORS.length]
-                }`}
-              >
-                <span
-                  className={`${COLOR_PALETTE[index % COLOR_PALETTE.length]}`}
-                >
-                  {broad_channel || "Unknown"}
-                </span>
-                <span className="text-right">
-                  {(retailing / 100000).toFixed(2)}
-                </span>
-                <span className="text-right">{percent.toFixed(1)}%</span>
-              </li>
-            );
-          })}
-        </ul>
       </CardContent>
     </Card>
   );

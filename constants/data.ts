@@ -15,7 +15,7 @@ export const pages = [
   {
     id: 2,
     path: "/ranking",
-    title: "Ranking",
+    title: "Top100",
   },
   {
     id: 3,

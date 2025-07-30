@@ -132,21 +132,3 @@ export default function TopBrandforms({
     </Card>
   );
 }
-
-{
-  /* <CardContent>
-        <ul className="space-y-2">
-          {data.map((item, index) => (
-            <li
-              key={index}
-              className={`flex justify-between items-center rounded-md px-3 py-1.5 font-medium text-sm hover:bg-muted ${
-                BG_COLORS[index % BG_COLORS.length]
-              }`}
-            >
-              <span>{item.brandform || "Unknown"}</span>
-              <span>{(item.retailing / 100000).toFixed(2)}</span>
-            </li>
-          ))}
-        </ul>
-      </CardContent> */
-}

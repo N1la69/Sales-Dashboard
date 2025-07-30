@@ -83,6 +83,10 @@ const GET_BROAD_CHANNEL_PERCENTAGE = gql`
     retailingByBroadChannel(filters: $filters, source: $source) {
       broad_channel
       retailing
+      breakdown {
+        year
+        value
+      }
     }
   }
 `;
