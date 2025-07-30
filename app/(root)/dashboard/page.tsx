@@ -9,7 +9,7 @@ import MultiSelect from "@/components/MultiSelect";
 import { filters } from "@/constants/data";
 import RetailingCategoryPie from "@/components/visuals/RetailingCategoryPie";
 import RetailingChannelPie from "@/components/visuals/RetailingChannelPie";
-import MonthlyTrendLineChart from "@/components/visuals/MonthlyTrendLineChart";
+import MonthlyTrendChart from "@/components/visuals/MonthlyTrendChart";
 import TopBrandforms from "@/components/structures/TopBrandforms";
 import CategoryTable from "@/components/structures/CategoryTable";
 import BroadChannelTable from "@/components/structures/BroadChannelTable";
@@ -379,7 +379,7 @@ export default function Dashboard() {
         {/* MIDDLE SECTION */}
         <section className="pt-5 px-6">
           <div className="bg-yellow-100/20 dark:bg-indigo-900/10 p-2 rounded-lg shadow">
-            <MonthlyTrendLineChart
+            <MonthlyTrendChart
               data={monthlyTrendData?.monthlyRetailingTrend}
               loading={monthlyTrendLoading}
               error={monthlyTrendError}

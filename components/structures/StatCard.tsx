@@ -46,7 +46,10 @@ const StatCard = ({
         {[...(breakdown ?? [])]
           .sort((a, b) => b.year - a.year)
           .map((entry) => (
-            <div key={entry.year} className="font-bold text-black">
+            <div
+              key={entry.year}
+              className="font-bold text-black dark:text-gray-300"
+            >
               {entry.year}:{" "}
               <span className="font-semibold text-gray-700 dark:text-white">
                 {(entry.value / 100000).toFixed(1)}
