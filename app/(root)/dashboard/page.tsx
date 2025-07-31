@@ -206,16 +206,19 @@ export default function Dashboard() {
   const hasAnyPendingFilter = Object.keys(pendingFilters).length > 0;
 
   return (
-    <div className="relative pt-3 mx-5 z-10 text-gray-900 dark:text-gray-200">
-      <div className="text-center space-y-1">
-        <h1 className="text-3xl font-bold text-primary">Sales Overview</h1>
-        <p className="text-muted-foreground font-medium text-lg">
+    <div className="relative pt-3 px-4 sm:px-6 z-10 text-gray-900 dark:text-gray-200">
+      {/* HEADER */}
+      <div className="text-left md:text-center space-y-1">
+        <h1 className="text-2xl sm:text-3xl font-bold text-primary">
+          Sales Overview
+        </h1>
+        <p className="text-muted-foreground font-medium text-base sm:text-lg">
           Your current sales summary and activity
         </p>
       </div>
 
-      {/* Data Source Dropdown */}
-      <div className="absolute right-4 top-7">
+      {/* DATA SOURCE DROPDOWN */}
+      <div className="absolute top-3 right-3 md:right-4 md:top-5">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -245,7 +248,8 @@ export default function Dashboard() {
         </DropdownMenu>
       </div>
 
-      <div className="flex flex-wrap justify-center items-center gap-2 mt-4 pb-4">
+      {/* FILTERS */}
+      <div className="flex flex-wrap justify-start md:justify-center items-center gap-2 mt-4 pb-4">
         {filters.map((filter) => (
           <MultiSelect
             key={filter.key}
@@ -257,8 +261,9 @@ export default function Dashboard() {
         ))}
       </div>
 
+      {/* ACTIVE FILTER TAGS */}
       {hasAnyPendingFilter && (
-        <div className="flex justify-center items-center gap-3 flex-wrap mb-4">
+        <div className="flex justify-center items-center gap-2 flex-wrap mb-4">
           {Object.entries(pendingFilters).flatMap(([key, values]) =>
             values.map((value) => (
               <span
@@ -278,8 +283,9 @@ export default function Dashboard() {
         </div>
       )}
 
+      {/* APPLY / CLEAR BUTTONS */}
       {hasAnyPendingFilter && (
-        <div className="flex gap-2 my-4 justify-center">
+        <div className="flex gap-2 my-4 justify-center flex-wrap">
           {hasPendingChanges && (
             <Button
               className="bg-indigo text-white hover:bg-indigo-hover"
@@ -298,129 +304,126 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* MAIN CONTENT */}
-      <>
-        {/* TOP SECTION */}
-        <section className="grid grid-cols-4 gap-3 items-stretch px-5">
-          <div className="col-span-1 h-full">
-            {loading && (
-              <p className="dark:text-gray-200">Loading Total Retailing...</p>
-            )}
-            {error && (
-              <p className="dark:text-red-400">
-                Error fetching data: {error.message}
-              </p>
-            )}
-            {data && (
-              <StatCard
-                title="Total Retailing (in Lakhs)"
-                value={(data.retailingStats.total / 100000).toFixed(1)}
-                breakdown={data.retailingStats.breakdown}
-                growth={data.retailingStats.growth}
-              />
-            )}
-          </div>
-
-          <div className="col-span-2 flex justify-around gap-2">
-            <div className="w-1/2 h-full">
-              <RetailingCategoryPie
-                data={categoryData?.retailingByCategory}
-                loading={categoryLoading}
-                error={categoryError}
-              />
-            </div>
-            <div className="w-1/2 h-full">
-              <RetailingChannelPie
-                data={broadChannelData?.retailingByBroadChannel}
-                loading={broadChannelLoading}
-                error={broadChannelError}
-              />
-            </div>
-          </div>
-
-          <div className="col-span-1 flex flex-col justify-between gap-2 h-full">
-            <div>
-              {highestBranchLoading && (
-                <p className="dark:text-gray-200">Loading highest branch...</p>
-              )}
-              {highestBranchError && (
-                <p className="dark:text-red-400">
-                  Error: {highestBranchError.message}
-                </p>
-              )}
-              {highestBranchData && (
-                <StatCard
-                  title="Highest Retailing Branch (in Lakhs)"
-                  value={(
-                    highestBranchData.highestRetailingBranch.retailing / 100000
-                  ).toFixed(1)}
-                  description={`Branch: ${highestBranchData.highestRetailingBranch.branch}`}
-                  breakdown={highestBranchData.highestRetailingBranch.breakdown}
-                  growth={highestBranchData.highestRetailingBranch.growth}
-                />
-              )}
-            </div>
-
-            <div>
-              {highestBrandLoading && (
-                <p className="dark:text-gray-200">Loading highest brand...</p>
-              )}
-              {highestBrandError && (
-                <p className="dark:text-red-400">
-                  Error: {highestBrandError.message}
-                </p>
-              )}
-              {highestBrandData && (
-                <StatCard
-                  title="Highest Retailing Brand (in Lakhs)"
-                  value={(
-                    highestBrandData.highestRetailingBrand.retailing / 100000
-                  ).toFixed(1)}
-                  description={`Brand: ${highestBrandData.highestRetailingBrand.brand}`}
-                  breakdown={highestBrandData.highestRetailingBrand.breakdown}
-                  growth={highestBrandData.highestRetailingBrand.growth}
-                />
-              )}
-            </div>
-          </div>
-        </section>
-
-        {/* MIDDLE SECTION */}
-        <section className="pt-5 px-6">
-          <div className="bg-yellow-100/20 dark:bg-indigo-900/10 p-2 rounded-lg shadow">
-            <MonthlyTrendChart
-              data={monthlyTrendData?.monthlyRetailingTrend}
-              loading={monthlyTrendLoading}
-              error={monthlyTrendError}
+      {/* TOP SECTION */}
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch px-0 sm:px-2">
+        <div className="h-full">
+          {loading && (
+            <p className="dark:text-gray-200">Loading Total Retailing...</p>
+          )}
+          {error && (
+            <p className="dark:text-red-400">
+              Error fetching data: {error.message}
+            </p>
+          )}
+          {data && (
+            <StatCard
+              title="Total Retailing (in Lakhs)"
+              value={(data.retailingStats.total / 100000).toFixed(1)}
+              breakdown={data.retailingStats.breakdown}
+              growth={data.retailingStats.growth}
             />
-          </div>
-        </section>
+          )}
+        </div>
 
-        {/* BOTTOM SECTION */}
-        <section className="py-5 pt-8 grid grid-cols-3 gap-5 px-6">
-          <div className="col-span-1">
-            <TopBrandforms
-              data={brandformData?.topBrandforms}
-              loading={brandformLoading}
-              error={brandformError}
-            />
-          </div>
-          <div className="col-span-1">
-            <CategoryTable
-              data={categoryData?.retailingByCategory || []}
+        <div className="md:col-span-1 lg:col-span-2 flex flex-col sm:flex-row justify-around gap-2">
+          <div className="w-full sm:w-1/2 h-full">
+            <RetailingCategoryPie
+              data={categoryData?.retailingByCategory}
               loading={categoryLoading}
               error={categoryError}
             />
           </div>
-          <div className="col-span-1">
-            <BroadChannelTable
-              data={broadChannelData?.retailingByBroadChannel || []}
+          <div className="w-full sm:w-1/2 h-full">
+            <RetailingChannelPie
+              data={broadChannelData?.retailingByBroadChannel}
               loading={broadChannelLoading}
               error={broadChannelError}
             />
           </div>
-        </section>
-      </>
+        </div>
+
+        <div className="h-full flex flex-col justify-between gap-2">
+          <div>
+            {highestBranchLoading && (
+              <p className="dark:text-gray-200">Loading highest branch...</p>
+            )}
+            {highestBranchError && (
+              <p className="dark:text-red-400">
+                Error: {highestBranchError.message}
+              </p>
+            )}
+            {highestBranchData && (
+              <StatCard
+                title="Highest Retailing Branch (in Lakhs)"
+                value={(
+                  highestBranchData.highestRetailingBranch.retailing / 100000
+                ).toFixed(1)}
+                description={`Branch: ${highestBranchData.highestRetailingBranch.branch}`}
+                breakdown={highestBranchData.highestRetailingBranch.breakdown}
+                growth={highestBranchData.highestRetailingBranch.growth}
+              />
+            )}
+          </div>
+
+          <div>
+            {highestBrandLoading && (
+              <p className="dark:text-gray-200">Loading highest brand...</p>
+            )}
+            {highestBrandError && (
+              <p className="dark:text-red-400">
+                Error: {highestBrandError.message}
+              </p>
+            )}
+            {highestBrandData && (
+              <StatCard
+                title="Highest Retailing Brand (in Lakhs)"
+                value={(
+                  highestBrandData.highestRetailingBrand.retailing / 100000
+                ).toFixed(1)}
+                description={`Brand: ${highestBrandData.highestRetailingBrand.brand}`}
+                breakdown={highestBrandData.highestRetailingBrand.breakdown}
+                growth={highestBrandData.highestRetailingBrand.growth}
+              />
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* MIDDLE SECTION */}
+      <section className="pt-5 px-0 sm:px-6">
+        <div className="bg-yellow-100/20 dark:bg-indigo-900/10 p-2 rounded-lg shadow">
+          <MonthlyTrendChart
+            data={monthlyTrendData?.monthlyRetailingTrend}
+            loading={monthlyTrendLoading}
+            error={monthlyTrendError}
+          />
+        </div>
+      </section>
+
+      {/* BOTTOM SECTION */}
+      <section className="py-5 pt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 px-0 sm:px-6">
+        <div>
+          <TopBrandforms
+            data={brandformData?.topBrandforms}
+            loading={brandformLoading}
+            error={brandformError}
+          />
+        </div>
+        <div>
+          <CategoryTable
+            data={categoryData?.retailingByCategory || []}
+            loading={categoryLoading}
+            error={categoryError}
+          />
+        </div>
+        <div>
+          <BroadChannelTable
+            data={broadChannelData?.retailingByBroadChannel || []}
+            loading={broadChannelLoading}
+            error={broadChannelError}
+          />
+        </div>
+      </section>
     </div>
   );
 }
