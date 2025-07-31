@@ -160,17 +160,13 @@ export default function Dashboard() {
     data: monthlyTrendData,
     loading: monthlyTrendLoading,
     error: monthlyTrendError,
-  } = useQuery(GET_MONTHLY_TREND, {
-    variables: { filters: appliedFilters, source: dataSource },
-  });
+  } = useQuery(GET_MONTHLY_TREND, queryOptions);
 
   const {
     data: brandformData,
     loading: brandformLoading,
     error: brandformError,
-  } = useQuery(GET_TOP_BRANDFORMS, {
-    variables: { filters: appliedFilters, source: dataSource },
-  });
+  } = useQuery(GET_TOP_BRANDFORMS, queryOptions);
 
   const handleFilterChange = (key: string, values: (string | number)[]) => {
     setPendingFilters((prev) => ({ ...prev, [key]: values }));
@@ -249,7 +245,7 @@ export default function Dashboard() {
       </div>
 
       {/* FILTERS */}
-      <div className="flex flex-wrap justify-start md:justify-center items-center gap-2 mt-4 pb-4">
+      <div className="flex flex-wrap justify-start md:justify-center items-center gap-2 my-4 pb-4">
         {filters.map((filter) => (
           <MultiSelect
             key={filter.key}

@@ -242,16 +242,19 @@ const StorePage = () => {
   };
 
   return (
-    <div className="relative pt-3 mx-5 z-10 text-gray-900 dark:text-gray-200">
-      <div className="text-center space-y-1 mb-6">
-        <h1 className="text-3xl font-bold text-primary">Store at Fingertips</h1>
+    <div className="relative pt-3 px-4 sm:px-6 md:px-8 z-10 text-gray-900 dark:text-gray-200">
+      {/* Header */}
+      <div className="text-left md:text-center space-y-1 mb-6">
+        <h1 className=" text-2xl md:text-3xl font-bold text-primary">
+          Store at Fingertips
+        </h1>
         <p className="text-muted-foreground font-medium text-lg">
           Your current stores&apos; summary & activity
         </p>
       </div>
 
       {/* Data Source Dropdown */}
-      <div className="absolute right-4 top-7">
+      <div className="absolute top-3 right-3 md:right-4 md:top-5">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -282,11 +285,12 @@ const StorePage = () => {
       </div>
 
       {/* MAIN CONTENT */}
-      <section className="space-y-5 px-5">
+      <section className="space-y-5">
         <h2 className="font-semibold text-2xl mb-4">Store Lookup</h2>
 
+        {/* Search Inputs */}
         <div className="flex flex-col gap-4 max-w-3xl">
-          <div className="flex gap-3">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:gap-3 gap-2">
             <StoreSearchInput value={storeQuery} onChange={setStoreQuery} />
 
             {branchLoading ? (
@@ -313,7 +317,7 @@ const StorePage = () => {
         <div className="space-y-4">
           {selectedStore ? (
             <>
-              <div className="flex gap-3">
+              <div className="flex flex-col sm:flex-row gap-3">
                 <MultiSelect
                   label="Year"
                   options={yearsList}
@@ -340,7 +344,7 @@ const StorePage = () => {
 
               {(pendingFilters.year.length > 0 ||
                 pendingFilters.month.length > 0) && (
-                <div className="flex gap-2">
+                <div className="flex gap-2 flex-wrap">
                   <Button onClick={applyFilters}>Apply Filters</Button>
                   <Button variant="outline" onClick={clearFilters}>
                     Clear Filters
@@ -348,8 +352,10 @@ const StorePage = () => {
                 </div>
               )}
 
-              <div className="grid grid-cols-5 mt-4 space-x-4">
-                <div className="col-span-3">
+              {/* Responsive Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mt-4">
+                {/* Trend Chart */}
+                <div className="lg:col-span-3">
                   <h2 className="text-xl font-semibold mb-3">
                     Retailing Trend for:{" "}
                     <span className="text-blue-600 dark:text-blue-400">
@@ -368,7 +374,8 @@ const StorePage = () => {
                   )}
                 </div>
 
-                <div className="col-span-1">
+                {/* Stats */}
+                <div className="lg:col-span-1">
                   <h2 className="text-xl font-semibold mb-3">
                     Additional Details:
                   </h2>
@@ -388,13 +395,14 @@ const StorePage = () => {
                   )}
                 </div>
 
-                <div className="col-span-1 pl-3">
+                {/* Category Stats */}
+                <div className="lg:col-span-1">
                   {categoryStats.length > 0 && (
-                    <div className="">
+                    <div>
                       <h2 className="text-xl font-semibold mb-3">
                         Category-wise retailing:
                       </h2>
-                      <ul className="space-y-1 h-96 overflow-y-auto">
+                      <ul className="space-y-1 max-h-96 overflow-y-auto">
                         {categoryStats.map((item: any, index: number) => (
                           <li
                             key={index}
@@ -411,13 +419,13 @@ const StorePage = () => {
               </div>
             </>
           ) : (
-            // Initial loading placeholder before store is selected
-            <div className="grid grid-cols-5 gap-2 mt-4">
-              <div className="col-span-3 space-y-4">
+            // Loading Skeleton before store is selected
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mt-4">
+              <div className="lg:col-span-3 space-y-4">
                 <Skeleton className="h-6 w-1/2" />
                 <Skeleton className="h-60 w-full rounded-xl" />
               </div>
-              <div className="col-span-2 space-y-4">
+              <div className="lg:col-span-2 space-y-4">
                 <Skeleton className="h-6 w-1/2" />
                 <Skeleton className="h-12 w-full rounded-md" />
                 <Skeleton className="h-12 w-full rounded-md" />

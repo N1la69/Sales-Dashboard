@@ -3,24 +3,24 @@
 
 interface StoreStatsProps {
   data: {
-    highestRetailingMonth: {
+    highestRetailingMonth?: {
       year: number;
       month: number;
       retailing: number;
-    };
-    lowestRetailingMonth: {
+    } | null;
+    lowestRetailingMonth?: {
       year: number;
       month: number;
       retailing: number;
-    };
-    highestRetailingBrand: {
+    } | null;
+    highestRetailingBrand?: {
       brand: string;
       retailing: number;
-    };
-    lowestRetailingBrand: {
+    } | null;
+    lowestRetailingBrand?: {
       brand: string;
       retailing: number;
-    };
+    } | null;
   } | null;
   loading: boolean;
   error: any;
@@ -52,34 +52,50 @@ export default function StoreStatsCard({
     <div className="flex flex-col gap-4">
       <div className="p-4 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-800 dark:text-indigo-200 shadow-sm">
         <h3 className="font-semibold mb-1">Highest Retailing Month</h3>
-        <p>
-          {data.highestRetailingMonth.month}/{data.highestRetailingMonth.year} –
-          ₹{data.highestRetailingMonth.retailing.toFixed(2)}
-        </p>
+        {data.highestRetailingMonth ? (
+          <p>
+            {data.highestRetailingMonth.month}/{data.highestRetailingMonth.year}{" "}
+            – ₹{data.highestRetailingMonth.retailing.toFixed(2)}
+          </p>
+        ) : (
+          <p className="text-gray-500 dark:text-gray-400">No data available</p>
+        )}
       </div>
 
       <div className="p-4 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-800 dark:text-indigo-200 shadow-sm">
         <h3 className="font-semibold mb-1">Lowest Retailing Month</h3>
-        <p>
-          {data.lowestRetailingMonth.month}/{data.lowestRetailingMonth.year} – ₹
-          {data.lowestRetailingMonth.retailing.toFixed(2)}
-        </p>
+        {data.lowestRetailingMonth ? (
+          <p>
+            {data.lowestRetailingMonth.month}/{data.lowestRetailingMonth.year} –
+            ₹{data.lowestRetailingMonth.retailing.toFixed(2)}
+          </p>
+        ) : (
+          <p className="text-gray-500 dark:text-gray-400">No data available</p>
+        )}
       </div>
 
       <div className="p-4 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-800 dark:text-indigo-200 shadow-sm">
         <h3 className="font-semibold mb-1">Highest Retailing Brand</h3>
-        <p>
-          {data.highestRetailingBrand.brand} – ₹
-          {data.highestRetailingBrand.retailing.toFixed(2)}
-        </p>
+        {data.highestRetailingBrand ? (
+          <p>
+            {data.highestRetailingBrand.brand} – ₹
+            {data.highestRetailingBrand.retailing.toFixed(2)}
+          </p>
+        ) : (
+          <p className="text-gray-500 dark:text-gray-400">No data available</p>
+        )}
       </div>
 
       <div className="p-4 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-800 dark:text-indigo-200 shadow-sm">
         <h3 className="font-semibold mb-1">Lowest Retailing Brand</h3>
-        <p>
-          {data.lowestRetailingBrand.brand} – ₹
-          {data.lowestRetailingBrand.retailing.toFixed(2)}
-        </p>
+        {data.lowestRetailingBrand ? (
+          <p>
+            {data.lowestRetailingBrand.brand} – ₹
+            {data.lowestRetailingBrand.retailing.toFixed(2)}
+          </p>
+        ) : (
+          <p className="text-gray-500 dark:text-gray-400">No data available</p>
+        )}
       </div>
     </div>
   );

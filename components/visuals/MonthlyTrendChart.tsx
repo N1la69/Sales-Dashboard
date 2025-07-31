@@ -76,24 +76,26 @@ export default function MonthlyTrendChart({
 
   return (
     <>
-      <div className="relative flex justify-between items-center mb-3">
-        <h2 className="text-xl font-semibold text-center w-full">
+      {/* HEADER & TOGGLE BUTTON */}
+      <div className="relative flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 mb-3">
+        <h2 className="text-lg sm:text-xl font-semibold text-center w-full">
           Monthly Retailing Trend by Year (in Lakhs)
         </h2>
-        <Button
-          variant="outline"
-          size="sm"
-          className="absolute right-4 top-4"
-          onClick={() =>
-            setChartType((prev) => (prev === "line" ? "bar" : "line"))
-          }
-        >
-          {chartType === "line" ? "Show Bar Chart" : "Show Line Chart"}
-        </Button>
+        <div className="sm:absolute sm:right-4 sm:top-4 self-center">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() =>
+              setChartType((prev) => (prev === "line" ? "bar" : "line"))
+            }
+          >
+            {chartType === "line" ? "Show Bar Chart" : "Show Line Chart"}
+          </Button>
+        </div>
       </div>
 
       {/* LEGEND */}
-      <div className="flex flex-wrap justify-center gap-4 mb-1 text-base text-gray-700 dark:text-gray-300">
+      <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mb-3 text-sm sm:text-base text-gray-700 dark:text-gray-300">
         {uniqueYears.map((year, idx) => (
           <div key={year} className="flex items-center gap-2">
             <span
@@ -105,96 +107,99 @@ export default function MonthlyTrendChart({
         ))}
       </div>
 
-      <ResponsiveContainer width="100%" height={550}>
-        {chartType === "line" ? (
-          <LineChart
-            data={chartData}
-            margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
-          >
-            <CartesianGrid
-              strokeDasharray="3 3"
-              stroke="currentColor"
-              opacity={0.2}
-            />
-            <XAxis
-              dataKey="month"
-              stroke="currentColor"
-              tick={{ fill: "currentColor" }}
-              padding={{ left: 10, right: 10 }}
-            />
-            <YAxis
-              label={{
-                value: "Retailing",
-                angle: -90,
-                position: "insideLeft",
-                fill: "currentColor",
-              }}
-              stroke="currentColor"
-              tick={{ fill: "currentColor" }}
-              domain={[yAxisMin, "auto"]}
-            />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "var(--background)",
-                color: "var(--foreground)",
-              }}
-              labelStyle={{ color: "var(--foreground)" }}
-            />
-            {uniqueYears.map((year, idx) => (
-              <Line
-                key={year}
-                type="monotone"
-                dataKey={String(year)}
-                stroke={getColor(idx)}
-                strokeWidth={2}
-                activeDot={{ r: 6 }}
+      {/* CHART */}
+      <div className="w-full h-[18.75rem] sm:h-[31.25rem]">
+        <ResponsiveContainer width="100%" height="100%">
+          {chartType === "line" ? (
+            <LineChart
+              data={chartData}
+              margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="currentColor"
+                opacity={0.2}
               />
-            ))}
-          </LineChart>
-        ) : (
-          <BarChart
-            data={chartData}
-            margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
-          >
-            <CartesianGrid
-              strokeDasharray="3 3"
-              stroke="currentColor"
-              opacity={0.2}
-            />
-            <XAxis
-              dataKey="month"
-              stroke="currentColor"
-              tick={{ fill: "currentColor" }}
-            />
-            <YAxis
-              label={{
-                value: "Retailing",
-                angle: -90,
-                position: "insideLeft",
-                fill: "currentColor",
-              }}
-              stroke="currentColor"
-              tick={{ fill: "currentColor" }}
-              domain={[yAxisMin, "auto"]}
-            />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "var(--background)",
-                color: "var(--foreground)",
-              }}
-              labelStyle={{ color: "var(--foreground)" }}
-            />
-            {uniqueYears.map((year, idx) => (
-              <Bar
-                key={year}
-                dataKey={String(year)}
-                fill={getColor(idx)}
-                barSize={30}
+              <XAxis
+                dataKey="month"
+                stroke="currentColor"
+                tick={{ fill: "currentColor", fontSize: 12 }}
+                padding={{ left: 10, right: 10 }}
               />
-            ))}
-          </BarChart>
-        )}
-      </ResponsiveContainer>
+              <YAxis
+                label={{
+                  value: "Retailing",
+                  angle: -90,
+                  position: "insideLeft",
+                  fill: "currentColor",
+                }}
+                stroke="currentColor"
+                tick={{ fill: "currentColor", fontSize: 12 }}
+                domain={[yAxisMin, "auto"]}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "var(--background)",
+                  color: "var(--foreground)",
+                }}
+                labelStyle={{ color: "var(--foreground)" }}
+              />
+              {uniqueYears.map((year, idx) => (
+                <Line
+                  key={year}
+                  type="monotone"
+                  dataKey={String(year)}
+                  stroke={getColor(idx)}
+                  strokeWidth={2}
+                  activeDot={{ r: 6 }}
+                />
+              ))}
+            </LineChart>
+          ) : (
+            <BarChart
+              data={chartData}
+              margin={{ top: 20, right: 30, left: 0, bottom: 5 }}
+            >
+              <CartesianGrid
+                strokeDasharray="3 3"
+                stroke="currentColor"
+                opacity={0.2}
+              />
+              <XAxis
+                dataKey="month"
+                stroke="currentColor"
+                tick={{ fill: "currentColor", fontSize: 12 }}
+              />
+              <YAxis
+                label={{
+                  value: "Retailing",
+                  angle: -90,
+                  position: "insideLeft",
+                  fill: "currentColor",
+                }}
+                stroke="currentColor"
+                tick={{ fill: "currentColor", fontSize: 12 }}
+                domain={[yAxisMin, "auto"]}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "var(--background)",
+                  color: "var(--foreground)",
+                }}
+                labelStyle={{ color: "var(--foreground)" }}
+              />
+              {uniqueYears.map((year, idx) => (
+                <Bar
+                  key={year}
+                  dataKey={String(year)}
+                  fill={getColor(idx)}
+                  barSize={30}
+                />
+              ))}
+            </BarChart>
+          )}
+        </ResponsiveContainer>
+      </div>
     </>
   );
 }

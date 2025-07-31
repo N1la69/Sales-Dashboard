@@ -19,21 +19,21 @@ const StatCard = ({
   growth?: number | null;
 }) => (
   <div className="bg-indigo-300/10 dark:bg-indigo-700/10 rounded-lg shadow p-4 text-left">
-    <h2 className="text-lg font-semibold text-indigo-600 dark:text-indigo-400">
+    <h2 className="text-md md:text-lg font-semibold text-indigo-600 dark:text-indigo-400">
       {title}
     </h2>
 
     {description ? (
       <div className="flex justify-between items-center">
-        <h2 className="text-lg font-semibold text-gray-800 dark:text-gray-300">
+        <h2 className="text-md md:text-lg font-semibold text-gray-800 dark:text-gray-300">
           {description}
         </h2>
-        <p className="text-2xl font-bold text-black dark:text-white">
+        <p className="text-xl md:text-2xl font-bold text-black dark:text-white">
           {typeof value === "number" ? value.toLocaleString() : value}
         </p>
       </div>
     ) : (
-      <p className="text-2xl font-bold text-black dark:text-white">
+      <p className="text-xl md:text-2xl font-bold text-black dark:text-white">
         {typeof value === "number" ? value.toLocaleString() : value}
       </p>
     )}

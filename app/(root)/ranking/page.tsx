@@ -320,16 +320,19 @@ const RankingPage = () => {
   ]);
 
   return (
-    <div className="relative pt-3 mx-5 z-10 text-gray-900 dark:text-gray-200">
-      <div className="text-center space-y-1 mb-6">
-        <h1 className="text-3xl font-bold text-primary">Top 100 Stores</h1>
-        <p className="text-muted-foreground font-medium text-lg">
+    <div className="relative pt-3 px-4 sm:px-6 md:px-10 z-10 text-gray-900 dark:text-gray-200">
+      {/* TITLE */}
+      <div className="text-left md:text-center space-y-1 mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-primary">
+          Top 100 Stores
+        </h1>
+        <p className="text-sm sm:text-lg text-muted-foreground font-medium">
           Generate rankings based on average retailing
         </p>
       </div>
 
       {/* Data Source Dropdown */}
-      <div className="absolute right-4 top-7">
+      <div className="absolute top-3 right-3 md:right-4 md:top-5">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
@@ -360,29 +363,26 @@ const RankingPage = () => {
       </div>
 
       {/* FILTERS */}
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-3 sm:gap-4 mb-4">
         <Input
           type="number"
           value={months}
           onChange={(e) => setMonths(parseInt(e.target.value))}
           placeholder="Months"
-          className="w-32 py-2.5 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 
-                     focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all placeholder:text-indigo-400 
-                     dark:placeholder:text-indigo-500 text-indigo-700 dark:text-indigo-200"
+          className="w-28 sm:w-32 py-2.5 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 
+                   focus:ring-indigo-500 dark:focus:ring-indigo-400 placeholder:text-indigo-400 
+                   dark:placeholder:text-indigo-500 text-indigo-700 dark:text-indigo-200"
           disabled={!!startDate && !!endDate}
         />
 
+        {/* Date Range Picker */}
         <Popover>
-          <PopoverTrigger
-            asChild
-            className="py-2.5 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 
-                     focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all placeholder:text-indigo-400 
-                     dark:placeholder:text-indigo-500 text-indigo-700 dark:text-indigo-200"
-          >
+          <PopoverTrigger asChild>
             <Button
               id="date"
-              variant={"outline"}
-              className="w-[260px] justify-start text-left font-normal"
+              variant="outline"
+              className="w-[250px] sm:w-[260px] py-2.5 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 
+                     text-indigo-700 dark:text-indigo-200 justify-start text-left font-normal"
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {startDate && endDate ? (
@@ -405,128 +405,82 @@ const RankingPage = () => {
           </PopoverContent>
         </Popover>
 
-        <Select value={zm} onValueChange={(value) => setZm(value)}>
-          <SelectTrigger className={selectFilterTriggerStyles}>
-            <SelectValue placeholder="Select ZM" />
-          </SelectTrigger>
-          <SelectContent className={selectFilterContentStyles}>
-            {filterValues.zms.map((z) => (
-              <SelectItem key={z} value={z}>
-                {z}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        {/* Select Filters */}
+        {[zm, sm, be, branch, category, brand, broadChannel].map((val, i) => {
+          const keys = [
+            "Select ZM",
+            "Select SM",
+            "Select BE",
+            "Select Branch",
+            "Select Category",
+            "Select Brand",
+            "Select Channel (Base)",
+          ];
+          const setters = [
+            setZm,
+            setSm,
+            setBe,
+            setBranch,
+            setCategory,
+            setBrand,
+            setBroadChannel,
+          ];
+          const lists = [
+            filterValues.zms,
+            filterValues.sms,
+            filterValues.bes,
+            filterValues.branches,
+            filterValues.categories,
+            filterValues.brands,
+            filterValues.broadChannels,
+          ];
+          return (
+            <Select key={keys[i]} value={val} onValueChange={setters[i]}>
+              <SelectTrigger className="w-40 sm:w-48 py-2.5 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-700 dark:text-indigo-200">
+                <SelectValue placeholder={keys[i]} />
+              </SelectTrigger>
+              <SelectContent>
+                {lists[i].map((option) => (
+                  <SelectItem key={option} value={option}>
+                    {option}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          );
+        })}
 
-        <Select value={sm} onValueChange={(value) => setSm(value)}>
-          <SelectTrigger className={selectFilterTriggerStyles}>
-            <SelectValue placeholder="Select SM" />
-          </SelectTrigger>
-          <SelectContent className={selectFilterContentStyles}>
-            {filterValues.sms.map((s) => (
-              <SelectItem key={s} value={s}>
-                {s}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        {/* Buttons */}
+        <div className="flex flex-wrap gap-2">
+          <Button
+            variant="default"
+            onClick={() => {
+              setZm("");
+              setSm("");
+              setBe("");
+              setCategory("");
+              setBranch("");
+              setBroadChannel("");
+              setBrand("");
+              setMonths(3);
+              setDateRange(undefined);
+            }}
+            className="bg-indigo text-white hover:bg-indigo-hover"
+          >
+            Clear Filters
+          </Button>
 
-        <Select value={be} onValueChange={(value) => setBe(value)}>
-          <SelectTrigger className={selectFilterTriggerStyles}>
-            <SelectValue placeholder="Select BE" />
-          </SelectTrigger>
-          <SelectContent className={selectFilterContentStyles}>
-            {filterValues.bes.map((b) => (
-              <SelectItem key={b} value={b}>
-                {b}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select value={branch} onValueChange={(value) => setBranch(value)}>
-          <SelectTrigger className={selectFilterTriggerStyles}>
-            <SelectValue placeholder="Select Branch" />
-          </SelectTrigger>
-          <SelectContent className={selectFilterContentStyles}>
-            {filterValues.branches.map((br) => (
-              <SelectItem key={br} value={br}>
-                {br}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select value={category} onValueChange={(value) => setCategory(value)}>
-          <SelectTrigger className={selectFilterTriggerStyles}>
-            <SelectValue placeholder="Select Category" />
-          </SelectTrigger>
-          <SelectContent className={selectFilterContentStyles}>
-            {filterValues.categories.map((c) => (
-              <SelectItem key={c} value={c}>
-                {c}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select value={brand} onValueChange={(value) => setBrand(value)}>
-          <SelectTrigger className={selectFilterTriggerStyles}>
-            <SelectValue placeholder="Select Brand" />
-          </SelectTrigger>
-          <SelectContent className={selectFilterContentStyles}>
-            {filterValues.brands.map((b) => (
-              <SelectItem key={b} value={b}>
-                {b}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select
-          value={broadChannel}
-          onValueChange={(value) => setBroadChannel(value)}
-        >
-          <SelectTrigger className={selectFilterTriggerStyles}>
-            <SelectValue placeholder="Select Channel (Base)" />
-          </SelectTrigger>
-          <SelectContent className={selectFilterContentStyles}>
-            {filterValues.broadChannels.map((bc) => (
-              <SelectItem key={bc} value={bc}>
-                {bc}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Button
-          variant="default"
-          onClick={() => {
-            setZm("");
-            setSm("");
-            setBe("");
-            setCategory("");
-            setBranch("");
-            setBroadChannel("");
-            setBrand("");
-            setMonths(3);
-            setDateRange(undefined);
-          }}
-          className="bg-indigo text-white hover:bg-indigo-hover"
-        >
-          Clear All Filters
-        </Button>
-
-        <Button
-          onClick={handleExcelDownload}
-          disabled={downloadLoading}
-          className="bg-indigo text-white hover:bg-indigo-hover"
-        >
-          {downloadLoading ? "Downloading..." : "Download Excel"}
-        </Button>
+          <Button
+            onClick={handleExcelDownload}
+            disabled={downloadLoading}
+            className="bg-indigo text-white hover:bg-indigo-hover"
+          >
+            {downloadLoading ? "Downloading..." : "Download Excel"}
+          </Button>
+        </div>
       </div>
 
-      {/* MAIN CONTENT */}
+      {/* MAIN TABLE */}
       <section className="py-4">
         {loading ? (
           <p>Loading top stores...</p>
@@ -534,26 +488,26 @@ const RankingPage = () => {
           <p>Error loading top stores: {error.message}</p>
         ) : (
           <>
-            {" "}
-            <div className="overflow-auto rounded-xl border border-indigo-300 dark:border-indigo-700">
+            <div className="overflow-x-auto rounded-xl border border-indigo-300 dark:border-indigo-700">
               <table className="min-w-full text-sm text-indigo-800 dark:text-indigo-200">
                 <thead className="bg-indigo-100/50 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 text-center">
                   <tr>
-                    <th className="px-4 py-2 border-b border-indigo-200 dark:border-indigo-700">
-                      Sl. No.
-                    </th>
-                    <th className="px-4 py-2 border-b border-indigo-200 dark:border-indigo-700">
-                      Store Code
-                    </th>
-                    <th className="px-4 py-2 border-b border-indigo-200 dark:border-indigo-700">
-                      Store Name
-                    </th>
-                    <th className="px-4 py-2 border-b border-indigo-200 dark:border-indigo-700">
-                      Branch Name
-                    </th>
-                    <th className="px-4 py-2 text-right border-b border-indigo-200 dark:border-indigo-700">
-                      Avg. Retailing
-                    </th>
+                    {[
+                      "Sl. No.",
+                      "Store Code",
+                      "Store Name",
+                      "Branch Name",
+                      "Avg. Retailing",
+                    ].map((title, idx) => (
+                      <th
+                        key={idx}
+                        className={`px-4 py-2 border-b border-indigo-200 dark:border-indigo-700 ${
+                          idx === 4 ? "text-right" : ""
+                        }`}
+                      >
+                        {title}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>
@@ -578,8 +532,9 @@ const RankingPage = () => {
                 </tbody>
               </table>
             </div>
+
             {/* PAGINATION */}
-            <div className="flex justify-between items-center mt-4 px-2">
+            <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mt-4 px-2">
               <Button
                 onClick={handlePrev}
                 disabled={page === 0}

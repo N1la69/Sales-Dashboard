@@ -77,41 +77,50 @@ export default function StoreRetailingTrendChart({
   const years = Array.from(new Set(data.map((d) => d.year)));
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
-      <BarChart
-        data={chartData}
-        margin={{ top: 20, left: 20, bottom: 5, right: 10 }}
-      >
-        <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
-        <XAxis dataKey="month" tick={{ fill: "currentColor" }} />
-        <YAxis
-          label={{
-            value: "Retailing (Lakhs)",
-            angle: -90,
-            position: "insideLeft",
-            fill: "currentColor",
-          }}
-          tick={{ fill: "currentColor" }}
-          domain={[(dataMin: number) => Math.floor(dataMin * 0.9), "auto"]}
-        />
-        <Tooltip
-          contentStyle={{
-            backgroundColor: "#f9f9f9",
-            borderColor: "#ccc",
-            color: "#000",
-          }}
-        />
-        <Legend wrapperStyle={{ color: "currentColor" }} />
-        {years.map((year, idx) => (
-          <Bar
-            key={year}
-            dataKey={String(year)}
-            fill={getColor(idx)}
-            radius={[4, 4, 0, 0]}
+    <div className="w-full h-[20rem] sm:h-[25rem] md:h-[28rem] lg:h-[32rem]">
+      <ResponsiveContainer width="100%" height="100%">
+        <BarChart
+          data={chartData}
+          margin={{ top: 20, left: 10, bottom: 5, right: 10 }}
+        >
+          <CartesianGrid strokeDasharray="3 3" stroke="#ccc" />
+          <XAxis
+            dataKey="month"
+            tick={{ fill: "currentColor", fontSize: 12 }}
           />
-        ))}
-      </BarChart>
-    </ResponsiveContainer>
+          <YAxis
+            label={{
+              value: "Retailing (Lakhs)",
+              angle: -90,
+              position: "insideLeft",
+              fill: "currentColor",
+              fontSize: 12,
+            }}
+            tick={{ fill: "currentColor", fontSize: 12 }}
+            domain={[(dataMin: number) => Math.floor(dataMin * 0.9), "auto"]}
+          />
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "#f9f9f9",
+              borderColor: "#ccc",
+              color: "#000",
+              fontSize: "0.875rem",
+            }}
+          />
+          <Legend
+            wrapperStyle={{ color: "currentColor", fontSize: "0.875rem" }}
+          />
+          {years.map((year, idx) => (
+            <Bar
+              key={year}
+              dataKey={String(year)}
+              fill={getColor(idx)}
+              radius={[4, 4, 0, 0]}
+            />
+          ))}
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
   );
 }
 

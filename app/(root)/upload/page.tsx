@@ -113,13 +113,13 @@ const UploadPage = () => {
   };
 
   return (
-    <div className="pt-3 mx-5 z-20 dark:text-blue-100">
-      <h1 className="text-center text-2xl font-bold">
+    <div className="pt-3 px-4 sm:px-6 md:px-10 z-20 dark:text-blue-100">
+      <h1 className="text-center text-2xl sm:text-3xl font-bold">
         Upload Analytics Data Here
       </h1>
 
       {/* PSR Data Upload */}
-      <Card className="mt-5 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
+      <Card className="mt-6 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
           <CardTitle className="text-lg font-semibold dark:text-blue-100">
             Upload PSR Data
@@ -139,7 +139,7 @@ const UploadPage = () => {
             className="cursor-pointer border border-blue-200 dark:border-blue-700 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/20 file:text-blue-700 dark:file:text-blue-200 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/30"
           />
 
-          <div className="flex space-x-2">
+          <div className="flex flex-wrap gap-2">
             <Button
               variant={psrAction === "overwrite" ? "default" : "outline"}
               onClick={() => setPsrAction("overwrite")}
@@ -200,7 +200,7 @@ const UploadPage = () => {
       </Card>
 
       {/* Channel Mapping Upload */}
-      <Card className="mt-5 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
+      <Card className="mt-6 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
           <CardTitle className="text-lg font-semibold dark:text-blue-100">
             Upload Channel Mapping Data
@@ -218,7 +218,7 @@ const UploadPage = () => {
             }}
             className="cursor-pointer border border-blue-200 dark:border-blue-700 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/20 file:text-blue-700 dark:file:text-blue-200 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/30"
           />
-          <div className="flex space-x-3">
+          <div className="flex flex-wrap gap-3">
             <Button
               onClick={() => channelFile && uploadFile(channelFile, "channel")}
               disabled={loadingType === "channel"}
@@ -238,7 +238,7 @@ const UploadPage = () => {
       </Card>
 
       {/* Store Mapping Upload */}
-      <Card className="mt-5 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
+      <Card className="mt-6 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
           <CardTitle className="text-lg font-semibold dark:text-blue-100">
             Upload Store Mapping Data
@@ -256,7 +256,7 @@ const UploadPage = () => {
             }}
             className="cursor-pointer border border-blue-200 dark:border-blue-700 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/20 file:text-blue-700 dark:file:text-blue-200 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/30"
           />
-          <div className="flex space-x-3">
+          <div className="flex flex-wrap gap-3">
             <Button
               onClick={() => storeFile && uploadFile(storeFile, "store")}
               disabled={loadingType === "store"}
