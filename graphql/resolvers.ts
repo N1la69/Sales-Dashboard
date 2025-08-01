@@ -2,6 +2,7 @@
 import {
   addInClause,
   getAllBranches,
+  getCategoryRetailing,
   getHighestRetailingBranch,
   getHighestRetailingBrand,
   getMonthlyRetailingTrend,
@@ -103,6 +104,22 @@ export const resolvers = {
       }
     ) => {
       return await getStoreStats(storeCode, source, year, month);
+    },
+    getCategoryRetailing: async (
+      _: any,
+      {
+        storeCode,
+        source,
+        year,
+        month,
+      }: {
+        storeCode: string;
+        source: string;
+        year?: number[];
+        month?: number[];
+      }
+    ) => {
+      return await getCategoryRetailing(storeCode, source, year, month);
     },
     getStoreDetails: async (
       _: any,

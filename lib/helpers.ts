@@ -632,17 +632,6 @@ export async function getStoreStats(
     `
   );
 
-  const categoryQueries = tables.map(
-    (table) => `
-      SELECT 
-        category, 
-        CAST(SUM(retailing) AS DECIMAL(15,2)) AS total
-      FROM ${table}
-      WHERE customer_code = ? ${yearFilter} ${monthFilter}
-      GROUP BY category
-    `
-  );
-
   const monthResults = (
     await Promise.all(
       monthQueries.map((query) =>
@@ -659,41 +648,16 @@ export async function getStoreStats(
     )
   ).flat();
 
-  const categoryResults = (
-    await Promise.all(
-      categoryQueries.map((query) =>
-        prisma.$queryRawUnsafe<any[]>(query, storeCode)
-      )
-    )
-  ).flat();
-
-  // Convert totals to numbers
   const parsedMonthResults = monthResults.map((r) => ({
     ...r,
     total: Number(r.total),
   }));
+
   const parsedBrandResults = brandResults.map((r) => ({
     ...r,
     total: Number(r.total),
   }));
-  const parsedCategoryResults = categoryResults.map((r) => ({
-    ...r,
-    total: Number(r.total),
-  }));
 
-  // Sort categories by total retailing in descending order
-  const categoryMap = new Map<string, number>();
-  for (const { category, total } of parsedCategoryResults) {
-    if (!category || isNaN(total)) continue;
-    const current = categoryMap.get(category) || 0;
-    categoryMap.set(category, current + total);
-  }
-
-  const categoriesByRetailing = Array.from(categoryMap.entries())
-    .map(([category, retailing]) => ({ category, retailing }))
-    .sort((a, b) => b.retailing - a.retailing);
-
-  // Safely compute highest and lowest months
   const highestMonth = parsedMonthResults.reduce(
     (prev, curr) => (!prev || curr.total > prev.total ? curr : prev),
     null as any
@@ -704,7 +668,6 @@ export async function getStoreStats(
     null as any
   );
 
-  // Safely compute highest and lowest brands
   const highestBrand = parsedBrandResults.reduce(
     (prev, curr) => (!prev || curr.total > prev.total ? curr : prev),
     null as any
@@ -744,8 +707,79 @@ export async function getStoreStats(
           retailing: lowestBrand.total,
         }
       : null,
-    categoryRetailing: categoriesByRetailing,
   };
+}
+
+export async function getCategoryRetailing(
+  storeCode: string,
+  source: string,
+  year?: number[],
+  month?: number[]
+) {
+  const tables = resolveTables(source);
+
+  const yearFilter = year?.length
+    ? `AND YEAR(document_date) IN (${year.join(",")})`
+    : "";
+  const monthFilter = month?.length
+    ? `AND MONTH(document_date) IN (${month.join(",")})`
+    : "";
+
+  const categoryQueries = tables.map(
+    (table) => `
+      SELECT 
+        category, 
+        YEAR(document_date) AS year,
+        CAST(SUM(retailing) AS DECIMAL(15,2)) AS total
+      FROM ${table}
+      WHERE customer_code = ? ${yearFilter} ${monthFilter}
+      GROUP BY category, year
+    `
+  );
+
+  const results = (
+    await Promise.all(
+      categoryQueries.map((query) =>
+        prisma.$queryRawUnsafe<any[]>(query, storeCode)
+      )
+    )
+  ).flat();
+
+  const categoryMap = new Map<
+    string,
+    { total: number; yearWise: Map<number, number> }
+  >();
+
+  for (const row of results) {
+    const { category, year, total } = row;
+    if (!category || !year || isNaN(total)) continue;
+
+    const existing = categoryMap.get(category) ?? {
+      total: 0,
+      yearWise: new Map<number, number>(),
+    };
+
+    existing.total += Number(total);
+    existing.yearWise.set(
+      year,
+      (existing.yearWise.get(year) || 0) + Number(total)
+    );
+
+    categoryMap.set(category, existing);
+  }
+
+  return Array.from(categoryMap.entries())
+    .map(([category, data]) => ({
+      category,
+      retailing: data.total,
+      yearWise: Array.from(data.yearWise.entries()).map(
+        ([year, retailing]) => ({
+          year: Number(year),
+          value: retailing,
+        })
+      ),
+    }))
+    .sort((a, b) => b.retailing - a.retailing);
 }
 
 // RANKING page

@@ -99,6 +99,7 @@ export const typeDefs = gql`
   type CategoryRetailingStat {
     category: String
     retailing: Float
+    yearWise: [YearlyRetailing!]
   }
 
   type StoreStats {
@@ -106,7 +107,6 @@ export const typeDefs = gql`
     lowestRetailingMonth: StoreRetailingStat
     highestRetailingBrand: StoreBrandStat
     lowestRetailingBrand: StoreBrandStat
-    categoryRetailing: [CategoryRetailingStat]
   }
 
   type StoreDetails {
@@ -159,13 +159,19 @@ export const typeDefs = gql`
       year: [Int]
       month: [Int]
     ): [StoreRetailingTrend]
+    getStoreDetails(storeCode: String!, source: String): StoreDetails
     getStoreStats(
       storeCode: String!
       source: String
       year: [Int]
       month: [Int]
     ): StoreStats
-    getStoreDetails(storeCode: String!, source: String): StoreDetails
+    getCategoryRetailing(
+      storeCode: String!
+      source: String
+      year: [Int]
+      month: [Int]
+    ): [CategoryRetailingStat]
 
     topStores(
       source: String!

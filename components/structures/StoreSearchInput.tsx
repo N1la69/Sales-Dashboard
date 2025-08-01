@@ -15,7 +15,7 @@ export default function StoreSearchInput({
       <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-indigo-500 dark:text-indigo-300" />
       <Input
         type="text"
-        placeholder="Search by Store Code"
+        placeholder="Enter Store Code"
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className="pl-10 py-2.5 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 

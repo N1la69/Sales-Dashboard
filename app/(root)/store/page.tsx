@@ -18,6 +18,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import StoreCategoryTable from "@/components/structures/StoreCategoryTable";
 
 // ================= GraphQL Queries =================
 const GET_ALL_BRANCHES = gql`
@@ -87,9 +88,28 @@ const GET_ADDITIONAL_STATS = gql`
         brand
         retailing
       }
-      categoryRetailing {
-        category
-        retailing
+    }
+  }
+`;
+
+const GET_CATEGORY_RETAILING = gql`
+  query GetCategoryRetailing(
+    $storeCode: String!
+    $source: String
+    $year: [Int]
+    $month: [Int]
+  ) {
+    getCategoryRetailing(
+      storeCode: $storeCode
+      source: $source
+      year: $year
+      month: $month
+    ) {
+      category
+      retailing
+      yearWise {
+        year
+        value
       }
     }
   }
@@ -170,8 +190,22 @@ const StorePage = () => {
     },
     skip: !selectedStore,
   });
-  const categoryStats =
-    additionalStatsData?.getStoreStats?.categoryRetailing ?? [];
+
+  const {
+    data: categoryRetailingData,
+    loading: categoryLoading,
+    error: categoryError,
+    refetch: refetchCategory,
+  } = useQuery(GET_CATEGORY_RETAILING, {
+    variables: {
+      storeCode: selectedStore,
+      source: dataSource,
+      year: appliedFilters.year,
+      month: appliedFilters.month,
+    },
+    skip: !selectedStore,
+  });
+  const categoryStats = categoryRetailingData?.getCategoryRetailing ?? [];
 
   const { refetch: refetchStoreDetails } = useQuery(GET_STORE_DETAILS, {
     variables: { storeCode: selectedStore, source: dataSource },
@@ -212,6 +246,7 @@ const StorePage = () => {
     setSuggestions([]);
     refetchTrend();
     refetchStats();
+    refetchCategory();
     refetchStoreDetails();
   };
 
@@ -220,6 +255,7 @@ const StorePage = () => {
     if (selectedStore) {
       refetchTrend();
       refetchStats();
+      refetchCategory();
       refetchStoreDetails();
     }
   };
@@ -229,6 +265,7 @@ const StorePage = () => {
     if (selectedStore) {
       refetchTrend();
       refetchStats();
+      refetchCategory();
     }
   };
 
@@ -238,6 +275,7 @@ const StorePage = () => {
     if (selectedStore) {
       refetchTrend();
       refetchStats();
+      refetchCategory();
     }
   };
 
@@ -394,28 +432,23 @@ const StorePage = () => {
                     />
                   )}
                 </div>
+              </div>
 
-                {/* Category Stats */}
-                <div className="lg:col-span-1">
-                  {categoryStats.length > 0 && (
-                    <div>
-                      <h2 className="text-xl font-semibold mb-3">
-                        Category-wise retailing:
-                      </h2>
-                      <ul className="space-y-1 max-h-96 overflow-y-auto">
-                        {categoryStats.map((item: any, index: number) => (
-                          <li
-                            key={index}
-                            className="flex justify-between text-indigo-800 dark:text-indigo-200"
-                          >
-                            <span>{item.category}</span>
-                            <span>₹ {item.retailing.toLocaleString()}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </div>
+              {/* Category Stats */}
+              <div className="mt-3 mb-5">
+                {categoryLoading ? (
+                  <p className="text-indigo-600 dark:text-indigo-300">
+                    Loading store category stats...
+                  </p>
+                ) : categoryError ? (
+                  <p className="text-red-600 dark:text-red-400">
+                    Error loading stats: {categoryError.message}
+                  </p>
+                ) : (
+                  categoryStats.length > 0 && (
+                    <StoreCategoryTable data={categoryStats} />
+                  )
+                )}
               </div>
             </>
           ) : (
