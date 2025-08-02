@@ -98,9 +98,9 @@ export const typeDefs = gql`
   }
 
   type CategoryRetailingStat {
-    category: String
-    retailing: Float
-    yearWise: [YearlyRetailing!]
+    category: String!
+    retailing: Float!
+    yearWise: [YearlyRetailing!]!
   }
 
   type StoreStats {

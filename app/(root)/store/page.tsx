@@ -116,8 +116,8 @@ const GET_CATEGORY_RETAILING = gql`
 `;
 
 const GET_STORE_DETAILS = gql`
-  query GetStoreDetails($storeCode: String!, $source: String) {
-    getStoreDetails(storeCode: $storeCode, source: $source) {
+  query GetStoreDetails($storeCode: String!) {
+    getStoreDetails(storeCode: $storeCode) {
       storeCode
       storeName
     }
@@ -208,7 +208,7 @@ const StorePage = () => {
   const categoryStats = categoryRetailingData?.getCategoryRetailing ?? [];
 
   const { refetch: refetchStoreDetails } = useQuery(GET_STORE_DETAILS, {
-    variables: { storeCode: selectedStore, source: dataSource },
+    variables: { storeCode: selectedStore },
     skip: !selectedStore,
     onCompleted: (data) => {
       if (data?.getStoreDetails) {
@@ -234,20 +234,26 @@ const StorePage = () => {
 
   useEffect(() => {
     if (searchData?.suggestStores) {
-      const storeCodes = searchData.suggestStores.map(
-        (s: any) => s.Old_Store_Code
-      );
+      const storeCodes = searchData.suggestStores
+        .map((s: any) => s.Old_Store_Code)
+        .filter((code: string) => code && code.trim().length > 0);
+
       setSuggestions(storeCodes);
     }
   }, [searchData]);
 
   const handleStoreSelect = (storeCode: string) => {
+    if (!storeCode || storeCode.trim().length === 0) return;
+
     setSelectedStore(storeCode);
     setSuggestions([]);
-    refetchTrend();
-    refetchStats();
-    refetchCategory();
-    refetchStoreDetails();
+
+    setTimeout(() => {
+      refetchTrend();
+      refetchStats();
+      refetchCategory();
+      refetchStoreDetails();
+    }, 0);
   };
 
   const handleSourceChange = (source: "combined" | "main" | "temp") => {

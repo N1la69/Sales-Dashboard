@@ -119,11 +119,8 @@ export const resolvers = {
     ) => {
       return await getCategoryRetailing(storeCode, source, year, month);
     },
-    getStoreDetails: async (
-      _: any,
-      { storeCode, source }: { storeCode: string; source: string }
-    ) => {
-      return await getStoreDetails(storeCode, source);
+    getStoreDetails: async (_: any, { storeCode }: { storeCode: string }) => {
+      return await getStoreDetails(storeCode);
     },
 
     // RANKING

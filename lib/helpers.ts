@@ -494,7 +494,7 @@ export async function getAllBranches(): Promise<string[]> {
 export async function suggestStores(branch: string | null, query: string) {
   const whereClause: any = {
     Old_Store_Code: {
-      endsWith: query,
+      contains: query,
     },
   };
 
@@ -510,6 +510,21 @@ export async function suggestStores(branch: string | null, query: string) {
   return stores;
 }
 
+export async function getStoreDetails(storeCode: string) {
+  const store = await prisma.store_mapping.findFirst({
+    where: { Old_Store_Code: storeCode },
+    select: {
+      Old_Store_Code: true,
+      customer_name: true,
+    },
+  });
+
+  return {
+    storeCode,
+    storeName: store?.customer_name || "Unknown",
+  };
+}
+
 export async function getStoreRetailingTrend(
   storeCode: string,
   source: string,
@@ -518,82 +533,49 @@ export async function getStoreRetailingTrend(
 ) {
   const tables = resolveTables(source);
 
-  const conditions = [`customer_code = ?`];
-  const params: any[] = [storeCode];
+  const hasYear = year?.length;
+  const hasMonth = month?.length;
 
-  if (year && year.length > 0) {
-    conditions.push(
-      `YEAR(document_date) IN (${year.map(() => "?").join(",")})`
-    );
-    params.push(...year);
+  const filters = [];
+  if (hasYear)
+    filters.push(`YEAR(document_date) IN (${year.map(() => "?").join(",")})`);
+  if (hasMonth)
+    filters.push(`MONTH(document_date) IN (${month.map(() => "?").join(",")})`);
+  const filterClause = filters.length ? `AND ${filters.join(" AND ")}` : "";
+
+  const unionQueryParts: string[] = [];
+  const queryParams: any[] = [];
+
+  for (const table of tables) {
+    unionQueryParts.push(`
+      SELECT 
+        YEAR(document_date) AS year,
+        MONTH(document_date) AS month,
+        retailing
+      FROM ${table}
+      WHERE customer_code = ? ${filterClause}
+    `);
+    queryParams.push(storeCode);
+    if (hasYear) queryParams.push(...year);
+    if (hasMonth) queryParams.push(...month);
   }
 
-  if (month && month.length > 0) {
-    conditions.push(
-      `MONTH(document_date) IN (${month.map(() => "?").join(",")})`
-    );
-    params.push(...month);
-  }
-
-  const conditionString =
-    conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
-
-  const unionQuery = tables
-    .map((t) => `SELECT * FROM ${t}`)
-    .join(" UNION ALL ");
-
-  const query = `
-    SELECT 
-      YEAR(document_date) as year, 
-      MONTH(document_date) as month, 
-      SUM(retailing) as total
-    FROM (${unionQuery}) AS combined
-    ${conditionString}
+  const fullQuery = `
+    SELECT year, month, SUM(retailing) AS total
+    FROM (
+      ${unionQueryParts.join(" UNION ALL ")}
+    ) AS combined
     GROUP BY year, month
     ORDER BY year, month
   `;
 
-  const results = await prisma.$queryRawUnsafe<
-    { year: number; month: number; total: number | bigint }[]
-  >(query, ...params);
+  const result = await prisma.$queryRawUnsafe<any[]>(fullQuery, ...queryParams);
 
-  return results.map((r) => ({
+  return result.map((r) => ({
     year: Number(r.year),
     month: Number(r.month),
-    retailing:
-      typeof r.total === "bigint"
-        ? Number(r.total.toString())
-        : Number(r.total),
+    retailing: Number(r.total),
   }));
-}
-
-export async function getStoreDetails(storeCode: string, source: string) {
-  const tables = resolveTables(source);
-
-  for (const table of tables) {
-    const result = await prisma.$queryRawUnsafe<any[]>(
-      `
-      SELECT customer_name 
-      FROM ${table}
-      WHERE customer_code = ?
-      LIMIT 1
-    `,
-      storeCode
-    );
-
-    if (result.length > 0) {
-      return {
-        storeCode,
-        storeName: result[0].customer_name || "Unknown",
-      };
-    }
-  }
-
-  // If not found in any table
-  return {
-    storeCode,
-    storeName: "Unknown",
-  };
 }
 
 export async function getStoreStats(
@@ -604,110 +586,130 @@ export async function getStoreStats(
 ) {
   const tables = resolveTables(source);
 
+  const storeMapping = await prisma.store_mapping.findFirst({
+    where: { Old_Store_Code: storeCode },
+    select: { Old_Store_Code: true },
+  });
+
+  if (!storeMapping) {
+    throw new Error(`Store mapping not found for ${storeCode}`);
+  }
+
   const yearFilter = year?.length
-    ? `AND YEAR(document_date) IN (${year.join(",")})`
+    ? `AND YEAR(document_date) IN (${year.map(() => "?").join(",")})`
     : "";
   const monthFilter = month?.length
-    ? `AND MONTH(document_date) IN (${month.join(",")})`
+    ? `AND MONTH(document_date) IN (${month.map(() => "?").join(",")})`
     : "";
 
-  const monthQueries = tables.map(
-    (table) => `
-      SELECT 
-        YEAR(document_date) AS year, 
-        MONTH(document_date) AS month, 
-        CAST(SUM(retailing) AS DECIMAL(15,2)) AS total
-      FROM ${table}
-      WHERE customer_code = ? ${yearFilter} ${monthFilter}
-      GROUP BY year, month
-    `
+  const filterParams = [...(year ?? []), ...(month ?? [])];
+  const allParams = [storeCode, ...filterParams];
+
+  // Month query
+  const monthQuery = tables
+    .map(
+      (table) => `
+        SELECT 
+          YEAR(document_date) AS year, 
+          MONTH(document_date) AS month, 
+          SUM(retailing) AS total
+        FROM ${table}
+        WHERE customer_code = ? ${yearFilter} ${monthFilter}
+        GROUP BY YEAR(document_date), MONTH(document_date)
+      `
+    )
+    .join(" UNION ALL ");
+
+  const brandQuery = tables
+    .map(
+      (table) => `
+        SELECT 
+          brand, 
+          SUM(retailing) AS total
+        FROM ${table}
+        WHERE customer_code = ? ${yearFilter} ${monthFilter}
+        GROUP BY brand
+      `
+    )
+    .join(" UNION ALL ");
+
+  const monthResults = await prisma.$queryRawUnsafe<any[]>(
+    monthQuery,
+    ...tables.flatMap(() => allParams)
   );
 
-  const brandQueries = tables.map(
-    (table) => `
-      SELECT 
-        brand, 
-        CAST(SUM(retailing) AS DECIMAL(15,2)) AS total
-      FROM ${table}
-      WHERE customer_code = ? ${yearFilter} ${monthFilter}
-      GROUP BY brand
-    `
+  const brandResults = await prisma.$queryRawUnsafe<any[]>(
+    brandQuery,
+    ...tables.flatMap(() => allParams)
   );
 
-  const monthResults = (
-    await Promise.all(
-      monthQueries.map((query) =>
-        prisma.$queryRawUnsafe<any[]>(query, storeCode)
-      )
-    )
-  ).flat();
+  // Aggregate month results
+  const monthMap = new Map<string, number>();
+  for (const r of monthResults) {
+    const key = `${r.year}-${r.month}`;
+    monthMap.set(key, (monthMap.get(key) ?? 0) + Number(r.total));
+  }
 
-  const brandResults = (
-    await Promise.all(
-      brandQueries.map((query) =>
-        prisma.$queryRawUnsafe<any[]>(query, storeCode)
-      )
-    )
-  ).flat();
+  const parsedMonthResults = Array.from(monthMap.entries()).map(
+    ([key, total]) => {
+      const [year, month] = key.split("-").map(Number);
+      return { year, month, total };
+    }
+  );
 
-  const parsedMonthResults = monthResults.map((r) => ({
-    ...r,
-    total: Number(r.total),
-  }));
+  // Aggregate brand results
+  const brandMap = new Map<string, number>();
+  for (const r of brandResults) {
+    brandMap.set(
+      r.brand ?? "Unknown",
+      (brandMap.get(r.brand) ?? 0) + Number(r.total)
+    );
+  }
 
-  const parsedBrandResults = brandResults.map((r) => ({
-    ...r,
-    total: Number(r.total),
-  }));
+  const parsedBrandResults = Array.from(brandMap.entries()).map(
+    ([brand, total]) => ({ brand, total })
+  );
 
+  // Calculate stats
   const highestMonth = parsedMonthResults.reduce(
-    (prev, curr) => (!prev || curr.total > prev.total ? curr : prev),
+    (max, curr) => (!max || curr.total > max.total ? curr : max),
     null as any
   );
-
   const lowestMonth = parsedMonthResults.reduce(
-    (prev, curr) => (!prev || curr.total < prev.total ? curr : prev),
+    (min, curr) => (!min || curr.total < min.total ? curr : min),
     null as any
   );
-
   const highestBrand = parsedBrandResults.reduce(
-    (prev, curr) => (!prev || curr.total > prev.total ? curr : prev),
+    (max, curr) => (!max || curr.total > max.total ? curr : max),
     null as any
   );
-
   const lowestBrand = parsedBrandResults.reduce(
-    (prev, curr) => (!prev || curr.total < prev.total ? curr : prev),
+    (min, curr) => (!min || curr.total < min.total ? curr : min),
     null as any
   );
 
   return {
     highestRetailingMonth: highestMonth
       ? {
-          year: Number(highestMonth.year),
-          month: Number(highestMonth.month),
-          monthName: monthNumberToName(Number(highestMonth.month)),
+          year: highestMonth.year,
+          month: highestMonth.month,
+          monthName: monthNumberToName(highestMonth.month),
           retailing: highestMonth.total,
         }
       : null,
     lowestRetailingMonth: lowestMonth
       ? {
-          year: Number(lowestMonth.year),
-          month: Number(lowestMonth.month),
-          monthName: monthNumberToName(Number(lowestMonth.month)),
+          year: lowestMonth.year,
+          month: lowestMonth.month,
+          monthName: monthNumberToName(lowestMonth.month),
           retailing: lowestMonth.total,
         }
       : null,
     highestRetailingBrand: highestBrand
-      ? {
-          brand: highestBrand.brand,
-          retailing: highestBrand.total,
-        }
+      ? { brand: highestBrand.brand, retailing: highestBrand.total }
       : null,
     lowestRetailingBrand: lowestBrand
-      ? {
-          brand: lowestBrand.brand,
-          retailing: lowestBrand.total,
-        }
+      ? { brand: lowestBrand.brand, retailing: lowestBrand.total }
       : null,
   };
 }
@@ -720,66 +722,66 @@ export async function getCategoryRetailing(
 ) {
   const tables = resolveTables(source);
 
-  const yearFilter = year?.length
-    ? `AND YEAR(document_date) IN (${year.join(",")})`
-    : "";
-  const monthFilter = month?.length
-    ? `AND MONTH(document_date) IN (${month.join(",")})`
+  // Escape values for inline use — be cautious and ensure storeCode is safe
+  const storeCodeEscaped = `'${storeCode}'`;
+
+  const yearCondition = year?.length
+    ? `AND YEAR(p.document_date) IN (${year.join(",")})`
     : "";
 
-  const categoryQueries = tables.map(
-    (table) => `
+  const monthCondition = month?.length
+    ? `AND MONTH(p.document_date) IN (${month.join(",")})`
+    : "";
+
+  const subqueries = tables.map((table) => {
+    return `
       SELECT 
-        category, 
-        YEAR(document_date) AS year,
-        CAST(SUM(retailing) AS DECIMAL(15,2)) AS total
-      FROM ${table}
-      WHERE customer_code = ? ${yearFilter} ${monthFilter}
-      GROUP BY category, year
-    `
-  );
+        pm.category AS category,
+        YEAR(p.document_date) AS year,
+        SUM(p.retailing) AS total
+      FROM ${table} p
+      INNER JOIN store_mapping sm ON p.customer_code = sm.Old_Store_Code
+      INNER JOIN product_mapping pm ON p.p_code = pm.p_code
+      WHERE sm.Old_Store_Code = ${storeCodeEscaped}
+        ${yearCondition}
+        ${monthCondition}
+      GROUP BY pm.category, YEAR(p.document_date)
+    `;
+  });
 
-  const results = (
-    await Promise.all(
-      categoryQueries.map((query) =>
-        prisma.$queryRawUnsafe<any[]>(query, storeCode)
-      )
-    )
-  ).flat();
+  const combinedQuery = subqueries.join(" UNION ALL");
+
+  // No params used now, because everything is already interpolated
+  const rawResults = await prisma.$queryRawUnsafe<any[]>(combinedQuery);
 
   const categoryMap = new Map<
     string,
     { total: number; yearWise: Map<number, number> }
   >();
 
-  for (const row of results) {
-    const { category, year, total } = row;
-    if (!category || !year || isNaN(total)) continue;
+  for (const row of rawResults) {
+    const category = row.category ?? "Unknown";
+    const year = Number(row.year);
+    const total = Number(row.total);
 
-    const existing = categoryMap.get(category) ?? {
-      total: 0,
-      yearWise: new Map<number, number>(),
-    };
+    let entry = categoryMap.get(category);
+    if (!entry) {
+      entry = { total: 0, yearWise: new Map() };
+      categoryMap.set(category, entry);
+    }
 
-    existing.total += Number(total);
-    existing.yearWise.set(
-      year,
-      (existing.yearWise.get(year) || 0) + Number(total)
-    );
-
-    categoryMap.set(category, existing);
+    entry.total += total;
+    entry.yearWise.set(year, (entry.yearWise.get(year) ?? 0) + total);
   }
 
   return Array.from(categoryMap.entries())
     .map(([category, data]) => ({
       category,
       retailing: data.total,
-      yearWise: Array.from(data.yearWise.entries()).map(
-        ([year, retailing]) => ({
-          year: Number(year),
-          value: retailing,
-        })
-      ),
+      yearWise: Array.from(data.yearWise.entries()).map(([year, value]) => ({
+        year,
+        value,
+      })),
     }))
     .sort((a, b) => b.retailing - a.retailing);
 }
