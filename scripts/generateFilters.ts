@@ -7,19 +7,24 @@ async function generateFilterValues() {
   const years = Array.from({ length: 4 }, (_, i) => currentYear - i);
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
 
-  const categories = await prisma.psr_data.findMany({
+  const categories = await prisma.product_mapping.findMany({
     distinct: ["category"],
     select: { category: true },
   });
 
-  const brands = await prisma.psr_data.findMany({
+  const brands = await prisma.product_mapping.findMany({
     distinct: ["brand"],
     select: { brand: true },
   });
 
-  const brandforms = await prisma.psr_data.findMany({
+  const brandforms = await prisma.product_mapping.findMany({
     distinct: ["brandform"],
     select: { brandform: true },
+  });
+
+  const subbrandforms = await prisma.product_mapping.findMany({
+    distinct: ["subbrandform"],
+    select: { subbrandform: true },
   });
 
   const branches = await prisma.store_mapping.findMany({
@@ -63,6 +68,9 @@ async function generateFilterValues() {
     categories: categories.map((c: { category: string }) => c.category),
     brands: brands.map((b: { brand: string }) => b.brand),
     brandforms: brandforms.map((bf: { brandform: string }) => bf.brandform),
+    subbrandforms: subbrandforms.map(
+      (sbf: { subbrandform: string }) => sbf.subbrandform
+    ),
     branches: branches.map((b: { New_Branch: string }) => b.New_Branch),
     zms: zms.map((z: { ZM: string }) => z.ZM),
     sms: sms.map((s: { SM: string }) => s.SM),

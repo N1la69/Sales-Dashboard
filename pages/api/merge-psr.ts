@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/utils";
+import { runGenerateFilters } from "@/lib/runGenerateFilters";
 
 export default async function handler(
   req: NextApiRequest,
@@ -39,12 +40,13 @@ export default async function handler(
           retailing
         FROM psr_data_temp;
       `),
-
       prisma.$executeRawUnsafe(`DELETE FROM psr_data_temp`),
     ]);
 
+    runGenerateFilters();
+
     return res.status(200).json({
-      message: "✅ PSR temp data merged successfully into psr_data.",
+      message: "✅ PSR temp data merged and filters generated successfully.",
     });
   } catch (error) {
     console.error("❌ Merge error:", error);
