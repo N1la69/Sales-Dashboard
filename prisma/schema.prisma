@@ -16,32 +16,34 @@ datasource db {
 
 // SCHEMAS
 model psr_data {
-  psr_id              Int      @id @default(autoincrement())
-  document_no         String   @db.VarChar(45)
-  document_date       DateTime
-  subbrandform_name   String   @db.VarChar(90)
-  customer_name       String   @db.VarChar(120)
-  customer_code       String   @db.VarChar(45)
-  channel_description String   @db.VarChar(45)
-  customer_type       String   @db.VarChar(90)
-  category            String   @db.VarChar(45)
-  brand               String   @db.VarChar(45)
-  brandform           String   @db.VarChar(45)
-  retailing           Decimal  @db.Decimal(12, 2)
+  psr_id        Int      @id @default(autoincrement())
+  document_no   String   @db.VarChar(45) //
+  document_date DateTime //
+  subbrandform  String   @db.VarChar(90)
+  customer_name String   @db.VarChar(120)
+  customer_code String   @db.VarChar(45) //
+  p_code        Int      @db.Int() //
+  customer_type String   @db.VarChar(90)
+  category      String   @db.VarChar(45)
+  brand         String   @db.VarChar(45)
+  brandform     String   @db.VarChar(45)
+  retailing     Decimal  @db.Decimal(12, 2) //
 }
 
 model channel_mapping {
   channel_id    Int    @id @default(autoincrement())
   customer_type String @db.VarChar(90)
   channel       String @db.VarChar(45)
-  broad_channel String @db.VarChar(45)
-  short_channel String @db.VarChar(45)
+  broad_channel String @db.VarChar(45) //
+  short_channel String @db.VarChar(45) //
 }
 
 model store_mapping {
   Id             Int    @id @default(autoincrement())
   Old_Store_Code String @db.VarChar(45)
   New_Store_Code String @db.VarChar(45)
+  customer_name  String @db.VarChar(120)
+  customer_type  String @db.VarChar(90)
   New_Branch     String @db.VarChar(45)
   DSE_Code       String @db.VarChar(45)
   ZM             String @db.VarChar(45)
@@ -50,17 +52,27 @@ model store_mapping {
   STL            String @db.VarChar(45)
 }
 
+model product_mapping {
+  Id           Int    @id @default(autoincrement())
+  p_code       Int    @db.Int()
+  desc_short   String @db.VarChar(90)
+  category     String @db.VarChar(45)
+  brand        String @db.VarChar(45)
+  brandform    String @db.VarChar(45)
+  subbrandform String @db.VarChar(90)
+}
+
 model psr_data_temp {
-  psr_id              Int      @id @default(autoincrement())
-  document_no         String   @db.VarChar(45)
-  document_date       DateTime
-  subbrandform_name   String   @db.VarChar(90)
-  customer_name       String   @db.VarChar(120)
-  customer_code       String   @db.VarChar(45)
-  channel_description String   @db.VarChar(45)
-  customer_type       String   @db.VarChar(90)
-  category            String   @db.VarChar(45)
-  brand               String   @db.VarChar(45)
-  brandform           String   @db.VarChar(45)
-  retailing           Decimal  @db.Decimal(12, 2)
+  psr_id        Int      @id @default(autoincrement())
+  document_no   String   @db.VarChar(45)
+  document_date DateTime
+  subbrandform  String   @db.VarChar(90)
+  customer_name String   @db.VarChar(120)
+  customer_code String   @db.VarChar(45)
+  p_code        Int      @db.Int()
+  customer_type String   @db.VarChar(90)
+  category      String   @db.VarChar(45)
+  brand         String   @db.VarChar(45)
+  brandform     String   @db.VarChar(45)
+  retailing     Decimal  @db.Decimal(12, 2)
 }

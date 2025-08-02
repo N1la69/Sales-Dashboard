@@ -10,11 +10,12 @@ const UploadPage = () => {
   const [channelFile, setChannelFile] = useState<File | null>(null);
   const [storeFile, setStoreFile] = useState<File | null>(null);
   const [psrFile, setPsrFile] = useState<File | null>(null);
+  const [productFile, setProductFile] = useState<File | null>(null);
   const [psrAction, setPsrAction] = useState<"append" | "overwrite">(
     "overwrite"
   );
   const [loadingType, setLoadingType] = useState<
-    "" | "psr" | "channel" | "store" | "merge" | "clear"
+    "" | "psr" | "channel" | "store" | "product" | "merge" | "clear"
   >("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -26,7 +27,7 @@ const UploadPage = () => {
 
   const uploadFile = async (
     file: File,
-    type: "psr" | "channel" | "store",
+    type: "psr" | "channel" | "store" | "product",
     action: "append" | "overwrite" = "overwrite"
   ) => {
     if (!file) {
@@ -263,6 +264,44 @@ const UploadPage = () => {
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
               {loadingType === "store" ? "Uploading..." : "Upload"}
+            </Button>
+
+            <Button
+              variant="outline"
+              className="border border-gray-200 text-gray-900 dark:text-gray-100 hover:border-indigo"
+            >
+              Download Template
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Product Mapping Upload */}
+      <Card className="mt-6 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
+        <CardHeader>
+          <CardTitle className="text-lg font-semibold dark:text-blue-100">
+            Upload Product Mapping Data
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-5">
+          <Input
+            type="file"
+            accept=".xlsx"
+            onChange={(e) => {
+              if (e.target.files) {
+                setProductFile(e.target.files[0]);
+                resetMessages();
+              }
+            }}
+            className="cursor-pointer border border-blue-200 dark:border-blue-700 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/20 file:text-blue-700 dark:file:text-blue-200 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/30"
+          />
+          <div className="flex flex-wrap gap-3">
+            <Button
+              onClick={() => productFile && uploadFile(productFile, "product")}
+              disabled={loadingType === "product"}
+              className="bg-indigo text-white hover:bg-indigo-hover"
+            >
+              {loadingType === "product" ? "Uploading..." : "Upload"}
             </Button>
 
             <Button

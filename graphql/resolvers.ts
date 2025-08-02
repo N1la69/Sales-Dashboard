@@ -13,8 +13,6 @@ import {
   getStoreStats,
   getTopBrandforms,
   getTopStoresQuery,
-  mergeCustomerCodes,
-  mergeCustomerTypes,
   resolveTables,
   suggestStores,
 } from "@/lib/helpers";
@@ -288,7 +286,8 @@ async function getRetailingWithZM(
     SELECT SUM(p.retailing) AS total
     FROM ${table} p
     LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
-    LEFT JOIN channel_mapping c ON p.customer_type = c.customer_type
+    LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
+    LEFT JOIN product_mapping pm ON p.p_code = pm.p_code
     WHERE 1=1
   `;
   const params: any[] = [];
@@ -303,10 +302,10 @@ async function getRetailingWithZM(
   query = addInClause(query, params, filters.Year, "YEAR(p.document_date)");
   query = addInClause(query, params, filters.Month, "MONTH(p.document_date)");
 
-  // PSR filters
-  query = addInClause(query, params, filters.Category, "p.category");
-  query = addInClause(query, params, filters.Brand, "p.brand");
-  query = addInClause(query, params, filters.Brandform, "p.brandform");
+  // PSR filters from product_mapping
+  query = addInClause(query, params, filters.Category, "pm.category");
+  query = addInClause(query, params, filters.Brand, "pm.brand");
+  query = addInClause(query, params, filters.Brandform, "pm.brandform");
 
   // Channel mapping
   query = addInClause(query, params, filters.Channel, "c.channel");
@@ -339,6 +338,7 @@ async function getRetailingWithPrisma(
 ): Promise<number> {
   const whereClause: any = {};
 
+  // Date filtering
   if (filters.Year && filters.Month?.length) {
     whereClause.OR = filters.Month.map((month: number) => ({
       document_date: {
@@ -365,53 +365,76 @@ async function getRetailingWithPrisma(
     }));
   }
 
-  if (filters.Category?.length) whereClause.category = { in: filters.Category };
-  if (filters.Brand?.length) whereClause.brand = { in: filters.Brand };
-  if (filters.Brandform?.length)
-    whereClause.brandform = { in: filters.Brandform };
-
-  let customerCodes: string[] = [];
-  if (filters.Branch?.length) {
-    customerCodes = await mergeCustomerCodes(
-      customerCodes,
-      "New_Branch",
-      filters.Branch
-    );
-  }
-  if (filters.SM?.length) {
-    customerCodes = await mergeCustomerCodes(customerCodes, "SM", filters.SM);
-  }
-  if (filters.BE?.length) {
-    customerCodes = await mergeCustomerCodes(customerCodes, "BE", filters.BE);
-  }
-  if (customerCodes.length) {
-    whereClause.customer_code = { in: customerCodes };
+  // Join: p -> product_mapping
+  if (filters.Category?.length) {
+    whereClause.product_mapping = {
+      category: { in: filters.Category },
+    };
   }
 
-  let customerTypes: string[] = [];
-  if (filters.Channel?.length) {
-    customerTypes = await mergeCustomerTypes(
-      customerTypes,
-      "channel",
-      filters.Channel
-    );
+  if (filters.Brand?.length) {
+    whereClause.product_mapping = {
+      ...(whereClause.product_mapping || {}),
+      brand: { in: filters.Brand },
+    };
   }
-  if (filters.BroadChannel?.length) {
-    customerTypes = await mergeCustomerTypes(
-      customerTypes,
-      "broad_channel",
-      filters.BroadChannel
-    );
+
+  if (filters.Brandform?.length) {
+    whereClause.product_mapping = {
+      ...(whereClause.product_mapping || {}),
+      brandform: { in: filters.Brandform },
+    };
   }
-  if (filters.ShortChannel?.length) {
-    customerTypes = await mergeCustomerTypes(
-      customerTypes,
-      "short_channel",
-      filters.ShortChannel
-    );
+
+  // Join: p -> store_mapping
+  if (
+    filters.Branch?.length ||
+    filters.SM?.length ||
+    filters.BE?.length ||
+    filters.ZM?.length
+  ) {
+    whereClause.store_mapping = {};
+
+    if (filters.Branch?.length) {
+      whereClause.store_mapping.New_Branch = { in: filters.Branch };
+    }
+    if (filters.SM?.length) {
+      whereClause.store_mapping.SM = { in: filters.SM };
+    }
+    if (filters.BE?.length) {
+      whereClause.store_mapping.BE = { in: filters.BE };
+    }
+    if (filters.ZM?.length) {
+      whereClause.store_mapping.ZM = { in: filters.ZM };
+    }
   }
-  if (customerTypes.length) {
-    whereClause.customer_type = { in: customerTypes };
+
+  // Channel Mapping (via store_mapping.customer_type -> channel_mapping)
+  if (
+    filters.Channel?.length ||
+    filters.BroadChannel?.length ||
+    filters.ShortChannel?.length
+  ) {
+    whereClause.store_mapping = {
+      ...(whereClause.store_mapping || {}),
+      channel_mapping: {},
+    };
+
+    if (filters.Channel?.length) {
+      whereClause.store_mapping.channel_mapping.channel = {
+        in: filters.Channel,
+      };
+    }
+    if (filters.BroadChannel?.length) {
+      whereClause.store_mapping.channel_mapping.broad_channel = {
+        in: filters.BroadChannel,
+      };
+    }
+    if (filters.ShortChannel?.length) {
+      whereClause.store_mapping.channel_mapping.short_channel = {
+        in: filters.ShortChannel,
+      };
+    }
   }
 
   const result = await (prisma as any)[table].aggregate({
@@ -419,5 +442,5 @@ async function getRetailingWithPrisma(
     where: whereClause,
   });
 
-  return result._sum.retailing ? Number(result._sum.retailing.toString()) : 0;
+  return result._sum.retailing ? Number(result._sum.retailing) : 0;
 }

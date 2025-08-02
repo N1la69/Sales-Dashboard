@@ -24,7 +24,7 @@ export function resolveTables(
 ): Array<"psr_data" | "psr_data_temp"> {
   if (source === "main") return ["psr_data"];
   if (source === "temp") return ["psr_data_temp"];
-  return ["psr_data", "psr_data_temp"]; // combined
+  return ["psr_data", "psr_data_temp"];
 }
 
 export function addInClause(
@@ -62,7 +62,7 @@ export async function mergeCustomerCodes(
   existing: string[],
   column: string,
   values: string[]
-) {
+): Promise<string[]> {
   const codes = await getStoreCodesByFilter(column, values);
   return mergeFilterResults(existing, codes);
 }
@@ -71,7 +71,7 @@ export async function mergeCustomerTypes(
   existing: string[],
   column: string,
   values: string[]
-) {
+): Promise<string[]> {
   const types = await getCustomerTypesByChannelFilter(column, values);
   return mergeFilterResults(existing, types);
 }
@@ -117,22 +117,22 @@ export async function buildWhereClauseForRawSQL(filters: any) {
     }
   };
 
-  // Store filters
+  // Store filters (store_mapping alias = s)
   addInClause(filters.ZM, "s.ZM");
   addInClause(filters.Branch, "s.New_Branch");
   addInClause(filters.SM, "s.SM");
   addInClause(filters.BE, "s.BE");
 
-  // Date filters
+  // Date filters (psr_data alias = p)
   addInClause(filters.Year, "YEAR(p.document_date)");
   addInClause(filters.Month, "MONTH(p.document_date)");
 
-  // PSR filters
-  addInClause(filters.Category, "p.category");
-  addInClause(filters.Brand, "p.brand");
-  addInClause(filters.Brandform, "p.brandform");
+  // Product filters (product_mapping alias = pm)
+  addInClause(filters.Category, "pm.category");
+  addInClause(filters.Brand, "pm.brand");
+  addInClause(filters.Brandform, "pm.brandform");
 
-  // Channel filters
+  // Channel filters (channel_mapping alias = c)
   addInClause(filters.Channel, "c.channel");
   addInClause(filters.BroadChannel, "c.broad_channel");
   addInClause(filters.ShortChannel, "c.short_channel");
@@ -153,7 +153,7 @@ export async function getHighestRetailingBranch(filters: any, source: string) {
         SELECT s.New_Branch AS branch, SUM(p.retailing) AS total
         FROM ${table} p
         LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
-        LEFT JOIN channel_mapping c ON p.customer_type = c.customer_type
+        LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
         WHERE 1=1
       `;
 
@@ -223,16 +223,17 @@ export async function getHighestRetailingBrand(filters: any, source: string) {
 
   for (const table of tables) {
     let query = `
-      SELECT p.brand AS brand, YEAR(p.document_date) AS year, SUM(p.retailing) AS total
+      SELECT pm.brand AS brand, YEAR(p.document_date) AS year, SUM(p.retailing) AS total
       FROM ${table} p
+      LEFT JOIN product_mapping pm ON p.p_code = pm.p_code
       LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
-      LEFT JOIN channel_mapping c ON p.customer_type = c.customer_type
+      LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
       WHERE 1=1
     `;
 
     const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
     query += whereClause;
-    query += ` GROUP BY p.brand, YEAR(p.document_date)`;
+    query += ` GROUP BY pm.brand, YEAR(p.document_date)`;
 
     const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
 
@@ -288,16 +289,17 @@ export async function getRetailingByCategory(filters: any, source: string) {
 
   for (const table of tables) {
     let query = `
-      SELECT p.category, YEAR(p.document_date) as year, SUM(p.retailing) AS total
+      SELECT pm.category, YEAR(p.document_date) AS year, SUM(p.retailing) AS total
       FROM ${table} p
+      LEFT JOIN product_mapping pm ON p.p_code = pm.p_code
       LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
-      LEFT JOIN channel_mapping c ON p.customer_type = c.customer_type
+      LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
       WHERE 1=1
     `;
 
     const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
     query += whereClause;
-    query += ` GROUP BY p.category, YEAR(p.document_date)`;
+    query += ` GROUP BY pm.category, YEAR(p.document_date)`;
 
     const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
 
@@ -312,14 +314,13 @@ export async function getRetailingByCategory(filters: any, source: string) {
     }
   }
 
-  // Return final structured result
   return Object.entries(breakdownMap).map(([category, yearlyData]) => {
     const breakdown = Object.entries(yearlyData)
       .map(([year, retailing]) => ({
         year: Number(year),
         value: retailing,
       }))
-      .sort((a, b) => b.year - a.year); // descending order: 2024 → 2023
+      .sort((a, b) => b.year - a.year);
 
     const total = breakdown.reduce((sum, item) => sum + item.value, 0);
 
@@ -340,7 +341,7 @@ export async function getRetailingByBroadChannel(filters: any, source: string) {
       SELECT c.broad_channel, YEAR(p.document_date) AS year, SUM(p.retailing) AS total
       FROM ${table} p
       LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
-      LEFT JOIN channel_mapping c ON p.customer_type = c.customer_type
+      LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
       WHERE 1=1
     `;
 
@@ -367,7 +368,7 @@ export async function getRetailingByBroadChannel(filters: any, source: string) {
         year: Number(year),
         value,
       }))
-      .sort((a, b) => b.year - a.year); // Latest year first
+      .sort((a, b) => b.year - a.year);
 
     const total = breakdown.reduce((sum, item) => sum + item.value, 0);
 
@@ -388,7 +389,7 @@ export async function getMonthlyRetailingTrend(filters: any, source: string) {
       SELECT YEAR(p.document_date) AS year, MONTH(p.document_date) AS month, SUM(p.retailing) AS total
       FROM ${table} p
       LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
-      LEFT JOIN channel_mapping c ON p.customer_type = c.customer_type
+      LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
       WHERE 1=1
     `;
 
@@ -433,16 +434,17 @@ export async function getTopBrandforms(filters: any, source: string) {
 
   for (const table of tables) {
     let query = `
-      SELECT p.brandform, YEAR(p.document_date) as year, SUM(p.retailing) AS total
+      SELECT pm.brandform, YEAR(p.document_date) AS year, SUM(p.retailing) AS total
       FROM ${table} p
       LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
-      LEFT JOIN channel_mapping c ON p.customer_type = c.customer_type
+      LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
+      LEFT JOIN product_mapping pm ON p.p_code = pm.p_code
       WHERE 1=1
     `;
 
     const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
     query += whereClause;
-    query += ` GROUP BY p.brandform, YEAR(p.document_date)`;
+    query += ` GROUP BY pm.brandform, YEAR(p.document_date)`;
 
     const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
 

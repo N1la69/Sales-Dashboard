@@ -76,6 +76,7 @@ export const typeDefs = gql`
     BE: String
     STL: String
     customer_type: String
+    customer_name: String
   }
 
   type StoreRetailingTrend {
