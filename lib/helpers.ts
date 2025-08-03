@@ -342,7 +342,7 @@ export async function getRetailingByBroadChannel(filters: any, source: string) {
       FROM ${table} p
       LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
       LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
-      WHERE 1=1
+      WHERE c.broad_channel IS NOT NULL
     `;
 
     const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
@@ -352,7 +352,7 @@ export async function getRetailingByBroadChannel(filters: any, source: string) {
     const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
 
     for (const row of results) {
-      const broad_channel = row.broad_channel || "Unknown";
+      const broad_channel = row.broad_channel;
       const year = Number(row.year);
       const value = Number(row.total);
 
@@ -787,7 +787,7 @@ export async function getCategoryRetailing(
 }
 
 // RANKING page
-export const getTopStoresQuery = async ({
+export async function getTopStoresQuery({
   source,
   months = 3,
   zm,
@@ -802,16 +802,11 @@ export const getTopStoresQuery = async ({
   page,
   pageSize,
   countOnly = false,
-}: TopStoresQueryParams): Promise<{ query: string; values: any[] }> => {
-  const values: any[] = [];
-  const filters: string[] = [];
-
+}: TopStoresQueryParams): Promise<{ query: string; values: any[] }> {
   const tables = resolveTables(source);
 
-  // Month filtering
+  // Get list of distinct months
   let monthsValues: string[] = [];
-  let monthsCondition = "";
-
   if (startDate && endDate) {
     const dateQuery = `
       SELECT DISTINCT DATE_FORMAT(document_date, '%Y-%m') as ym
@@ -819,12 +814,12 @@ export const getTopStoresQuery = async ({
       WHERE document_date BETWEEN ? AND ?
       ORDER BY ym DESC
     `;
-    const dateRows: any[] = await prisma.$queryRawUnsafe(
+    const rows: any[] = await prisma.$queryRawUnsafe(
       dateQuery,
       startDate,
       endDate
     );
-    monthsValues = dateRows.map((r) => r.ym);
+    monthsValues = rows.map((r) => r.ym);
     if (monthsValues.length === 0)
       throw new Error("No data in selected date range.");
   } else {
@@ -834,64 +829,81 @@ export const getTopStoresQuery = async ({
       ORDER BY ym DESC
       LIMIT ?
     `;
-    const dateRows: any[] = await prisma.$queryRawUnsafe(dateQuery, months);
-    monthsValues = dateRows.map((r) => r.ym);
+    const rows: any[] = await prisma.$queryRawUnsafe(dateQuery, months);
+    monthsValues = rows.map((r) => r.ym);
     if (monthsValues.length === 0) throw new Error("No recent data found.");
   }
 
-  monthsCondition = monthsValues
+  // Build month conditions and values
+  const monthCondition = monthsValues
     .map(() => `DATE_FORMAT(p.document_date, '%Y-%m') = ?`)
     .join(" OR ");
+  const monthConditionClause = `(${monthCondition})`;
 
-  // Dynamic Filters
-  if (zm) filters.push("sm.ZM = ?");
-  if (sm) filters.push("sm.SM = ?");
-  if (be) filters.push("sm.BE = ?");
-  if (category) filters.push("p.category = ?");
-  if (branch) filters.push("sm.New_Branch = ?");
-  if (broadChannel) filters.push("cm.broad_channel = ?");
-  if (brand) filters.push("p.brand = ?");
+  // Filters
+  const filters: string[] = [];
+  const dynamicValues: any[] = [];
 
-  const dynamicFilterValues = [
-    zm,
-    sm,
-    be,
-    category,
-    branch,
-    broadChannel,
-    brand,
-  ].filter(Boolean);
-  values.push(...dynamicFilterValues);
+  if (zm) {
+    filters.push("sm.ZM = ?");
+    dynamicValues.push(zm);
+  }
+  if (sm) {
+    filters.push("sm.SM = ?");
+    dynamicValues.push(sm);
+  }
+  if (be) {
+    filters.push("sm.BE = ?");
+    dynamicValues.push(be);
+  }
+  if (category) {
+    filters.push("pm.category = ?");
+    dynamicValues.push(category);
+  }
+  if (branch) {
+    filters.push("sm.New_Branch = ?");
+    dynamicValues.push(branch);
+  }
+  if (broadChannel) {
+    filters.push("cm.broad_channel = ?");
+    dynamicValues.push(broadChannel);
+  }
+  if (brand) {
+    filters.push("pm.brand = ?");
+    dynamicValues.push(brand);
+  }
 
   const filterClause = filters.length ? `AND ${filters.join(" AND ")}` : "";
 
-  // Flatten values for all tables
-  const baseValues = tables.flatMap(() => [
-    ...monthsValues,
-    ...dynamicFilterValues,
-  ]);
+  // JOINs
+  const joins = `
+    LEFT JOIN store_mapping sm ON p.customer_code = sm.Old_Store_Code
+    ${
+      broadChannel
+        ? "LEFT JOIN channel_mapping cm ON sm.customer_type = cm.customer_type"
+        : ""
+    }
+    LEFT JOIN product_mapping pm ON p.p_code = pm.p_code
+  `;
 
-  const joinClause = broadChannel
-    ? `JOIN store_mapping sm ON p.customer_code = sm.Old_Store_Code
-       JOIN channel_mapping cm ON p.channel = cm.channel`
-    : `JOIN store_mapping sm ON p.customer_code = sm.Old_Store_Code`;
-
+  // Build subqueries
   const subQueries = tables
     .map(
       (table) => `
-        SELECT
-          p.customer_code,
-          MAX(p.customer_name) AS store_name,
-          sm.New_Branch AS branch_name,
-          SUM(p.retailing) AS total_retailing
-        FROM ${table} p
-        ${joinClause}
-        WHERE (${monthsCondition}) ${filterClause}
-        GROUP BY p.customer_code, sm.New_Branch
-      `
+    SELECT
+      p.customer_code,
+      MAX(sm.customer_name) AS store_name,
+      sm.New_Branch AS branch_name,
+      SUM(p.retailing) AS total_retailing
+    FROM ${table} p
+    ${joins}
+    WHERE ${monthConditionClause} ${filterClause}
+    GROUP BY p.customer_code, sm.New_Branch
+  `
     )
     .join(" UNION ALL ");
 
+  // Final CTE
   const topStoresCTE = `
     WITH ranked_stores AS (
       SELECT
@@ -900,21 +912,30 @@ export const getTopStoresQuery = async ({
         branch_name,
         SUM(total_retailing) AS total_retailing,
         ROUND(SUM(total_retailing) / ?, 2) AS avg_retailing
-      FROM (${subQueries}) AS combined
+      FROM (${subQueries}) combined
       GROUP BY customer_code, store_name, branch_name
       ORDER BY avg_retailing DESC
       LIMIT 100
     )
   `;
 
+  const totalTables = tables.length;
+  const repeatedValues = Array(totalTables)
+    .fill([...monthsValues, ...dynamicValues])
+    .flat();
+
+  const allValues = [
+    monthsValues.length, // For avg_retailing divisor
+    ...repeatedValues, // For all subqueries
+  ];
+
   if (countOnly) {
-    const countQuery = `
-      ${topStoresCTE}
-      SELECT COUNT(*) as count FROM ranked_stores
-    `;
     return {
-      query: countQuery,
-      values: [monthsValues.length, ...baseValues],
+      query: `
+        ${topStoresCTE}
+        SELECT COUNT(*) as count FROM ranked_stores
+      `,
+      values: allValues,
     };
   }
 
@@ -933,6 +954,6 @@ export const getTopStoresQuery = async ({
 
   return {
     query: paginatedQuery,
-    values: [monthsValues.length, ...baseValues, pageSize, page * pageSize],
+    values: [...allValues, pageSize, page * pageSize],
   };
-};
+}

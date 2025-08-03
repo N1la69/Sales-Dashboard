@@ -249,6 +249,7 @@ const RankingPage = () => {
         be,
         category,
         branch,
+        brand,
         broadChannel,
         startDate,
         endDate,
@@ -300,7 +301,7 @@ const RankingPage = () => {
         fetchPolicy: "network-only",
       })
       .then((res) => {
-        setDownloadData(res.data.topStores.stores);
+        setDownloadData(res.data.downloadTopStores);
       })
       .catch((err) => {
         console.error("Error fetching data for download", err);
