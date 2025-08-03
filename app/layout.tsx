@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { ClerkProvider } from "@clerk/nextjs";
 import ApolloWrapper from "@/components/ApolloWrapper";
+import { ToastContainer } from "react-toastify";
 
 export const metadata: Metadata = {
   title: "Sales Dashboard",
@@ -14,12 +14,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider>
-      <html lang="en">
-        <body className="antialiased bg-background-light dark:bg-background-dark">
-          <ApolloWrapper>{children}</ApolloWrapper>
-        </body>
-      </html>
-    </ClerkProvider>
+    <html lang="en">
+      <body className="antialiased bg-background-light dark:bg-background-dark">
+        <ToastContainer />
+        <ApolloWrapper>{children}</ApolloWrapper>
+      </body>
+    </html>
   );
 }

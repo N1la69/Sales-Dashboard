@@ -117,12 +117,13 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { pages } from "@/constants/data";
 import Image from "next/image";
-import { UserButton, useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { Minus, Moon, Sun, Menu, X } from "lucide-react";
 
 const Navbar = () => {
-  const { user } = useUser();
+  const user = {
+    username: "User", // Placeholder, replace with actual user data
+  };
   const pathname = usePathname();
 
   const [activePage, setActivePage] = useState(0);
@@ -222,7 +223,7 @@ const Navbar = () => {
 
         {/* User Info */}
         <div className="flex items-center gap-2">
-          <UserButton />
+          {/* <UserButton /> */}
           <p className="text-gray-950 dark:text-gray-200 font-semibold uppercase hidden sm:block">
             {user?.username}
           </p>
@@ -248,7 +249,7 @@ const Navbar = () => {
               </li>
             ))}
             <li className="flex justify-center py-2 border-t border-gray-300 dark:border-gray-700">
-              <UserButton />
+              {/* <UserButton /> */}
               <p className="ml-2 text-gray-950 dark:text-gray-200 font-semibold uppercase">
                 {user?.username}
               </p>

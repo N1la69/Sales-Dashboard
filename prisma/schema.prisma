@@ -76,3 +76,24 @@ model psr_data_temp {
   brandform     String   @db.VarChar(45)
   retailing     Decimal  @db.Decimal(12, 2)
 }
+
+model User {
+  id             Int              @id @default(autoincrement())
+  name           String           @db.VarChar(120)
+  email          String           @unique @db.VarChar(120)
+  hash           String?          @db.Text
+  salt           String?          @db.Text
+  role           String           @default("staff")
+  permissionSets PermissionSet[]  @relation("UserPermissions")
+  isActive       Boolean          @default(true)
+  lastLogin      DateTime         @default(now())
+  image          String           @default("https://picsum.photos/100/100")
+}
+
+model PermissionSet {
+  id          Int     @id @default(autoincrement())
+  user        User    @relation("UserPermissions", fields: [userId], references: [id])
+  userId      Int
+  page        String  @db.VarChar(100)
+  permissions Json
+}
