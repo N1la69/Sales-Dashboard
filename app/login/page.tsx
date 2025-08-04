@@ -1,21 +1,65 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { toast } from "react-toastify";
 
 const SignInPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
+  // 🔐 Check if user is already logged in
   useEffect(() => {
-    // You can add redirect logic here if already signed in
+    const verifyUser = async () => {
+      try {
+        const res = await fetch("/api/user/auth/verify-user", {
+          credentials: "include",
+        });
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const data = await res.json();
+        if (res.ok) {
+          const params = new URLSearchParams(window.location.search);
+          const redirectTo = params.get("from") || "/dashboard";
+          window.location.href = redirectTo;
+        }
+      } catch (err) {
+        // Not logged in — do nothing
+        console.error("User verification failed:", err);
+      }
+    };
+    verifyUser();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // 🔑 Handle login form submission
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Email:", email);
-    console.log("Password:", password);
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/user/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        const params = new URLSearchParams(window.location.search);
+        const redirectTo = params.get("from") || "/dashboard";
+        window.location.href = redirectTo;
+      } else {
+        toast.error(data.error || "Login failed");
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      console.error("Login error:", err);
+      toast.error(err?.message || "An error occurred during login");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -62,9 +106,10 @@ const SignInPage = () => {
 
             <button
               type="submit"
+              disabled={loading}
               className="w-full bg-gray-900 dark:bg-gray-700 hover:bg-gray-600 dark:hover:bg-gray-600 text-white font-medium py-2.5 rounded-md cursor-pointer"
             >
-              Sign In
+              {loading ? "Signing in..." : "Sign In"}
             </button>
           </form>
         </CardContent>

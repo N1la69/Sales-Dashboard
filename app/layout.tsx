@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
-import "./globals.css";
 import ApolloWrapper from "@/components/ApolloWrapper";
+import { AuthProvider } from "@/hooks/AppContext";
+import type { Metadata } from "next";
 import { ToastContainer } from "react-toastify";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Sales Dashboard",
@@ -14,11 +15,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="antialiased bg-background-light dark:bg-background-dark">
-        <ToastContainer />
-        <ApolloWrapper>{children}</ApolloWrapper>
-      </body>
-    </html>
+    <AuthProvider>
+      <html lang="en">
+        <body className="antialiased bg-background-light dark:bg-background-dark">
+          <ToastContainer />
+          <ApolloWrapper>{children}</ApolloWrapper>
+        </body>
+      </html>
+    </AuthProvider>
   );
 }
