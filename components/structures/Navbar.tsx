@@ -101,7 +101,7 @@
 //           <UserButton />
 
 //           <p className="text-gray-950 dark:text-gray-200 font-semibold uppercase">
-//             {user?.username}
+//             {user?.name}
 //           </p>
 //         </div>
 //       </div>
@@ -119,11 +119,12 @@ import { pages } from "@/constants/data";
 import Image from "next/image";
 import Link from "next/link";
 import { Minus, Moon, Sun, Menu, X } from "lucide-react";
+import { useAppContext } from "@/hooks/AppContext";
 
 const Navbar = () => {
-  const user = {
-    username: "User", // Placeholder, replace with actual user data
-  };
+  const { state } = useAppContext();
+  const { user } = state; // Assuming user data is stored in the context
+  console.log("User in Navbar:", user);
   const pathname = usePathname();
 
   const [activePage, setActivePage] = useState(0);
@@ -225,7 +226,7 @@ const Navbar = () => {
         <div className="flex items-center gap-2">
           {/* <UserButton /> */}
           <p className="text-gray-950 dark:text-gray-200 font-semibold uppercase hidden sm:block">
-            {user?.username}
+            {user?.name}
           </p>
         </div>
       </div>
@@ -251,7 +252,7 @@ const Navbar = () => {
             <li className="flex justify-center py-2 border-t border-gray-300 dark:border-gray-700">
               {/* <UserButton /> */}
               <p className="ml-2 text-gray-950 dark:text-gray-200 font-semibold uppercase">
-                {user?.username}
+                {user?.name}
               </p>
             </li>
           </ul>
