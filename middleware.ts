@@ -3,8 +3,8 @@ import { verifyUser } from "@/lib/auth/verifyUser";
 
 const publicPaths = [
   "/login",
-  "/forget-password",
-  "/reset-forget-password",
+  "/forgot-password",
+  "/reset-password",
   "/verify-reset-otp",
   "/favicon.ico",
   "/api/user/auth",

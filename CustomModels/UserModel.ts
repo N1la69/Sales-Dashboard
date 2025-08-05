@@ -106,7 +106,9 @@ export class UserModel {
     //   type: 'password_reset',
     //   data: { name: this.user.name, email: this.user.email, otp }
     // });
-
+    console.warn("⚠️⚠️ Please Disable this line in production ⚠️⚠️");
+    // For testing purposes, we log the OTP instead of sending an email
+    console.warn('OTP sent to user email:', this.user.email, otp);
     return { success: true, reason: 'sent' };
   }
 

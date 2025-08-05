@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "react-toastify";
 
-const SignInPage = () => {
+const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -91,7 +91,7 @@ const SignInPage = () => {
               />
             </div>
 
-            <div className="space-y-2 flex flex-col pb-3">
+            <div className="space-y-2 flex flex-col">
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                 Password
               </label>
@@ -102,6 +102,14 @@ const SignInPage = () => {
                 required
                 className="border border-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md py-2 px-2"
               />
+              <div className="text-right">
+                <a
+                  href="/forgot-password"
+                  className="text-sm text-gray-600 dark:text-gray-300 hover:underline"
+                >
+                  Forgot password?
+                </a>
+              </div>
             </div>
 
             <button
@@ -118,4 +126,4 @@ const SignInPage = () => {
   );
 };
 
-export default SignInPage;
+export default LoginPage;
