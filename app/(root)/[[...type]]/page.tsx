@@ -13,8 +13,7 @@ export default function Page({
   const resolvedParams = use(params); // <-- unwrap Promise
   const typeArray: string[] = resolvedParams.type ?? [];
   const pageKey = typeArray[0]; // e.g., 'store'
-  const page = PublicNavLinks.find((page) => page.key === pageKey);
-
+  const page = PublicNavLinks.find((page) => page.key == pageKey);
   useEffect(() => {
     if (page?.title) {
       document.title = `${page.title} || ${process.env.NEXT_PUBLIC_APP_NAME}`;

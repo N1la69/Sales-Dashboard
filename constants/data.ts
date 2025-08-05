@@ -12,9 +12,10 @@ import filterValues from "./filterValues";
 // NAVBAR PAGES
 interface NavLink {
   id: number;
-  path: string | undefined;
+  path: string;
   title: string;
-  key: string;
+  page: string;
+  key: string | undefined;
   module?: ({ routeParams }: { routeParams?: string[] }) => JSX.Element;
   icon?: LucideIcon;
   toRender: boolean;
@@ -22,15 +23,17 @@ interface NavLink {
 export const PublicNavLinks: NavLink[] = [
   {
     id: 0,
-    path: undefined,
+    path: "/",
+    page: "dashboard",
     title: "Dashboard",
     module: Dashboard,
-    key: "dashboard",
+    key: undefined,
     toRender: true,
   },
   {
     id: 1,
     path: "/store",
+    page: "store",
     title: "Stores",
     module: StorePage,
     key: "store",
@@ -40,6 +43,7 @@ export const PublicNavLinks: NavLink[] = [
     id: 2,
     path: "/ranking",
     title: "Top100",
+    page: "ranking",
     key: "ranking",
     module: RankingPage,
     toRender: true,
@@ -48,6 +52,7 @@ export const PublicNavLinks: NavLink[] = [
     id: 3,
     path: "/upload",
     title: "Upload",
+    page: "upload",
     key: "upload",
     module: UploadPage,
     toRender: true,
@@ -56,6 +61,7 @@ export const PublicNavLinks: NavLink[] = [
     id: 4,
     path: "/login",
     title: "Login",
+    page: "login",
     key: "login",
     module: LoginPage,
     toRender: false,
@@ -63,6 +69,7 @@ export const PublicNavLinks: NavLink[] = [
     id: 5,
     path: "/forgot-password",
     title: "Forgot Password",
+    page: "forgot-password",
     key: "forgot-password",
     module: ForgotPasswordPage,
     toRender: false,
@@ -71,6 +78,7 @@ export const PublicNavLinks: NavLink[] = [
     id: 6,
     path: "/reset-password",
     title: "Reset Password",
+    page: "reset-password",
     key: "reset-password",
     module: ResetPasswordPage,
     toRender: false,
