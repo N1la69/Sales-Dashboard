@@ -27,19 +27,6 @@ export function resolveTables(
   return ["psr_data", "psr_data_temp"];
 }
 
-export function addInClause(
-  query: string,
-  params: any[],
-  values: any[],
-  field: string
-): string {
-  if (values?.length) {
-    query += ` AND ${field} IN (${values.map(() => "?").join(",")})`;
-    params.push(...values);
-  }
-  return query;
-}
-
 export function monthNumberToName(month: number): string {
   const monthNames = [
     "Jan",
@@ -136,6 +123,12 @@ export async function buildWhereClauseForRawSQL(filters: any) {
   addInClause(filters.Channel, "c.channel");
   addInClause(filters.BroadChannel, "c.broad_channel");
   addInClause(filters.ShortChannel, "c.short_channel");
+
+  // Date range filter
+  if (filters.StartDate && filters.EndDate) {
+    whereClause += ` AND p.document_date BETWEEN ? AND ?`;
+    params.push(filters.StartDate, filters.EndDate);
+  }
 
   return { whereClause, params };
 }
@@ -342,7 +335,7 @@ export async function getRetailingByBroadChannel(filters: any, source: string) {
       FROM ${table} p
       LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
       LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
-      WHERE c.broad_channel IS NOT NULL
+      WHERE 1=1
     `;
 
     const { whereClause, params } = await buildWhereClauseForRawSQL(filters);

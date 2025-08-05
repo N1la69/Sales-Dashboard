@@ -14,6 +14,8 @@ export const typeDefs = gql`
     Channel: [String]
     BroadChannel: [String]
     ShortChannel: [String]
+    StartDate: String
+    EndDate: String
   }
 
   type YearlyRetailing {
