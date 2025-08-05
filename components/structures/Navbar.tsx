@@ -113,20 +113,19 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
-import { pages } from "@/constants/data";
+import { PublicNavLinks } from "@/constants/data";
+import { useAppContext } from "@/hooks/AppContext";
+import { Menu, Minus, Moon, Sun, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Minus, Moon, Sun, Menu, X } from "lucide-react";
-import { useAppContext } from "@/hooks/AppContext";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
   const { state } = useAppContext();
   const { user } = state; // Assuming user data is stored in the context
-  console.log("User in Navbar:", user);
   const pathname = usePathname();
-
+  const filteredNavLinks = PublicNavLinks.filter((p) => p.toRender);
   const [activePage, setActivePage] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -147,9 +146,9 @@ const Navbar = () => {
   }, [darkMode]);
 
   useEffect(() => {
-    const currentPage = pages.find((page) => page.path === pathname);
+    const currentPage = filteredNavLinks.find((page) => page.path === pathname);
     if (currentPage) setActivePage(currentPage.id);
-  }, [pathname]);
+  }, [pathname, filteredNavLinks]);
 
   return (
     <nav className="flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-600">
@@ -163,10 +162,10 @@ const Navbar = () => {
 
       {/* Desktop Nav Links */}
       <ul className="hidden md:flex gap-3 items-center justify-center">
-        {pages.map((page) => (
+        {filteredNavLinks.map((page) => (
           <li key={page.id}>
             <Link
-              href={page.path}
+              href={page.path ?? "/"}
               className="relative py-2 px-4 tracking-wide inline-block"
               onClick={() => setActivePage(page.id)}
             >
@@ -235,10 +234,10 @@ const Navbar = () => {
       {menuOpen && (
         <div className="absolute top-16 left-0 w-full bg-white dark:bg-gray-900 border-t border-gray-300 dark:border-gray-700 md:hidden z-50">
           <ul className="flex flex-col text-center py-2">
-            {pages.map((page) => (
+            {PublicNavLinks.map((page) => (
               <li key={page.id}>
                 <Link
-                  href={page.path}
+                  href={page.path === undefined ? "/" : page.path}
                   className="block py-2 text-gray-950 dark:text-gray-200 font-semibold hover:bg-gray-100 dark:hover:bg-gray-800"
                   onClick={() => {
                     setActivePage(page.id);
