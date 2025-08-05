@@ -193,12 +193,15 @@ export default function Dashboard() {
     setPendingFilters((prev) => ({ ...prev, [key]: values }));
   };
 
-  const applyFilters = () => {
-    setAppliedFilters({ ...pendingFilters });
+  const applyFilters = (filtersOverride?: typeof pendingFilters) => {
+    const filtersToApply = filtersOverride ?? pendingFilters;
+
+    setAppliedFilters({ ...filtersToApply });
     setAppliedDateRange({ ...dateRange });
+
     refetch({
       filters: {
-        ...pendingFilters,
+        ...filtersToApply,
         ...(dateRange.startDate &&
           dateRange.endDate && {
             StartDate: dateRange.startDate.toISOString().split("T")[0],
@@ -237,6 +240,7 @@ export default function Dashboard() {
     };
     if (updated[key].length === 0) delete updated[key];
     setPendingFilters(updated);
+    applyFilters(updated);
   };
 
   const handleSourceChange = (source: "combined" | "main" | "temp") => {
@@ -354,7 +358,7 @@ export default function Dashboard() {
           {hasPendingChanges && (
             <Button
               className="bg-indigo text-white hover:bg-indigo-hover"
-              onClick={applyFilters}
+              onClick={() => applyFilters()}
             >
               Apply Filters
             </Button>
