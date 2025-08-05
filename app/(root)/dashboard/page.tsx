@@ -19,6 +19,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import DateRange from "@/components/structures/DateRange";
 
 // ================= GraphQL Queries =================
 const GET_RETAILING_STATS = gql`
@@ -119,12 +120,32 @@ export default function Dashboard() {
   const [appliedFilters, setAppliedFilters] = useState<
     Record<string, (string | number)[]>
   >({});
+  const [dateRange, setDateRange] = useState({
+    startDate: null as Date | null,
+    endDate: null as Date | null,
+  });
+
+  const [appliedDateRange, setAppliedDateRange] = useState({
+    startDate: null as Date | null,
+    endDate: null as Date | null,
+  });
+
   const [dataSource, setDataSource] = useState<"combined" | "main" | "temp">(
     "combined"
   );
 
   const queryOptions = {
-    variables: { filters: appliedFilters, source: dataSource },
+    variables: {
+      filters: {
+        ...appliedFilters,
+        ...(appliedDateRange.startDate &&
+          appliedDateRange.endDate && {
+            StartDate: appliedDateRange.startDate.toISOString().split("T")[0],
+            EndDate: appliedDateRange.endDate.toISOString().split("T")[0],
+          }),
+      },
+      source: dataSource,
+    },
   };
 
   const { data, loading, error, refetch } = useQuery(
@@ -173,14 +194,40 @@ export default function Dashboard() {
   };
 
   const applyFilters = () => {
-    setAppliedFilters(pendingFilters);
-    refetch({ filters: pendingFilters, source: dataSource });
+    setAppliedFilters({ ...pendingFilters });
+    setAppliedDateRange({ ...dateRange });
+    refetch({
+      filters: {
+        ...pendingFilters,
+        ...(dateRange.startDate &&
+          dateRange.endDate && {
+            StartDate: dateRange.startDate.toISOString().split("T")[0],
+            EndDate: dateRange.endDate.toISOString().split("T")[0],
+          }),
+      },
+      source: dataSource,
+    });
   };
 
   const clearAllFilters = () => {
     setPendingFilters({});
     setAppliedFilters({});
+    setDateRange({ startDate: null, endDate: null });
+    setAppliedDateRange({ startDate: null, endDate: null }); // ✅ clear applied too
     refetch({ filters: {}, source: dataSource });
+  };
+
+  const clearDateRange = () => {
+    const updated = { startDate: null, endDate: null };
+    setDateRange(updated);
+    setAppliedDateRange(updated); // Optional: immediately clear applied too
+    setPendingFilters({ ...pendingFilters });
+    refetch({
+      filters: {
+        ...pendingFilters,
+      },
+      source: dataSource,
+    });
   };
 
   const removeFilter = (key: string, value: string | number) => {
@@ -198,8 +245,13 @@ export default function Dashboard() {
   };
 
   const hasPendingChanges =
-    JSON.stringify(pendingFilters) !== JSON.stringify(appliedFilters);
-  const hasAnyPendingFilter = Object.keys(pendingFilters).length > 0;
+    JSON.stringify(pendingFilters) !== JSON.stringify(appliedFilters) ||
+    JSON.stringify(dateRange) !== JSON.stringify(appliedDateRange);
+
+  const hasAnyPendingFilter =
+    Object.keys(pendingFilters).length > 0 ||
+    dateRange.startDate?.getTime() !== appliedDateRange.startDate?.getTime() ||
+    dateRange.endDate?.getTime() !== appliedDateRange.endDate?.getTime();
 
   return (
     <div className="relative pt-3 px-4 sm:px-6 z-10 text-gray-900 dark:text-gray-200">
@@ -255,11 +307,13 @@ export default function Dashboard() {
             onChange={(values) => handleFilterChange(filter.key, values)}
           />
         ))}
+        <DateRange value={dateRange} onChange={setDateRange} />
       </div>
 
       {/* ACTIVE FILTER TAGS */}
       {hasAnyPendingFilter && (
         <div className="flex justify-center items-center gap-2 flex-wrap mb-4">
+          {/* Other filters */}
           {Object.entries(pendingFilters).flatMap(([key, values]) =>
             values.map((value) => (
               <span
@@ -275,6 +329,21 @@ export default function Dashboard() {
                 </button>
               </span>
             ))
+          )}
+
+          {/* Date Range filter tag */}
+          {(dateRange.startDate || dateRange.endDate) && (
+            <span className="flex items-center bg-indigo text-white rounded-full px-3 py-1 text-sm">
+              {`Date: ${dateRange.startDate?.toLocaleDateString() ?? "–"} to ${
+                dateRange.endDate?.toLocaleDateString() ?? "–"
+              }`}
+              <button
+                onClick={clearDateRange}
+                className="ml-2 hover:text-error"
+              >
+                <X size={14} />
+              </button>
+            </span>
           )}
         </div>
       )}

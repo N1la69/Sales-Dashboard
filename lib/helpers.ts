@@ -45,6 +45,19 @@ export function monthNumberToName(month: number): string {
   return monthNames[month - 1] || "Unknown";
 }
 
+export function addInClause(
+  query: string,
+  params: any[],
+  values: any[],
+  field: string
+): string {
+  if (values?.length) {
+    query += ` AND ${field} IN (${values.map(() => "?").join(",")})`;
+    params.push(...values);
+  }
+  return query;
+}
+
 export async function mergeCustomerCodes(
   existing: string[],
   column: string,
@@ -133,7 +146,65 @@ export async function buildWhereClauseForRawSQL(filters: any) {
   return { whereClause, params };
 }
 
+export async function getRetailingWithRawSQL(
+  filters: any,
+  source: string
+): Promise<number> {
+  const tables = resolveTables(source);
+
+  let total = 0;
+  for (const table of tables) {
+    const subtotal = await getTotalRetailing(table, filters);
+    total += subtotal;
+  }
+  return total;
+}
+
 // DASHBOARD page
+export async function getTotalRetailing(
+  table: string,
+  filters: any
+): Promise<number> {
+  let query = `
+    SELECT SUM(p.retailing) AS total
+    FROM ${table} p
+    LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
+    LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
+    LEFT JOIN product_mapping pm ON p.p_code = pm.p_code
+    WHERE 1=1
+  `;
+  const params: any[] = [];
+
+  // Store filters
+  query = addInClause(query, params, filters.ZM, "s.ZM");
+  query = addInClause(query, params, filters.Branch, "s.New_Branch");
+  query = addInClause(query, params, filters.SM, "s.SM");
+  query = addInClause(query, params, filters.BE, "s.BE");
+
+  // Date filters
+  if (filters.StartDate && filters.EndDate) {
+    query += ` AND p.document_date BETWEEN ? AND ?`;
+    params.push(filters.StartDate, filters.EndDate);
+  } else {
+    query = addInClause(query, params, filters.Year, "YEAR(p.document_date)");
+    query = addInClause(query, params, filters.Month, "MONTH(p.document_date)");
+  }
+
+  // PSR filters from product_mapping
+  query = addInClause(query, params, filters.Category, "pm.category");
+  query = addInClause(query, params, filters.Brand, "pm.brand");
+  query = addInClause(query, params, filters.Brandform, "pm.brandform");
+
+  // Channel mapping
+  query = addInClause(query, params, filters.Channel, "c.channel");
+  query = addInClause(query, params, filters.BroadChannel, "c.broad_channel");
+  query = addInClause(query, params, filters.ShortChannel, "c.short_channel");
+
+  const result: any[] = await prisma.$queryRawUnsafe(query, ...params);
+  const total = result[0]?.total;
+  return total ? Number(total) : 0;
+}
+
 export async function getHighestRetailingBranch(filters: any, source: string) {
   const years = filters?.Year?.length ? filters.Year : [2023, 2024];
   const branchYearMap: Record<string, Record<number, number>> = {}; // { branch: { year: retailing } }
@@ -147,6 +218,7 @@ export async function getHighestRetailingBranch(filters: any, source: string) {
         FROM ${table} p
         LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
         LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
+        LEFT JOIN product_mapping pm ON p.p_code = pm.p_code
         WHERE 1=1
       `;
 
@@ -335,6 +407,7 @@ export async function getRetailingByBroadChannel(filters: any, source: string) {
       FROM ${table} p
       LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
       LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
+      LEFT JOIN product_mapping pm ON p.p_code = pm.p_code
       WHERE 1=1
     `;
 
@@ -383,6 +456,7 @@ export async function getMonthlyRetailingTrend(filters: any, source: string) {
       FROM ${table} p
       LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
       LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
+      LEFT JOIN product_mapping pm ON p.p_code = pm.p_code
       WHERE 1=1
     `;
 
