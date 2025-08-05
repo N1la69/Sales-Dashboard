@@ -7,6 +7,7 @@ export const typeDefs = gql`
     Category: [String]
     Brand: [String]
     Brandform: [String]
+    Subbrandform: [String]
     Branch: [String]
     ZM: [String]
     SM: [String]

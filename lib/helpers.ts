@@ -131,6 +131,7 @@ export async function buildWhereClauseForRawSQL(filters: any) {
   addInClause(filters.Category, "pm.category");
   addInClause(filters.Brand, "pm.brand");
   addInClause(filters.Brandform, "pm.brandform");
+  addInClause(filters.Subbrandform, "pm.subbrandform");
 
   // Channel filters (channel_mapping alias = c)
   addInClause(filters.Channel, "c.channel");
@@ -194,6 +195,7 @@ export async function getTotalRetailing(
   query = addInClause(query, params, filters.Category, "pm.category");
   query = addInClause(query, params, filters.Brand, "pm.brand");
   query = addInClause(query, params, filters.Brandform, "pm.brandform");
+  query = addInClause(query, params, filters.Subbrandform, "pm.subbrandform");
 
   // Channel mapping
   query = addInClause(query, params, filters.Channel, "c.channel");

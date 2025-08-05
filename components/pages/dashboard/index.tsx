@@ -257,6 +257,11 @@ export default function Dashboard() {
     dateRange.startDate?.getTime() !== appliedDateRange.startDate?.getTime() ||
     dateRange.endDate?.getTime() !== appliedDateRange.endDate?.getTime();
 
+  const hasAnyAppliedFilter =
+    Object.keys(appliedFilters).length > 0 ||
+    appliedDateRange.startDate !== null ||
+    appliedDateRange.endDate !== null;
+
   return (
     <div className="relative pt-3 px-4 sm:px-6 z-10 text-gray-900 dark:text-gray-200">
       {/* HEADER */}
@@ -315,7 +320,7 @@ export default function Dashboard() {
       </div>
 
       {/* ACTIVE FILTER TAGS */}
-      {hasAnyPendingFilter && (
+      {(hasAnyPendingFilter || hasAnyAppliedFilter) && (
         <div className="flex justify-center items-center gap-2 flex-wrap mb-4">
           {/* Other filters */}
           {Object.entries(pendingFilters).flatMap(([key, values]) =>
@@ -353,7 +358,7 @@ export default function Dashboard() {
       )}
 
       {/* APPLY / CLEAR BUTTONS */}
-      {hasAnyPendingFilter && (
+      {(hasAnyPendingFilter || hasAnyAppliedFilter) && (
         <div className="flex gap-2 my-4 justify-center flex-wrap">
           {hasPendingChanges && (
             <Button

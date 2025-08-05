@@ -20,6 +20,7 @@ interface NavLink {
   icon?: LucideIcon;
   toRender: boolean;
 }
+
 export const PublicNavLinks: NavLink[] = [
   {
     id: 0,
@@ -65,7 +66,8 @@ export const PublicNavLinks: NavLink[] = [
     key: "login",
     module: LoginPage,
     toRender: false,
-  }, {
+  },
+  {
     id: 5,
     path: "/forgot-password",
     title: "Forgot Password",
@@ -91,6 +93,11 @@ export const filters = [
   { label: "Category", key: "Category", values: filterValues.categories },
   { label: "Brand", key: "Brand", values: filterValues.brands },
   { label: "Brandform", key: "Brandform", values: filterValues.brandforms },
+  {
+    label: "Subbrandform",
+    key: "Subbrandform",
+    values: filterValues.subbrandforms,
+  },
   { label: "Branch", key: "Branch", values: filterValues.branches },
   { label: "ZM", key: "ZM", values: filterValues.zms },
   { label: "SM", key: "SM", values: filterValues.sms },
