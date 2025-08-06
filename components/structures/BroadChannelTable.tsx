@@ -87,7 +87,6 @@ export default function BroadChannelTable({
             <thead>
               <tr>
                 <th className="px-4 py-2">Base Channel</th>
-                <th className="px-4 py-2 text-right">Total</th>
                 {uniqueYears.map((year) => (
                   <th key={year} className="px-4 py-2 text-right">
                     {year}
@@ -99,10 +98,6 @@ export default function BroadChannelTable({
             <tbody>
               {sortedChannels.map((channel, index) => {
                 const yearly = channelMap[channel];
-                const total = uniqueYears.reduce(
-                  (sum, y) => sum + (yearly[y] || 0),
-                  0
-                );
                 const latest = yearly[latestYear] ?? 0;
                 const previous = yearly[previousYear] ?? 0;
                 const growth =
@@ -131,12 +126,11 @@ export default function BroadChannelTable({
                     >
                       {channel || "Unknown"}
                     </td>
-                    <td className="px-4 py-2 text-right font-semibold">
-                      {(total / 100000).toFixed(2)}
-                    </td>
                     {uniqueYears.map((year) => (
                       <td key={year} className="px-4 py-2 text-right">
-                        <div>
+                        <div
+                          className={year === latestYear ? "font-semibold" : ""}
+                        >
                           {yearly[year]
                             ? (yearly[year] / 100000).toFixed(2)
                             : "0.00"}

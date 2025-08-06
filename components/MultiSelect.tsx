@@ -42,7 +42,7 @@ export default function MultiSelect({
       >
         <Button variant="outline" className="justify-between">
           {selected.length === 0
-            ? `Select ${label}`
+            ? `${label}`
             : selected.length === 1
             ? `${label}: ${selected[0]}`
             : `${label}: ${selected.length} selected`}

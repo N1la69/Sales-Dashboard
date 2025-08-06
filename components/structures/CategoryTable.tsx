@@ -84,7 +84,6 @@ export default function CategoryTable({
           <thead>
             <tr>
               <th className="px-4 py-2">Category</th>
-              <th className="px-4 py-2 text-right">Total</th>
               {uniqueYears.map((year) => (
                 <th key={year} className="px-4 py-2 text-right">
                   {year}
@@ -96,10 +95,6 @@ export default function CategoryTable({
           <tbody>
             {sortedCategories.map((category, index) => {
               const yearly = categoryMap[category];
-              const total = uniqueYears.reduce(
-                (sum, y) => sum + (yearly[y] || 0),
-                0
-              );
               const latest = yearly[latestYear] ?? 0;
               const previous = yearly[previousYear] ?? 0;
               const growth =
@@ -128,12 +123,11 @@ export default function CategoryTable({
                   >
                     {category || "Unknown"}
                   </td>
-                  <td className="px-4 py-2 text-right font-semibold">
-                    {(total / 100000).toFixed(2)}
-                  </td>
                   {uniqueYears.map((year) => (
                     <td key={year} className="px-4 py-2 text-right">
-                      <div>
+                      <div
+                        className={year === latestYear ? "font-semibold" : ""}
+                      >
                         {yearly[year]
                           ? (yearly[year] / 100000).toFixed(2)
                           : "0.00"}

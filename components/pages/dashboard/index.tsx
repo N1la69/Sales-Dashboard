@@ -25,7 +25,6 @@ import DateRange from "@/components/structures/DateRange";
 const GET_RETAILING_STATS = gql`
   query GetRetailingStats($filters: FilterInput, $source: String) {
     retailingStats(filters: $filters, source: $source) {
-      total
       breakdown {
         year
         value
@@ -39,7 +38,6 @@ const GET_HIGHEST_BRANCH = gql`
   query GetHighestRetailingBranch($filters: FilterInput, $source: String) {
     highestRetailingBranch(filters: $filters, source: $source) {
       branch
-      retailing
       breakdown {
         year
         value
@@ -53,7 +51,6 @@ const GET_HIGHEST_BRAND = gql`
   query GetHighestRetailingBrand($filters: FilterInput, $source: String) {
     highestRetailingBrand(filters: $filters, source: $source) {
       brand
-      retailing
       breakdown {
         year
         value
@@ -67,7 +64,6 @@ const GET_CATEGORY_PERCENTAGE = gql`
   query GetCategoryRetailingPercentage($filters: FilterInput, $source: String) {
     retailingByCategory(filters: $filters, source: $source) {
       category
-      retailing
       breakdown {
         year
         value
@@ -83,7 +79,6 @@ const GET_BROAD_CHANNEL_PERCENTAGE = gql`
   ) {
     retailingByBroadChannel(filters: $filters, source: $source) {
       broad_channel
-      retailing
       breakdown {
         year
         value
@@ -106,8 +101,11 @@ const GET_TOP_BRANDFORMS = gql`
   query GetTopBrandforms($filters: FilterInput, $source: String) {
     topBrandforms(filters: $filters, source: $source) {
       brandform
-      year
-      retailing
+      breakdown {
+        year
+        value
+      }
+      growth
     }
   }
 `;
@@ -392,7 +390,6 @@ export default function Dashboard() {
           {data && (
             <StatCard
               title="Total Retailing (in Lakhs)"
-              value={(data.retailingStats.total / 100000).toFixed(1)}
               breakdown={data.retailingStats.breakdown}
               growth={data.retailingStats.growth}
             />
@@ -429,9 +426,6 @@ export default function Dashboard() {
             {highestBranchData && (
               <StatCard
                 title="Highest Retailing Branch (in Lakhs)"
-                value={(
-                  highestBranchData.highestRetailingBranch.retailing / 100000
-                ).toFixed(1)}
                 description={`Branch: ${highestBranchData.highestRetailingBranch.branch}`}
                 breakdown={highestBranchData.highestRetailingBranch.breakdown}
                 growth={highestBranchData.highestRetailingBranch.growth}
@@ -451,9 +445,6 @@ export default function Dashboard() {
             {highestBrandData && (
               <StatCard
                 title="Highest Retailing Brand (in Lakhs)"
-                value={(
-                  highestBrandData.highestRetailingBrand.retailing / 100000
-                ).toFixed(1)}
                 description={`Brand: ${highestBrandData.highestRetailingBrand.brand}`}
                 breakdown={highestBrandData.highestRetailingBrand.breakdown}
                 growth={highestBrandData.highestRetailingBrand.growth}

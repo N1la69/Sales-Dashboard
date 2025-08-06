@@ -25,34 +25,29 @@ export const typeDefs = gql`
   }
 
   type RetailingStats {
-    total: Float!
     breakdown: [YearlyRetailing!]!
     growth: Float
   }
 
   type HighestBranch {
     branch: String!
-    retailing: Float!
     breakdown: [YearlyRetailing!]!
     growth: Float
   }
 
   type HighestBrand {
     brand: String
-    retailing: Float
     breakdown: [YearlyRetailing!]
     growth: Float
   }
 
   type CategoryRetailing {
     category: String
-    retailing: Float
     breakdown: [YearlyRetailing!]
   }
 
   type BroadChannelRetailing {
     broad_channel: String
-    retailing: Float
     breakdown: [YearlyRetailing!]
   }
 
@@ -64,8 +59,8 @@ export const typeDefs = gql`
 
   type TopBrandform {
     brandform: String
-    year: Int
-    retailing: Float
+    breakdown: [YearlyRetailing!]!
+    growth: Float
   }
 
   type Store {

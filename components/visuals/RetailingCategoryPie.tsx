@@ -1,33 +1,44 @@
 "use client";
 
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import { useState } from "react";
+
+interface BreakdownItem {
+  year: number;
+  value: number;
+}
+
+interface CategoryBreakdown {
+  category: string;
+  breakdown: BreakdownItem[];
+}
 
 interface RetailingCategoryPieProps {
-  data: { category: string; retailing: number }[];
+  data: CategoryBreakdown[];
   loading?: boolean;
   error?: { message: string };
 }
 
 const LIGHT_COLORS = [
-  "#4f46e5", // indigo
-  "#06b6d4", // cyan
-  "#22c55e", // green
-  "#facc15", // yellow
-  "#f97316", // orange
-  "#ec4899", // pink
-  "#8b5cf6", // violet
-  "#10b981", // emerald
+  "#4f46e5",
+  "#06b6d4",
+  "#22c55e",
+  "#facc15",
+  "#f97316",
+  "#ec4899",
+  "#8b5cf6",
+  "#10b981",
 ];
 
 const DARK_COLORS = [
-  "#3b82f6", // bright blue
-  "#0ea5e9", // sky blue
-  "#22c55e", // green
-  "#eab308", // amber
-  "#f97316", // orange
-  "#ec4899", // pink
-  "#8b5cf6", // violet
-  "#14b8a6", // teal
+  "#3b82f6",
+  "#0ea5e9",
+  "#22c55e",
+  "#eab308",
+  "#f97316",
+  "#ec4899",
+  "#8b5cf6",
+  "#14b8a6",
 ];
 
 export default function RetailingCategoryPie({
@@ -39,17 +50,48 @@ export default function RetailingCategoryPie({
   if (error) return <p>Error loading category data: {error.message}</p>;
   if (!data.length) return <p>No category data available.</p>;
 
-  const total = data.reduce((sum, item) => sum + item.retailing, 0);
-  const pieData = data.map((item) => ({
-    name: item.category,
-    value: Math.round((item.retailing / total) * 100),
+  const allYears = Array.from(
+    new Set(data.flatMap((item) => item.breakdown.map((b) => b.year)))
+  ).sort((a, b) => b - a); // descending
+
+  const [selectedYear, setSelectedYear] = useState(allYears[0]);
+
+  const selectedYearData = data
+    .map((item) => {
+      const entry = item.breakdown.find((b) => b.year === selectedYear);
+      return {
+        name: item.category || "Unknown",
+        value: entry?.value ?? 0,
+      };
+    })
+    .filter((item) => item.value > 0);
+
+  const total = selectedYearData.reduce((sum, item) => sum + item.value, 0);
+  const pieData = selectedYearData.map((item) => ({
+    name: item.name,
+    value: Math.round((item.value / total) * 100),
   }));
 
   return (
-    <div className="flex flex-col items-center">
-      <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-        Retailing by Category
-      </h2>
+    <div className="flex flex-col items-center gap-4">
+      <div className="flex items-center gap-2">
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+          Retailing by Category
+        </h2>
+        <select
+          className="ml-1 py-1 px-2 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 
+                     focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all placeholder:text-indigo-400 
+                     dark:placeholder:text-indigo-500 text-indigo-700 dark:text-indigo-200"
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+        >
+          {allYears.map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {/* Light Mode Chart */}
       <div className="w-full h-[20rem] dark:hidden">

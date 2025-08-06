@@ -20,8 +20,8 @@ interface TopBrandformsProps {
   data:
     | {
         brandform: string;
-        year: number;
-        retailing: number;
+        breakdown: { year: number; value: number }[];
+        growth?: number | null;
       }[]
     | undefined;
   loading: boolean;
@@ -37,18 +37,12 @@ export default function TopBrandforms({
   if (error) return <p>Error loading brandforms: {error.message}</p>;
   if (!data || data.length === 0) return <p>No brandform data available.</p>;
 
-  const brandformMap: Record<string, Record<number, number>> = {};
-  const allYears = new Set<number>();
+  // Extract unique years
+  const allYears = Array.from(
+    new Set(data.flatMap((item) => item.breakdown.map((b) => b.year)))
+  ).sort((a, b) => b - a);
 
-  data.forEach(({ brandform, year, retailing }) => {
-    if (!brandformMap[brandform]) brandformMap[brandform] = {};
-    brandformMap[brandform][year] = retailing;
-    allYears.add(year);
-  });
-
-  const sortedYears = Array.from(allYears).sort((a, b) => b - a);
-  const [latestYear, prevYear] = sortedYears;
-  const brandforms = Object.keys(brandformMap);
+  const [latestYear, prevYear] = allYears;
 
   return (
     <Card className="shadow-md bg-slate-100/40 dark:bg-slate-800/30 border-transparent">
@@ -63,8 +57,7 @@ export default function TopBrandforms({
             <thead>
               <tr>
                 <th className="px-4 py-2">Brandform</th>
-                <th className="text-right px-4 py-2">Total</th>
-                {sortedYears.map((year) => (
+                {allYears.map((year) => (
                   <th key={year} className="text-right px-4 py-2">
                     {year}
                   </th>
@@ -73,20 +66,16 @@ export default function TopBrandforms({
               </tr>
             </thead>
             <tbody>
-              {brandforms.map((brandform, index) => {
-                const yearlyData = brandformMap[brandform];
-                const totalRetailing = sortedYears.reduce(
-                  (sum, year) => sum + (yearlyData[year] || 0),
-                  0
-                );
+              {data.map((item, index) => {
+                const { brandform, breakdown, growth } = item;
 
-                const latest = yearlyData[latestYear] ?? 0;
-                const previous = yearlyData[prevYear] ?? 0;
-                const growth =
-                  previous && previous !== 0 ? (latest / previous) * 100 : null;
+                const yearly: Record<number, number> = {};
+                breakdown.forEach((b) => {
+                  yearly[b.year] = b.value;
+                });
 
                 const growthColor =
-                  growth === null
+                  growth === null || growth === undefined
                     ? "text-gray-500"
                     : growth > 100
                     ? "text-green-500"
@@ -104,21 +93,25 @@ export default function TopBrandforms({
                     <td className="px-4 py-2 font-medium rounded-l-lg">
                       {brandform}
                     </td>
-                    <td className="px-4 py-2 text-right font-semibold">
-                      {(totalRetailing / 100000).toFixed(2)}
-                    </td>
-                    {sortedYears.map((year) => {
-                      const retailing = yearlyData[year];
-                      return (
-                        <td key={year} className="px-4 py-2 text-right">
-                          <div>{(retailing / 100000).toFixed(2)}</div>
-                        </td>
-                      );
-                    })}
+                    {allYears.map((year) => (
+                      <td key={year} className="px-4 py-2 text-right">
+                        <span
+                          className={
+                            year === latestYear
+                              ? "font-bold text-black dark:text-white"
+                              : ""
+                          }
+                        >
+                          {yearly[year]
+                            ? (yearly[year] / 100000).toFixed(2)
+                            : "0.00"}
+                        </span>
+                      </td>
+                    ))}
                     <td
                       className={`px-4 py-2 text-right font-medium rounded-r-lg ${growthColor}`}
                     >
-                      {growth !== null
+                      {growth !== null && growth !== undefined
                         ? `${growth > 100 ? "+" : "-"}${growth.toFixed(1)}%`
                         : "N/A"}
                     </td>

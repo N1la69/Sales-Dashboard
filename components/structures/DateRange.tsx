@@ -55,7 +55,7 @@ const DateRange: React.FC<Props> = ({ value, onChange }) => {
         <Button variant="outline" className="justify-between">
           {startDate && endDate
             ? `From ${formatDate(startDate)} to ${formatDate(endDate)}`
-            : "Select Date Range"}
+            : "Date Range"}
         </Button>
       </PopoverTrigger>
 

@@ -209,7 +209,7 @@ export async function getTotalRetailing(
 
 export async function getHighestRetailingBranch(filters: any, source: string) {
   const years = filters?.Year?.length ? filters.Year : [2023, 2024];
-  const branchYearMap: Record<string, Record<number, number>> = {}; // { branch: { year: retailing } }
+  const branchYearMap: Record<string, Record<number, number>> = {};
 
   for (const year of years) {
     const tables = resolveTables(source);
@@ -244,19 +244,14 @@ export async function getHighestRetailingBranch(filters: any, source: string) {
     }
   }
 
-  // Compute total per branch
-  const branchTotalMap: Record<string, number> = {};
-  for (const [branch, yearly] of Object.entries(branchYearMap)) {
-    branchTotalMap[branch] = Object.values(yearly).reduce((a, b) => a + b, 0);
-  }
-
   // Find max
   let maxBranch = "";
-  let maxRetailing = 0;
+  let maxTotal = 0;
 
-  for (const [branch, total] of Object.entries(branchTotalMap)) {
-    if (total > maxRetailing) {
-      maxRetailing = total;
+  for (const [branch, yearly] of Object.entries(branchYearMap)) {
+    const total = Object.values(yearly).reduce((a, b) => a + b, 0);
+    if (total > maxTotal) {
+      maxTotal = total;
       maxBranch = branch;
     }
   }
@@ -278,7 +273,6 @@ export async function getHighestRetailingBranch(filters: any, source: string) {
 
   return {
     branch: maxBranch,
-    retailing: maxRetailing,
     breakdown,
     growth,
   };
@@ -344,7 +338,6 @@ export async function getHighestRetailingBrand(filters: any, source: string) {
 
   return {
     brand: maxBrand,
-    retailing: maxTotal,
     breakdown: maxBreakdown,
     growth,
   };
@@ -389,11 +382,8 @@ export async function getRetailingByCategory(filters: any, source: string) {
       }))
       .sort((a, b) => b.year - a.year);
 
-    const total = breakdown.reduce((sum, item) => sum + item.value, 0);
-
     return {
       category,
-      retailing: total,
       breakdown,
     };
   });
@@ -438,11 +428,8 @@ export async function getRetailingByBroadChannel(filters: any, source: string) {
       }))
       .sort((a, b) => b.year - a.year);
 
-    const total = breakdown.reduce((sum, item) => sum + item.value, 0);
-
     return {
       broad_channel,
-      retailing: total,
       breakdown,
     };
   });
@@ -528,26 +515,37 @@ export async function getTopBrandforms(filters: any, source: string) {
     }
   }
 
-  // Aggregate by total retailing across years for sorting
   const topBrandforms = Object.entries(brandformYearlyMap)
-    .map(([brandform, yearData]) => ({
-      brandform,
-      total: Object.values(yearData).reduce((sum, val) => sum + val, 0),
-      yearData,
-    }))
+    .map(([brandform, yearData]) => {
+      const breakdown = Object.entries(yearData)
+        .map(([year, value]) => ({
+          year: Number(year),
+          value,
+        }))
+        .sort((a, b) => b.year - a.year); // Descending
+
+      const total = breakdown.reduce((sum, item) => sum + item.value, 0);
+
+      let growth: number | null = null;
+      if (breakdown.length >= 2) {
+        const latest = breakdown[0].value;
+        const previous = breakdown[1].value;
+        if (previous > 0) {
+          growth = (latest / previous) * 100;
+        }
+      }
+
+      return { brandform, breakdown, total, growth };
+    })
     .sort((a, b) => b.total - a.total)
-    .slice(0, 10);
-
-  // Flatten the format for frontend
-  const flattened = topBrandforms.flatMap(({ brandform, yearData }) =>
-    Object.entries(yearData).map(([year, retailing]) => ({
+    .slice(0, 10)
+    .map(({ brandform, breakdown, growth }) => ({
       brandform,
-      year: Number(year),
-      retailing,
-    }))
-  );
+      breakdown,
+      growth,
+    }));
 
-  return flattened;
+  return topBrandforms;
 }
 
 // STORE page

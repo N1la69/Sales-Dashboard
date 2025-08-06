@@ -33,14 +33,13 @@ export const resolvers = {
 
         for (const year of years) {
           const value = await getRetailingWithRawSQL(
-            { ...filters, Year: undefined, Month: undefined },
+            { ...filters, Year: [year], Month: undefined },
             source
           );
           breakdown.push({ year, value });
         }
       } else {
         const years = filters?.Year?.length ? filters.Year : [2023, 2024];
-
         for (const year of years) {
           const value = await getRetailingWithRawSQL(
             { ...filters, Year: [year] },
@@ -50,15 +49,13 @@ export const resolvers = {
         }
       }
 
-      const total = breakdown.reduce((sum, y) => sum + y.value, 0);
-
       let growth = null;
       if (breakdown.length === 2 && breakdown[0].value && breakdown[1].value) {
         const [prev, curr] = breakdown.sort((a, b) => a.year - b.year);
         growth = (curr.value / prev.value) * 100;
       }
 
-      return { total, breakdown, growth };
+      return { breakdown, growth };
     },
     highestRetailingBranch: async (_: any, { filters, source }: any) => {
       return await getHighestRetailingBranch(filters, source);

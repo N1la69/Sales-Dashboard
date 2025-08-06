@@ -1,31 +1,40 @@
 "use client";
 
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
+import { useState } from "react";
 
 const LIGHT_COLORS = [
-  "#4f46e5", // indigo-600
-  "#059669", // green-600
-  "#f59e0b", // amber-500
-  "#ef4444", // red-500
-  "#0ea5e9", // sky-500
-  "#8b5cf6", // violet-500
-  "#f43f5e", // rose-500
-  "#10b981", // emerald-500
+  "#4f46e5",
+  "#059669",
+  "#f59e0b",
+  "#ef4444",
+  "#0ea5e9",
+  "#8b5cf6",
+  "#f43f5e",
+  "#10b981",
 ];
 
 const DARK_COLORS = [
-  "#60a5fa", // blue-400
-  "#38bdf8", // sky-400
-  "#4ade80", // green-400
-  "#facc15", // yellow-400 (good contrast)
-  "#fb923c", // orange-400
-  "#f472b6", // pink-400
-  "#a78bfa", // violet-400
-  "#2dd4bf", // teal-400
+  "#60a5fa",
+  "#38bdf8",
+  "#4ade80",
+  "#facc15",
+  "#fb923c",
+  "#f472b6",
+  "#a78bfa",
+  "#2dd4bf",
 ];
 
+interface ChannelBreakdownItem {
+  year: number;
+  value: number;
+}
+
 interface RetailingChannelPieProps {
-  data: { broad_channel: string; retailing: number }[];
+  data: {
+    broad_channel: string;
+    breakdown: ChannelBreakdownItem[];
+  }[];
   loading?: boolean;
   error?: { message: string };
 }
@@ -39,17 +48,49 @@ export default function RetailingChannelPie({
   if (error) return <p>Error loading channel data: {error.message}</p>;
   if (!data.length) return <p>No channel data available.</p>;
 
-  const total = data.reduce((sum, item) => sum + item.retailing, 0);
-  const pieData = data.map((item) => ({
-    name: item.broad_channel,
-    value: Math.round((item.retailing / total) * 100), // percentage to nearest integer
+  const allYears = Array.from(
+    new Set(data.flatMap((item) => item.breakdown.map((b) => b.year)))
+  ).sort((a, b) => b - a);
+
+  const [selectedYear, setSelectedYear] = useState<number>(allYears[0]);
+
+  const selectedYearData = data
+    .map((item) => {
+      const entry = item.breakdown.find((b) => b.year === selectedYear);
+      return {
+        name: item.broad_channel || "Unknown",
+        value: entry?.value ?? 0,
+      };
+    })
+    .filter((item) => item.value > 0);
+
+  const total = selectedYearData.reduce((sum, item) => sum + item.value, 0);
+
+  const pieData = selectedYearData.map((item) => ({
+    name: item.name,
+    value: Math.round((item.value / total) * 100),
   }));
 
   return (
-    <div className="flex flex-col items-center">
-      <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-        Retailing by Channel (Base)
-      </h2>
+    <div className="flex flex-col items-center gap-4">
+      <div className="flex items-center gap-2">
+        <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
+          Retailing by Channel (Base)
+        </h2>
+        <select
+          className="ml-1 py-1 px-2 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 
+                     focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all placeholder:text-indigo-400 
+                     dark:placeholder:text-indigo-500 text-indigo-700 dark:text-indigo-200"
+          value={selectedYear}
+          onChange={(e) => setSelectedYear(parseInt(e.target.value))}
+        >
+          {allYears.map((year) => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {/* Light Mode Pie Chart */}
       <div className="block dark:hidden w-full h-[20rem]">
