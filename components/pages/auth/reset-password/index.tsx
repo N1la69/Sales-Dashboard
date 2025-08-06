@@ -24,6 +24,8 @@ const ResetPasswordPage = () => {
       const data = await res.json();
       if (res.ok) {
         toast.success("Password reset successfully");
+        // Redirect to /
+        window.location.href = "/";
       } else {
         toast.error(data.error || "Failed to reset password");
       }

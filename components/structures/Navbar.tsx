@@ -119,7 +119,7 @@ import { Menu, Minus, Moon, Sun, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const Navbar = () => {
   const { state } = useAppContext();
@@ -129,6 +129,7 @@ const Navbar = () => {
   const [activePage, setActivePage] = useState(0);
   const [darkMode, setDarkMode] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const IS_LOGGED_IN = useMemo(() => !!user, [user]);
 
   useEffect(() => {
     const theme = localStorage.getItem("theme");
@@ -162,23 +163,24 @@ const Navbar = () => {
 
       {/* Desktop Nav Links */}
       <ul className="hidden md:flex gap-3 items-center justify-center">
-        {filteredNavLinks.map((page) => (
-          <li key={page.id}>
-            <Link
-              href={page.path ?? "/"}
-              className="relative py-2 px-4 tracking-wide inline-block"
-              onClick={() => setActivePage(page.id)}
-            >
-              <h1 className="text-gray-950 dark:text-gray-200 font-semibold">
-                {page.title}
-              </h1>
+        {IS_LOGGED_IN &&
+          filteredNavLinks.map((page) => (
+            <li key={page.id}>
+              <Link
+                href={page.path ?? "/"}
+                className="relative py-2 px-4 tracking-wide inline-block"
+                onClick={() => setActivePage(page.id)}
+              >
+                <h1 className="text-gray-950 dark:text-gray-200 font-semibold">
+                  {page.title}
+                </h1>
 
-              {activePage === page.id && (
-                <div className="absolute inset-0 bg-blue-400 rounded-full opacity-20 "></div>
-              )}
-            </Link>
-          </li>
-        ))}
+                {activePage === page.id && (
+                  <div className="absolute inset-0 bg-blue-400 rounded-full opacity-20 "></div>
+                )}
+              </Link>
+            </li>
+          ))}
       </ul>
 
       {/* Mobile Menu Toggle */}
@@ -234,20 +236,21 @@ const Navbar = () => {
       {menuOpen && (
         <div className="absolute top-16 left-0 w-full bg-white dark:bg-gray-900 border-t border-gray-300 dark:border-gray-700 md:hidden z-50">
           <ul className="flex flex-col text-center py-2">
-            {PublicNavLinks.map((page) => (
-              <li key={page.id}>
-                <Link
-                  href={page.path === undefined ? "/" : page.path}
-                  className="block py-2 text-gray-950 dark:text-gray-200 font-semibold hover:bg-gray-100 dark:hover:bg-gray-800"
-                  onClick={() => {
-                    setActivePage(page.id);
-                    setMenuOpen(false);
-                  }}
-                >
-                  {page.title}
-                </Link>
-              </li>
-            ))}
+            {IS_LOGGED_IN &&
+              PublicNavLinks.map((page) => (
+                <li key={page.id}>
+                  <Link
+                    href={page.path === undefined ? "/" : page.path}
+                    className="block py-2 text-gray-950 dark:text-gray-200 font-semibold hover:bg-gray-100 dark:hover:bg-gray-800"
+                    onClick={() => {
+                      setActivePage(page.id);
+                      setMenuOpen(false);
+                    }}
+                  >
+                    {page.title}
+                  </Link>
+                </li>
+              ))}
             <li className="flex justify-center py-2 border-t border-gray-300 dark:border-gray-700">
               {/* <UserButton /> */}
               <p className="ml-2 text-gray-950 dark:text-gray-200 font-semibold uppercase">
