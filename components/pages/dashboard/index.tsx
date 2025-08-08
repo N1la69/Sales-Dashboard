@@ -479,6 +479,8 @@ export default function Dashboard() {
             data={categoryData?.retailingByCategory || []}
             loading={categoryLoading}
             error={categoryError}
+            filters={appliedFilters}
+            source={dataSource}
           />
         </div>
         <div>

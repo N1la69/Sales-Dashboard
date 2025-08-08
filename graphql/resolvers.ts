@@ -5,6 +5,7 @@ import {
   getHighestRetailingBranch,
   getHighestRetailingBrand,
   getMonthlyRetailingTrend,
+  getRetailingBreakdown,
   getRetailingByBroadChannel,
   getRetailingByCategory,
   getRetailingWithRawSQL,
@@ -19,6 +20,14 @@ import prisma from "@/lib/utils";
 
 export const resolvers = {
   Query: {
+    // Drill-down logic
+    retailingBreakdown: async (
+      _: any,
+      { level, parent, filters, source }: any
+    ) => {
+      return await getRetailingBreakdown(level, parent, filters, source);
+    },
+
     //DASHBOARD
     retailingStats: async (_: any, { filters, source }: any) => {
       const breakdown: { year: number; value: number }[] = [];

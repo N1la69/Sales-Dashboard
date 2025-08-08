@@ -106,7 +106,10 @@ export function mergeFilterResults(
   return existing.filter((item) => incoming.includes(item));
 }
 
-export async function buildWhereClauseForRawSQL(filters: any) {
+export async function buildWhereClauseForRawSQL(
+  filters: any,
+  parentFilter?: { field: string; value: string }
+) {
   let whereClause = "";
   const params: any[] = [];
 
@@ -144,6 +147,12 @@ export async function buildWhereClauseForRawSQL(filters: any) {
     params.push(filters.StartDate, filters.EndDate);
   }
 
+  // Parent filter for drill-down
+  if (parentFilter?.field && parentFilter?.value != null) {
+    whereClause += ` AND ${parentFilter.field} = ?`;
+    params.push(parentFilter.value);
+  }
+
   return { whereClause, params };
 }
 
@@ -159,6 +168,105 @@ export async function getRetailingWithRawSQL(
     total += subtotal;
   }
   return total;
+}
+
+// Drill-down Logic
+export async function getRetailingBreakdown(
+  level: string,
+  parent: string | undefined,
+  filters: any,
+  source: string
+) {
+  const levelMap: Record<string, string> = {
+    category: "pm.category",
+    brand: "pm.brand",
+    brandform: "pm.brandform",
+    subbrandform: "pm.subbrandform",
+  };
+
+  const groupField = levelMap[level?.toLowerCase()];
+  if (!groupField) {
+    throw new Error(`Invalid level: ${level}`);
+  }
+
+  // Parent field mapping
+  let parentFilter: { field: string; value: string } | undefined;
+  if (parent) {
+    // Example: if current level is brand, parent is category
+    const parentFieldMap: Record<string, string> = {
+      brand: "pm.category",
+      brandform: "pm.brand",
+      subbrandform: "pm.brandform",
+    };
+    const parentField = parentFieldMap[level?.toLowerCase()];
+    if (parentField) {
+      parentFilter = { field: parentField, value: parent };
+    }
+  }
+
+  const tables = resolveTables(source);
+  const breakdownMap: Record<string, { [year: number]: number }> = {};
+
+  for (const table of tables) {
+    let query = `
+      SELECT ${groupField} AS group_key, YEAR(p.document_date) AS year, SUM(p.retailing) AS total
+      FROM ${table} p
+      LEFT JOIN product_mapping pm ON p.p_code = pm.p_code
+      LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
+      LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
+      WHERE 1=1
+    `;
+
+    const { whereClause, params } = await buildWhereClauseForRawSQL(
+      filters,
+      parentFilter
+    );
+    query += whereClause;
+    query += ` GROUP BY ${groupField}, YEAR(p.document_date)`;
+
+    const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
+
+    for (const row of results) {
+      const key = row.group_key || "Unknown";
+      const year = Number(row.year);
+      const value = Number(row.total);
+
+      if (!breakdownMap[key]) breakdownMap[key] = {};
+      breakdownMap[key][year] = (breakdownMap[key][year] || 0) + value;
+    }
+  }
+
+  // Build final output
+  return Object.entries(breakdownMap)
+    .map(([key, yearlyData]) => {
+      const breakdown = Object.entries(yearlyData)
+        .map(([year, retailing]) => ({
+          year: Number(year),
+          value: retailing,
+        }))
+        .sort((a, b) => b.year - a.year);
+
+      let growth: number | null = null;
+      if (breakdown.length >= 2) {
+        const latest = breakdown[0];
+        const prev = breakdown[1];
+        growth =
+          prev.value === 0
+            ? null
+            : Math.round((latest.value / prev.value) * 100);
+      }
+
+      return {
+        key,
+        name: key,
+        breakdown,
+        growth,
+        childrenCount: null, // Optional: can add COUNT DISTINCT here if needed
+      };
+    })
+    .sort(
+      (a, b) => (b.breakdown[0]?.value || 0) - (a.breakdown[0]?.value || 0)
+    );
 }
 
 // DASHBOARD page
