@@ -164,6 +164,8 @@ export default function CategoryTable({
     }
 
     return items.map((item, idx) => {
+      const rowKey = `${parentLevel}-${item.key}`;
+
       const yearlyMap: Record<number, number> = {};
       item.breakdown.forEach(({ year, value }) => {
         yearlyMap[year] = value;
@@ -187,23 +189,23 @@ export default function CategoryTable({
         item.childrenCount === null || item.childrenCount === undefined
           ? true
           : item.childrenCount > 0;
-      const isExpanded = !!expanded[item.key];
+      const isExpanded = !!expanded[rowKey];
       const nextLevel = NEXT_LEVEL[parentLevel];
 
       const toggleExpand = async () => {
         if (!nextLevel) return;
 
         if (isExpanded) {
-          setExpanded((p) => ({ ...p, [item.key]: false }));
+          setExpanded((p) => ({ ...p, [rowKey]: false }));
           return;
         }
 
-        if (childrenData[item.key]) {
-          setExpanded((p) => ({ ...p, [item.key]: true }));
+        if (childrenData[rowKey]) {
+          setExpanded((p) => ({ ...p, [rowKey]: true }));
           return;
         }
 
-        setLoadingKeys((prev) => [...prev, item.key]);
+        setLoadingKeys((prev) => [...prev, rowKey]);
 
         try {
           const res = await fetchBreakdown({
@@ -237,18 +239,18 @@ export default function CategoryTable({
 
           setChildrenData((prev) => ({
             ...prev,
-            [item.key]: sortedChildren,
+            [rowKey]: sortedChildren,
           }));
 
           // Only expand if children exist
           if (sortedChildren.length > 0) {
-            setExpanded((p) => ({ ...p, [item.key]: true }));
+            setExpanded((p) => ({ ...p, [rowKey]: true }));
           }
         } catch (err) {
           console.error("Drill fetch failed:", err);
         } finally {
           // remove from loading
-          setLoadingKeys((prev) => prev.filter((k) => k !== item.key));
+          setLoadingKeys((prev) => prev.filter((k) => k !== rowKey));
         }
       };
 
@@ -271,7 +273,7 @@ export default function CategoryTable({
       }
 
       return (
-        <React.Fragment key={item.key}>
+        <React.Fragment key={rowKey}>
           <tr
             className={`transition-colors hover:bg-muted dark:hover:bg-accent ${rowBg}`}
           >
@@ -324,10 +326,10 @@ export default function CategoryTable({
 
           {isExpanded &&
             nextLevel &&
-            childrenData[item.key] &&
-            renderRows(childrenData[item.key], depth + 1, nextLevel)}
+            childrenData[rowKey] &&
+            renderRows(childrenData[rowKey], depth + 1, nextLevel)}
 
-          {loadingKeys.includes(item.key) && (
+          {loadingKeys.includes(rowKey) && (
             <tr>
               <td
                 colSpan={(uniqueYears.length || 1) + 2}
@@ -353,7 +355,7 @@ export default function CategoryTable({
           onClick={collapseAll}
           className="text-red-500 hover:text-red-700 flex items-center gap-1 text-sm"
         >
-          <PlusCircle size={18} />
+          <MinusCircle size={18} />
         </button>
       </CardHeader>
       <CardContent className="overflow-x-auto">
