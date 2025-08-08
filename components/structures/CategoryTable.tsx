@@ -4,7 +4,9 @@
 import React, { JSX, useState } from "react";
 import { useLazyQuery, gql } from "@apollo/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { MinusCircle, PlusCircle } from "lucide-react";
 
+// ================= GraphQL Queries =================
 export const GET_RETAILING_BREAKDOWN = gql`
   query GetRetailingBreakdown(
     $level: String!
@@ -30,6 +32,7 @@ export const GET_RETAILING_BREAKDOWN = gql`
   }
 `;
 
+// ================= Utilities =================
 interface RawIncoming {
   category?: string;
   key?: string;
@@ -54,6 +57,25 @@ interface CategoryTableProps {
   source?: string; // optional source for the query
 }
 
+const PARENT_BG_COLORS = [
+  "bg-indigo-100/50 dark:bg-indigo-900/30",
+  "bg-emerald-100/50 dark:bg-emerald-900/30",
+  "bg-amber-100/50 dark:bg-amber-900/30",
+  "bg-rose-100/50 dark:bg-rose-900/30",
+  "bg-sky-100/50 dark:bg-sky-900/30",
+  "bg-violet-100/50 dark:bg-violet-900/30",
+  "bg-pink-100/50 dark:bg-pink-900/30",
+  "bg-lime-100/50 dark:bg-lime-900/30",
+  "bg-purple-100/50 dark:bg-purple-900/30",
+  "bg-cyan-100/50 dark:bg-cyan-900/30",
+];
+
+const CHILD_BG_COLORS = ["bg-gray-200/50 dark:bg-gray-800/30"];
+
+const GRANDCHILD_BG_COLORS = ["bg-slate-300/50 dark:bg-slate-700/30"];
+
+const GREATGRANDCHILD_BG_COLORS = ["bg-stone-300/50 dark:bg-stone-600/30"];
+
 const COLOR_PALETTE = [
   "text-rose-500 dark:text-rose-400",
   "text-orange-500 dark:text-orange-400",
@@ -67,25 +89,13 @@ const COLOR_PALETTE = [
   "text-emerald-500 dark:text-emerald-400",
 ];
 
-const BG_COLORS = [
-  "bg-indigo-100/50 dark:bg-indigo-900/30",
-  "bg-emerald-100/50 dark:bg-emerald-900/30",
-  "bg-amber-100/50 dark:bg-amber-900/30",
-  "bg-rose-100/50 dark:bg-rose-900/30",
-  "bg-sky-100/50 dark:bg-sky-900/30",
-  "bg-violet-100/50 dark:bg-violet-900/30",
-  "bg-pink-100/50 dark:bg-pink-900/30",
-  "bg-lime-100/50 dark:bg-lime-900/30",
-  "bg-purple-100/50 dark:bg-purple-900/30",
-  "bg-cyan-100/50 dark:bg-cyan-900/30",
-];
-
 const NEXT_LEVEL: Record<string, string> = {
   category: "brand",
   brand: "brandform",
   brandform: "subbrandform",
 };
 
+// ================= Component =================
 export default function CategoryTable({
   data = [],
   loading,
@@ -97,14 +107,12 @@ export default function CategoryTable({
   const [childrenData, setChildrenData] = useState<
     Record<string, BreakdownItem[]>
   >({});
+  const [loadingKeys, setLoadingKeys] = useState<string[]>([]);
 
   // useLazyQuery for drill-down
-  const [fetchBreakdown, { loading: drillLoading }] = useLazyQuery(
-    GET_RETAILING_BREAKDOWN,
-    {
-      fetchPolicy: "network-only",
-    }
-  );
+  const [fetchBreakdown] = useLazyQuery(GET_RETAILING_BREAKDOWN, {
+    fetchPolicy: "network-only",
+  });
 
   if (loading) return <p className="dark:text-white">Loading categories...</p>;
   if (error)
@@ -140,12 +148,21 @@ export default function CategoryTable({
     return bLatest - aLatest;
   });
 
+  // collapse-all handler
+  const collapseAll = () => {
+    setExpanded({});
+  };
+
   // returns an array of JSX elements
   const renderRows = (
     items: BreakdownItem[],
     depth: number,
     parentLevel: string
   ): JSX.Element[] => {
+    if (!items || items.length === 0 || !parentLevel) {
+      return [];
+    }
+
     return items.map((item, idx) => {
       const yearlyMap: Record<number, number> = {};
       item.breakdown.forEach(({ year, value }) => {
@@ -181,7 +198,12 @@ export default function CategoryTable({
           return;
         }
 
-        setExpanded((p) => ({ ...p, [item.key]: true }));
+        if (childrenData[item.key]) {
+          setExpanded((p) => ({ ...p, [item.key]: true }));
+          return;
+        }
+
+        setLoadingKeys((prev) => [...prev, item.key]);
 
         try {
           const res = await fetchBreakdown({
@@ -217,26 +239,46 @@ export default function CategoryTable({
             ...prev,
             [item.key]: sortedChildren,
           }));
+
+          // Only expand if children exist
+          if (sortedChildren.length > 0) {
+            setExpanded((p) => ({ ...p, [item.key]: true }));
+          }
         } catch (err) {
           console.error("Drill fetch failed:", err);
-          setExpanded((p) => ({ ...p, [item.key]: false }));
+        } finally {
+          // remove from loading
+          setLoadingKeys((prev) => prev.filter((k) => k !== item.key));
         }
       };
 
       // Row color indexing
-      const colorIdx = idx % BG_COLORS.length;
-      const textColorIdx = idx % COLOR_PALETTE.length;
+      let colorIdx: number;
+      let rowBg: string;
+
+      if (depth === 0) {
+        colorIdx = idx % PARENT_BG_COLORS.length;
+        rowBg = PARENT_BG_COLORS[colorIdx];
+      } else if (depth === 1) {
+        colorIdx = idx % CHILD_BG_COLORS.length;
+        rowBg = CHILD_BG_COLORS[colorIdx];
+      } else if (depth === 2) {
+        colorIdx = idx % GRANDCHILD_BG_COLORS.length;
+        rowBg = GRANDCHILD_BG_COLORS[colorIdx];
+      } else {
+        colorIdx = idx % GREATGRANDCHILD_BG_COLORS.length;
+        rowBg = GREATGRANDCHILD_BG_COLORS[colorIdx];
+      }
 
       return (
         <React.Fragment key={item.key}>
           <tr
-            className={`transition-colors hover:bg-muted dark:hover:bg-accent ${BG_COLORS[colorIdx]}`}
+            className={`transition-colors hover:bg-muted dark:hover:bg-accent ${rowBg}`}
           >
             <td
-              className={`px-4 py-2 font-medium ${COLOR_PALETTE[textColorIdx]} rounded-l-lg`}
+              className={`px-4 py-2 font-medium ${COLOR_PALETTE[colorIdx]} rounded-l-lg`}
               style={{ paddingLeft: `${depth * 1.5}rem` }}
             >
-              {/* clickable area */}
               <button
                 onClick={toggleExpand}
                 className="flex items-center gap-2 w-full text-left"
@@ -245,14 +287,18 @@ export default function CategoryTable({
                   item.name
                 }`}
               >
-                {/* show arrow if nextLevel exists */}
-                {nextLevel && isExpandable ? (
-                  <span className="cursor-pointer select-none">
-                    {isExpanded ? "▼" : "▶"}
+                {nextLevel && isExpandable && item.childrenCount !== 0 ? (
+                  <span className="cursor-pointer select-none pl-2">
+                    {isExpanded ? (
+                      <MinusCircle size={12} />
+                    ) : (
+                      <PlusCircle size={12} />
+                    )}
                   </span>
                 ) : (
                   <span style={{ width: 18, display: "inline-block" }} />
                 )}
+
                 <span>{item.name || "Unknown"}</span>
               </button>
             </td>
@@ -276,13 +322,12 @@ export default function CategoryTable({
             </td>
           </tr>
 
-          {/* children (if expanded) */}
           {isExpanded &&
+            nextLevel &&
             childrenData[item.key] &&
-            renderRows(childrenData[item.key], depth + 1, nextLevel ?? "")}
+            renderRows(childrenData[item.key], depth + 1, nextLevel)}
 
-          {/* loading row */}
-          {isExpanded && drillLoading && (
+          {loadingKeys.includes(item.key) && (
             <tr>
               <td
                 colSpan={(uniqueYears.length || 1) + 2}
@@ -300,16 +345,22 @@ export default function CategoryTable({
 
   return (
     <Card className="shadow-md bg-slate-100/40 dark:bg-slate-800/30 border-transparent">
-      <CardHeader>
+      <CardHeader className="flex flex-row justify-between items-center">
         <CardTitle className="text-xl font-semibold text-center">
           Retailing by Category (in Lakhs)
         </CardTitle>
+        <button
+          onClick={collapseAll}
+          className="text-red-500 hover:text-red-700 flex items-center gap-1 text-sm"
+        >
+          <PlusCircle size={18} />
+        </button>
       </CardHeader>
       <CardContent className="overflow-x-auto">
         <table className="min-w-full text-sm text-left border-separate border-spacing-y-2">
           <thead>
             <tr>
-              <th className="px-4 py-2">Name</th>
+              <th className="px-4 py-2">Category</th>
               {uniqueYears.length > 0 ? (
                 uniqueYears.map((year) => (
                   <th key={year} className="px-4 py-2 text-right">
