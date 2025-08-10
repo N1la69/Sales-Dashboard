@@ -30,38 +30,6 @@ model psr_data {
   retailing     Decimal  @db.Decimal(12, 2) //
 }
 
-model channel_mapping {
-  channel_id    Int    @id @default(autoincrement())
-  customer_type String @db.VarChar(90)
-  channel       String @db.VarChar(45)
-  broad_channel String @db.VarChar(45) //
-  short_channel String @db.VarChar(45) //
-}
-
-model store_mapping {
-  Id             Int    @id @default(autoincrement())
-  Old_Store_Code String @db.VarChar(45)
-  New_Store_Code String @db.VarChar(45)
-  customer_name  String @db.VarChar(120)
-  customer_type  String @db.VarChar(90)
-  New_Branch     String @db.VarChar(45)
-  DSE_Code       String @db.VarChar(45)
-  ZM             String @db.VarChar(45)
-  SM             String @db.VarChar(45)
-  BE             String @db.VarChar(45)
-  STL            String @db.VarChar(45)
-}
-
-model product_mapping {
-  Id           Int    @id @default(autoincrement())
-  p_code       Int    @db.Int()
-  desc_short   String @db.VarChar(90)
-  category     String @db.VarChar(45)
-  brand        String @db.VarChar(45)
-  brandform    String @db.VarChar(45)
-  subbrandform String @db.VarChar(90)
-}
-
 model psr_data_temp {
   psr_id        Int      @id @default(autoincrement())
   document_no   String   @db.VarChar(45)
@@ -77,35 +45,66 @@ model psr_data_temp {
   retailing     Decimal  @db.Decimal(12, 2)
 }
 
-model User {
-  id             Int              @id @default(autoincrement())
-  name           String           @db.VarChar(120)
-  email          String           @unique @db.VarChar(120)
-  hash           String?          @db.Text
-  salt           String?          @db.Text
-  role           String           @default("staff")
-  isActive       Boolean          @default(true)
-  lastLogin      DateTime         @default(now())
-  image          String           @default("https://picsum.photos/100/100")
-
-  // OTP and verification - fixed (no @default(null))
-  resetPasswordOTP        Int?
-  verificationOTP         Int?
-  verificationOTPExpires  DateTime?
-  resetPasswordExpires    DateTime?
-  otpAttempts             Int?
-  lastOTPAttemptAt        DateTime?
-  otpCooldownUntil        DateTime?
-
-  // Relations
-  permissionSets PermissionSet[]  @relation("UserPermissions")
+model channel_mapping {
+  channel_id    Int    @id @default(autoincrement())
+  customer_type String @db.VarChar(90)
+  base_channel  String @db.VarChar(45) //
+  short_channel String @db.VarChar(45) //
+  channel_desc  String @db.VarChar(45)
 }
 
+model store_mapping {
+  Id             Int    @id @default(autoincrement())
+  Old_Store_Code String @db.VarChar(45)
+  New_Store_Code String @db.VarChar(45)
+  customer_name  String @db.VarChar(120)
+  customer_type  String @db.VarChar(90)
+  Branch         String @db.VarChar(45)
+  DSE_Code       String @db.VarChar(45)
+  ZM             String @db.VarChar(45)
+  RSM            String @db.VarChar(45)
+  ASM            String @db.VarChar(45)
+  TSI            String @db.VarChar(45)
+}
+
+model product_mapping {
+  Id           Int    @id @default(autoincrement())
+  p_code       Int    @db.Int()
+  desc_short   String @db.VarChar(90)
+  category     String @db.VarChar(45)
+  brand        String @db.VarChar(45)
+  brandform    String @db.VarChar(45)
+  subbrandform String @db.VarChar(90)
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(120)
+  email     String   @unique @db.VarChar(120)
+  hash      String?  @db.Text
+  salt      String?  @db.Text
+  role      String   @default("staff")
+  isActive  Boolean  @default(true)
+  lastLogin DateTime @default(now())
+  image     String   @default("https://picsum.photos/100/100")
+
+  // OTP and verification - fixed (no @default(null))
+  resetPasswordOTP       Int?
+  verificationOTP        Int?
+  verificationOTPExpires DateTime?
+  resetPasswordExpires   DateTime?
+  otpAttempts            Int?
+  lastOTPAttemptAt       DateTime?
+  otpCooldownUntil       DateTime?
+
+  // Relations
+  permissionSets PermissionSet[] @relation("UserPermissions")
+}
 
 model PermissionSet {
-  id          Int     @id @default(autoincrement())
-  user        User    @relation("UserPermissions", fields: [userId], references: [id])
+  id          Int    @id @default(autoincrement())
+  user        User   @relation("UserPermissions", fields: [userId], references: [id])
   userId      Int
-  page        String  @db.VarChar(100)
+  page        String @db.VarChar(100)
   permissions Json
 }

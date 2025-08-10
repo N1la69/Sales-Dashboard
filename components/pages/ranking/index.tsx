@@ -39,11 +39,11 @@ const GET_TOP_STORES = gql`
     $source: String!
     $months: Int
     $zm: String
-    $sm: String
-    $be: String
+    $rsm: String
+    $asm: String
     $category: String
     $branch: String
-    $broadChannel: String
+    $baseChannel: String
     $brand: String
     $startDate: String
     $endDate: String
@@ -54,11 +54,11 @@ const GET_TOP_STORES = gql`
       source: $source
       months: $months
       zm: $zm
-      sm: $sm
-      be: $be
+      rsm: $rsm
+      asm: $asm
       category: $category
       branch: $branch
-      broadChannel: $broadChannel
+      baseChannel: $baseChannel
       brand: $brand
       startDate: $startDate
       endDate: $endDate
@@ -81,11 +81,11 @@ const GET_DOWNLOAD_TOP_STORES = gql`
     $source: String!
     $months: Int!
     $zm: String
-    $sm: String
-    $be: String
+    $rsm: String
+    $asm: String
     $category: String
     $branch: String
-    $broadChannel: String
+    $baseChannel: String
     $brand: String
     $startDate: String
     $endDate: String
@@ -94,11 +94,11 @@ const GET_DOWNLOAD_TOP_STORES = gql`
       source: $source
       months: $months
       zm: $zm
-      sm: $sm
-      be: $be
+      rsm: $rsm
+      asm: $asm
       category: $category
       branch: $branch
-      broadChannel: $broadChannel
+      baseChannel: $baseChannel
       brand: $brand
       startDate: $startDate
       endDate: $endDate
@@ -131,12 +131,10 @@ const RankingPage = () => {
   const startDate = dateRange?.from;
   const endDate = dateRange?.to;
   const [zm, setZm] = useState<string | undefined>(undefined);
-  const [sm, setSm] = useState<string | undefined>(undefined);
-  const [be, setBe] = useState<string | undefined>(undefined);
+  const [rsm, setRsm] = useState<string | undefined>(undefined);
+  const [asm, setAsm] = useState<string | undefined>(undefined);
   const [branch, setBranch] = useState<string | undefined>(undefined);
-  const [broadChannel, setBroadChannel] = useState<string | undefined>(
-    undefined
-  );
+  const [baseChannel, setBaseChannel] = useState<string | undefined>(undefined);
   const [brand, setBrand] = useState<string | undefined>(undefined);
   const [category, setCategory] = useState<string | undefined>(undefined);
 
@@ -152,11 +150,11 @@ const RankingPage = () => {
       source: dataSource,
       months: startDate && endDate ? undefined : months,
       zm,
-      sm,
-      be,
+      rsm,
+      asm,
       category,
       branch: branch,
-      broadChannel,
+      baseChannel,
       brand,
       startDate: startDate ? startDate.toISOString().slice(0, 10) : undefined,
       endDate: endDate ? endDate.toISOString().slice(0, 10) : undefined,
@@ -245,12 +243,12 @@ const RankingPage = () => {
         source: dataSource,
         months,
         zm,
-        sm,
-        be,
+        rsm,
+        asm,
         category,
         branch,
         brand,
-        broadChannel,
+        baseChannel,
         startDate,
         endDate,
       },
@@ -285,11 +283,11 @@ const RankingPage = () => {
           source: dataSource,
           months,
           zm,
-          sm,
-          be,
+          rsm,
+          asm,
           category,
           branch,
-          broadChannel,
+          baseChannel,
           brand,
           startDate: startDate
             ? startDate.toISOString().slice(0, 10)
@@ -310,11 +308,11 @@ const RankingPage = () => {
     dataSource,
     months,
     zm,
-    sm,
-    be,
+    rsm,
+    asm,
     category,
     branch,
-    broadChannel,
+    baseChannel,
     brand,
     startDate,
     endDate,
@@ -407,11 +405,11 @@ const RankingPage = () => {
         </Popover>
 
         {/* Select Filters */}
-        {[zm, sm, be, branch, category, brand, broadChannel].map((val, i) => {
+        {[zm, rsm, asm, branch, category, brand, baseChannel].map((val, i) => {
           const keys = [
             "Select ZM",
-            "Select SM",
-            "Select BE",
+            "Select RSM",
+            "Select ASM",
             "Select Branch",
             "Select Category",
             "Select Brand",
@@ -419,21 +417,21 @@ const RankingPage = () => {
           ];
           const setters = [
             setZm,
-            setSm,
-            setBe,
+            setRsm,
+            setAsm,
             setBranch,
             setCategory,
             setBrand,
-            setBroadChannel,
+            setBaseChannel,
           ];
           const lists = [
             filterValues.zms,
-            filterValues.sms,
-            filterValues.bes,
+            filterValues.rsms,
+            filterValues.asms,
             filterValues.branches,
             filterValues.categories,
             filterValues.brands,
-            filterValues.broadChannels,
+            filterValues.baseChannels,
           ];
           return (
             <Select key={keys[i]} value={val} onValueChange={setters[i]}>
@@ -441,7 +439,7 @@ const RankingPage = () => {
                 <SelectValue placeholder={keys[i]} />
               </SelectTrigger>
               <SelectContent>
-                {lists[i].map((option) => (
+                {lists[i].map((option: string) => (
                   <SelectItem key={option} value={option}>
                     {option}
                   </SelectItem>
@@ -457,11 +455,11 @@ const RankingPage = () => {
             variant="default"
             onClick={() => {
               setZm("");
-              setSm("");
-              setBe("");
+              setRsm("");
+              setAsm("");
               setCategory("");
               setBranch("");
-              setBroadChannel("");
+              setBaseChannel("");
               setBrand("");
               setMonths(3);
               setDateRange(undefined);

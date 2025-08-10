@@ -72,13 +72,13 @@ const GET_CATEGORY_PERCENTAGE = gql`
   }
 `;
 
-const GET_BROAD_CHANNEL_PERCENTAGE = gql`
-  query GetBroadChannelRetailingPercentage(
+const GET_BASE_CHANNEL_PERCENTAGE = gql`
+  query GetBaseChannelRetailingPercentage(
     $filters: FilterInput
     $source: String
   ) {
-    retailingByBroadChannel(filters: $filters, source: $source) {
-      broad_channel
+    retailingByBaseChannel(filters: $filters, source: $source) {
+      base_channel
       breakdown {
         year
         value
@@ -170,10 +170,10 @@ export default function Dashboard() {
   } = useQuery(GET_CATEGORY_PERCENTAGE, queryOptions);
 
   const {
-    data: broadChannelData,
-    loading: broadChannelLoading,
-    error: broadChannelError,
-  } = useQuery(GET_BROAD_CHANNEL_PERCENTAGE, queryOptions);
+    data: baseChannelData,
+    loading: baseChannelLoading,
+    error: baseChannelError,
+  } = useQuery(GET_BASE_CHANNEL_PERCENTAGE, queryOptions);
 
   const {
     data: monthlyTrendData,
@@ -406,9 +406,9 @@ export default function Dashboard() {
           </div>
           <div className="w-full sm:w-1/2 h-full">
             <RetailingChannelPie
-              data={broadChannelData?.retailingByBroadChannel}
-              loading={broadChannelLoading}
-              error={broadChannelError}
+              data={baseChannelData?.retailingByBaseChannel}
+              loading={baseChannelLoading}
+              error={baseChannelError}
             />
           </div>
         </div>
@@ -485,9 +485,9 @@ export default function Dashboard() {
         </div>
         <div>
           <BroadChannelTable
-            data={broadChannelData?.retailingByBroadChannel || []}
-            loading={broadChannelLoading}
-            error={broadChannelError}
+            data={baseChannelData?.retailingByBaseChannel || []}
+            loading={baseChannelLoading}
+            error={baseChannelError}
           />
         </div>
       </section>

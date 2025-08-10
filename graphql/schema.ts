@@ -10,13 +10,19 @@ export const typeDefs = gql`
     Subbrandform: [String]
     Branch: [String]
     ZM: [String]
-    SM: [String]
-    BE: [String]
-    Channel: [String]
-    BroadChannel: [String]
+    RSM: [String]
+    ASM: [String]
+    TSI: [String]
+    ChannelDesc: [String]
+    BaseChannel: [String]
     ShortChannel: [String]
     StartDate: String
     EndDate: String
+  }
+
+  type YearlyRetailing {
+    year: Int!
+    value: Float!
   }
 
   type HierarchyNode {
@@ -25,11 +31,6 @@ export const typeDefs = gql`
     breakdown: [YearlyRetailing!]!
     growth: Float
     childrenCount: Int
-  }
-
-  type YearlyRetailing {
-    year: Int!
-    value: Float!
   }
 
   type RetailingStats {
@@ -54,8 +55,8 @@ export const typeDefs = gql`
     breakdown: [YearlyRetailing!]
   }
 
-  type BroadChannelRetailing {
-    broad_channel: String
+  type BaseChannelRetailing {
+    base_channel: String
     breakdown: [YearlyRetailing!]
   }
 
@@ -75,12 +76,12 @@ export const typeDefs = gql`
     id: Int
     Old_Store_Code: String
     New_Store_Code: String
-    New_Branch: String
+    Branch: String
     DSE_Code: String
     ZM: String
-    SM: String
-    BE: String
-    STL: String
+    RSM: String
+    ASM: String
+    TSI: String
     customer_type: String
     customer_name: String
   }
@@ -155,10 +156,10 @@ export const typeDefs = gql`
       filters: FilterInput
       source: String
     ): [CategoryRetailing]
-    retailingByBroadChannel(
+    retailingByBaseChannel(
       filters: FilterInput
       source: String
-    ): [BroadChannelRetailing]
+    ): [BaseChannelRetailing]
     monthlyRetailingTrend(
       filters: FilterInput
       source: String
@@ -191,11 +192,12 @@ export const typeDefs = gql`
       source: String!
       months: Int
       zm: String
-      sm: String
-      be: String
+      rsm: String
+      asm: String
+      tsi: String
       category: String
       branch: String
-      broadChannel: String
+      baseChannel: String
       brand: String
       startDate: String
       endDate: String
@@ -206,12 +208,13 @@ export const typeDefs = gql`
       source: String!
       months: Int!
       zm: String
-      sm: String
-      be: String
+      rsm: String
+      asm: String
+      tsi: String
       category: String
       branch: String
       brand: String
-      broadChannel: String
+      baseChannel: String
       startDate: String
       endDate: String
     ): [DownloadTopStore!]!

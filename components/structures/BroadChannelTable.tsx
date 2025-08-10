@@ -29,22 +29,22 @@ const BG_COLORS = [
   "bg-cyan-100/50 dark:bg-cyan-900/30",
 ];
 
-interface BroadChannelItem {
-  broad_channel: string;
+interface BaseChannelItem {
+  base_channel: string;
   breakdown: { year: number; value: number }[];
 }
 
-interface BroadChannelTableProps {
-  data: BroadChannelItem[];
+interface BaseChannelTableProps {
+  data: BaseChannelItem[];
   loading: boolean;
   error: any;
 }
 
-export default function BroadChannelTable({
+export default function BaseChannelTable({
   data = [],
   loading,
   error,
-}: BroadChannelTableProps) {
+}: BaseChannelTableProps) {
   if (loading) return <p className="dark:text-white">Loading channels...</p>;
   if (error)
     return (
@@ -59,12 +59,12 @@ export default function BroadChannelTable({
   const [latestYear, previousYear] = uniqueYears;
 
   const channelMap: Record<string, Record<number, number>> = {};
-  const allChannels = data.map((item) => item.broad_channel);
+  const allChannels = data.map((item) => item.base_channel);
 
-  data.forEach(({ broad_channel, breakdown }) => {
-    if (!channelMap[broad_channel]) channelMap[broad_channel] = {};
+  data.forEach(({ base_channel, breakdown }) => {
+    if (!channelMap[base_channel]) channelMap[base_channel] = {};
     breakdown.forEach(({ year, value }) => {
-      channelMap[broad_channel][year] = value;
+      channelMap[base_channel][year] = value;
     });
   });
 

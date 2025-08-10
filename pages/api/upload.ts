@@ -81,13 +81,14 @@ export default async function handler(
         console.log(`🔍 Rows parsed: ${data.length}`);
         const chunkSize = 2000;
 
+        // CHANNEL
         if (type === "channel") {
           console.log("🗂 Mapping channel data...");
           const mappedData = data.map((row) => ({
             customer_type: row[1]?.toString() || "",
-            channel: row[2]?.toString() || "",
-            broad_channel: row[3]?.toString() || "",
-            short_channel: row[4]?.toString() || "",
+            base_channel: row[2]?.toString() || "",
+            short_channel: row[3]?.toString() || "",
+            channel_desc: row[4]?.toString() || "",
           }));
 
           console.log("🧹 Deleting existing channel data...");
@@ -101,19 +102,21 @@ export default async function handler(
           }
           console.log("✅ Channel data inserted.");
           runGenerateFilters();
-        } else if (type === "store") {
+        }
+        // STORE
+        else if (type === "store") {
           console.log("🗂 Mapping store data...");
           const mappedData = data.map((row) => ({
             Old_Store_Code: row[1]?.toString() || "",
             New_Store_Code: row[2]?.toString() || "",
             customer_name: row[3]?.toString() || "",
             customer_type: row[4]?.toString() || "",
-            New_Branch: row[5]?.toString() || "",
+            Branch: row[5]?.toString() || "",
             DSE_Code: row[6]?.toString() || "",
             ZM: row[7]?.toString() || "",
-            SM: row[8]?.toString() || "",
-            BE: row[9]?.toString() || "",
-            STL: row[10]?.toString() || "",
+            RSM: row[8]?.toString() || "",
+            ASM: row[9]?.toString() || "",
+            TSI: row[10]?.toString() || "",
           }));
 
           console.log("🧹 Deleting existing store data...");
@@ -127,7 +130,9 @@ export default async function handler(
           }
           console.log("✅ Store data inserted.");
           runGenerateFilters();
-        } else if (type === "product") {
+        }
+        // PRODUCT
+        else if (type === "product") {
           console.log("🗂 Mapping product data...");
           const mappedData = data.map((row) => ({
             p_code: Number(row[1]) || 0,

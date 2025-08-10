@@ -28,8 +28,8 @@ async function generateFilterValues() {
   });
 
   const branches = await prisma.store_mapping.findMany({
-    distinct: ["New_Branch"],
-    select: { New_Branch: true },
+    distinct: ["Branch"],
+    select: { Branch: true },
   });
 
   const zms = await prisma.store_mapping.findMany({
@@ -37,24 +37,29 @@ async function generateFilterValues() {
     select: { ZM: true },
   });
 
-  const sms = await prisma.store_mapping.findMany({
-    distinct: ["SM"],
-    select: { SM: true },
+  const rsms = await prisma.store_mapping.findMany({
+    distinct: ["RSM"],
+    select: { RSM: true },
   });
 
-  const bes = await prisma.store_mapping.findMany({
-    distinct: ["BE"],
-    select: { BE: true },
+  const asms = await prisma.store_mapping.findMany({
+    distinct: ["ASM"],
+    select: { ASM: true },
   });
 
-  const channels = await prisma.channel_mapping.findMany({
-    distinct: ["channel"],
-    select: { channel: true },
+  const tsis = await prisma.store_mapping.findMany({
+    distinct: ["TSI"],
+    select: { TSI: true },
   });
 
-  const broadChannels = await prisma.channel_mapping.findMany({
-    distinct: ["broad_channel"],
-    select: { broad_channel: true },
+  const channelDescs = await prisma.channel_mapping.findMany({
+    distinct: ["channel_desc"],
+    select: { channel_desc: true },
+  });
+
+  const baseChannels = await prisma.channel_mapping.findMany({
+    distinct: ["base_channel"],
+    select: { base_channel: true },
   });
 
   const shortChannels = await prisma.channel_mapping.findMany({
@@ -62,39 +67,35 @@ async function generateFilterValues() {
     select: { short_channel: true },
   });
 
+  const clean = (values: { [key: string]: string }[], key: string) =>
+    values
+      .map((v) => v[key])
+      .filter((val) => val && val.trim().toUpperCase() !== "NA");
+
   const filterValues = {
     years,
     months,
-    categories: categories.map((c: { category: string }) => c.category),
-    brands: brands.map((b: { brand: string }) => b.brand),
-    brandforms: brandforms.map((bf: { brandform: string }) => bf.brandform),
-    subbrandforms: subbrandforms.map(
-      (sbf: { subbrandform: string }) => sbf.subbrandform
-    ),
-    branches: branches.map((b: { New_Branch: string }) => b.New_Branch),
-    zms: zms.map((z: { ZM: string }) => z.ZM),
-    sms: sms.map((s: { SM: string }) => s.SM),
-    bes: bes.map((b: { BE: string }) => b.BE),
-    channels: channels.map((c: { channel: string }) => c.channel),
-    broadChannels: broadChannels.map(
-      (bc: { broad_channel: string }) => bc.broad_channel
-    ),
-    shortChannels: shortChannels.map(
-      (sc: { short_channel: string }) => sc.short_channel
-    ),
+    categories: clean(categories, "category"),
+    brands: clean(brands, "brand"),
+    brandforms: clean(brandforms, "brandform"),
+    subbrandforms: clean(subbrandforms, "subbrandform"),
+    branches: clean(branches, "Branch"),
+    zms: clean(zms, "ZM"),
+    rsms: clean(rsms, "RSM"), // "NA" removed here
+    asms: clean(asms, "ASM"), // "NA" removed here
+    tsis: clean(tsis, "TSI"),
+    channelDescs: clean(channelDescs, "channel_desc"),
+    baseChannels: clean(baseChannels, "base_channel"),
+    shortChannels: clean(shortChannels, "short_channel"),
   };
 
   const outputPath = path.join(process.cwd(), "constants", "filterValues.ts");
   const fileContent = `// AUTO-GENERATED FILE - DO NOT EDIT MANUALLY
 
-                    const filterValues = ${JSON.stringify(
-                      filterValues,
-                      null,
-                      2
-                    )} as const;
+const filterValues = ${JSON.stringify(filterValues, null, 2)} as const;
 
-                    export default filterValues;
-                    `;
+export default filterValues;
+`;
 
   writeFileSync(outputPath, fileContent, "utf-8");
   console.log("✅ Filter values generated at constants/filterValues.ts");

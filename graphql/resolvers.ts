@@ -6,7 +6,7 @@ import {
   getHighestRetailingBrand,
   getMonthlyRetailingTrend,
   getRetailingBreakdown,
-  getRetailingByBroadChannel,
+  getRetailingByBaseChannel,
   getRetailingByCategory,
   getRetailingWithRawSQL,
   getStoreDetails,
@@ -75,8 +75,8 @@ export const resolvers = {
     retailingByCategory: async (_: any, { filters, source }: any) => {
       return await getRetailingByCategory(filters, source);
     },
-    retailingByBroadChannel: async (_: any, { filters, source }: any) => {
-      return await getRetailingByBroadChannel(filters, source);
+    retailingByBaseChannel: async (_: any, { filters, source }: any) => {
+      return await getRetailingByBaseChannel(filters, source);
     },
     monthlyRetailingTrend: async (_: any, { filters, source }: any) => {
       return await getMonthlyRetailingTrend(filters, source);
@@ -154,11 +154,11 @@ export const resolvers = {
         source,
         months,
         zm,
-        sm,
-        be,
+        rsm,
+        asm,
         category,
         branch,
-        broadChannel,
+        baseChannel,
         brand,
         startDate,
         endDate,
@@ -168,11 +168,11 @@ export const resolvers = {
         source: string;
         months: number;
         zm?: string;
-        sm?: string;
-        be?: string;
+        rsm?: string;
+        asm?: string;
         category?: string;
         branch?: string;
-        broadChannel?: string;
+        baseChannel?: string;
         brand?: string;
         startDate?: string;
         endDate?: string;
@@ -185,11 +185,11 @@ export const resolvers = {
           source,
           months,
           zm,
-          sm,
-          be,
+          rsm,
+          asm,
           category,
           branch,
-          broadChannel,
+          baseChannel,
           brand,
           startDate,
           endDate,
@@ -204,11 +204,11 @@ export const resolvers = {
             source,
             months,
             zm,
-            sm,
-            be,
+            rsm,
+            asm,
             category,
             branch,
-            broadChannel,
+            baseChannel,
             brand,
             startDate,
             endDate,
@@ -238,11 +238,11 @@ export const resolvers = {
         source,
         months = 3,
         zm,
-        sm,
-        be,
+        rsm,
+        asm,
         category,
         branch,
-        broadChannel,
+        baseChannel,
         brand,
         startDate,
         endDate,
@@ -250,11 +250,11 @@ export const resolvers = {
         source: string;
         months: number;
         zm?: string;
-        sm?: string;
-        be?: string;
+        rsm?: string;
+        asm?: string;
         category?: string;
         branch?: string;
-        broadChannel?: string;
+        baseChannel?: string;
         brand?: string;
         startDate?: string;
         endDate?: string;
@@ -265,11 +265,11 @@ export const resolvers = {
           source,
           months,
           zm,
-          sm,
-          be,
+          rsm,
+          asm,
           category,
           branch,
-          broadChannel,
+          baseChannel,
           brand,
           startDate,
           endDate,

@@ -100,13 +100,17 @@ export const filters = [
   },
   { label: "Branch", key: "Branch", values: filterValues.branches },
   { label: "ZM", key: "ZM", values: filterValues.zms },
-  { label: "SM", key: "SM", values: filterValues.sms },
-  { label: "BE", key: "BE", values: filterValues.bes },
-  { label: "Channel", key: "Channel", values: filterValues.channels },
+  { label: "RSM", key: "RSM", values: filterValues.rsms },
+  { label: "ASM", key: "ASM", values: filterValues.asms },
   {
-    label: "Broad Channel",
-    key: "BroadChannel",
-    values: filterValues.broadChannels,
+    label: "Channel Desc",
+    key: "ChannelDesc",
+    values: filterValues.channelDescs,
+  },
+  {
+    label: "Base Channel",
+    key: "BaseChannel",
+    values: filterValues.baseChannels,
   },
   {
     label: "Short Channel",

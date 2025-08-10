@@ -32,7 +32,7 @@ interface ChannelBreakdownItem {
 
 interface RetailingChannelPieProps {
   data: {
-    broad_channel: string;
+    base_channel: string;
     breakdown: ChannelBreakdownItem[];
   }[];
   loading?: boolean;
@@ -44,21 +44,21 @@ export default function RetailingChannelPie({
   loading,
   error,
 }: RetailingChannelPieProps) {
-  if (loading) return <p>Loading channel data...</p>;
-  if (error) return <p>Error loading channel data: {error.message}</p>;
-  if (!data.length) return <p>No channel data available.</p>;
-
   const allYears = Array.from(
     new Set(data.flatMap((item) => item.breakdown.map((b) => b.year)))
   ).sort((a, b) => b - a);
 
   const [selectedYear, setSelectedYear] = useState<number>(allYears[0]);
 
+  if (loading) return <p>Loading channel data...</p>;
+  if (error) return <p>Error loading channel data: {error.message}</p>;
+  if (!data.length) return <p>No channel data available.</p>;
+
   const selectedYearData = data
     .map((item) => {
       const entry = item.breakdown.find((b) => b.year === selectedYear);
       return {
-        name: item.broad_channel || "Unknown",
+        name: item.base_channel || "Unknown",
         value: entry?.value ?? 0,
       };
     })

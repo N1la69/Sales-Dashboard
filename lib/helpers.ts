@@ -6,11 +6,12 @@ interface TopStoresQueryParams {
   source: string;
   months?: number;
   zm?: string;
-  sm?: string;
-  be?: string;
+  rsm?: string;
+  asm?: string;
+  tsi?: string;
   category?: string;
   branch?: string;
-  broadChannel?: string;
+  baseChannel?: string;
   brand?: string;
   startDate?: string;
   endDate?: string;
@@ -122,9 +123,10 @@ export async function buildWhereClauseForRawSQL(
 
   // Store filters (store_mapping alias = s)
   addInClause(filters.ZM, "s.ZM");
-  addInClause(filters.Branch, "s.New_Branch");
-  addInClause(filters.SM, "s.SM");
-  addInClause(filters.BE, "s.BE");
+  addInClause(filters.Branch, "s.Branch");
+  addInClause(filters.RSM, "s.RSM");
+  addInClause(filters.ASM, "s.ASM");
+  addInClause(filters.TSI, "s.TSI");
 
   // Date filters (psr_data alias = p)
   addInClause(filters.Year, "YEAR(p.document_date)");
@@ -137,8 +139,8 @@ export async function buildWhereClauseForRawSQL(
   addInClause(filters.Subbrandform, "pm.subbrandform");
 
   // Channel filters (channel_mapping alias = c)
-  addInClause(filters.Channel, "c.channel");
-  addInClause(filters.BroadChannel, "c.broad_channel");
+  addInClause(filters.ChannelDesc, "c.channel_desc");
+  addInClause(filters.BaseChannel, "c.base_channel");
   addInClause(filters.ShortChannel, "c.short_channel");
 
   // Date range filter
@@ -286,9 +288,10 @@ export async function getTotalRetailing(
 
   // Store filters
   query = addInClause(query, params, filters.ZM, "s.ZM");
-  query = addInClause(query, params, filters.Branch, "s.New_Branch");
-  query = addInClause(query, params, filters.SM, "s.SM");
-  query = addInClause(query, params, filters.BE, "s.BE");
+  query = addInClause(query, params, filters.Branch, "s.Branch");
+  query = addInClause(query, params, filters.RSM, "s.RSM");
+  query = addInClause(query, params, filters.ASM, "s.ASM");
+  query = addInClause(query, params, filters.TSI, "s.TSI");
 
   // Date filters
   if (filters.StartDate && filters.EndDate) {
@@ -306,8 +309,8 @@ export async function getTotalRetailing(
   query = addInClause(query, params, filters.Subbrandform, "pm.subbrandform");
 
   // Channel mapping
-  query = addInClause(query, params, filters.Channel, "c.channel");
-  query = addInClause(query, params, filters.BroadChannel, "c.broad_channel");
+  query = addInClause(query, params, filters.Channel, "c.channel_desc");
+  query = addInClause(query, params, filters.BroadChannel, "c.base_channel");
   query = addInClause(query, params, filters.ShortChannel, "c.short_channel");
 
   const result: any[] = await prisma.$queryRawUnsafe(query, ...params);
@@ -324,7 +327,7 @@ export async function getHighestRetailingBranch(filters: any, source: string) {
 
     for (const table of tables) {
       let query = `
-        SELECT s.New_Branch AS branch, SUM(p.retailing) AS total
+        SELECT s.Branch AS branch, SUM(p.retailing) AS total
         FROM ${table} p
         LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
         LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
@@ -337,7 +340,7 @@ export async function getHighestRetailingBranch(filters: any, source: string) {
         Year: [year],
       });
 
-      query += whereClause + ` GROUP BY s.New_Branch`;
+      query += whereClause + ` GROUP BY s.Branch`;
 
       const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
 
@@ -497,13 +500,13 @@ export async function getRetailingByCategory(filters: any, source: string) {
   });
 }
 
-export async function getRetailingByBroadChannel(filters: any, source: string) {
+export async function getRetailingByBaseChannel(filters: any, source: string) {
   const tables = resolveTables(source);
   const breakdownMap: Record<string, Record<number, number>> = {};
 
   for (const table of tables) {
     let query = `
-      SELECT c.broad_channel, YEAR(p.document_date) AS year, SUM(p.retailing) AS total
+      SELECT c.base_channel, YEAR(p.document_date) AS year, SUM(p.retailing) AS total
       FROM ${table} p
       LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
       LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
@@ -513,22 +516,22 @@ export async function getRetailingByBroadChannel(filters: any, source: string) {
 
     const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
     query += whereClause;
-    query += ` GROUP BY c.broad_channel, YEAR(p.document_date)`;
+    query += ` GROUP BY c.base_channel, YEAR(p.document_date)`;
 
     const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
 
     for (const row of results) {
-      const broad_channel = row.broad_channel;
+      const base_channel = row.base_channel;
       const year = Number(row.year);
       const value = Number(row.total);
 
-      if (!breakdownMap[broad_channel]) breakdownMap[broad_channel] = {};
-      breakdownMap[broad_channel][year] =
-        (breakdownMap[broad_channel][year] || 0) + value;
+      if (!breakdownMap[base_channel]) breakdownMap[base_channel] = {};
+      breakdownMap[base_channel][year] =
+        (breakdownMap[base_channel][year] || 0) + value;
     }
   }
 
-  return Object.entries(breakdownMap).map(([broad_channel, yearlyData]) => {
+  return Object.entries(breakdownMap).map(([base_channel, yearlyData]) => {
     const breakdown = Object.entries(yearlyData)
       .map(([year, value]) => ({
         year: Number(year),
@@ -537,7 +540,7 @@ export async function getRetailingByBroadChannel(filters: any, source: string) {
       .sort((a, b) => b.year - a.year);
 
     return {
-      broad_channel,
+      base_channel,
       breakdown,
     };
   });
@@ -659,11 +662,11 @@ export async function getTopBrandforms(filters: any, source: string) {
 // STORE page
 export async function getAllBranches(): Promise<string[]> {
   const branches = await prisma.store_mapping.findMany({
-    distinct: ["New_Branch"],
-    select: { New_Branch: true },
+    distinct: ["Branch"],
+    select: { Branch: true },
   });
 
-  return branches.map((b) => b.New_Branch).filter(Boolean);
+  return branches.map((b) => b.Branch).filter(Boolean);
 }
 
 export async function suggestStores(branch: string | null, query: string) {
@@ -674,7 +677,7 @@ export async function suggestStores(branch: string | null, query: string) {
   };
 
   if (branch) {
-    whereClause.New_Branch = branch;
+    whereClause.Branch = branch;
   }
 
   const stores = await prisma.store_mapping.findMany({
@@ -966,11 +969,11 @@ export async function getTopStoresQuery({
   source,
   months = 3,
   zm,
-  sm,
-  be,
+  rsm,
+  asm,
   category,
   branch,
-  broadChannel,
+  baseChannel,
   brand,
   startDate,
   endDate,
@@ -1023,25 +1026,25 @@ export async function getTopStoresQuery({
     filters.push("sm.ZM = ?");
     dynamicValues.push(zm);
   }
-  if (sm) {
-    filters.push("sm.SM = ?");
-    dynamicValues.push(sm);
+  if (rsm) {
+    filters.push("sm.RSM = ?");
+    dynamicValues.push(rsm);
   }
-  if (be) {
-    filters.push("sm.BE = ?");
-    dynamicValues.push(be);
+  if (asm) {
+    filters.push("sm.ASM = ?");
+    dynamicValues.push(asm);
   }
   if (category) {
     filters.push("pm.category = ?");
     dynamicValues.push(category);
   }
   if (branch) {
-    filters.push("sm.New_Branch = ?");
+    filters.push("sm.Branch = ?");
     dynamicValues.push(branch);
   }
-  if (broadChannel) {
-    filters.push("cm.broad_channel = ?");
-    dynamicValues.push(broadChannel);
+  if (baseChannel) {
+    filters.push("cm.base_channel = ?");
+    dynamicValues.push(baseChannel);
   }
   if (brand) {
     filters.push("pm.brand = ?");
@@ -1054,7 +1057,7 @@ export async function getTopStoresQuery({
   const joins = `
     LEFT JOIN store_mapping sm ON p.customer_code = sm.Old_Store_Code
     ${
-      broadChannel
+      baseChannel
         ? "LEFT JOIN channel_mapping cm ON sm.customer_type = cm.customer_type"
         : ""
     }
@@ -1068,12 +1071,12 @@ export async function getTopStoresQuery({
     SELECT
       p.customer_code,
       MAX(sm.customer_name) AS store_name,
-      sm.New_Branch AS branch_name,
+      sm.Branch AS branch_name,
       SUM(p.retailing) AS total_retailing
     FROM ${table} p
     ${joins}
     WHERE ${monthConditionClause} ${filterClause}
-    GROUP BY p.customer_code, sm.New_Branch
+    GROUP BY p.customer_code, sm.Branch
   `
     )
     .join(" UNION ALL ");
