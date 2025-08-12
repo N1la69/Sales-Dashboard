@@ -12,7 +12,6 @@ import RetailingChannelPie from "@/components/visuals/RetailingChannelPie";
 import MonthlyTrendChart from "@/components/visuals/MonthlyTrendChart";
 import TopBrandforms from "@/components/structures/TopBrandforms";
 import CategoryTable from "@/components/structures/CategoryTable";
-import BroadChannelTable from "@/components/structures/BroadChannelTable";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import DateRange from "@/components/structures/DateRange";
+import BaseChannelTable from "@/components/structures/BaseChannelTable";
 
 // ================= GraphQL Queries =================
 const GET_RETAILING_STATS = gql`
@@ -484,7 +484,7 @@ export default function Dashboard() {
           />
         </div>
         <div>
-          <BroadChannelTable
+          <BaseChannelTable
             data={baseChannelData?.retailingByBaseChannel || []}
             loading={baseChannelLoading}
             error={baseChannelError}

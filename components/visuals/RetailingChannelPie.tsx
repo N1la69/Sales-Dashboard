@@ -1,7 +1,7 @@
 "use client";
 
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const LIGHT_COLORS = [
   "#4f46e5",
@@ -48,7 +48,15 @@ export default function RetailingChannelPie({
     new Set(data.flatMap((item) => item.breakdown.map((b) => b.year)))
   ).sort((a, b) => b - a);
 
-  const [selectedYear, setSelectedYear] = useState<number>(allYears[0]);
+  const [selectedYear, setSelectedYear] = useState<number | undefined>(
+    undefined
+  );
+
+  useEffect(() => {
+    if (allYears.length && selectedYear === undefined) {
+      setSelectedYear(allYears[0]);
+    }
+  }, [allYears, selectedYear]);
 
   if (loading) return <p>Loading channel data...</p>;
   if (error) return <p>Error loading channel data: {error.message}</p>;

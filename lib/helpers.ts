@@ -184,6 +184,9 @@ export async function getRetailingBreakdown(
     brand: "pm.brand",
     brandform: "pm.brandform",
     subbrandform: "pm.subbrandform",
+    base_channel: "c.base_channel",
+    short_channel: "c.short_channel",
+    channel_desc: "c.channel_desc",
   };
 
   const groupField = levelMap[level?.toLowerCase()];
@@ -191,14 +194,15 @@ export async function getRetailingBreakdown(
     throw new Error(`Invalid level: ${level}`);
   }
 
-  // Parent field mapping
+  // Parent field mapping for drill-down
   let parentFilter: { field: string; value: string } | undefined;
   if (parent) {
-    // Example: if current level is brand, parent is category
     const parentFieldMap: Record<string, string> = {
       brand: "pm.category",
       brandform: "pm.brand",
       subbrandform: "pm.brandform",
+      short_channel: "c.base_channel",
+      channel_desc: "c.short_channel",
     };
     const parentField = parentFieldMap[level?.toLowerCase()];
     if (parentField) {
@@ -263,7 +267,7 @@ export async function getRetailingBreakdown(
         name: key,
         breakdown,
         growth,
-        childrenCount: null, // Optional: can add COUNT DISTINCT here if needed
+        childrenCount: null, // Optional: can be implemented later
       };
     })
     .sort(

@@ -47,7 +47,7 @@ export default function TopBrandforms({
   return (
     <Card className="shadow-md bg-slate-100/40 dark:bg-slate-800/30 border-transparent">
       <CardHeader>
-        <CardTitle className="text-xl font-semibold text-center">
+        <CardTitle className="text-xl font-semibold text-left">
           Top 10 Brandforms (in Lakhs)
         </CardTitle>
       </CardHeader>
