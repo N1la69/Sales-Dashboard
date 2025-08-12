@@ -415,39 +415,47 @@ export async function getHighestRetailingBrand(filters: any, source: string) {
 
     for (const row of results) {
       const brand = row.brand || "Unknown";
-      const year = row.year;
+      const year = Number(row.year);
       const retailing = Number(row.total);
-      brandYearTotals[brand] = brandYearTotals[brand] || {};
+
+      if (!brandYearTotals[brand]) brandYearTotals[brand] = {};
       brandYearTotals[brand][year] =
         (brandYearTotals[brand][year] || 0) + retailing;
     }
   }
 
+  // Determine the latest year present in the filtered dataset
+  const allYears = new Set<number>();
+  for (const yearMap of Object.values(brandYearTotals)) {
+    Object.keys(yearMap).forEach((y) => allYears.add(Number(y)));
+  }
+  const latestYear = Math.max(...Array.from(allYears));
+
+  // Pick highest brand based on latest year's retailing
   let maxBrand = "";
-  let maxTotal = 0;
   let maxBreakdown: { year: number; value: number }[] = [];
+  let maxLatestValue = 0;
 
   for (const [brand, yearMap] of Object.entries(brandYearTotals)) {
-    const total = Object.values(yearMap).reduce((a, b) => a + b, 0);
-    if (total > maxTotal) {
+    const breakdown = Object.entries(yearMap)
+      .map(([year, value]) => ({ year: Number(year), value }))
+      .sort((a, b) => b.year - a.year);
+
+    const latestValue = yearMap[latestYear] || 0;
+    if (latestValue > maxLatestValue) {
       maxBrand = brand;
-      maxTotal = total;
-      maxBreakdown = Object.entries(yearMap).map(([year, value]) => ({
-        year: Number(year),
-        value,
-      }));
+      maxLatestValue = latestValue;
+      maxBreakdown = breakdown;
     }
   }
 
-  // Sort breakdown by descending year
-  maxBreakdown.sort((a, b) => b.year - a.year);
-
+  // Calculate growth from previous year to latest year
   let growth: number | null = null;
   if (maxBreakdown.length >= 2) {
     const latest = maxBreakdown[0].value;
-    const previous = maxBreakdown[1].value;
-    if (previous !== 0) {
-      growth = (latest / previous) * 100;
+    const prev = maxBreakdown[1].value;
+    if (prev !== 0) {
+      growth = Math.round((latest / prev) * 100);
     }
   }
 

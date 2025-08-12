@@ -1,9 +1,39 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import React, { JSX, useState } from "react";
+import { useLazyQuery, gql } from "@apollo/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { MinusCircle, PlusCircle } from "lucide-react";
 
-const BG_COLORS = [
+// ================= GraphQL Queries =================
+export const GET_RETAILING_BREAKDOWN = gql`
+  query GetRetailingBreakdown(
+    $level: String!
+    $parent: String
+    $filters: FilterInput
+    $source: String
+  ) {
+    retailingBreakdown(
+      level: $level
+      parent: $parent
+      filters: $filters
+      source: $source
+    ) {
+      key
+      name
+      breakdown {
+        year
+        value
+      }
+      growth
+      childrenCount
+    }
+  }
+`;
+
+// ================= Utilities =================
+const PARENT_BG_COLORS = [
   "bg-indigo-100/50 dark:bg-indigo-900/30",
   "bg-emerald-100/50 dark:bg-emerald-900/30",
   "bg-amber-100/50 dark:bg-amber-900/30",
@@ -16,111 +46,339 @@ const BG_COLORS = [
   "bg-cyan-100/50 dark:bg-cyan-900/30",
 ];
 
-interface TopBrandformsProps {
-  data:
-    | {
-        brandform: string;
-        breakdown: { year: number; value: number }[];
-        growth?: number | null;
-      }[]
-    | undefined;
-  loading: boolean;
-  error: any;
+const CHILD_BG_COLORS = ["bg-gray-200/50 dark:bg-gray-800/30"];
+
+const GRANDCHILD_BG_COLORS = ["bg-slate-300/50 dark:bg-slate-700/30"];
+
+const GREATGRANDCHILD_BG_COLORS = ["bg-stone-300/50 dark:bg-stone-600/30"];
+
+const COLOR_PALETTE = [
+  "text-rose-500 dark:text-rose-400",
+  "text-orange-500 dark:text-orange-400",
+  "text-yellow-500 dark:text-yellow-300",
+  "text-green-500 dark:text-green-400",
+  "text-teal-500 dark:text-teal-400",
+  "text-sky-500 dark:text-sky-400",
+  "text-indigo-500 dark:text-indigo-400",
+  "text-violet-500 dark:text-violet-400",
+  "text-pink-500 dark:text-pink-400",
+  "text-emerald-500 dark:text-emerald-400",
+];
+
+interface RawIncoming {
+  brandform?: string;
+  key?: string;
+  name?: string;
+  breakdown: { year: number; value: number }[];
+  childrenCount?: number;
 }
 
+interface BreakdownItem {
+  key: string;
+  name: string;
+  breakdown: { year: number; value: number }[];
+  growth: number | null;
+  childrenCount?: number | null;
+}
+
+interface TopBrandformsProps {
+  data: RawIncoming[];
+  loading: boolean;
+  error: any;
+  filters?: Record<string, any>;
+  source?: string;
+}
+
+const NEXT_LEVEL: Record<string, string> = {
+  brandform: "subbrandform",
+};
+
+// ================= Component =================
 export default function TopBrandforms({
-  data,
+  data = [],
   loading,
   error,
+  filters = {},
+  source,
 }: TopBrandformsProps) {
-  if (loading) return <p>Loading top brandforms...</p>;
-  if (error) return <p>Error loading brandforms: {error.message}</p>;
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const [childrenData, setChildrenData] = useState<
+    Record<string, BreakdownItem[]>
+  >({});
+  const [loadingKeys, setLoadingKeys] = useState<string[]>([]);
+
+  // useLazyQuery for drill-down
+  const [fetchBreakdown] = useLazyQuery(GET_RETAILING_BREAKDOWN, {
+    fetchPolicy: "network-only",
+  });
+
+  if (loading)
+    return <p className="dark:text-white">Loading base channels...</p>;
+  if (error)
+    return (
+      <p className="text-red-500">
+        Error loading base channels: {error.message}
+      </p>
+    );
   if (!data || data.length === 0) return <p>No brandform data available.</p>;
 
-  // Extract unique years
-  const allYears = Array.from(
-    new Set(data.flatMap((item) => item.breakdown.map((b) => b.year)))
+  // Normalize incoming data
+  const normalized: BreakdownItem[] = data.map((raw) => {
+    const key = raw.key ?? raw.brandform ?? raw.name ?? "Unknown";
+    const name = raw.name ?? raw.brandform ?? raw.key ?? "Unknown";
+    const breakdown = raw.breakdown ?? [];
+    const childrenCount = raw.childrenCount ?? null;
+    return { key, name, breakdown, growth: null, childrenCount };
+  });
+
+  // Determine unique years
+  const uniqueYears = Array.from(
+    new Set(normalized.flatMap((item) => item.breakdown.map((b) => b.year)))
   ).sort((a, b) => b - a);
 
-  const [latestYear, prevYear] = allYears;
+  const latestYear = uniqueYears[0] ?? null;
+  const previousYear = uniqueYears[1] ?? null;
+
+  // Sort normalized rows descending by latest year value
+  const sortedTop = [...normalized].sort((a, b) => {
+    const aLatest = latestYear
+      ? a.breakdown.find((d) => d.year === latestYear)?.value ?? 0
+      : 0;
+    const bLatest = latestYear
+      ? b.breakdown.find((d) => d.year === latestYear)?.value ?? 0
+      : 0;
+    return bLatest - aLatest;
+  });
+
+  // collapse-all handler
+  const collapseAll = () => {
+    setExpanded({});
+  };
+
+  // returns an array of JSX elements
+  const renderRows = (
+    items: BreakdownItem[],
+    depth: number,
+    parentLevel: string
+  ): JSX.Element[] => {
+    if (!items || items.length === 0 || !parentLevel) {
+      return [];
+    }
+
+    return items.map((item, idx) => {
+      const rowKey = `${parentLevel}-${item.key}`;
+
+      const yearlyMap: Record<number, number> = {};
+      item.breakdown.forEach(({ year, value }) => {
+        yearlyMap[year] = value;
+      });
+
+      const latest = latestYear ? yearlyMap[latestYear] ?? 0 : 0;
+      const previous = previousYear ? yearlyMap[previousYear] ?? 0 : 0;
+      const growth =
+        previous && previous !== 0 ? (latest / previous) * 100 : null;
+
+      const growthColor =
+        growth === null
+          ? "text-gray-500"
+          : growth > 100
+          ? "text-green-500"
+          : growth < 100
+          ? "text-red-500"
+          : "text-gray-500";
+
+      const isExpandable =
+        item.childrenCount === null || item.childrenCount === undefined
+          ? true
+          : item.childrenCount > 0;
+      const isExpanded = !!expanded[rowKey];
+      const nextLevel = NEXT_LEVEL[parentLevel];
+
+      const toggleExpand = async () => {
+        if (!nextLevel) return;
+
+        if (isExpanded) {
+          setExpanded((p) => ({ ...p, [rowKey]: false }));
+          return;
+        }
+
+        if (childrenData[rowKey]) {
+          setExpanded((p) => ({ ...p, [rowKey]: true }));
+          return;
+        }
+
+        setLoadingKeys((prev) => [...prev, rowKey]);
+
+        try {
+          const res = await fetchBreakdown({
+            variables: {
+              level: nextLevel,
+              parent: item.key,
+              filters: filters ?? {},
+              source: source ?? "",
+            },
+          });
+
+          const nodes: BreakdownItem[] = (
+            res?.data?.retailingBreakdown ?? []
+          ).map((n: any) => ({
+            key: n.key ?? n.name ?? "Unknown",
+            name: n.name ?? n.key ?? "Unknown",
+            breakdown: n.breakdown ?? [],
+            growth: n.growth ?? null,
+            childrenCount: n.childrenCount ?? null,
+          }));
+
+          const sortedChildren = [...nodes].sort((a, b) => {
+            const aLatest = latestYear
+              ? a.breakdown.find((d) => d.year === latestYear)?.value ?? 0
+              : 0;
+            const bLatest = latestYear
+              ? b.breakdown.find((d) => d.year === latestYear)?.value ?? 0
+              : 0;
+            return bLatest - aLatest;
+          });
+
+          setChildrenData((prev) => ({
+            ...prev,
+            [rowKey]: sortedChildren,
+          }));
+
+          // Only expand if children exist
+          if (sortedChildren.length > 0) {
+            setExpanded((p) => ({ ...p, [rowKey]: true }));
+          }
+        } catch (err) {
+          console.error("Drill fetch failed:", err);
+        } finally {
+          // remove from loading
+          setLoadingKeys((prev) => prev.filter((k) => k !== rowKey));
+        }
+      };
+
+      // Row color indexing
+      let colorIdx: number;
+      let rowBg: string;
+
+      if (depth === 0) {
+        colorIdx = idx % PARENT_BG_COLORS.length;
+        rowBg = PARENT_BG_COLORS[colorIdx];
+      } else if (depth === 1) {
+        colorIdx = idx % CHILD_BG_COLORS.length;
+        rowBg = CHILD_BG_COLORS[colorIdx];
+      } else if (depth === 2) {
+        colorIdx = idx % GRANDCHILD_BG_COLORS.length;
+        rowBg = GRANDCHILD_BG_COLORS[colorIdx];
+      } else {
+        colorIdx = idx % GREATGRANDCHILD_BG_COLORS.length;
+        rowBg = GREATGRANDCHILD_BG_COLORS[colorIdx];
+      }
+
+      return (
+        <React.Fragment key={rowKey}>
+          <tr
+            className={`transition-colors hover:bg-muted dark:hover:bg-accent ${rowBg}`}
+          >
+            <td
+              className={`px-4 py-2 font-medium ${COLOR_PALETTE[colorIdx]} rounded-l-lg`}
+              style={{ paddingLeft: `${depth * 1.5}rem` }}
+            >
+              <button
+                onClick={toggleExpand}
+                className="flex items-center gap-2 w-full text-left"
+                aria-expanded={isExpanded}
+                aria-label={`${isExpanded ? "Collapse" : "Expand"} ${
+                  item.name
+                }`}
+              >
+                {nextLevel && isExpandable && item.childrenCount !== 0 ? (
+                  <span className="cursor-pointer select-none pl-2">
+                    {isExpanded ? (
+                      <MinusCircle size={12} />
+                    ) : (
+                      <PlusCircle size={12} />
+                    )}
+                  </span>
+                ) : (
+                  <span style={{ width: 18, display: "inline-block" }} />
+                )}
+
+                <span>{item.name || "Unknown"}</span>
+              </button>
+            </td>
+
+            {uniqueYears.map((year) => (
+              <td key={year} className="px-4 py-2 text-right">
+                <div className={year === latestYear ? "font-semibold" : ""}>
+                  {yearlyMap[year]
+                    ? (yearlyMap[year] / 100000).toFixed(2)
+                    : "0.00"}
+                </div>
+              </td>
+            ))}
+
+            <td
+              className={`px-4 py-2 text-right font-medium rounded-r-lg ${growthColor}`}
+            >
+              {growth !== null
+                ? `${growth > 100 ? "+" : "-"}${growth.toFixed(1)}%`
+                : "N/A"}
+            </td>
+          </tr>
+
+          {isExpanded &&
+            nextLevel &&
+            childrenData[rowKey] &&
+            renderRows(childrenData[rowKey], depth + 1, nextLevel)}
+
+          {loadingKeys.includes(rowKey) && (
+            <tr>
+              <td
+                colSpan={(uniqueYears.length || 1) + 2}
+                className="px-4 py-2 italic text-gray-500"
+                style={{ paddingLeft: `${(depth + 1) * 1.5}rem` }}
+              >
+                Loading...
+              </td>
+            </tr>
+          )}
+        </React.Fragment>
+      );
+    });
+  };
 
   return (
     <Card className="shadow-md bg-slate-100/40 dark:bg-slate-800/30 border-transparent">
-      <CardHeader>
-        <CardTitle className="text-xl font-semibold text-left">
+      <CardHeader className="flex flex-row justify-between items-center">
+        <CardTitle className="text-xl font-semibold text-center">
           Top 10 Brandforms (in Lakhs)
         </CardTitle>
+        <button
+          onClick={collapseAll}
+          className="text-red-500 hover:text-red-700 flex items-center gap-1 text-sm"
+        >
+          <MinusCircle size={18} />
+        </button>
       </CardHeader>
-      <CardContent>
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm text-left border-separate border-spacing-y-2">
-            <thead>
-              <tr>
-                <th className="px-4 py-2">Brandform</th>
-                {allYears.map((year) => (
-                  <th key={year} className="text-right px-4 py-2">
+      <CardContent className="overflow-x-auto">
+        <table className="min-w-full text-sm text-left border-separate border-spacing-y-2">
+          <thead>
+            <tr>
+              <th className="px-4 py-2">Brandform</th>
+              {uniqueYears.length > 0 ? (
+                uniqueYears.map((year) => (
+                  <th key={year} className="px-4 py-2 text-right">
                     {year}
                   </th>
-                ))}
-                <th className="text-right px-4 py-2">Index</th>
-              </tr>
-            </thead>
-            <tbody>
-              {data.map((item, index) => {
-                const { brandform, breakdown, growth } = item;
-
-                const yearly: Record<number, number> = {};
-                breakdown.forEach((b) => {
-                  yearly[b.year] = b.value;
-                });
-
-                const growthColor =
-                  growth === null || growth === undefined
-                    ? "text-gray-500"
-                    : growth > 100
-                    ? "text-green-500"
-                    : growth < 100
-                    ? "text-red-500"
-                    : "text-gray-500";
-
-                return (
-                  <tr
-                    key={brandform}
-                    className={`hover:bg-muted ${
-                      BG_COLORS[index % BG_COLORS.length]
-                    } rounded-lg`}
-                  >
-                    <td className="px-4 py-2 font-medium rounded-l-lg">
-                      {brandform}
-                    </td>
-                    {allYears.map((year) => (
-                      <td key={year} className="px-4 py-2 text-right">
-                        <span
-                          className={
-                            year === latestYear
-                              ? "font-bold text-black dark:text-white"
-                              : ""
-                          }
-                        >
-                          {yearly[year]
-                            ? (yearly[year] / 100000).toFixed(2)
-                            : "0.00"}
-                        </span>
-                      </td>
-                    ))}
-                    <td
-                      className={`px-4 py-2 text-right font-medium rounded-r-lg ${growthColor}`}
-                    >
-                      {growth !== null && growth !== undefined
-                        ? `${growth > 100 ? "+" : "-"}${growth.toFixed(1)}%`
-                        : "N/A"}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
+                ))
+              ) : (
+                <th className="px-4 py-2 text-right">Year</th>
+              )}
+              <th className="px-4 py-2 text-right">Index</th>
+            </tr>
+          </thead>
+          <tbody>{renderRows(sortedTop, 0, "brandform")}</tbody>
+        </table>
       </CardContent>
     </Card>
   );
