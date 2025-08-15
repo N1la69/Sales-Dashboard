@@ -33,6 +33,11 @@ export const GET_RETAILING_BREAKDOWN = gql`
 `;
 
 // ================= Utilities =================
+function formatFiscalYear(year: number): string {
+  const nextYear = (year + 1).toString().slice(-2);
+  return `${year}-${nextYear}`;
+}
+
 const PARENT_BG_COLORS = [
   "bg-indigo-100/50 dark:bg-indigo-900/30",
   "bg-emerald-100/50 dark:bg-emerald-900/30",
@@ -367,8 +372,8 @@ export default function TopBrandforms({
               <th className="px-4 py-2">Brandform</th>
               {uniqueYears.length > 0 ? (
                 uniqueYears.map((year) => (
-                  <th key={year} className="px-4 py-2 text-right">
-                    {year}
+                  <th key={year} className="px-2 py-2 text-right">
+                    {formatFiscalYear(year)}
                   </th>
                 ))
               ) : (

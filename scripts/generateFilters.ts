@@ -4,8 +4,20 @@ import path from "path";
 
 async function generateFilterValues() {
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: 4 }, (_, i) => currentYear - i);
-  const months = Array.from({ length: 12 }, (_, i) => i + 1);
+  const currentMonth = new Date().getMonth() + 1;
+
+  // Determine starting fiscal year based on July start
+  const startFiscalYear = currentMonth >= 7 ? currentYear : currentYear - 1;
+
+  // Last 4 fiscal years
+  const years = Array.from({ length: 4 }, (_, i) => {
+    const fyStart = startFiscalYear - i;
+    const fyEnd = fyStart + 1;
+    return `${fyStart}-${fyEnd.toString().slice(-2)}`;
+  });
+
+  // Fiscal months: Jul (7) → Jun (6)
+  const months = [7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6];
 
   const categories = await prisma.product_mapping.findMany({
     distinct: ["category"],

@@ -2,6 +2,7 @@
 import {
   getAllBranches,
   getCategoryRetailing,
+  getFiscalYear,
   getHighestRetailingBranch,
   getHighestRetailingBrand,
   getMonthlyRetailingTrend,
@@ -33,32 +34,37 @@ export const resolvers = {
       const breakdown: { year: number; value: number }[] = [];
 
       if (filters?.StartDate && filters?.EndDate) {
-        const startYear = new Date(filters.StartDate).getFullYear();
-        const endYear = new Date(filters.EndDate).getFullYear();
-        const years = Array.from(
-          { length: endYear - startYear + 1 },
-          (_, i) => startYear + i
+        const startFiscalYear = getFiscalYear(new Date(filters.StartDate));
+        const endFiscalYear = getFiscalYear(new Date(filters.EndDate));
+
+        const fiscalYears = Array.from(
+          { length: endFiscalYear - startFiscalYear + 1 },
+          (_, i) => startFiscalYear + i
         );
 
-        for (const year of years) {
+        for (const fy of fiscalYears) {
           const value = await getRetailingWithRawSQL(
-            { ...filters, Year: [year], Month: undefined },
+            {
+              ...filters,
+              Year: [fy],
+              Month: undefined,
+            },
             source
           );
-          breakdown.push({ year, value });
+          breakdown.push({ year: fy, value });
         }
       } else {
-        const years = filters?.Year?.length ? filters.Year : [2023, 2024];
-        for (const year of years) {
+        const fiscalYears = filters?.Year?.length ? filters.Year : [2024, 2025];
+        for (const fy of fiscalYears) {
           const value = await getRetailingWithRawSQL(
-            { ...filters, Year: [year] },
+            { ...filters, Year: [fy] },
             source
           );
-          breakdown.push({ year, value });
+          breakdown.push({ year: fy, value });
         }
       }
 
-      let growth = null;
+      let growth: number | null = null;
       if (breakdown.length === 2 && breakdown[0].value && breakdown[1].value) {
         const [prev, curr] = breakdown.sort((a, b) => a.year - b.year);
         growth = (curr.value / prev.value) * 100;

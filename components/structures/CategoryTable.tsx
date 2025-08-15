@@ -57,6 +57,11 @@ interface CategoryTableProps {
   source?: string; // optional source for the query
 }
 
+function formatFiscalYear(year: number): string {
+  const nextYear = (year + 1).toString().slice(-2);
+  return `${year}-${nextYear}`;
+}
+
 const PARENT_BG_COLORS = [
   "bg-indigo-100/50 dark:bg-indigo-900/30",
   "bg-emerald-100/50 dark:bg-emerald-900/30",
@@ -365,8 +370,8 @@ export default function CategoryTable({
               <th className="px-4 py-2">Category</th>
               {uniqueYears.length > 0 ? (
                 uniqueYears.map((year) => (
-                  <th key={year} className="px-4 py-2 text-right">
-                    {year}
+                  <th key={year} className="px-3 py-2 text-right">
+                    {formatFiscalYear(year)}
                   </th>
                 ))
               ) : (

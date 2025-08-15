@@ -94,6 +94,11 @@ const NEXT_LEVEL: Record<string, string> = {
   short_channel: "channel_desc",
 };
 
+function formatFiscalYear(year: number): string {
+  const nextYear = (year + 1).toString().slice(-2);
+  return `${year}-${nextYear}`;
+}
+
 // ================= Component =================
 export default function BaseChannelTable({
   data = [],
@@ -367,8 +372,8 @@ export default function BaseChannelTable({
               <th className="px-4 py-2">Base Channel</th>
               {uniqueYears.length > 0 ? (
                 uniqueYears.map((year) => (
-                  <th key={year} className="px-4 py-2 text-right">
-                    {year}
+                  <th key={year} className="px-3 py-2 text-right">
+                    {formatFiscalYear(year)}
                   </th>
                 ))
               ) : (

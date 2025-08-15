@@ -5,6 +5,12 @@ type YearBreakdown = {
   value: number;
 };
 
+const formatFiscalYear = (year: number) => {
+  const startYear = year;
+  const endYear = year + 1;
+  return `${startYear}-${String(endYear).slice(-2)}`;
+};
+
 const StatCard = ({
   title,
   description,
@@ -34,7 +40,8 @@ const StatCard = ({
       {current && (
         <div className="mt-1">
           <p className="text-2xl md:text-2xl font-bold text-black dark:text-white">
-            {current.year}: {(current.value / 100000).toFixed(1)}
+            {formatFiscalYear(current.year)}:{" "}
+            {(current.value / 100000).toFixed(1)}
           </p>
         </div>
       )}
@@ -42,7 +49,8 @@ const StatCard = ({
       {/* Previous year */}
       {previous && (
         <div className="text-xl font-semibold text-gray-800 dark:text-gray-200 mt-1">
-          {previous.year}: {(previous.value / 100000).toFixed(1)}
+          {formatFiscalYear(previous.year)}:{" "}
+          {(previous.value / 100000).toFixed(1)}
         </div>
       )}
 
