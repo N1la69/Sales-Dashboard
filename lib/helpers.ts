@@ -86,11 +86,6 @@ export function getFiscalYear(date: Date): number {
   return month >= 7 ? year : year - 1;
 }
 
-// function getFiscalMonth(date: Date): number {
-//   const month = date.getMonth() + 1;
-//   return month >= 7 ? month - 6 : month + 6;
-// }
-
 export function addInClause(
   query: string,
   params: any[],
@@ -359,12 +354,12 @@ export async function getTotalRetailing(
   query = addInClause(query, params, filters.ASM, "s.ASM");
   query = addInClause(query, params, filters.TSI, "s.TSI");
 
-  // Fiscal Year filter
+  // Fiscal Year filter (July–June)
   if (filters.FiscalYear?.length) {
     query += ` AND (
       CASE 
-        WHEN MONTH(p.document_date) >= 7 THEN YEAR(p.document_date) + 1
-        ELSE YEAR(p.document_date)
+        WHEN MONTH(p.document_date) >= 7 THEN YEAR(p.document_date)
+        ELSE YEAR(p.document_date) - 1
       END
     ) IN (${filters.FiscalYear.map(() => "?").join(",")})`;
     params.push(...filters.FiscalYear);

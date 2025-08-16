@@ -42,6 +42,11 @@ const monthNames = [
   "Dec",
 ];
 
+function formatFiscalYear(year: number): string {
+  const nextYear = (year + 1).toString().slice(-2);
+  return `${year}-${nextYear}`;
+}
+
 export default function MonthlyTrendChart({
   data,
   loading,
@@ -102,7 +107,7 @@ export default function MonthlyTrendChart({
               className="inline-block w-4 h-1.5 rounded-sm"
               style={{ backgroundColor: getColor(idx) }}
             />
-            <span>{year}</span>
+            <span>{formatFiscalYear(year)}</span>
           </div>
         ))}
       </div>
@@ -143,6 +148,10 @@ export default function MonthlyTrendChart({
                   color: "var(--foreground)",
                 }}
                 labelStyle={{ color: "var(--foreground)" }}
+                formatter={(value, name) => [
+                  value, 
+                  formatFiscalYear(Number(name))
+                ]}
               />
               {uniqueYears.map((year, idx) => (
                 <Line

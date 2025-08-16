@@ -118,7 +118,7 @@ export default function TopBrandforms({
   });
 
   if (loading)
-    return <p className="dark:text-white">Loading base channels...</p>;
+    return <p className="dark:text-white">Loading top brandforms...</p>;
   if (error)
     return (
       <p className="text-red-500">

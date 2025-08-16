@@ -33,40 +33,54 @@ export const resolvers = {
     retailingStats: async (_: any, { filters, source }: any) => {
       const breakdown: { year: number; value: number }[] = [];
 
+      // 1) If a date range is provided, use its fiscal-year span (and drop zero totals)
       if (filters?.StartDate && filters?.EndDate) {
         const startFiscalYear = getFiscalYear(new Date(filters.StartDate));
         const endFiscalYear = getFiscalYear(new Date(filters.EndDate));
 
-        const fiscalYears = Array.from(
-          { length: endFiscalYear - startFiscalYear + 1 },
-          (_, i) => startFiscalYear + i
-        );
-
-        for (const fy of fiscalYears) {
+        for (let fy = startFiscalYear; fy <= endFiscalYear; fy++) {
           const value = await getRetailingWithRawSQL(
-            {
-              ...filters,
-              Year: [fy],
-              Month: undefined,
-            },
+            { ...filters, FiscalYear: [fy], FiscalMonth: undefined },
             source
           );
-          breakdown.push({ year: fy, value });
-        }
-      } else {
-        const fiscalYears = filters?.Year?.length ? filters.Year : [2024, 2025];
-        for (const fy of fiscalYears) {
-          const value = await getRetailingWithRawSQL(
-            { ...filters, Year: [fy] },
-            source
-          );
-          breakdown.push({ year: fy, value });
+          if (value > 0) breakdown.push({ year: fy, value });
         }
       }
+      // 2) If explicit FiscalYear(s) provided, use them (and drop zero totals)
+      else if (filters?.FiscalYear?.length) {
+        for (const fy of filters.FiscalYear) {
+          const value = await getRetailingWithRawSQL(
+            { ...filters, FiscalYear: [fy], FiscalMonth: undefined },
+            source
+          );
+          if (value > 0) breakdown.push({ year: fy, value });
+        }
+      }
+      // 3) No years given -> choose the last TWO fiscal years that actually have data
+      else {
+        const currentFY = getFiscalYear(new Date());
+        const collected: { year: number; value: number }[] = [];
 
+        // look back up to 6 FYs (safety) and pick the first two that have > 0
+        for (let back = 0; back < 6 && collected.length < 2; back++) {
+          const fy = currentFY - back;
+          const value = await getRetailingWithRawSQL(
+            { ...filters, FiscalYear: [fy], FiscalMonth: undefined },
+            source
+          );
+          if (value > 0) collected.push({ year: fy, value });
+        }
+
+        breakdown.push(...collected);
+      }
+
+      // sort newest FY first (e.g., 2024 before 2023)
+      breakdown.sort((a, b) => b.year - a.year);
+
+      // compute growth between the top two years, if available
       let growth: number | null = null;
-      if (breakdown.length === 2 && breakdown[0].value && breakdown[1].value) {
-        const [prev, curr] = breakdown.sort((a, b) => a.year - b.year);
+      if (breakdown.length >= 2 && breakdown[1].value > 0) {
+        const [curr, prev] = breakdown; // curr is latest due to sort
         growth = (curr.value / prev.value) * 100;
       }
 
