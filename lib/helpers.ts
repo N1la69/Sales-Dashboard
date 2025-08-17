@@ -159,7 +159,10 @@ export async function buildWhereClauseForRawSQL(
         ELSE MONTH(p.document_date) + 6
       END
     ) IN (${filters.FiscalMonth.map(() => "?").join(",")})`;
-    params.push(...filters.FiscalMonth);
+    const fiscalMonthMap = filters.FiscalMonth.map((m: number) =>
+      m >= 7 ? m - 6 : m + 6
+    );
+    params.push(...fiscalMonthMap);
   }
 
   // Product filters
@@ -186,20 +189,6 @@ export async function buildWhereClauseForRawSQL(
   }
 
   return { whereClause, params };
-}
-
-export async function getRetailingWithRawSQL(
-  filters: any,
-  source: string
-): Promise<number> {
-  const tables = resolveTables(source);
-
-  let total = 0;
-  for (const table of tables) {
-    const subtotal = await getTotalRetailing(table, filters);
-    total += subtotal;
-  }
-  return total;
 }
 
 // Drill-down Logic
@@ -243,6 +232,8 @@ export async function getRetailingBreakdown(
   const tables = resolveTables(source);
   const breakdownMap: Record<string, { [year: number]: number }> = {};
 
+  const filtersWithFiscalMonth = { ...filters, FiscalMonth: filters.Month };
+
   for (const table of tables) {
     let query = `
       SELECT ${groupField} AS group_key, p.document_date, SUM(p.retailing) AS total
@@ -254,7 +245,7 @@ export async function getRetailingBreakdown(
     `;
 
     const { whereClause, params } = await buildWhereClauseForRawSQL(
-      filters,
+      filtersWithFiscalMonth,
       parentFilter
     );
     query += whereClause;
@@ -305,82 +296,107 @@ export async function getRetailingBreakdown(
 }
 
 // DASHBOARD page
-export async function getTotalRetailing(
-  table: string,
-  filters: any
-): Promise<number> {
-  let query = `
-    SELECT SUM(p.retailing) AS total
-    FROM ${table} p
-    LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
-    LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
-    LEFT JOIN product_mapping pm ON p.p_code = pm.p_code
-    WHERE 1=1
-  `;
-  const params: any[] = [];
+export async function getTotalRetailing(filters: any, source: string) {
+  const yearTotals: Record<number, number> = {};
+  const tables = resolveTables(source);
 
-  // Store filters
-  query = addInClause(query, params, filters.ZM, "s.ZM");
-  query = addInClause(query, params, filters.Branch, "s.Branch");
-  query = addInClause(query, params, filters.RSM, "s.RSM");
-  query = addInClause(query, params, filters.ASM, "s.ASM");
-  query = addInClause(query, params, filters.TSI, "s.TSI");
+  const filtersWithFiscalMonth = { ...filters, FiscalMonth: filters.Month };
 
-  // Accept FiscalYear or Year (UI sends Year) — END-YEAR convention
-  const fyList =
+  for (const table of tables) {
+    let query = `
+      SELECT p.document_date, SUM(p.retailing) AS total
+      FROM ${table} p
+      LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
+      LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
+      LEFT JOIN product_mapping pm ON p.p_code = pm.p_code
+      WHERE 1=1
+    `;
+
+    const { whereClause, params } = await buildWhereClauseForRawSQL(
+      filtersWithFiscalMonth
+    );
+    query += whereClause + ` GROUP BY p.document_date`;
+
+    const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
+
+    for (const row of results) {
+      const dt = row.document_date ? new Date(row.document_date) : null;
+      if (!dt) continue;
+      const fy = getFiscalYear(dt); // end-year convention
+      const subtotal = Number(row.total || 0);
+      yearTotals[fy] = (yearTotals[fy] || 0) + subtotal;
+    }
+  }
+
+  // If no data, return empty breakdown
+  const explicitFYs =
     (filters?.FiscalYear?.length ? filters.FiscalYear : null) ??
-    (filters?.Year?.length ? filters.Year : null);
+    (filters?.Year?.length ? filters.Year : null) ??
+    null;
+  const isExplicit = Boolean(
+    explicitFYs || (filters?.StartDate && filters?.EndDate)
+  );
 
-  if (fyList?.length) {
-    query += ` AND (
-      CASE
-        WHEN MONTH(p.document_date) >= 7 THEN YEAR(p.document_date) + 1
-        ELSE YEAR(p.document_date)
-      END
-    ) IN (${fyList.map(() => "?").join(",")})`;
-    params.push(...fyList);
+  // Helper: compute years from date range (inclusive)
+  const yearsFromRange = (startISO: string, endISO: string) => {
+    const startFY = getFiscalYear(new Date(startISO));
+    const endFY = getFiscalYear(new Date(endISO));
+    const out: number[] = [];
+    for (let y = startFY; y <= endFY; y++) out.push(y);
+    return out;
+  };
+
+  let yearsToReturn: number[] = [];
+
+  if (isExplicit) {
+    if (filters?.StartDate && filters?.EndDate) {
+      yearsToReturn = yearsFromRange(filters.StartDate, filters.EndDate);
+    } else if (explicitFYs) {
+      yearsToReturn = explicitFYs.slice();
+    }
+  } else {
+    // pick latest two fiscal years that actually have data (desc)
+    const presentYears = Object.keys(yearTotals)
+      .map((y) => Number(y))
+      .sort((a, b) => b - a);
+    if (presentYears.length >= 2) {
+      yearsToReturn = presentYears.slice(0, 2);
+    } else if (presentYears.length === 1) {
+      yearsToReturn = presentYears.slice(0, 1);
+    } else {
+      // no data at all -> return empty breakdown (consistent with previous "skip zeros" behavior)
+      yearsToReturn = [];
+    }
   }
 
-  // Fiscal Month filter (1 = July .. 12 = June)
-  if (filters.FiscalMonth?.length) {
-    query += ` AND (
-      CASE 
-        WHEN MONTH(p.document_date) >= 7 THEN MONTH(p.document_date) - 6
-        ELSE MONTH(p.document_date) + 6
-      END
-    ) IN (${filters.FiscalMonth.map(() => "?").join(",")})`;
-    params.push(...filters.FiscalMonth);
+  const formatFY = (endYear: number) =>
+    `${endYear - 1}-${String(endYear).slice(-2)}`;
+
+  // Build breakdown items (include zeros only when explicit)
+  const breakdown = yearsToReturn
+    .map((y) => ({
+      year: y,
+      label: formatFY(y),
+      value: yearTotals[y] || 0,
+    }))
+    .filter((item) => (isExplicit ? true : item.value > 0))
+    .sort((a, b) => b.year - a.year);
+
+  // Growth: index semantics (100 = flat)
+  let growth: number | null = null;
+  if (breakdown.length >= 2) {
+    const [curr, prev] = breakdown;
+    growth = prev.value > 0 ? (curr.value / prev.value) * 100 : null;
   }
 
-  // Product filters
-  query = addInClause(query, params, filters.Category, "pm.category");
-  query = addInClause(query, params, filters.Brand, "pm.brand");
-  query = addInClause(query, params, filters.Brandform, "pm.brandform");
-  query = addInClause(query, params, filters.Subbrandform, "pm.subbrandform");
-
-  // Channel filters
-  query = addInClause(
-    query,
-    params,
-    filters.Channel ?? filters.ChannelDesc,
-    "c.channel_desc"
-  );
-  query = addInClause(
-    query,
-    params,
-    filters.BroadChannel ?? filters.BaseChannel,
-    "c.base_channel"
-  );
-  query = addInClause(query, params, filters.ShortChannel, "c.short_channel");
-
-  const result: any[] = await prisma.$queryRawUnsafe(query, ...params);
-  const total = result[0]?.total;
-  return total ? Number(total) : 0;
+  return { breakdown, growth };
 }
 
 export async function getHighestRetailingBranch(filters: any, source: string) {
   const tables = resolveTables(source);
   const branchYearMap: Record<string, Record<number, number>> = {};
+
+  const filtersWithFiscalMonth = { ...filters, FiscalMonth: filters.Month };
 
   for (const table of tables) {
     let query = `
@@ -395,7 +411,9 @@ export async function getHighestRetailingBranch(filters: any, source: string) {
       WHERE 1=1
     `;
 
-    const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
+    const { whereClause, params } = await buildWhereClauseForRawSQL(
+      filtersWithFiscalMonth
+    );
     query += whereClause + ` GROUP BY s.Branch, p.document_date`;
 
     const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
@@ -450,6 +468,8 @@ export async function getHighestRetailingBrand(filters: any, source: string) {
   const tables = resolveTables(source);
   const brandYearTotals: Record<string, Record<number, number>> = {};
 
+  const filtersWithFiscalMonth = { ...filters, FiscalMonth: filters.Month };
+
   for (const table of tables) {
     let query = `
       SELECT pm.brand AS brand, p.document_date, SUM(p.retailing) AS total
@@ -460,7 +480,9 @@ export async function getHighestRetailingBrand(filters: any, source: string) {
       WHERE 1=1
     `;
 
-    const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
+    const { whereClause, params } = await buildWhereClauseForRawSQL(
+      filtersWithFiscalMonth
+    );
     query += whereClause;
     query += ` GROUP BY pm.brand, p.document_date`;
 
@@ -527,6 +549,8 @@ export async function getRetailingByCategory(filters: any, source: string) {
   const tables = resolveTables(source);
   const breakdownMap: Record<string, Record<number, number>> = {};
 
+  const filtersWithFiscalMonth = { ...filters, FiscalMonth: filters.Month };
+
   for (const table of tables) {
     let query = `
       SELECT pm.category, p.document_date, SUM(p.retailing) AS total
@@ -537,7 +561,9 @@ export async function getRetailingByCategory(filters: any, source: string) {
       WHERE 1=1
     `;
 
-    const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
+    const { whereClause, params } = await buildWhereClauseForRawSQL(
+      filtersWithFiscalMonth
+    );
     query += whereClause;
     query += ` GROUP BY pm.category, p.document_date`;
 
@@ -572,6 +598,8 @@ export async function getRetailingByBaseChannel(filters: any, source: string) {
   const tables = resolveTables(source);
   const breakdownMap: Record<string, Record<number, number>> = {};
 
+  const filtersWithFiscalMonth = { ...filters, FiscalMonth: filters.Month };
+
   for (const table of tables) {
     let query = `
       SELECT c.base_channel, p.document_date, SUM(p.retailing) AS total
@@ -582,7 +610,9 @@ export async function getRetailingByBaseChannel(filters: any, source: string) {
       WHERE 1=1
     `;
 
-    const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
+    const { whereClause, params } = await buildWhereClauseForRawSQL(
+      filtersWithFiscalMonth
+    );
     query += whereClause;
     query += ` GROUP BY c.base_channel, p.document_date`;
 
@@ -618,6 +648,8 @@ export async function getMonthlyRetailingTrend(filters: any, source: string) {
   const tables = resolveTables(source);
   const monthlyTotals: Record<string, Record<number, number>> = {};
 
+  const filtersWithFiscalMonth = { ...filters, FiscalMonth: filters.Month };
+
   for (const table of tables) {
     let query = `
       SELECT p.document_date, SUM(p.retailing) AS total
@@ -628,7 +660,9 @@ export async function getMonthlyRetailingTrend(filters: any, source: string) {
       WHERE 1=1
     `;
 
-    const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
+    const { whereClause, params } = await buildWhereClauseForRawSQL(
+      filtersWithFiscalMonth
+    );
     query += whereClause;
     query += ` GROUP BY p.document_date ORDER BY p.document_date`;
 
@@ -664,6 +698,8 @@ export async function getTopBrandforms(filters: any, source: string) {
   const tables = resolveTables(source);
   const brandformYearlyMap: Record<string, Record<number, number>> = {};
 
+  const filtersWithFiscalMonth = { ...filters, FiscalMonth: filters.Month };
+
   for (const table of tables) {
     let query = `
       SELECT pm.brandform, p.document_date, SUM(p.retailing) AS total
@@ -674,7 +710,9 @@ export async function getTopBrandforms(filters: any, source: string) {
       WHERE 1=1
     `;
 
-    const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
+    const { whereClause, params } = await buildWhereClauseForRawSQL(
+      filtersWithFiscalMonth
+    );
     query += whereClause;
     query += ` GROUP BY pm.brandform, p.document_date`;
 

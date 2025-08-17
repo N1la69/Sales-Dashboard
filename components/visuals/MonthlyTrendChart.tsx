@@ -43,9 +43,11 @@ const monthNames = [
 ];
 
 function formatFiscalYear(year: number): string {
-  const nextYear = (year + 1).toString().slice(-2);
-  return `${year}-${nextYear}`;
+  const nextYear = year.toString().slice(-2);
+  return `${year - 1}-${nextYear}`;
 }
+
+const fiscalMonthOrder = [7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6];
 
 export default function MonthlyTrendChart({
   data,
@@ -59,7 +61,7 @@ export default function MonthlyTrendChart({
   if (!data?.length) return <p>No trend data available.</p>;
 
   const uniqueMonths = [...new Set(data.map((d) => d.month))].sort(
-    (a, b) => a - b
+    (a, b) => fiscalMonthOrder.indexOf(a) - fiscalMonthOrder.indexOf(b)
   );
   const uniqueYears = [...new Set(data.map((d) => d.year))];
 
@@ -149,8 +151,8 @@ export default function MonthlyTrendChart({
                 }}
                 labelStyle={{ color: "var(--foreground)" }}
                 formatter={(value, name) => [
-                  value, 
-                  formatFiscalYear(Number(name))
+                  value,
+                  formatFiscalYear(Number(name)),
                 ]}
               />
               {uniqueYears.map((year, idx) => (
@@ -196,6 +198,10 @@ export default function MonthlyTrendChart({
                   color: "var(--foreground)",
                 }}
                 labelStyle={{ color: "var(--foreground)" }}
+                formatter={(value, name) => [
+                  value,
+                  formatFiscalYear(Number(name)),
+                ]}
               />
               {uniqueYears.map((year, idx) => (
                 <Bar

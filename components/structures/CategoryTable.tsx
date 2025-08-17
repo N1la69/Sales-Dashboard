@@ -58,8 +58,8 @@ interface CategoryTableProps {
 }
 
 function formatFiscalYear(year: number): string {
-  const nextYear = (year + 1).toString().slice(-2);
-  return `${year}-${nextYear}`;
+  const nextYear = year.toString().slice(-2);
+  return `${year - 1}-${nextYear}`;
 }
 
 const PARENT_BG_COLORS = [

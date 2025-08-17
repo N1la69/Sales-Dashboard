@@ -6,6 +6,7 @@ import { useState } from "react";
 interface BreakdownItem {
   year: number;
   value: number;
+  label: string; // 👈 add label from API ("2023-24")
 }
 
 interface CategoryBreakdown {
@@ -52,7 +53,7 @@ export default function RetailingCategoryPie({
 
   const allYears = Array.from(
     new Set(data.flatMap((item) => item.breakdown.map((b) => b.year)))
-  ).sort((a, b) => b - a); // descending
+  ).sort((a, b) => b - a);
 
   const [selectedYear, setSelectedYear] = useState(allYears[0]);
 
@@ -72,11 +73,17 @@ export default function RetailingCategoryPie({
     value: Math.round((item.value / total) * 100),
   }));
 
+  // map year to fiscal label (find from any breakdown entry)
+  const getLabel = (year: number) => {
+    const entry = data.flatMap((d) => d.breakdown).find((b) => b.year === year);
+    return entry?.label ?? `${year - 1}-${String(year).slice(-2)}`;
+  };
+
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="flex items-center gap-2">
         <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-          Retailing by Category
+          Category %
         </h2>
         <select
           className="ml-1 py-1 px-2 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 
@@ -87,7 +94,7 @@ export default function RetailingCategoryPie({
         >
           {allYears.map((year) => (
             <option key={year} value={year}>
-              {year}
+              {getLabel(year)}
             </option>
           ))}
         </select>

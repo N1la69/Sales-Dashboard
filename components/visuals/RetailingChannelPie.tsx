@@ -25,16 +25,19 @@ const DARK_COLORS = [
   "#2dd4bf",
 ];
 
-interface ChannelBreakdownItem {
+interface BreakdownItem {
   year: number;
   value: number;
+  label: string; // 👈 add label from API ("2023-24")
+}
+
+interface ChannelBreakdown {
+  base_channel: string;
+  breakdown: BreakdownItem[];
 }
 
 interface RetailingChannelPieProps {
-  data: {
-    base_channel: string;
-    breakdown: ChannelBreakdownItem[];
-  }[];
+  data: ChannelBreakdown[];
   loading?: boolean;
   error?: { message: string };
 }
@@ -79,11 +82,17 @@ export default function RetailingChannelPie({
     value: Math.round((item.value / total) * 100),
   }));
 
+  // 🔑 helper: get label for year
+  const getLabel = (year: number) => {
+    const entry = data.flatMap((d) => d.breakdown).find((b) => b.year === year);
+    return entry?.label ?? `${year - 1}-${String(year).slice(-2)}`;
+  };
+
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="flex items-center gap-2">
         <h2 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
-          Retailing by Channel (Base)
+          Base Channel %
         </h2>
         <select
           className="ml-1 py-1 px-2 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 
@@ -94,7 +103,7 @@ export default function RetailingChannelPie({
         >
           {allYears.map((year) => (
             <option key={year} value={year}>
-              {year}
+              {getLabel(year)}
             </option>
           ))}
         </select>
