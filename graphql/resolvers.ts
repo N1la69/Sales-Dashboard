@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+  buildWhereClauseForRawSQL,
   getAllBranches,
   getCategoryRetailing,
   getFiscalYear,
@@ -15,6 +16,7 @@ import {
   getStoreStats,
   getTopBrandforms,
   getTopStoresQuery,
+  resolveTables,
   suggestStores,
 } from "@/lib/helpers";
 import prisma from "@/lib/utils";
@@ -31,57 +33,98 @@ export const resolvers = {
 
     //DASHBOARD
     retailingStats: async (_: any, { filters, source }: any) => {
-      const breakdown: { year: number; value: number }[] = [];
+      // Aggregate totals per fiscal end-year
+      const yearTotals: Record<number, number> = {};
+      const tables = resolveTables(source);
 
-      // 1) If a date range is provided, use its fiscal-year span (and drop zero totals)
-      if (filters?.StartDate && filters?.EndDate) {
-        const startFiscalYear = getFiscalYear(new Date(filters.StartDate));
-        const endFiscalYear = getFiscalYear(new Date(filters.EndDate));
+      for (const table of tables) {
+        let query = `
+      SELECT p.document_date, SUM(p.retailing) AS total
+      FROM ${table} p
+      LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
+      LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
+      LEFT JOIN product_mapping pm ON p.p_code = pm.p_code
+      WHERE 1=1
+    `;
 
-        for (let fy = startFiscalYear; fy <= endFiscalYear; fy++) {
-          const value = await getRetailingWithRawSQL(
-            { ...filters, FiscalYear: [fy], FiscalMonth: undefined },
-            source
-          );
-          if (value > 0) breakdown.push({ year: fy, value });
+        // Keep your existing SQL filter builder (it may include Year/FiscalYear if UI sent one)
+        const { whereClause, params } = await buildWhereClauseForRawSQL(
+          filters
+        );
+        query += whereClause + ` GROUP BY p.document_date`;
+
+        const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
+
+        for (const row of results) {
+          const dt = row.document_date ? new Date(row.document_date) : null;
+          if (!dt) continue;
+          const fy = getFiscalYear(dt); // end-year convention
+          const subtotal = Number(row.total || 0);
+          yearTotals[fy] = (yearTotals[fy] || 0) + subtotal;
         }
       }
-      // 2) If explicit FiscalYear(s) provided, use them (and drop zero totals)
-      else if (filters?.FiscalYear?.length) {
-        for (const fy of filters.FiscalYear) {
-          const value = await getRetailingWithRawSQL(
-            { ...filters, FiscalYear: [fy], FiscalMonth: undefined },
-            source
-          );
-          if (value > 0) breakdown.push({ year: fy, value });
+
+      // Decide which years to return, preserving previous behavior:
+      // - if user explicitly requested years (or StartDate/EndDate) -> include those years (include zeros)
+      // - otherwise -> return the latest two YEARS that have data (skip zeros)
+      const explicitFYs =
+        (filters?.FiscalYear?.length ? filters.FiscalYear : null) ??
+        (filters?.Year?.length ? filters.Year : null) ??
+        null;
+      const isExplicit = Boolean(
+        explicitFYs || (filters?.StartDate && filters?.EndDate)
+      );
+
+      // Helper: compute years from date range (inclusive)
+      const yearsFromRange = (startISO: string, endISO: string) => {
+        const startFY = getFiscalYear(new Date(startISO));
+        const endFY = getFiscalYear(new Date(endISO));
+        const out: number[] = [];
+        for (let y = startFY; y <= endFY; y++) out.push(y);
+        return out;
+      };
+
+      let yearsToReturn: number[] = [];
+
+      if (isExplicit) {
+        if (filters?.StartDate && filters?.EndDate) {
+          yearsToReturn = yearsFromRange(filters.StartDate, filters.EndDate);
+        } else if (explicitFYs) {
+          yearsToReturn = explicitFYs.slice();
+        }
+      } else {
+        // pick latest two fiscal years that actually have data (desc)
+        const presentYears = Object.keys(yearTotals)
+          .map((y) => Number(y))
+          .sort((a, b) => b - a);
+        if (presentYears.length >= 2) {
+          yearsToReturn = presentYears.slice(0, 2);
+        } else if (presentYears.length === 1) {
+          yearsToReturn = presentYears.slice(0, 1);
+        } else {
+          // no data at all -> return empty breakdown (consistent with previous "skip zeros" behavior)
+          yearsToReturn = [];
         }
       }
-      // 3) No years given -> choose the last TWO fiscal years that actually have data
-      else {
-        const currentFY = getFiscalYear(new Date());
-        const collected: { year: number; value: number }[] = [];
 
-        // look back up to 6 FYs (safety) and pick the first two that have > 0
-        for (let back = 0; back < 6 && collected.length < 2; back++) {
-          const fy = currentFY - back;
-          const value = await getRetailingWithRawSQL(
-            { ...filters, FiscalYear: [fy], FiscalMonth: undefined },
-            source
-          );
-          if (value > 0) collected.push({ year: fy, value });
-        }
+      const formatFY = (endYear: number) =>
+        `${endYear - 1}-${String(endYear).slice(-2)}`;
 
-        breakdown.push(...collected);
-      }
+      // Build breakdown items (include zeros only when explicit)
+      const breakdown = yearsToReturn
+        .map((y) => ({
+          year: y,
+          label: formatFY(y),
+          value: yearTotals[y] || 0,
+        }))
+        .filter((item) => (isExplicit ? true : item.value > 0))
+        .sort((a, b) => b.year - a.year);
 
-      // sort newest FY first (e.g., 2024 before 2023)
-      breakdown.sort((a, b) => b.year - a.year);
-
-      // compute growth between the top two years, if available
+      // Growth: index semantics (100 = flat)
       let growth: number | null = null;
-      if (breakdown.length >= 2 && breakdown[1].value > 0) {
-        const [curr, prev] = breakdown; // curr is latest due to sort
-        growth = (curr.value / prev.value) * 100;
+      if (breakdown.length >= 2) {
+        const [curr, prev] = breakdown;
+        growth = prev.value > 0 ? (curr.value / prev.value) * 100 : null;
       }
 
       return { breakdown, growth };

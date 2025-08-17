@@ -122,7 +122,6 @@ export default function Dashboard() {
     startDate: null as Date | null,
     endDate: null as Date | null,
   });
-
   const [appliedDateRange, setAppliedDateRange] = useState({
     startDate: null as Date | null,
     endDate: null as Date | null,
@@ -188,7 +187,14 @@ export default function Dashboard() {
   } = useQuery(GET_TOP_BRANDFORMS, queryOptions);
 
   const handleFilterChange = (key: string, values: (string | number)[]) => {
-    setPendingFilters((prev) => ({ ...prev, [key]: values }));
+    const mapped = values.map((v) => {
+      if (typeof v === "string" && /^\d{4}-\d{2}$/.test(v)) {
+        // "2024-25" → 2025 (end year)
+        return parseInt(v.split("-")[1]) + 2000;
+      }
+      return v;
+    });
+    setPendingFilters((prev) => ({ ...prev, [key]: mapped }));
   };
 
   const applyFilters = (filtersOverride?: typeof pendingFilters) => {

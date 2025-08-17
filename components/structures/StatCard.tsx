@@ -5,9 +5,8 @@ type YearBreakdown = {
   value: number;
 };
 
-const formatFiscalYear = (year: number) => {
-  const startYear = year;
-  const endYear = year + 1;
+const formatFiscalYear = (endYear: number) => {
+  const startYear = endYear - 1;
   return `${startYear}-${String(endYear).slice(-2)}`;
 };
 

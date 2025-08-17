@@ -46,44 +46,10 @@ export function monthNumberToName(month: number): string {
   return monthNames[month - 1] || "Unknown";
 }
 
-export function fiscalMonthNumberToName(fiscalMonth: number): string {
-  const fiscalMonths = [
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-  ];
-  return fiscalMonths[fiscalMonth - 1] || "Unknown";
-}
-
-export function getFiscalYearAndMonth(date: Date) {
-  const month = date.getMonth() + 1; // 1–12 calendar
-  const year = date.getFullYear();
-
-  const fiscalYearStart = month >= 7 ? year : year - 1;
-  const fiscalMonth = month >= 7 ? month - 6 : month + 6;
-
-  return {
-    fiscalYearStart, // e.g. 2023 for FY 2023-24
-    fiscalYearLabel: `${fiscalYearStart}-${(fiscalYearStart + 1)
-      .toString()
-      .slice(-2)}`, // "2023-24"
-    fiscalMonth, // 1 = July, 12 = June
-  };
-}
-
 export function getFiscalYear(date: Date): number {
   const year = date.getFullYear();
-  const month = date.getMonth() + 1; // 1–12
-  return month >= 7 ? year : year - 1;
+  const month = date.getMonth() + 1;
+  return month >= 7 ? year + 1 : year;
 }
 
 export function addInClause(
@@ -168,21 +134,27 @@ export async function buildWhereClauseForRawSQL(
   addInClause(filters.ASM, "s.ASM");
   addInClause(filters.TSI, "s.TSI");
 
-  // Fiscal Year filter
-  if (filters.FiscalYear?.length) {
+  // Accept FiscalYear or Year from the UI; prefer FiscalYear if present
+  const fyList =
+    (filters?.FiscalYear && filters.FiscalYear.length
+      ? filters.FiscalYear
+      : null) ?? (filters?.Year && filters.Year.length ? filters.Year : null);
+
+  // Fiscal Year filter (END-YEAR convention: Jul..Dec => YEAR+1, Jan..Jun => YEAR)
+  if (fyList?.length) {
     whereClause += ` AND (
-      CASE 
+      CASE
         WHEN MONTH(p.document_date) >= 7 THEN YEAR(p.document_date) + 1
         ELSE YEAR(p.document_date)
       END
-    ) IN (${filters.FiscalYear.map(() => "?").join(",")})`;
-    params.push(...filters.FiscalYear);
+    ) IN (${fyList.map(() => "?").join(",")})`;
+    params.push(...fyList);
   }
 
-  // Fiscal Month filter (1 = July, 12 = June)
+  // Fiscal Month filter (1 = July, 12 = June) — keep as-is
   if (filters.FiscalMonth?.length) {
     whereClause += ` AND (
-      CASE 
+      CASE
         WHEN MONTH(p.document_date) >= 7 THEN MONTH(p.document_date) - 6
         ELSE MONTH(p.document_date) + 6
       END
@@ -201,13 +173,13 @@ export async function buildWhereClauseForRawSQL(
   addInClause(filters.BaseChannel, "c.base_channel");
   addInClause(filters.ShortChannel, "c.short_channel");
 
-  // Date range
+  // Date range (if provided, keep it — resolvers may use it)
   if (filters.StartDate && filters.EndDate) {
     whereClause += ` AND p.document_date BETWEEN ? AND ?`;
     params.push(filters.StartDate, filters.EndDate);
   }
 
-  // Parent filter
+  // Parent (drill-down) filter
   if (parentFilter?.field && parentFilter?.value != null) {
     whereClause += ` AND ${parentFilter.field} = ?`;
     params.push(parentFilter.value);
@@ -354,18 +326,22 @@ export async function getTotalRetailing(
   query = addInClause(query, params, filters.ASM, "s.ASM");
   query = addInClause(query, params, filters.TSI, "s.TSI");
 
-  // Fiscal Year filter (July–June)
-  if (filters.FiscalYear?.length) {
+  // Accept FiscalYear or Year (UI sends Year) — END-YEAR convention
+  const fyList =
+    (filters?.FiscalYear?.length ? filters.FiscalYear : null) ??
+    (filters?.Year?.length ? filters.Year : null);
+
+  if (fyList?.length) {
     query += ` AND (
-      CASE 
-        WHEN MONTH(p.document_date) >= 7 THEN YEAR(p.document_date)
-        ELSE YEAR(p.document_date) - 1
+      CASE
+        WHEN MONTH(p.document_date) >= 7 THEN YEAR(p.document_date) + 1
+        ELSE YEAR(p.document_date)
       END
-    ) IN (${filters.FiscalYear.map(() => "?").join(",")})`;
-    params.push(...filters.FiscalYear);
+    ) IN (${fyList.map(() => "?").join(",")})`;
+    params.push(...fyList);
   }
 
-  // Fiscal Month filter (1 = July, 12 = June)
+  // Fiscal Month filter (1 = July .. 12 = June)
   if (filters.FiscalMonth?.length) {
     query += ` AND (
       CASE 
@@ -383,8 +359,18 @@ export async function getTotalRetailing(
   query = addInClause(query, params, filters.Subbrandform, "pm.subbrandform");
 
   // Channel filters
-  query = addInClause(query, params, filters.Channel, "c.channel_desc");
-  query = addInClause(query, params, filters.BroadChannel, "c.base_channel");
+  query = addInClause(
+    query,
+    params,
+    filters.Channel ?? filters.ChannelDesc,
+    "c.channel_desc"
+  );
+  query = addInClause(
+    query,
+    params,
+    filters.BroadChannel ?? filters.BaseChannel,
+    "c.base_channel"
+  );
   query = addInClause(query, params, filters.ShortChannel, "c.short_channel");
 
   const result: any[] = await prisma.$queryRawUnsafe(query, ...params);
@@ -393,45 +379,38 @@ export async function getTotalRetailing(
 }
 
 export async function getHighestRetailingBranch(filters: any, source: string) {
-  const years = filters?.Year?.length ? filters.Year : [2023, 2024];
+  const tables = resolveTables(source);
   const branchYearMap: Record<string, Record<number, number>> = {};
 
-  for (const year of years) {
-    const tables = resolveTables(source);
+  for (const table of tables) {
+    let query = `
+      SELECT 
+        s.Branch AS branch,
+        p.document_date,
+        SUM(p.retailing) AS total
+      FROM ${table} p
+      LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
+      LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
+      LEFT JOIN product_mapping pm ON p.p_code = pm.p_code
+      WHERE 1=1
+    `;
 
-    for (const table of tables) {
-      let query = `
-        SELECT s.Branch AS branch, p.document_date, SUM(p.retailing) AS total
-        FROM ${table} p
-        LEFT JOIN store_mapping s ON p.customer_code = s.Old_Store_Code
-        LEFT JOIN channel_mapping c ON s.customer_type = c.customer_type
-        LEFT JOIN product_mapping pm ON p.p_code = pm.p_code
-        WHERE 1=1
-      `;
+    const { whereClause, params } = await buildWhereClauseForRawSQL(filters);
+    query += whereClause + ` GROUP BY s.Branch, p.document_date`;
 
-      const { whereClause, params } = await buildWhereClauseForRawSQL({
-        ...filters,
-        Year: [year], // this will be fiscal year now
-      });
+    const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
 
-      query += whereClause + ` GROUP BY s.Branch, p.document_date`;
+    for (const row of results) {
+      const branch = row.branch || "Unknown";
+      const fy = getFiscalYear(new Date(row.document_date)); // convert in JS
+      const retailing = Number(row.total);
 
-      const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
-
-      for (const row of results) {
-        const branch = row.branch || "Unknown";
-        const date = new Date(row.document_date);
-        const fy = getFiscalYear(date);
-        const retailing = Number(row.total);
-
-        if (!branchYearMap[branch]) branchYearMap[branch] = {};
-        branchYearMap[branch][fy] =
-          (branchYearMap[branch][fy] || 0) + retailing;
-      }
+      if (!branchYearMap[branch]) branchYearMap[branch] = {};
+      branchYearMap[branch][fy] = (branchYearMap[branch][fy] || 0) + retailing;
     }
   }
 
-  // Find max branch
+  // Find max branch across all FYs
   let maxBranch = "";
   let maxTotal = 0;
 
@@ -443,19 +422,21 @@ export async function getHighestRetailingBranch(filters: any, source: string) {
     }
   }
 
+  // Format breakdown
   const breakdownRaw = branchYearMap[maxBranch] || {};
-  const breakdown = Object.entries(breakdownRaw).map(([year, value]) => ({
-    year: parseInt(year),
-    value,
-  }));
+  const breakdown = Object.entries(breakdownRaw)
+    .map(([year, value]) => ({
+      year: parseInt(year), // fiscal end-year
+      label: `${parseInt(year) - 1}-${String(year).slice(-2)}`, // "2024-25"
+      value,
+    }))
+    .sort((a, b) => b.year - a.year);
 
-  // Calculate growth
-  let growth = null;
-  if (breakdown.length === 2) {
-    const [a, b] = breakdown.sort((a, b) => a.year - b.year);
-    if (a.value > 0) {
-      growth = (b.value / a.value) * 100;
-    }
+  // Growth
+  let growth: number | null = null;
+  if (breakdown.length >= 2) {
+    const [curr, prev] = breakdown;
+    growth = prev.value > 0 ? (curr.value / prev.value) * 100 : null;
   }
 
   return {
@@ -488,7 +469,7 @@ export async function getHighestRetailingBrand(filters: any, source: string) {
     for (const row of results) {
       const brand = row.brand || "Unknown";
       const date = new Date(row.document_date);
-      const fy = getFiscalYear(date);
+      const fy = getFiscalYear(date); // now end-year convention
       const retailing = Number(row.total);
 
       if (!brandYearTotals[brand]) brandYearTotals[brand] = {};
@@ -502,7 +483,12 @@ export async function getHighestRetailingBrand(filters: any, source: string) {
   for (const yearMap of Object.values(brandYearTotals)) {
     Object.keys(yearMap).forEach((y) => allYears.add(Number(y)));
   }
-  const latestYear = Math.max(...Array.from(allYears));
+
+  // if no data, fallback to current FY
+  const latestYear =
+    allYears.size > 0
+      ? Math.max(...Array.from(allYears))
+      : getFiscalYear(new Date());
 
   // Pick highest brand based on latest year's retailing
   let maxBrand = "";
@@ -522,14 +508,12 @@ export async function getHighestRetailingBrand(filters: any, source: string) {
     }
   }
 
-  // Calculate growth from previous fiscal year
+  // Calculate growth from previous fiscal year (index semantics)
   let growth: number | null = null;
   if (maxBreakdown.length >= 2) {
     const latest = maxBreakdown[0].value;
     const prev = maxBreakdown[1].value;
-    if (prev !== 0) {
-      growth = Math.round((latest / prev) * 100);
-    }
+    growth = prev !== 0 ? (latest / prev) * 100 : null;
   }
 
   return {
