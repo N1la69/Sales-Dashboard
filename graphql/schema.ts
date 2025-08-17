@@ -106,7 +106,6 @@ export const typeDefs = gql`
 
   type CategoryRetailingStat {
     category: String!
-    retailing: Float!
     yearWise: [YearlyRetailing!]!
   }
 

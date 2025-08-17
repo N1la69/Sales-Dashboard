@@ -106,7 +106,6 @@ const GET_CATEGORY_RETAILING = gql`
       month: $month
     ) {
       category
-      retailing
       yearWise {
         year
         value
@@ -397,7 +396,7 @@ const StorePage = () => {
               )}
 
               {/* Responsive Grid */}
-              <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mt-4">
+              <div className="grid grid-cols-1 lg:grid-cols-5 gap-4 mt-4 mb-3">
                 {/* Trend Chart */}
                 <div className="lg:col-span-3">
                   <h2 className="text-xl font-semibold mb-3">
@@ -441,7 +440,7 @@ const StorePage = () => {
               </div>
 
               {/* Category Stats */}
-              <div className="mt-3 mb-5">
+              <div className="mt-4 mb-5">
                 {categoryLoading ? (
                   <p className="text-indigo-600 dark:text-indigo-300">
                     Loading store category stats...
@@ -452,7 +451,10 @@ const StorePage = () => {
                   </p>
                 ) : (
                   categoryStats.length > 0 && (
-                    <StoreCategoryTable data={categoryStats} />
+                    <StoreCategoryTable
+                      data={categoryStats}
+                      storeCode={selectedStore}
+                    />
                   )
                 )}
               </div>

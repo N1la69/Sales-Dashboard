@@ -40,6 +40,13 @@ const monthNames = [
   "Dec",
 ];
 
+function formatFiscalYear(year: number): string {
+  const nextYear = year.toString().slice(-2);
+  return `${year - 1}-${nextYear}`;
+}
+
+const fiscalMonthOrder = [7, 8, 9, 10, 11, 12, 1, 2, 3, 4, 5, 6];
+
 export default function StoreRetailingTrendChart({
   data,
   loading,
@@ -56,9 +63,10 @@ export default function StoreRetailingTrendChart({
   if (!data || data.length === 0)
     return <p className="text-muted-foreground">No trend data available.</p>;
 
-  const uniqueMonths = Array.from(new Set(data.map((d) => d.month))).sort(
-    (a, b) => a - b
+  const uniqueMonths = [...new Set(data.map((d) => d.month))].sort(
+    (a, b) => fiscalMonthOrder.indexOf(a) - fiscalMonthOrder.indexOf(b)
   );
+  const uniqueYears = [...new Set(data.map((d) => d.year))];
 
   const chartData = uniqueMonths.map((month) => {
     const entry: Record<string, number | string> = {
@@ -74,10 +82,21 @@ export default function StoreRetailingTrendChart({
     return entry;
   });
 
-  const years = Array.from(new Set(data.map((d) => d.year)));
-
   return (
     <div className="w-full h-[20rem] sm:h-[25rem] md:h-[28rem] lg:h-[32rem]">
+      {/* LEGEND */}
+      <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm sm:text-base text-gray-700 dark:text-gray-300">
+        {uniqueYears.map((year, idx) => (
+          <div key={year} className="flex items-center gap-2">
+            <span
+              className="inline-block w-4 h-1.5 rounded-sm"
+              style={{ backgroundColor: getColor(idx) }}
+            />
+            <span>{formatFiscalYear(year)}</span>
+          </div>
+        ))}
+      </div>
+
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={chartData}
@@ -106,11 +125,9 @@ export default function StoreRetailingTrendChart({
               color: "#000",
               fontSize: "0.875rem",
             }}
+            formatter={(value, name) => [value, formatFiscalYear(Number(name))]}
           />
-          <Legend
-            wrapperStyle={{ color: "currentColor", fontSize: "0.875rem" }}
-          />
-          {years.map((year, idx) => (
+          {uniqueYears.map((year, idx) => (
             <Bar
               key={year}
               dataKey={String(year)}
