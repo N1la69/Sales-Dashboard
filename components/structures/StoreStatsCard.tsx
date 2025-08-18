@@ -26,6 +26,8 @@ interface StoreStatsProps {
   error: any;
 }
 
+const fiscalYearLabel = (fy: number) => `${fy - 1}-${String(fy).slice(-2)}`;
+
 export default function StoreStatsCard({
   data,
   loading,
@@ -54,8 +56,9 @@ export default function StoreStatsCard({
         <h3 className="font-semibold mb-1">Highest Retailing Month</h3>
         {data.highestRetailingMonth ? (
           <p>
-            {data.highestRetailingMonth.month}/{data.highestRetailingMonth.year}{" "}
-            – ₹{data.highestRetailingMonth.retailing.toFixed(2)}
+            {data.highestRetailingMonth.month}/
+            {fiscalYearLabel(data.highestRetailingMonth.year)} – ₹
+            {data.highestRetailingMonth.retailing.toFixed(2)}
           </p>
         ) : (
           <p className="text-gray-500 dark:text-gray-400">No data available</p>
@@ -66,8 +69,9 @@ export default function StoreStatsCard({
         <h3 className="font-semibold mb-1">Lowest Retailing Month</h3>
         {data.lowestRetailingMonth ? (
           <p>
-            {data.lowestRetailingMonth.month}/{data.lowestRetailingMonth.year} –
-            ₹{data.lowestRetailingMonth.retailing.toFixed(2)}
+            {data.lowestRetailingMonth.month}/
+            {fiscalYearLabel(data.lowestRetailingMonth.year)} – ₹
+            {data.lowestRetailingMonth.retailing.toFixed(2)}
           </p>
         ) : (
           <p className="text-gray-500 dark:text-gray-400">No data available</p>

@@ -6,7 +6,6 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { MinusCircle, PlusCircle } from "lucide-react";
 
 // ================= GraphQL =================
-// 🔥 UPDATED: store drilldown query
 const STORE_RETAILING_BREAKDOWN = gql`
   query StoreRetailingBreakdown(
     $level: String!
@@ -37,12 +36,36 @@ const STORE_RETAILING_BREAKDOWN = gql`
 `;
 
 // ================= Utilities =================
-const ROW_COLORS = [
-  "bg-indigo-50 dark:bg-indigo-900/20",
-  "bg-emerald-50 dark:bg-emerald-900/20",
-  "bg-amber-50 dark:bg-amber-900/20",
-  "bg-rose-50 dark:bg-rose-900/20",
-  "bg-sky-50 dark:bg-sky-900/20",
+const PARENT_BG_COLORS = [
+  "bg-indigo-100/50 dark:bg-indigo-900/30",
+  "bg-emerald-100/50 dark:bg-emerald-900/30",
+  "bg-amber-100/50 dark:bg-amber-900/30",
+  "bg-rose-100/50 dark:bg-rose-900/30",
+  "bg-sky-100/50 dark:bg-sky-900/30",
+  "bg-violet-100/50 dark:bg-violet-900/30",
+  "bg-pink-100/50 dark:bg-pink-900/30",
+  "bg-lime-100/50 dark:bg-lime-900/30",
+  "bg-purple-100/50 dark:bg-purple-900/30",
+  "bg-cyan-100/50 dark:bg-cyan-900/30",
+];
+
+const CHILD_BG_COLORS = ["bg-gray-200/50 dark:bg-gray-800/30"];
+
+const GRANDCHILD_BG_COLORS = ["bg-slate-300/50 dark:bg-slate-700/30"];
+
+const GREATGRANDCHILD_BG_COLORS = ["bg-stone-300/50 dark:bg-stone-600/30"];
+
+const COLOR_PALETTE = [
+  "text-rose-500 dark:text-rose-400",
+  "text-orange-500 dark:text-orange-400",
+  "text-yellow-500 dark:text-yellow-300",
+  "text-green-500 dark:text-green-400",
+  "text-teal-500 dark:text-teal-400",
+  "text-sky-500 dark:text-sky-400",
+  "text-indigo-500 dark:text-indigo-400",
+  "text-violet-500 dark:text-violet-400",
+  "text-pink-500 dark:text-pink-400",
+  "text-emerald-500 dark:text-emerald-400",
 ];
 
 const NEXT_LEVEL: Record<string, string> = {
@@ -87,7 +110,6 @@ export default function StoreCategoryTable({
   >({});
   const [loadingKeys, setLoadingKeys] = useState<string[]>([]);
 
-  // 🔥 UPDATED: useLazyQuery for store breakdown
   const [fetchBreakdown] = useLazyQuery(STORE_RETAILING_BREAKDOWN);
 
   const topYears =
@@ -103,7 +125,7 @@ export default function StoreCategoryTable({
   const normalized: BreakdownItem[] = data.map((row) => ({
     key: row.category,
     name: row.category,
-    breakdown: row.breakdown ?? [], // ✅ instead of row.yearWise
+    breakdown: row.breakdown ?? [],
     growth: null,
     childrenCount: null,
   }));
@@ -211,16 +233,35 @@ export default function StoreCategoryTable({
       const nextLevel = NEXT_LEVEL[parentLevel];
       const isExpandable = !!nextLevel;
       const isExpanded = !!expanded[rowKey];
-      const rowBg = ROW_COLORS[idx % ROW_COLORS.length];
+      // Row color indexing
+      let colorIdx: number;
+      let rowBg: string;
+
+      if (depth === 0) {
+        colorIdx = idx % PARENT_BG_COLORS.length;
+        rowBg = PARENT_BG_COLORS[colorIdx];
+      } else if (depth === 1) {
+        colorIdx = idx % CHILD_BG_COLORS.length;
+        rowBg = CHILD_BG_COLORS[colorIdx];
+      } else if (depth === 2) {
+        colorIdx = idx % GRANDCHILD_BG_COLORS.length;
+        rowBg = GRANDCHILD_BG_COLORS[colorIdx];
+      } else {
+        colorIdx = idx % GREATGRANDCHILD_BG_COLORS.length;
+        rowBg = GREATGRANDCHILD_BG_COLORS[colorIdx];
+      }
 
       return (
         <React.Fragment key={rowKey}>
           <tr
             className={`${rowBg} transition-colors hover:bg-muted dark:hover:bg-accent`}
           >
-            <td className="px-4 py-2 font-medium">
+            <td
+              style={{ paddingLeft: `${depth * 1.5}rem` }}
+              className={`px-4 py-2 font-medium ${COLOR_PALETTE[colorIdx]} rounded-l-lg`}
+            >
               <button
-                className="flex items-center gap-2 w-full text-left"
+                className="flex items-center gap-2 w-full text-left pl-2"
                 onClick={() => toggleExpand(item, parentLevel)}
                 aria-expanded={isExpanded}
               >

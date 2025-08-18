@@ -19,6 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import StoreCategoryTable from "@/components/structures/StoreCategoryTable";
+import { filters } from "@/constants/data";
 
 // ================= GraphQL Queries =================
 const GET_ALL_BRANCHES = gql`
@@ -149,8 +150,8 @@ const StorePage = () => {
     month: [],
   });
 
-  const yearsList = [2023, 2024, 2025];
-  const monthsList = Array.from({ length: 12 }, (_, i) => i + 1);
+  const yearFilter = filters.find((f) => f.key === "Year");
+  const monthFilter = filters.find((f) => f.key === "Month");
 
   const { data: branchData, loading: branchLoading } =
     useQuery(GET_ALL_BRANCHES);
@@ -363,7 +364,7 @@ const StorePage = () => {
               <div className="flex flex-col sm:flex-row gap-3">
                 <MultiSelect
                   label="Year"
-                  options={yearsList}
+                  options={[...(yearFilter?.values || [])]}
                   selected={pendingFilters.year}
                   onChange={(values) =>
                     setPendingFilters((prev) => ({
@@ -374,7 +375,7 @@ const StorePage = () => {
                 />
                 <MultiSelect
                   label="Month"
-                  options={monthsList}
+                  options={[...(monthFilter?.values || [])]}
                   selected={pendingFilters.month}
                   onChange={(values) =>
                     setPendingFilters((prev) => ({
