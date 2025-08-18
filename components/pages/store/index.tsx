@@ -361,6 +361,7 @@ const StorePage = () => {
         <div className="space-y-4">
           {selectedStore ? (
             <>
+              {/* FILTERS */}
               <div className="flex flex-col sm:flex-row gap-3">
                 <MultiSelect
                   label="Year"
@@ -369,7 +370,11 @@ const StorePage = () => {
                   onChange={(values) =>
                     setPendingFilters((prev) => ({
                       ...prev,
-                      year: values as number[],
+                      year: (values as (string | number)[]).map((y) =>
+                        typeof y === "string"
+                          ? parseInt(y.split("-")[1]) + 2000
+                          : y
+                      ),
                     }))
                   }
                 />
@@ -455,6 +460,8 @@ const StorePage = () => {
                     <StoreCategoryTable
                       data={categoryStats}
                       storeCode={selectedStore}
+                      filters={appliedFilters}
+                      source={dataSource}
                     />
                   )
                 )}
