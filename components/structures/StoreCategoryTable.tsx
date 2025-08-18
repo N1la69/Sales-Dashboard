@@ -6,18 +6,23 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { MinusCircle, PlusCircle } from "lucide-react";
 
 // ================= GraphQL =================
-export const GET_RETAILING_BREAKDOWN = gql`
-  query GetRetailingBreakdown(
+// 🔥 UPDATED: store drilldown query
+const STORE_RETAILING_BREAKDOWN = gql`
+  query StoreRetailingBreakdown(
     $level: String!
     $parent: String
-    $filters: FilterInput
+    $storeCode: String!
     $source: String
+    $year: [Int!]
+    $month: [Int!]
   ) {
-    retailingBreakdown(
+    storeRetailingBreakdown(
       level: $level
       parent: $parent
-      filters: $filters
+      storeCode: $storeCode
       source: $source
+      year: $year
+      month: $month
     ) {
       key
       name
@@ -58,7 +63,7 @@ interface BreakdownItem {
 
 interface CategoryRetailingStat {
   category: string;
-  yearWise: { year: number; value: number }[];
+  breakdown: { year: number; value: number }[];
 }
 
 interface Props {
@@ -82,24 +87,23 @@ export default function StoreCategoryTable({
   >({});
   const [loadingKeys, setLoadingKeys] = useState<string[]>([]);
 
+  // 🔥 UPDATED: useLazyQuery for store breakdown
+  const [fetchBreakdown] = useLazyQuery(STORE_RETAILING_BREAKDOWN);
+
   const topYears =
     latestYears ??
-    Array.from(new Set(data.flatMap((d) => d.yearWise.map((y) => y.year))))
+    Array.from(new Set(data.flatMap((d) => d.breakdown.map((y) => y.year))))
       .sort((a, b) => b - a)
       .slice(0, 2);
 
   const latestYear = topYears[0] ?? null;
   const previousYear = topYears[1] ?? null;
 
-  const [fetchBreakdown] = useLazyQuery(GET_RETAILING_BREAKDOWN, {
-    fetchPolicy: "network-only",
-  });
-
   // Convert top-level data into BreakdownItems
   const normalized: BreakdownItem[] = data.map((row) => ({
     key: row.category,
     name: row.category,
-    breakdown: row.yearWise,
+    breakdown: row.breakdown ?? [], // ✅ instead of row.yearWise
     growth: null,
     childrenCount: null,
   }));
@@ -136,24 +140,27 @@ export default function StoreCategoryTable({
     // Fetch children
     setLoadingKeys((prev) => [...prev, rowKey]);
     try {
+      // 🔥 UPDATED: pass storeCode, year, month explicitly
       const res = await fetchBreakdown({
         variables: {
           level: nextLevel,
           parent: item.key,
-          filters: { ...filters, storeCode },
+          storeCode,
           source,
+          year: filters?.year ?? [],
+          month: filters?.month ?? [],
         },
       });
 
-      const nodes: BreakdownItem[] = (res?.data?.retailingBreakdown ?? []).map(
-        (n: any) => ({
-          key: n.key ?? n.name ?? "Unknown",
-          name: n.name ?? n.key ?? "Unknown",
-          breakdown: n.breakdown ?? [],
-          growth: n.growth ?? null,
-          childrenCount: n.childrenCount ?? null,
-        })
-      );
+      const nodes: BreakdownItem[] = (
+        res?.data?.storeRetailingBreakdown ?? []
+      ).map((n: any) => ({
+        key: n.key ?? n.name ?? "Unknown",
+        name: n.name ?? n.key ?? "Unknown",
+        breakdown: n.breakdown ?? [],
+        growth: n.growth ?? null,
+        childrenCount: n.childrenCount ?? null,
+      }));
 
       const sortedChildren = [...nodes].sort((a, b) => {
         const aLatest = latestYear
@@ -184,7 +191,9 @@ export default function StoreCategoryTable({
     items.map((item, idx) => {
       const rowKey = `${parentLevel}-${item.key}`;
       const yearlyMap: Record<number, number> = {};
-      item.breakdown.forEach(({ year, value }) => (yearlyMap[year] = value));
+      (item.breakdown ?? []).forEach(({ year, value }) => {
+        yearlyMap[year] = value;
+      });
 
       const latest = latestYear ? yearlyMap[latestYear] ?? 0 : 0;
       const previous = previousYear ? yearlyMap[previousYear] ?? 0 : 0;

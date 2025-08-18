@@ -106,7 +106,7 @@ const GET_CATEGORY_RETAILING = gql`
       month: $month
     ) {
       category
-      yearWise {
+      breakdown {
         year
         value
       }

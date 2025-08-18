@@ -9,6 +9,7 @@ import {
   getRetailingByBaseChannel,
   getRetailingByCategory,
   getStoreDetails,
+  getStoreRetailingBreakdown,
   getStoreRetailingTrend,
   getStoreStats,
   getTopBrandforms,
@@ -27,6 +28,19 @@ export const resolvers = {
       { level, parent, filters, source }: any
     ) => {
       return await getRetailingBreakdown(level, parent, filters, source);
+    },
+    storeRetailingBreakdown: async (
+      _: any,
+      { level, parent, storeCode, source, year, month }: any
+    ) => {
+      return await getStoreRetailingBreakdown(
+        level,
+        parent,
+        storeCode,
+        source,
+        year,
+        month
+      );
     },
 
     //DASHBOARD

@@ -33,6 +33,14 @@ export const typeDefs = gql`
     childrenCount: Int
   }
 
+  type StoreHierarchyNode {
+    key: String!
+    name: String!
+    breakdown: [YearlyRetailing!]!
+    growth: Float
+    childrenCount: Int
+  }
+
   type RetailingStats {
     breakdown: [YearlyRetailing!]!
     growth: Float
@@ -106,7 +114,7 @@ export const typeDefs = gql`
 
   type CategoryRetailingStat {
     category: String!
-    yearWise: [YearlyRetailing!]!
+    breakdown: [YearlyRetailing!]
   }
 
   type StoreStats {
@@ -147,6 +155,14 @@ export const typeDefs = gql`
       filters: FilterInput
       source: String
     ): [HierarchyNode]
+    storeRetailingBreakdown(
+      storeCode: String!
+      level: String!
+      parent: String
+      source: String
+      year: [Int]
+      month: [Int]
+    ): [StoreHierarchyNode]
 
     retailingStats(filters: FilterInput, source: String): RetailingStats
     highestRetailingBranch(filters: FilterInput, source: String): HighestBranch

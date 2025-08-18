@@ -249,11 +249,6 @@ export async function getRetailingBreakdown(
       WHERE 1=1
     `;
 
-    // Include storeCode filter if present
-    if (filtersWithFiscalMonth.storeCode) {
-      query += ` AND s.Old_Store_Code = ?`;
-    }
-
     const { whereClause, params } = await buildWhereClauseForRawSQL(
       filtersWithFiscalMonth,
       parentFilter
@@ -303,6 +298,119 @@ export async function getRetailingBreakdown(
         breakdown,
         growth,
         childrenCount: null,
+      };
+    })
+    .sort(
+      (a, b) => (b.breakdown[0]?.value || 0) - (a.breakdown[0]?.value || 0)
+    );
+}
+
+export async function getStoreRetailingBreakdown(
+  level: string,
+  parent: string | undefined,
+  storeCode: string,
+  source: string,
+  year?: number[],
+  month?: number[]
+) {
+  const levelMap: Record<string, string> = {
+    category: "pm.category",
+    brand: "pm.brand",
+    brandform: "pm.brandform",
+    subbrandform: "pm.subbrandform",
+  };
+
+  const groupField = levelMap[level?.toLowerCase()];
+  if (!groupField) {
+    throw new Error(`Invalid level: ${level}`);
+  }
+
+  // Map parent field (to filter children correctly)
+  let parentFilter: { field: string; value: string } | undefined;
+  if (parent) {
+    const parentFieldMap: Record<string, string> = {
+      brand: "pm.category",
+      brandform: "pm.brand",
+      subbrandform: "pm.brandform",
+    };
+    const parentField = parentFieldMap[level?.toLowerCase()];
+    if (parentField) {
+      parentFilter = { field: parentField, value: parent };
+    }
+  }
+
+  const tables = resolveTables(source);
+  const breakdownMap: Record<string, { [year: number]: number }> = {};
+
+  // Build year/month filters (fiscal handling)
+  const yearCondition = year?.length
+    ? `AND (CASE WHEN MONTH(p.document_date) >= 7 THEN YEAR(p.document_date)+1 ELSE YEAR(p.document_date) END) IN (${year.join(
+        ","
+      )})`
+    : "";
+
+  const monthCondition = month?.length
+    ? `AND (CASE WHEN MONTH(p.document_date) >= 7 THEN MONTH(p.document_date)-6 ELSE MONTH(p.document_date)+6 END) IN (${month.join(
+        ","
+      )})`
+    : "";
+
+  const storeCodeEscaped = `'${storeCode}'`;
+
+  for (const table of tables) {
+    let query = `
+      SELECT ${groupField} AS group_key, p.document_date, SUM(p.retailing) AS total
+      FROM ${table} p
+      INNER JOIN store_mapping sm ON p.customer_code = sm.Old_Store_Code
+      INNER JOIN product_mapping pm ON p.p_code = pm.p_code
+      WHERE sm.Old_Store_Code = ${storeCodeEscaped}
+      ${yearCondition}
+      ${monthCondition}
+    `;
+
+    if (parentFilter) {
+      query += ` AND ${parentFilter.field} = '${parentFilter.value}'`;
+    }
+
+    query += ` GROUP BY ${groupField}, p.document_date`;
+
+    const results: any[] = await prisma.$queryRawUnsafe(query);
+
+    for (const row of results) {
+      const key = row.group_key || "Unknown";
+      const fy = getFiscalYear(new Date(row.document_date));
+      const value = Number(row.total);
+
+      if (!breakdownMap[key]) breakdownMap[key] = {};
+      breakdownMap[key][fy] = (breakdownMap[key][fy] || 0) + value;
+    }
+  }
+
+  return Object.entries(breakdownMap)
+    .map(([key, yearlyData]) => {
+      const breakdown = Object.entries(yearlyData)
+        .map(([year, retailing]) => ({
+          year: Number(year),
+          value: retailing,
+        }))
+        .sort((a, b) => b.year - a.year);
+
+      let growth: number | null = null;
+      if (breakdown.length >= 2) {
+        const latest = breakdown[0];
+        const prev = breakdown[1];
+        growth =
+          prev.value === 0
+            ? null
+            : Math.round((latest.value / prev.value) * 100);
+      }
+
+      return {
+        key,
+        name: key,
+        breakdown,
+        growth,
+        childrenCount: null, // optional: could compute if needed
       };
     })
     .sort(
@@ -1066,26 +1174,27 @@ export async function getCategoryRetailing(
     yearMap.set(fy, (yearMap.get(fy) ?? 0) + total);
   }
 
-  // Build final result (without growth)
+  // Build final result in dashboard-style format
   const result = Array.from(categoryMap.entries()).map(
     ([category, yearMap]) => {
-      const years = Array.from(yearMap.keys()).sort((a, b) => b - a); // descending FY
-      const yearWise = years.map((fy) => ({
-        year: fy,
-        value: yearMap.get(fy)!,
-      }));
+      const breakdown = Array.from(yearMap.entries())
+        .map(([fy, value]) => ({
+          year: fy,
+          value,
+        }))
+        .sort((a, b) => b.year - a.year); // latest year first
 
       return {
         category,
-        yearWise,
+        breakdown,
       };
     }
   );
 
   // Sort categories by latest FY value descending
   return result.sort((a, b) => {
-    const aLatest = a.yearWise[0]?.value ?? 0;
-    const bLatest = b.yearWise[0]?.value ?? 0;
+    const aLatest = a.breakdown[0]?.value ?? 0;
+    const bLatest = b.breakdown[0]?.value ?? 0;
     return bLatest - aLatest;
   });
 }
