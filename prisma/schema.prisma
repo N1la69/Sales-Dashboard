@@ -24,7 +24,7 @@ model psr_data {
   customer_code String   @db.VarChar(45) //
   p_code        Int      @db.Int() //
   customer_type String   @db.VarChar(90)
-  category      String   @db.VarChar(45)
+  category      String   @db.VarChar(255)
   brand         String   @db.VarChar(45)
   brandform     String   @db.VarChar(45)
   retailing     Decimal  @db.Decimal(12, 2) //
@@ -39,7 +39,7 @@ model psr_data_temp {
   customer_code String   @db.VarChar(45)
   p_code        Int      @db.Int()
   customer_type String   @db.VarChar(90)
-  category      String   @db.VarChar(45)
+  category      String   @db.VarChar(255)
   brand         String   @db.VarChar(45)
   brandform     String   @db.VarChar(45)
   retailing     Decimal  @db.Decimal(12, 2)

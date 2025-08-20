@@ -209,9 +209,18 @@ export default async function handler(
                   totalInserted + chunkSize
                 }`
               );
-              await prisma.psr_data_temp.createMany({ data: buffer });
-              totalInserted += buffer.length;
-              buffer = [];
+              try {
+                await prisma.psr_data_temp.createMany({ data: buffer });
+                totalInserted += buffer.length;
+                buffer = [];
+              } catch (error: any) {
+                console.error(
+                  "Insert failed:",
+                  error.meta?.column_name,
+                  error.meta?.value
+                );
+                throw error;
+              }
 
               global.gc?.(); // optional
             }
