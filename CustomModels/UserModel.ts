@@ -12,7 +12,17 @@ export class UserModel {
   }
 
   get userDetails() {
-    return this.user;
+    const {
+      hash: _,
+      salt: _s,
+      resetPasswordOTP: _o,
+      resetPasswordExpires: _re,
+      otpAttempts: _a,
+      lastOTPAttemptAt: _l,
+      otpCooldownUntil: _c,
+      ...safeUser
+    } = this.user;
+    return safeUser;
   }
 
   /**

@@ -38,11 +38,11 @@ export default async function GET(req: NextApiRequest, res: NextApiResponse) {
         const permissions = await userModel.getPermissions();
 
         return res.status(200).json({
-            sucess: true,
+            success: true,
             timeStamp: new Date().toISOString(),
             message: 'User verified successfully',
             data: {
-                user: userModel?.user,
+                user: userModel.userDetails,
                 permissions,
             },
         });
