@@ -3,6 +3,7 @@ import { AuthProvider } from "@/hooks/AppContext";
 import type { Metadata } from "next";
 import { ToastContainer } from "react-toastify";
 import "./globals.css";
+import Navbar from "@/components/structures/Navbar";
 
 export const metadata: Metadata = {
   title: "Sales Dashboard",
@@ -19,7 +20,14 @@ export default function RootLayout({
       <html lang="en">
         <body className="antialiased bg-background-light dark:bg-background-dark">
           <ToastContainer />
-          <ApolloWrapper>{children}</ApolloWrapper>
+          <ApolloWrapper>
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              <div className="absolute top-20 right-20 w-64 h-64 rounded-full blur-3xl opacity-10 bg-blue-400 dark:bg-blue-500" />
+              <div className="absolute bottom-20 left-20 w-48 h-48 rounded-full blur-3xl opacity-10 bg-purple-400 dark:bg-purple-500" />
+            </div>
+            <Navbar />
+            {children}
+          </ApolloWrapper>
         </body>
       </html>
     </AuthProvider>

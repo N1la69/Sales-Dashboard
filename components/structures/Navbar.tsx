@@ -120,6 +120,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const Navbar = () => {
   const { state } = useAppContext();
@@ -226,6 +227,10 @@ const Navbar = () => {
         {/* User Info */}
         <div className="flex items-center gap-2">
           {/* <UserButton /> */}
+          <Avatar>
+            <AvatarImage src={user?.image} />
+            <AvatarFallback> {user?.name}</AvatarFallback>
+          </Avatar>
           <p className="text-gray-950 dark:text-gray-200 font-semibold uppercase hidden sm:block">
             {user?.name}
           </p>

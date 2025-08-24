@@ -1,35 +1,30 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useAppContext } from "@/hooks/AppContext";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const { state } = useAppContext();
+  const { user } = state;
   // 🔐 Check if user is already logged in
   useEffect(() => {
-    const verifyUser = async () => {
-      try {
-        const res = await fetch("/api/user/auth/verify-user", {
-          credentials: "include",
-        });
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const data = await res.json();
-        if (res.ok) {
-          const params = new URLSearchParams(window.location.search);
-          const redirectTo = params.get("from") || "/dashboard";
-          window.location.href = redirectTo;
-        }
-      } catch (err) {
-        // Not logged in — do nothing
-        console.error("User verification failed:", err);
+    try {
+      if (user) {
+        const params = new URLSearchParams(window.location.search);
+        const redirectTo = params.get("from") || "/dashboard";
+        window.location.href = redirectTo;
       }
-    };
-    verifyUser();
-  }, []);
+    } catch (err) {
+      // Not logged in — do nothing
+      console.error("User verification failed:", err);
+    }
+  }, [user]);
 
   // 🔑 Handle login form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -103,12 +98,12 @@ const LoginPage = () => {
                 className="border border-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md py-2 px-2"
               />
               <div className="text-right">
-                <a
+                <Link
                   href="/forgot-password"
                   className="text-sm text-gray-600 dark:text-gray-300 hover:underline"
                 >
                   Forgot password?
-                </a>
+                </Link>
               </div>
             </div>
 

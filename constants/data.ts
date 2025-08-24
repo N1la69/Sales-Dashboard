@@ -1,10 +1,10 @@
+import UploadPage from "@/components/pages/admin/upload";
 import ForgotPasswordPage from "@/components/pages/auth/forgot-password";
 import LoginPage from "@/components/pages/auth/login";
 import ResetPasswordPage from "@/components/pages/auth/reset-password";
-import Dashboard from "@/components/pages/dashboard";
-import RankingPage from "@/components/pages/ranking";
-import StorePage from "@/components/pages/store";
-import UploadPage from "@/components/pages/upload";
+import Dashboard from "@/components/pages/public/dashboard";
+import RankingPage from "@/components/pages/public/ranking";
+import StorePage from "@/components/pages/public/store";
 import { LucideIcon } from "lucide-react";
 import { JSX } from "react";
 import filterValues from "./filterValues";
@@ -51,15 +51,6 @@ export const PublicNavLinks: NavLink[] = [
   },
   {
     id: 3,
-    path: "/upload",
-    title: "Upload",
-    page: "upload",
-    key: "upload",
-    module: UploadPage,
-    toRender: true,
-  },
-  {
-    id: 4,
     path: "/login",
     title: "Login",
     page: "login",
@@ -68,7 +59,7 @@ export const PublicNavLinks: NavLink[] = [
     toRender: false,
   },
   {
-    id: 5,
+    id: 4,
     path: "/forgot-password",
     title: "Forgot Password",
     page: "forgot-password",
@@ -77,13 +68,25 @@ export const PublicNavLinks: NavLink[] = [
     toRender: false,
   },
   {
-    id: 6,
+    id: 5,
     path: "/reset-password",
     title: "Reset Password",
     page: "reset-password",
     key: "reset-password",
     module: ResetPasswordPage,
     toRender: false,
+  },
+];
+
+export const AdminNavLinks: NavLink[] = [
+  {
+    id: 0,
+    path: "./upload",
+    title: "Upload",
+    page: "upload",
+    key: "upload",
+    module: UploadPage,
+    toRender: true,
   },
 ];
 
