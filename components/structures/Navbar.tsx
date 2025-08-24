@@ -113,7 +113,7 @@
 
 "use client";
 
-import { PublicNavLinks } from "@/constants/data";
+import { AdminNavLinks, PublicNavLinks } from "@/constants/data";
 import { useAppContext } from "@/hooks/AppContext";
 import { Menu, Minus, Moon, Sun, X } from "lucide-react";
 import Image from "next/image";
@@ -164,24 +164,44 @@ const Navbar = () => {
 
       {/* Desktop Nav Links */}
       <ul className="hidden md:flex gap-3 items-center justify-center">
-        {IS_LOGGED_IN &&
-          filteredNavLinks.map((page) => (
-            <li key={page.id}>
-              <Link
-                href={page.path ?? "/"}
-                className="relative py-2 px-4 tracking-wide inline-block"
-                onClick={() => setActivePage(page.id)}
-              >
-                <h1 className="text-gray-950 dark:text-gray-200 font-semibold">
-                  {page.title}
-                </h1>
+        {IS_LOGGED_IN && (
+          <>
+            {filteredNavLinks.map((page) => (
+              <li key={page.id}>
+                <Link
+                  href={page.path ?? "/"}
+                  className="relative py-2 px-4 tracking-wide inline-block"
+                  onClick={() => setActivePage(page.id)}
+                >
+                  <h1 className="text-gray-950 dark:text-gray-200 font-semibold">
+                    {page.title}
+                  </h1>
 
-                {activePage === page.id && (
-                  <div className="absolute inset-0 bg-blue-400 rounded-full opacity-20 "></div>
-                )}
-              </Link>
-            </li>
-          ))}
+                  {activePage === page.id && (
+                    <div className="absolute inset-0 bg-blue-400 rounded-full opacity-20 "></div>
+                  )}
+                </Link>
+              </li>
+            ))}
+            {AdminNavLinks.map((page) => (
+              <li key={page.id}>
+                <Link
+                  href={page.path ?? "/"}
+                  className="relative py-2 px-4 tracking-wide inline-block"
+                  onClick={() => setActivePage(page.id)}
+                >
+                  <h1 className="text-gray-950 dark:text-gray-200 font-semibold">
+                    {page.title}
+                  </h1>
+
+                  {activePage === page.id && (
+                    <div className="absolute inset-0 bg-blue-400 rounded-full opacity-20 "></div>
+                  )}
+                </Link>
+              </li>
+            ))}
+          </>
+        )}
       </ul>
 
       {/* Mobile Menu Toggle */}
