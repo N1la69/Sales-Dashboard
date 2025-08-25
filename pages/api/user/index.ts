@@ -118,20 +118,16 @@ async function PUT(req: NextApiRequest, res: NextApiResponse) {
 // ✅ Update or remove permissions
 async function PATCH(req: NextApiRequest, res: NextApiResponse) {
     try {
-        const { userId, page, permissions, remove } = req.body;
-        if (!userId || !page) throw { message: "userId and page required", status: 400 };
+        const { userId, permissions } = req.body;
+        if (!userId || !permissions || typeof permissions !== "object") {
+            throw { message: "userId and permissions required", status: 400 };
+        }
 
         const user = await prisma.user.findUnique({ where: { id: userId } });
         if (!user) throw { message: "User not found", status: 404 };
 
         const userModel = new UserModel(user);
-        let result;
-
-        if (remove) {
-            result = await userModel.removePermission(page);
-        } else {
-            result = await userModel.updatePermissions(page, permissions ?? []);
-        }
+        const result = await userModel.updatePermissionsBulk(permissions);
 
         return res.status(200).json({
             success: true,
