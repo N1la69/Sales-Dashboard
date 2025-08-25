@@ -1,11 +1,12 @@
 import UploadPage from "@/components/pages/admin/upload";
+import UserManagementPage from "@/components/pages/admin/user";
 import ForgotPasswordPage from "@/components/pages/auth/forgot-password";
 import LoginPage from "@/components/pages/auth/login";
 import ResetPasswordPage from "@/components/pages/auth/reset-password";
 import Dashboard from "@/components/pages/public/dashboard";
 import RankingPage from "@/components/pages/public/ranking";
 import StorePage from "@/components/pages/public/store";
-import { BarChart3, Home, LayoutDashboard, LogIn, LucideIcon, ShieldQuestion, Store, Unlock, UploadCloud } from "lucide-react";
+import { BarChart3, LayoutDashboard, LogIn, LucideIcon, ShieldQuestion, Store, Unlock, UploadCloud, UsersRound } from "lucide-react";
 import { JSX } from "react";
 import filterValues from "./filterValues";
 
@@ -95,6 +96,16 @@ export const AdminNavLinks: NavLink[] = [
     module: UploadPage,
     toRender: true,
   },
+  {
+    id: 1,
+    path: "/admin/manage-user",
+    title: "Manage User",
+    page: "manage-user",
+    key: "manage-user",
+    icon: UsersRound,
+    module: UserManagementPage,
+    toRender: true,
+  }
 ];
 
 export const filters = [

@@ -20,6 +20,8 @@ export class UserModel {
       otpAttempts: _a,
       lastOTPAttemptAt: _l,
       otpCooldownUntil: _c,
+      verificationOTP: _v,
+      verificationOTPExpires: _ve,
       ...safeUser
     } = this.user;
     return safeUser;
