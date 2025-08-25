@@ -1,17 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import {
-  useReactTable,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  ColumnDef,
-  flexRender,
-} from "@tanstack/react-table";
-
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -20,14 +11,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardContent, CardTitle } from "@/components/ui/card";
-import { FileSpreadsheet, UserPlus, Trash2 } from "lucide-react";
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import ExcelJS from "exceljs";
+import { FileSpreadsheet, Trash2, UserPlus } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
+import { toast } from "react-toastify";
 
-// Mock data (replace with API data later)
 type User = {
-  id: number;
+  id: string;
   name: string;
   email: string;
   role: string;
@@ -36,30 +36,80 @@ type User = {
   image: string;
 };
 
-const initialData: User[] = [
-  {
-    id: 1,
-    name: "Alice",
-    email: "alice@example.com",
-    role: "admin",
-    isActive: true,
-    lastLogin: "2025-08-20T10:00:00Z",
-    image: "https://picsum.photos/100/100?1",
-  },
-  {
-    id: 2,
-    name: "Bob",
-    email: "bob@example.com",
-    role: "staff",
-    isActive: false,
-    lastLogin: "2025-08-22T15:30:00Z",
-    image: "https://picsum.photos/100/100?2",
-  },
-];
-
 export default function UserManagementPage() {
-  const [data, setData] = useState<User[]>(initialData);
+  const [data, setData] = useState<User[]>([]);
   const [globalFilter, setGlobalFilter] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  // 📡 Fetch users from API
+  const fetchUsers = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("/api/user", {
+        method: "GET",
+        credentials: "include",
+      });
+      const json = await res.json();
+      if (json.success) {
+        setData(json.data);
+        toast.success(json?.message || "Users fetched successfully");
+      }
+    } catch (err) {
+      console.error("Error fetching users:", err);
+      toast.error(err?.message || "Failed to fetch users");
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  // 🟢 Toggle Active/Inactive
+  const toggleActive = async (user: User) => {
+    try {
+      const res = await fetch(`/api/user`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          data: { isActive: !user.isActive },
+          id: user.id,
+        }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        toast.success(
+          json?.message ||
+            `User ${user.name} is now ${!user.isActive ? "Active" : "Inactive"}`
+        );
+        fetchUsers();
+      }
+    } catch (err) {
+      console.error("Error toggling status:", err);
+      toast.error(err?.message || "Failed to toggle user status");
+    }
+  };
+
+  // 🗑 Delete User
+  const deleteUser = async (id: string) => {
+    try {
+      const res = await fetch(`/api/user`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ id: id }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        setData((prev) => prev.filter((u) => u.id !== id));
+        toast.success(json?.message || "User deleted successfully");
+      }
+    } catch (err) {
+      console.error("Error deleting user:", err);
+      toast.error(err?.message || "Failed to delete user");
+    }
+  };
 
   // 📊 Table Columns
   const columns = useMemo<ColumnDef<User>[]>(
@@ -68,34 +118,30 @@ export default function UserManagementPage() {
         accessorKey: "image",
         header: "",
         cell: ({ row }) => (
-          <img
+          <Image
+            width={32}
+            height={32}
             src={row.original.image}
             alt={row.original.name}
             className="h-8 w-8 rounded-full"
           />
         ),
       },
-      {
-        accessorKey: "name",
-        header: "Name",
-      },
-      {
-        accessorKey: "email",
-        header: "Email",
-      },
-      {
-        accessorKey: "role",
-        header: "Role",
-      },
+      { accessorKey: "name", header: "Name" },
+      { accessorKey: "email", header: "Email" },
+      { accessorKey: "role", header: "Role" },
       {
         accessorKey: "isActive",
         header: "Active",
-        cell: ({ getValue }) =>
-          getValue<boolean>() ? (
-            <span className="text-green-600 font-medium">Yes</span>
-          ) : (
-            <span className="text-red-500 font-medium">No</span>
-          ),
+        cell: ({ row }) => (
+          <Button
+            size="sm"
+            variant={row.original.isActive ? "outline" : "destructive"}
+            onClick={() => toggleActive(row.original)}
+          >
+            {row.original.isActive ? "Active" : "Inactive"}
+          </Button>
+        ),
       },
       {
         accessorKey: "lastLogin",
@@ -117,9 +163,7 @@ export default function UserManagementPage() {
             <Button
               size="sm"
               variant="destructive"
-              onClick={() =>
-                setData((prev) => prev.filter((u) => u.id !== row.original.id))
-              }
+              onClick={() => deleteUser(row.original.id)}
             >
               <Trash2 className="h-4 w-4 mr-1" /> Delete
             </Button>
@@ -142,7 +186,7 @@ export default function UserManagementPage() {
     getSortedRowModel: getSortedRowModel(),
   });
 
-  // 📥 Import with exceljs
+  // 📥 Import with ExcelJS
   const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -152,32 +196,44 @@ export default function UserManagementPage() {
     await workbook.xlsx.load(buffer);
 
     const worksheet = workbook.worksheets[0];
-    const rows: User[] = [];
+    const rows: Partial<User>[] = [];
 
     worksheet.eachRow((row, rowNumber) => {
-      if (rowNumber === 1) return; // skip header
+      if (rowNumber === 1) return;
       const [id, name, email, role, isActive, lastLogin, image] =
-        row.values as any[];
+        row.values as (string | boolean)[];
       rows.push({
-        id: Number(id),
-        name,
-        email,
-        role,
+        id: id?.toString(),
+        name: typeof name === "string" ? name : name?.toString(),
+        email: typeof email === "string" ? email : email?.toString(),
+        role: typeof role === "string" ? role : role?.toString(),
         isActive: isActive === "true" || isActive === true,
-        lastLogin,
-        image,
+        lastLogin:
+          typeof lastLogin === "string" ? lastLogin : lastLogin?.toString(),
+        image: typeof image === "string" ? image : image?.toString(),
       });
     });
 
-    setData(rows);
+    try {
+      const res = await fetch("/api/user", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(rows),
+      });
+      if (res.ok) {
+        fetchUsers();
+      }
+    } catch (err) {
+      console.error("Error importing users:", err);
+    }
   };
 
-  // 📤 Export with exceljs
+  // 📤 Export with ExcelJS
   const handleExport = async () => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet("Users");
 
-    // Header row
     worksheet.addRow([
       "ID",
       "Name",
@@ -187,19 +243,8 @@ export default function UserManagementPage() {
       "Last Login",
       "Image",
     ]);
-
     worksheet.getRow(1).font = { bold: true };
-    worksheet.columns = [
-      { width: 10 },
-      { width: 20 },
-      { width: 30 },
-      { width: 15 },
-      { width: 10 },
-      { width: 25 },
-      { width: 40 },
-    ];
 
-    // Data rows
     data.forEach((user) => {
       worksheet.addRow([
         user.id,
@@ -244,12 +289,10 @@ export default function UserManagementPage() {
               </span>
             </Button>
           </label>
-
           {/* Export */}
           <Button variant="outline" onClick={handleExport}>
             Export
           </Button>
-
           {/* Add user */}
           <Button variant="default">
             <UserPlus className="h-4 w-4 mr-2" /> Add User
@@ -271,46 +314,50 @@ export default function UserManagementPage() {
           <CardTitle>All Users</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="overflow-x-auto">
-            <Table>
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
-                      <TableHead
-                        key={header.id}
-                        className="cursor-pointer select-none"
-                        onClick={header.column.getToggleSortingHandler()}
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                        {{
-                          asc: " 🔼",
-                          desc: " 🔽",
-                        }[header.column.getIsSorted() as string] ?? null}
-                      </TableHead>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableHeader>
-              <TableBody>
-                {table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id}>
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+          {loading ? (
+            <p>Loading users...</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <TableRow key={headerGroup.id}>
+                      {headerGroup.headers.map((header) => (
+                        <TableHead
+                          key={header.id}
+                          className="cursor-pointer select-none"
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {{
+                            asc: " 🔼",
+                            desc: " 🔽",
+                          }[header.column.getIsSorted() as string] ?? null}
+                        </TableHead>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableHeader>
+                <TableBody>
+                  {table.getRowModel().rows.map((row) => (
+                    <TableRow key={row.id}>
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          )}
 
           {/* Pagination */}
           <div className="flex justify-between items-center mt-4">
