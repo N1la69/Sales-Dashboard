@@ -107,4 +107,6 @@ model PermissionSet {
   userId      Int
   page        String @db.VarChar(100)
   permissions Json
+  @@unique([userId, page]) // 👈 makes (userId, page) unique
+
 }
