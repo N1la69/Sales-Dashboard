@@ -5,7 +5,7 @@ import ResetPasswordPage from "@/components/pages/auth/reset-password";
 import Dashboard from "@/components/pages/public/dashboard";
 import RankingPage from "@/components/pages/public/ranking";
 import StorePage from "@/components/pages/public/store";
-import { LucideIcon } from "lucide-react";
+import { BarChart3, Home, LayoutDashboard, LogIn, LucideIcon, ShieldQuestion, Store, Unlock, UploadCloud } from "lucide-react";
 import { JSX } from "react";
 import filterValues from "./filterValues";
 
@@ -28,6 +28,7 @@ export const PublicNavLinks: NavLink[] = [
     page: "dashboard",
     title: "Dashboard",
     module: Dashboard,
+    icon: LayoutDashboard,
     key: undefined,
     toRender: true,
   },
@@ -37,6 +38,7 @@ export const PublicNavLinks: NavLink[] = [
     page: "store",
     title: "Stores",
     module: StorePage,
+    icon: Store,
     key: "store",
     toRender: true,
   },
@@ -46,6 +48,7 @@ export const PublicNavLinks: NavLink[] = [
     title: "Top100",
     page: "ranking",
     key: "ranking",
+    icon: BarChart3,
     module: RankingPage,
     toRender: true,
   },
@@ -55,6 +58,7 @@ export const PublicNavLinks: NavLink[] = [
     title: "Login",
     page: "login",
     key: "login",
+    icon: LogIn,
     module: LoginPage,
     toRender: false,
   },
@@ -64,6 +68,7 @@ export const PublicNavLinks: NavLink[] = [
     title: "Forgot Password",
     page: "forgot-password",
     key: "forgot-password",
+    icon: ShieldQuestion,
     module: ForgotPasswordPage,
     toRender: false,
   },
@@ -73,6 +78,7 @@ export const PublicNavLinks: NavLink[] = [
     title: "Reset Password",
     page: "reset-password",
     key: "reset-password",
+    icon: Unlock,
     module: ResetPasswordPage,
     toRender: false,
   },
@@ -81,10 +87,11 @@ export const PublicNavLinks: NavLink[] = [
 export const AdminNavLinks: NavLink[] = [
   {
     id: 0,
-    path: "./upload",
+    path: "/admin/upload",
     title: "Upload",
     page: "upload",
     key: "upload",
+    icon: UploadCloud,
     module: UploadPage,
     toRender: true,
   },
