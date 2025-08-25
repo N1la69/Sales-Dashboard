@@ -1,292 +1,197 @@
-// "use client";
-
-// import { useEffect, useState } from "react";
-// import { usePathname } from "next/navigation";
-// import { pages } from "@/constants/data";
-// import Image from "next/image";
-
-// import { UserButton, useUser } from "@clerk/nextjs";
-// import Link from "next/link";
-// import { Minus, Moon, Sun } from "lucide-react";
-
-// const Navbar = () => {
-//   const { user } = useUser();
-//   const pathname = usePathname();
-
-//   const [activePage, setActivePage] = useState(0);
-//   const [darkMode, setDarkMode] = useState(false);
-
-//   useEffect(() => {
-//     const theme = localStorage.getItem("theme");
-//     if (theme === "dark") {
-//       setDarkMode(true);
-//     }
-//   }, []);
-
-//   useEffect(() => {
-//     if (darkMode) {
-//       document.documentElement.classList.add("dark");
-//       localStorage.setItem("theme", "dark");
-//     } else {
-//       document.documentElement.classList.remove("dark");
-//       localStorage.setItem("theme", "light");
-//     }
-//   }, [darkMode]);
-
-//   // Update activePage based on pathname
-//   useEffect(() => {
-//     const currentPage = pages.find((page) => page.path === pathname);
-//     if (currentPage) {
-//       setActivePage(currentPage.id);
-//     }
-//   }, [pathname]);
-
-//   return (
-//     <nav className="flex items-center justify-between px-6 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-600">
-//       {/* LOGO */}
-//       <div className="flex items-center">
-//         <Image src="/logo.png" alt="logo" width={50} height={50} />
-//         <h1 className="ml-2 text-xl font-semibold text-gray-950 dark:text-gray-200">
-//           BG Distributors Pvt. Ltd.
-//         </h1>
-//       </div>
-
-//       {/* LINKS */}
-//       <div className="relative">
-//         <ul className="flex justify-center items-center gap-2">
-//           {pages.map((page) => (
-//             <li key={page.id}>
-//               <Link
-//                 href={page.path}
-//                 className="relative py-2 px-4 tracking-wide inline-block"
-//                 onClick={() => setActivePage(page.id)}
-//               >
-//                 <h1 className="text-gray-950 dark:text-gray-200 font-semibold">
-//                   {page.title}
-//                 </h1>
-
-//                 {activePage === page.id && (
-//                   <div className="absolute inset-0 bg-blue-400 rounded-full opacity-20"></div>
-//                 )}
-//               </Link>
-//             </li>
-//           ))}
-//         </ul>
-//       </div>
-
-//       {/* RIGHT SECTION */}
-//       <div className="relative flex items-center">
-//         <div className="flex items-center gap-4">
-//           <div
-//             className="hover:bg-gray-500 transition-colors duration-300 rounded-full p-1 cursor-pointer"
-//             onClick={() => setDarkMode(!darkMode)}
-//           >
-//             {darkMode ? (
-//               <Sun size={22} className="text-gray-950 dark:text-gray-200" />
-//             ) : (
-//               <Moon
-//                 size={22}
-//                 className="text-gray-950 hover:text-gray-200 dark:text-gray-200"
-//               />
-//             )}
-//           </div>
-//         </div>
-
-//         <Minus
-//           size={45}
-//           className="rotate-90 text-gray-400 dark:text-gray-500"
-//         />
-
-//         <div className="flex items-center gap-2">
-//           <UserButton />
-
-//           <p className="text-gray-950 dark:text-gray-200 font-semibold uppercase">
-//             {user?.name}
-//           </p>
-//         </div>
-//       </div>
-//     </nav>
-//   );
-// };
-
-// export default Navbar;
-
 "use client";
 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { AdminNavLinks, PublicNavLinks } from "@/constants/data";
 import { useAppContext } from "@/hooks/AppContext";
-import { Menu, Minus, Moon, Sun, X } from "lucide-react";
+import { logOutUser } from "@/lib/auth/logOutUser";
+import { cn } from "@/lib/utils";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Button } from "../ui/button";
 
-const Navbar = () => {
+export default function Navbar() {
   const { state } = useAppContext();
-  const { user } = state; // Assuming user data is stored in the context
+  const { user } = state;
+  const { theme, setTheme } = useTheme();
   const pathname = usePathname();
-  const filteredNavLinks = PublicNavLinks.filter((p) => p.toRender);
-  const [activePage, setActivePage] = useState(0);
-  const [darkMode, setDarkMode] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
+
   const IS_LOGGED_IN = useMemo(() => !!user, [user]);
+  const isAdminPage = useMemo(() => pathname?.startsWith("/admin"), [pathname]);
 
-  useEffect(() => {
-    const theme = localStorage.getItem("theme");
-    if (theme === "dark") setDarkMode(true);
-  }, []);
+  const navLinks = useMemo(() => {
+    return isAdminPage
+      ? AdminNavLinks.filter((link) => link.toRender)
+      : PublicNavLinks.filter((link) => link.toRender);
+  }, [isAdminPage]);
 
-  useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
-  }, [darkMode]);
-
-  useEffect(() => {
-    const currentPage = filteredNavLinks.find((page) => page.path === pathname);
-    if (currentPage) setActivePage(currentPage.id);
-  }, [pathname, filteredNavLinks]);
+  const isActive = (path?: string) => {
+    if (!path) return false;
+    return pathname === path;
+  };
 
   return (
-    <nav className="flex items-center justify-between px-4 py-3 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-600">
-      {/* LOGO */}
-      <div className="flex items-center gap-1 md:gap-2">
-        <Image src="/logo.png" alt="logo" width={40} height={40} />
-        <h1 className="hidden md:block text-xl font-semibold text-gray-950 dark:text-gray-200">
-          BG Distributors Pvt. Ltd.
-        </h1>
-      </div>
-
-      {/* Desktop Nav Links */}
-      <ul className="hidden md:flex gap-3 items-center justify-center">
-        {IS_LOGGED_IN && (
-          <>
-            {filteredNavLinks.map((page) => (
-              <li key={page.id}>
-                <Link
-                  href={page.path ?? "/"}
-                  className="relative py-2 px-4 tracking-wide inline-block"
-                  onClick={() => setActivePage(page.id)}
-                >
-                  <h1 className="text-gray-950 dark:text-gray-200 font-semibold">
-                    {page.title}
-                  </h1>
-
-                  {activePage === page.id && (
-                    <div className="absolute inset-0 bg-blue-400 rounded-full opacity-20 "></div>
-                  )}
-                </Link>
-              </li>
-            ))}
-            {AdminNavLinks.map((page) => (
-              <li key={page.id}>
-                <Link
-                  href={page.path ?? "/"}
-                  className="relative py-2 px-4 tracking-wide inline-block"
-                  onClick={() => setActivePage(page.id)}
-                >
-                  <h1 className="text-gray-950 dark:text-gray-200 font-semibold">
-                    {page.title}
-                  </h1>
-
-                  {activePage === page.id && (
-                    <div className="absolute inset-0 bg-blue-400 rounded-full opacity-20 "></div>
-                  )}
-                </Link>
-              </li>
-            ))}
-          </>
-        )}
-      </ul>
-
-      {/* Mobile Menu Toggle */}
-      <div className="flex justify-center items-center gap-2 md:hidden px-2">
-        <div
-          className="hover:bg-gray-500 transition-colors duration-300 rounded-full p-1 cursor-pointer"
-          onClick={() => setDarkMode(!darkMode)}
-        >
-          {darkMode ? (
-            <Sun size={22} className="text-gray-950 dark:text-gray-200" />
-          ) : (
-            <Moon size={22} className="text-gray-950 dark:text-gray-200" />
-          )}
+    <nav className="fixed top-0 left-0 z-50 w-full bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl shadow-sm">
+      <div className="flex items-center justify-between h-16 px-4 md:px-8 w-full">
+        {/* Left Section: Logo + Company */}
+        <div className="flex items-center space-x-3">
+          <Image src="/logo.png" alt="logo" width={40} height={40} priority />
+          <h1 className="hidden md:block text-lg font-bold text-gray-900 dark:text-gray-200 tracking-tight">
+            B G Distributors Pvt Ltd
+          </h1>
         </div>
 
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="text-gray-950 dark:text-gray-200"
-        >
-          {menuOpen ? <X size={24} /> : <Menu size={24} />}
-        </button>
-      </div>
-
-      {/* Right Section */}
-      <div className="hidden md:flex items-center gap-2">
-        {/* Theme Toggle */}
-        <div
-          className="hover:bg-gray-500 transition-colors duration-300 rounded-full p-1 cursor-pointer"
-          onClick={() => setDarkMode(!darkMode)}
-        >
-          {darkMode ? (
-            <Sun size={22} className="text-gray-950 dark:text-gray-200" />
-          ) : (
-            <Moon size={22} className="text-gray-950 dark:text-gray-200" />
-          )}
-        </div>
-
-        <Minus
-          size={45}
-          className="rotate-90 text-gray-400 dark:text-gray-500"
-        />
-
-        {/* User Info */}
-        <div className="flex items-center gap-2">
-          {/* <UserButton /> */}
-          <Avatar>
-            <AvatarImage src={user?.image} />
-            <AvatarFallback> {user?.name}</AvatarFallback>
-          </Avatar>
-          <p className="text-gray-950 dark:text-gray-200 font-semibold uppercase hidden sm:block">
-            {user?.name}
-          </p>
-        </div>
-      </div>
-
-      {/* Mobile Dropdown Menu */}
-      {menuOpen && (
-        <div className="absolute top-16 left-0 w-full bg-white dark:bg-gray-900 border-t border-gray-300 dark:border-gray-700 md:hidden z-50">
-          <ul className="flex flex-col text-center py-2">
-            {IS_LOGGED_IN &&
-              PublicNavLinks.map((page) => (
+        {/* Center Section: Nav Links (desktop only) */}
+        <ul className="hidden md:flex items-center space-x-6">
+          {IS_LOGGED_IN &&
+            navLinks.map((page) => {
+              const active = isActive(page.path);
+              return (
                 <li key={page.id}>
                   <Link
-                    href={page.path === undefined ? "/" : page.path}
-                    className="block py-2 text-gray-950 dark:text-gray-200 font-semibold hover:bg-gray-100 dark:hover:bg-gray-800"
-                    onClick={() => {
-                      setActivePage(page.id);
-                      setMenuOpen(false);
-                    }}
+                    href={page.path ?? "/"}
+                    className={cn(
+                      "group flex items-center gap-2 px-2 py-1 font-medium text-sm transition-all duration-200 relative",
+                      active
+                        ? "text-blue-600 dark:text-blue-400"
+                        : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+                    )}
                   >
-                    {page.title}
+                    {/* Icon on left */}
+                    {page.icon && (
+                      <page.icon
+                        className={cn(
+                          "h-4 w-4 transition-colors",
+                          active
+                            ? "text-blue-600 dark:text-blue-400"
+                            : "text-gray-400 group-hover:text-gray-700 dark:group-hover:text-gray-200"
+                        )}
+                      />
+                    )}
+
+                    {/* Label */}
+                    <span>{page.title}</span>
+
+                    {/* Animated underline */}
+                    <span
+                      className={cn(
+                        "absolute bottom-0 left-0 h-[2px] bg-blue-500 dark:bg-blue-300 transition-all duration-300",
+                        active ? "w-full" : "w-0 group-hover:w-full"
+                      )}
+                    />
                   </Link>
                 </li>
-              ))}
-            <li className="flex justify-center py-2 border-t border-gray-300 dark:border-gray-700">
-              {/* <UserButton /> */}
-              <p className="ml-2 text-gray-950 dark:text-gray-200 font-semibold uppercase">
-                {user?.name}
-              </p>
-            </li>
-          </ul>
+              );
+            })}
+        </ul>
+
+        {/* Right Section: Theme, User */}
+        <div className="flex items-center space-x-4 md:pr-2 lg:pr-6">
+          {IS_LOGGED_IN && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="hidden md:flex text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
+                >
+                  {isAdminPage ? "Public" : "Admin"} Pages
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>Switch Pages</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {(isAdminPage
+                  ? PublicNavLinks.filter((link) => link.toRender)
+                  : AdminNavLinks.filter((link) => link.toRender)
+                ).map((page) => {
+                  const active = pathname === page.path;
+                  return (
+                    <DropdownMenuItem key={page.id} asChild>
+                      <Link
+                        href={page.path ?? "/"}
+                        className={cn(
+                          "flex items-center gap-2 px-2 py-1.5 rounded-md transition-all",
+                          active
+                            ? "bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 font-semibold"
+                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
+                        )}
+                      >
+                        {page.icon && (
+                          <page.icon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                        )}
+                        <span>{page.title}</span>
+                      </Link>
+                    </DropdownMenuItem>
+                  );
+                })}
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
+
+          {/* Theme Toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+            aria-label="Toggle dark mode"
+            className="md:none mr-6"
+          >
+            {theme === "dark" ? (
+              <Sun className="h-[1.2rem] w-[1.2rem]" />
+            ) : (
+              <Moon className="h-[1.2rem] w-[1.2rem]" />
+            )}
+          </Button>
+
+          {/* User Menu */}
+          {IS_LOGGED_IN && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="flex items-center space-x-2"
+                  aria-label="User profile menu"
+                >
+                  <Avatar className="h-9 w-9 border-2 border-transparent hover:border-blue-500 transition-all">
+                    <AvatarImage src={user?.image} alt={user?.name} />
+                    <AvatarFallback>{user?.name?.[0]}</AvatarFallback>
+                  </Avatar>
+                  <span className="hidden lg:block text-sm font-semibold text-gray-900 dark:text-gray-200">
+                    {user?.name}
+                  </span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onClick={() => {
+                    window.location.href = "/profile";
+                  }}
+                >
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => logOutUser()}>
+                  Log out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
-      )}
+      </div>
     </nav>
   );
-};
-
-export default Navbar;
+}
