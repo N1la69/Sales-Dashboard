@@ -1,8 +1,21 @@
+import { PermissionSet, User as PrismaUser } from "@/app/generated/prisma";
 import prisma from "@/lib/utils";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
-import { PermissionSet, User as PrismaUser } from "@/app/generated/prisma";
-export type SafeUser = Omit<PrismaUser, | "hash" | "salt" | "resetPasswordOTP" | "resetPasswordExpires" | "otpAttempts" | "lastOTPAttemptAt" | "otpCooldownUntil" | "verificationOTP" | "verificationOTPExpires">;
+export type SafeUser = Omit<
+  PrismaUser,
+  | "hash"
+  | "salt"
+  | "resetPasswordOTP"
+  | "resetPasswordExpires"
+  | "otpAttempts"
+  | "lastOTPAttemptAt"
+  | "otpCooldownUntil"
+  | "verificationOTP"
+  | "verificationOTPExpires"
+> & {
+  permissions: PermissionSet[];
+};
 export class UserModel {
   private user: PrismaUser;
 
@@ -203,6 +216,28 @@ export class UserModel {
       });
     }
   }
+
+  async updatePermissionsBulk(permissions: Record<string, string[]>) {
+    const updates = Object.entries(permissions).map(async ([page, ops]) => {
+      const existing = await prisma.permissionSet.findFirst({
+        where: { userId: this.user.id, page },
+      });
+
+      if (existing) {
+        return prisma.permissionSet.update({
+          where: { id: existing.id },
+          data: { permissions: ops },
+        });
+      } else {
+        return prisma.permissionSet.create({
+          data: { userId: this.user.id, page, permissions: ops },
+        });
+      }
+    });
+
+    return Promise.all(updates);
+  }
+
   /**
    * Remove permission set for a page
    */
