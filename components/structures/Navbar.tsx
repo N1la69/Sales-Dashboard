@@ -17,7 +17,7 @@ import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 
@@ -26,6 +26,8 @@ export default function Navbar() {
   const { user } = state;
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const IS_LOGGED_IN = useMemo(() => !!user, [user]);
   const isAdminPage = useMemo(() => pathname?.startsWith("/admin"), [pathname]);
@@ -147,7 +149,7 @@ export default function Navbar() {
             aria-label="Toggle dark mode"
             className="md:none mr-6"
           >
-            {theme === "dark" ? (
+            {mounted && theme === "dark" ? (
               <Sun className="h-[1.2rem] w-[1.2rem]" />
             ) : (
               <Moon className="h-[1.2rem] w-[1.2rem]" />

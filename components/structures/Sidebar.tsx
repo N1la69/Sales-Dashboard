@@ -1,12 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Menu, Moon, Sun, X } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,11 +10,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AdminNavLinks, PublicNavLinks } from "@/constants/data";
 import { useAppContext } from "@/hooks/AppContext";
+import { logOutUser } from "@/lib/auth/logOutUser";
 import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import { Menu, Moon, Sun, X } from "lucide-react";
 import { useTheme } from "next-themes";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
-import { logOutUser } from "@/lib/auth/logOutUser";
 
 export function AppSidebar() {
   const { state } = useAppContext();
@@ -29,6 +28,8 @@ export function AppSidebar() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   const IS_LOGGED_IN = useMemo(() => !!user, [user]);
   const isAdminPage = useMemo(() => pathname?.startsWith("/admin"), [pathname]);
@@ -178,7 +179,7 @@ export function AppSidebar() {
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             className="flex items-center gap-2 justify-center"
           >
-            {theme === "dark" ? (
+            {mounted && theme === "dark" ? (
               <>
                 <Sun size={18} /> Light Mode
               </>
