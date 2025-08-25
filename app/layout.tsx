@@ -40,7 +40,7 @@ export default function RootLayout({
                 <Navbar />
                 <AppSidebar />
 
-                <main className="relative flex flex-col items-center justify-start w-full pt-16">
+                <main className="relative flex flex-col w-full pt-16">
                   <ToastContainer />
                   {children}
                 </main>
