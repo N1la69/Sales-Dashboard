@@ -13,7 +13,6 @@ export default function PublicRouter({
   const resolvedParams = use(params); // <-- unwrap Promise
   const typeArray: string[] = resolvedParams.type ?? [];
   const pageKey = typeArray[0]; // e.g., 'store'
-  console.log(typeArray, pageKey);
   const page = PublicNavLinks.find((page) => page.key == pageKey);
   useEffect(() => {
     if (page?.title) {
