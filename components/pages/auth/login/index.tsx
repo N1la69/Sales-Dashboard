@@ -58,12 +58,12 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-950">
+    <div className="flex min-h-screen min-w-full items-center justify-center bg-gray-50 dark:bg-gray-950">
       <Card className="w-full max-w-sm border-0 shadow-sm bg-white dark:bg-gray-800">
         <CardHeader>
           <CardTitle className="text-center space-y-2 mb-3">
             <h1 className="text-2xl font-medium text-gray-800 dark:text-gray-100">
-              BG Sales Dashboard
+              B G Distributors Pvt Ltd
             </h1>
             <h2 className="text-gray-500 dark:text-gray-300 font-normal">
               Sign in to your account
