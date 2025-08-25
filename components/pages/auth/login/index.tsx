@@ -17,7 +17,7 @@ const LoginPage = () => {
     try {
       if (user) {
         const params = new URLSearchParams(window.location.search);
-        const redirectTo = params.get("from") || "/dashboard";
+        const redirectTo = params.get("from") || "/";
         window.location.href = redirectTo;
       }
     } catch (err) {
@@ -42,7 +42,7 @@ const LoginPage = () => {
       const data = await res.json();
       if (res.ok) {
         const params = new URLSearchParams(window.location.search);
-        const redirectTo = params.get("from") || "/dashboard";
+        const redirectTo = params.get("from") || "/";
         window.location.href = redirectTo;
       } else {
         toast.error(data.error || "Login failed");
