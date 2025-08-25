@@ -1,29 +1,20 @@
 "use client";
 
+import { SafeUser } from "@/CustomModels/UserModel";
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 
 // ---------------------------
 // Types
 // ---------------------------
-type User = {
-  _id: string;
-  name: string;
-  email: string;
-  role: string;
-  image?: string;
-  isActive: boolean;
-  lastLogin?: string;
-  slotDuration?: number;
-};
 
 type State = {
-  user: User | null;
+  user: SafeUser | null;
   loading: boolean;
   error: string | null;
 };
 
 type Action =
-  | { type: "SET_USER"; payload: User }
+  | { type: "SET_USER"; payload: SafeUser }
   | { type: "SET_LOADING"; payload: boolean }
   | { type: "SET_ERROR"; payload: string | null };
 
@@ -81,7 +72,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         if (!res.ok) throw new Error("Not authenticated");
 
         const { data } = await res.json();
-        dispatch({ type: "SET_USER", payload: data.user });
+        dispatch({ type: "SET_USER", payload: data });
         //
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
