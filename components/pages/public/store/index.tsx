@@ -484,7 +484,6 @@ const StorePage = () => {
 
               {/* Bills */}
               <div className="py-3">
-                <h2 className="text-xl font-semibold mb-3">Last 6 Bills:</h2>
                 <BillTable
                   bills={data?.getLastStoreBills || []}
                   loading={loading}

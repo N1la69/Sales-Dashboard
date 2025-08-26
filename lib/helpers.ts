@@ -313,11 +313,14 @@ export async function getStoreRetailingBreakdown(
   year?: number[],
   month?: number[]
 ) {
-  const levelMap: Record<string, string> = {
-    category: "pm.category",
-    brand: "pm.brand",
-    brandform: "pm.brandform",
-    subbrandform: "pm.subbrandform",
+  // Define the allowed keys from product_mapping
+  type ProductKeys = "category" | "brand" | "brandform" | "subbrandform";
+
+  const levelMap: Record<string, ProductKeys> = {
+    category: "category",
+    brand: "brand",
+    brandform: "brandform",
+    subbrandform: "subbrandform",
   };
 
   const groupField = levelMap[level?.toLowerCase()];
@@ -325,97 +328,137 @@ export async function getStoreRetailingBreakdown(
     throw new Error(`Invalid level: ${level}`);
   }
 
-  // Map parent field (to filter children correctly)
-  let parentFilter: { field: string; value: string } | undefined;
-  if (parent) {
-    const parentFieldMap: Record<string, string> = {
-      brand: "pm.category",
-      brandform: "pm.brand",
-      subbrandform: "pm.brandform",
-    };
-    const parentField = parentFieldMap[level?.toLowerCase()];
-    if (parentField) {
-      parentFilter = { field: parentField, value: parent };
-    }
+  // Step 1: Preload product_mapping (small table vs psr_data)
+  const products = await prisma.product_mapping.findMany({
+    select: {
+      p_code: true,
+      category: true,
+      brand: true,
+      brandform: true,
+      subbrandform: true,
+    },
+  });
+
+  // Step 2: Build product map
+  const productMap = new Map<
+    number,
+    { category: string; brand: string; brandform: string; subbrandform: string }
+  >();
+  for (const p of products) {
+    productMap.set(p.p_code, {
+      category: p.category ?? "Unknown",
+      brand: p.brand ?? "Unknown",
+      brandform: p.brandform ?? "Unknown",
+      subbrandform: p.subbrandform ?? "Unknown",
+    });
+  }
+
+  // Step 3: Date range from fiscal year
+  let dateCondition: any = {};
+  if (year && year.length > 0) {
+    const minFY = Math.min(...year);
+    const maxFY = Math.max(...year);
+    const minDate = new Date(minFY - 1, 6, 1); // Jul prev year
+    const maxDate = new Date(maxFY, 5, 30); // Jun maxFY
+    dateCondition = { gte: minDate, lte: maxDate };
   }
 
   const tables = resolveTables(source);
-  const breakdownMap: Record<string, { [year: number]: number }> = {};
 
-  // Build year/month filters (fiscal handling)
-  const yearCondition = year?.length
-    ? `AND (CASE WHEN MONTH(p.document_date) >= 7 THEN YEAR(p.document_date)+1 ELSE YEAR(p.document_date) END) IN (${year.join(
-        ","
-      )})`
-    : "";
+  let rawResults: { p_code: number; document_date: Date; retailing: number }[] =
+    [];
 
-  const monthCondition = month?.length
-    ? `AND (CASE WHEN MONTH(p.document_date) >= 7 THEN MONTH(p.document_date)-6 ELSE MONTH(p.document_date)+6 END) IN (${month.join(
-        ","
-      )})`
-    : "";
-
-  const storeCodeEscaped = `'${storeCode}'`;
-
+  // Step 4: Query psr_data only (skip product_mapping join)
   for (const table of tables) {
-    let query = `
-      SELECT ${groupField} AS group_key, p.document_date, SUM(p.retailing) AS total
-      FROM ${table} p
-      INNER JOIN store_mapping sm ON p.customer_code = sm.Old_Store_Code
-      INNER JOIN product_mapping pm ON p.p_code = pm.p_code
-      WHERE sm.Old_Store_Code = ${storeCodeEscaped}
-      ${yearCondition}
-      ${monthCondition}
-    `;
+    const delegate = prisma[table as "psr_data" | "psr_data_temp"] as any;
 
-    if (parentFilter) {
-      query += ` AND ${parentFilter.field} = '${parentFilter.value}'`;
-    }
+    const data = await delegate.findMany({
+      where: {
+        customer_code: storeCode,
+        ...(year?.length ? { document_date: dateCondition } : {}),
+      },
+      select: {
+        p_code: true,
+        document_date: true,
+        retailing: true,
+      },
+    });
 
-    query += ` GROUP BY ${groupField}, p.document_date`;
-
-    const results: any[] = await prisma.$queryRawUnsafe(query);
-
-    for (const row of results) {
-      const key = row.group_key || "Unknown";
-      const fy = getFiscalYear(new Date(row.document_date));
-      const value = Number(row.total);
-
-      if (!breakdownMap[key]) breakdownMap[key] = {};
-      breakdownMap[key][fy] = (breakdownMap[key][fy] || 0) + value;
-    }
+    rawResults.push(
+      ...data.map((row: any) => ({
+        p_code: row.p_code,
+        document_date: row.document_date,
+        retailing: Number(row.retailing),
+      }))
+    );
   }
 
-  return Object.entries(breakdownMap)
-    .map(([key, yearlyData]) => {
-      const breakdown = Object.entries(yearlyData)
-        .map(([year, retailing]) => ({
-          year: Number(year),
-          value: retailing,
-        }))
-        .sort((a, b) => b.year - a.year);
+  // Step 5: Apply fiscal month filter in-memory
+  if (month && month.length > 0) {
+    rawResults = rawResults.filter((row) => {
+      const calMonth = row.document_date.getMonth(); // 0=Jan
+      const fiscalMonth = calMonth >= 6 ? calMonth - 6 + 1 : calMonth + 6 + 1;
+      return month.includes(fiscalMonth);
+    });
+  }
 
-      let growth: number | null = null;
-      if (breakdown.length >= 2) {
-        const latest = breakdown[0];
-        const prev = breakdown[1];
-        growth =
-          prev.value === 0
-            ? null
-            : Math.round((latest.value / prev.value) * 100);
-      }
+  // Step 6: Aggregate by group (category/brand/brandform/subbrandform)
+  const breakdownMap = new Map<string, Map<number, number>>(); // key -> (FY -> total)
 
-      return {
-        key,
-        name: key,
-        breakdown,
-        growth,
-        childrenCount: null, // optional: could compute if needed
+  for (const row of rawResults) {
+    const product = productMap.get(row.p_code);
+    if (!product) continue;
+
+    // Parent filter (applied in-memory)
+    if (parent) {
+      const parentFieldMap: Record<string, ProductKeys> = {
+        brand: "category",
+        brandform: "brand",
+        subbrandform: "brandform",
       };
-    })
-    .sort(
-      (a, b) => (b.breakdown[0]?.value || 0) - (a.breakdown[0]?.value || 0)
-    );
+      const field = parentFieldMap[level.toLowerCase()];
+      if (field && product[field] !== parent) continue;
+    }
+
+    const key = product[groupField] ?? "Unknown";
+
+    const fy =
+      row.document_date.getMonth() >= 6
+        ? row.document_date.getFullYear() + 1
+        : row.document_date.getFullYear();
+
+    if (!breakdownMap.has(key)) breakdownMap.set(key, new Map());
+    const yearMap = breakdownMap.get(key)!;
+    yearMap.set(fy, (yearMap.get(fy) ?? 0) + row.retailing);
+  }
+
+  // Step 7: Transform to final structure
+  const result = Array.from(breakdownMap.entries()).map(([key, yearMap]) => {
+    const breakdown = Array.from(yearMap.entries())
+      .map(([fy, value]) => ({ year: fy, value }))
+      .sort((a, b) => b.year - a.year);
+
+    let growth: number | null = null;
+    if (breakdown.length >= 2) {
+      const latest = breakdown[0];
+      const prev = breakdown[1];
+      growth =
+        prev.value === 0 ? null : Math.round((latest.value / prev.value) * 100);
+    }
+
+    return {
+      key,
+      name: key,
+      breakdown,
+      growth,
+      childrenCount: null,
+    };
+  });
+
+  // Step 8: Sort by latest value
+  return result.sort(
+    (a, b) => (b.breakdown[0]?.value || 0) - (a.breakdown[0]?.value || 0)
+  );
 }
 
 // DASHBOARD page
@@ -963,9 +1006,7 @@ export async function getLastStoreBills(
         .join(",")})`
     : "";
   const monthFilter = month?.length
-    ? `AND (CASE WHEN MONTH(document_date) >= 7 THEN MONTH(document_date)-6 ELSE MONTH(document_date)+6 END) IN (${month
-        .map(() => "?")
-        .join(",")})`
+    ? `AND MONTH(document_date) IN (${month.map(() => "?").join(",")})`
     : "";
 
   const filterParams = [...(year ?? []), ...(month ?? [])];
