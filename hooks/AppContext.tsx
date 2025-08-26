@@ -1,20 +1,25 @@
 "use client";
 
+import { PermissionSet } from "@/app/generated/prisma/wasm";
 import { SafeUser } from "@/CustomModels/UserModel";
 import React, { createContext, useContext, useEffect, useReducer } from "react";
 
 // ---------------------------
 // Types
 // ---------------------------
+type UserTypeUI = {
+  user: SafeUser | null;
+  permissions: PermissionSet | null;
+};
 
 type State = {
-  user: SafeUser | null;
+  user: UserTypeUI | null;
   loading: boolean;
   error: string | null;
 };
 
 type Action =
-  | { type: "SET_USER"; payload: SafeUser }
+  | { type: "SET_USER"; payload: UserTypeUI | null }
   | { type: "SET_LOADING"; payload: boolean }
   | { type: "SET_ERROR"; payload: string | null };
 
