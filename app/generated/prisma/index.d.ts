@@ -1368,6 +1368,117 @@ export namespace Prisma {
 
 
   /**
+   * Count Type Channel_mappingCountOutputType
+   */
+
+  export type Channel_mappingCountOutputType = {
+    store_mapping: number
+  }
+
+  export type Channel_mappingCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    store_mapping?: boolean | Channel_mappingCountOutputTypeCountStore_mappingArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * Channel_mappingCountOutputType without action
+   */
+  export type Channel_mappingCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Channel_mappingCountOutputType
+     */
+    select?: Channel_mappingCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * Channel_mappingCountOutputType without action
+   */
+  export type Channel_mappingCountOutputTypeCountStore_mappingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: store_mappingWhereInput
+  }
+
+
+  /**
+   * Count Type Store_mappingCountOutputType
+   */
+
+  export type Store_mappingCountOutputType = {
+    psr_data: number
+    psr_data_temp: number
+  }
+
+  export type Store_mappingCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    psr_data?: boolean | Store_mappingCountOutputTypeCountPsr_dataArgs
+    psr_data_temp?: boolean | Store_mappingCountOutputTypeCountPsr_data_tempArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * Store_mappingCountOutputType without action
+   */
+  export type Store_mappingCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Store_mappingCountOutputType
+     */
+    select?: Store_mappingCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * Store_mappingCountOutputType without action
+   */
+  export type Store_mappingCountOutputTypeCountPsr_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: psr_dataWhereInput
+  }
+
+  /**
+   * Store_mappingCountOutputType without action
+   */
+  export type Store_mappingCountOutputTypeCountPsr_data_tempArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: psr_data_tempWhereInput
+  }
+
+
+  /**
+   * Count Type Product_mappingCountOutputType
+   */
+
+  export type Product_mappingCountOutputType = {
+    psr_data: number
+    psr_data_temp: number
+  }
+
+  export type Product_mappingCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    psr_data?: boolean | Product_mappingCountOutputTypeCountPsr_dataArgs
+    psr_data_temp?: boolean | Product_mappingCountOutputTypeCountPsr_data_tempArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * Product_mappingCountOutputType without action
+   */
+  export type Product_mappingCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Product_mappingCountOutputType
+     */
+    select?: Product_mappingCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * Product_mappingCountOutputType without action
+   */
+  export type Product_mappingCountOutputTypeCountPsr_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: psr_dataWhereInput
+  }
+
+  /**
+   * Product_mappingCountOutputType without action
+   */
+  export type Product_mappingCountOutputTypeCountPsr_data_tempArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: psr_data_tempWhereInput
+  }
+
+
+  /**
    * Count Type UserCountOutputType
    */
 
@@ -1664,6 +1775,8 @@ export namespace Prisma {
     brand?: boolean
     brandform?: boolean
     retailing?: boolean
+    store_mapping?: boolean | store_mappingDefaultArgs<ExtArgs>
+    product_mapping?: boolean | product_mappingDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["psr_data"]>
 
 
@@ -1684,10 +1797,17 @@ export namespace Prisma {
   }
 
   export type psr_dataOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"psr_id" | "document_no" | "document_date" | "subbrandform" | "customer_name" | "customer_code" | "p_code" | "customer_type" | "category" | "brand" | "brandform" | "retailing", ExtArgs["result"]["psr_data"]>
+  export type psr_dataInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    store_mapping?: boolean | store_mappingDefaultArgs<ExtArgs>
+    product_mapping?: boolean | product_mappingDefaultArgs<ExtArgs>
+  }
 
   export type $psr_dataPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "psr_data"
-    objects: {}
+    objects: {
+      store_mapping: Prisma.$store_mappingPayload<ExtArgs>
+      product_mapping: Prisma.$product_mappingPayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       psr_id: number
       document_no: string
@@ -2041,6 +2161,8 @@ export namespace Prisma {
    */
   export interface Prisma__psr_dataClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    store_mapping<T extends store_mappingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, store_mappingDefaultArgs<ExtArgs>>): Prisma__store_mappingClient<$Result.GetResult<Prisma.$store_mappingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    product_mapping<T extends product_mappingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, product_mappingDefaultArgs<ExtArgs>>): Prisma__product_mappingClient<$Result.GetResult<Prisma.$product_mappingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2099,6 +2221,10 @@ export namespace Prisma {
      */
     omit?: psr_dataOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_dataInclude<ExtArgs> | null
+    /**
      * Filter, which psr_data to fetch.
      */
     where: psr_dataWhereUniqueInput
@@ -2117,6 +2243,10 @@ export namespace Prisma {
      */
     omit?: psr_dataOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_dataInclude<ExtArgs> | null
+    /**
      * Filter, which psr_data to fetch.
      */
     where: psr_dataWhereUniqueInput
@@ -2134,6 +2264,10 @@ export namespace Prisma {
      * Omit specific fields from the psr_data
      */
     omit?: psr_dataOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_dataInclude<ExtArgs> | null
     /**
      * Filter, which psr_data to fetch.
      */
@@ -2183,6 +2317,10 @@ export namespace Prisma {
      */
     omit?: psr_dataOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_dataInclude<ExtArgs> | null
+    /**
      * Filter, which psr_data to fetch.
      */
     where?: psr_dataWhereInput
@@ -2231,6 +2369,10 @@ export namespace Prisma {
      */
     omit?: psr_dataOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_dataInclude<ExtArgs> | null
+    /**
      * Filter, which psr_data to fetch.
      */
     where?: psr_dataWhereInput
@@ -2274,6 +2416,10 @@ export namespace Prisma {
      */
     omit?: psr_dataOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_dataInclude<ExtArgs> | null
+    /**
      * The data needed to create a psr_data.
      */
     data: XOR<psr_dataCreateInput, psr_dataUncheckedCreateInput>
@@ -2302,6 +2448,10 @@ export namespace Prisma {
      * Omit specific fields from the psr_data
      */
     omit?: psr_dataOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_dataInclude<ExtArgs> | null
     /**
      * The data needed to update a psr_data.
      */
@@ -2343,6 +2493,10 @@ export namespace Prisma {
      */
     omit?: psr_dataOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_dataInclude<ExtArgs> | null
+    /**
      * The filter to search for the psr_data to update in case it exists.
      */
     where: psr_dataWhereUniqueInput
@@ -2368,6 +2522,10 @@ export namespace Prisma {
      * Omit specific fields from the psr_data
      */
     omit?: psr_dataOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_dataInclude<ExtArgs> | null
     /**
      * Filter which psr_data to delete.
      */
@@ -2400,6 +2558,10 @@ export namespace Prisma {
      * Omit specific fields from the psr_data
      */
     omit?: psr_dataOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_dataInclude<ExtArgs> | null
   }
 
 
@@ -2665,6 +2827,8 @@ export namespace Prisma {
     brand?: boolean
     brandform?: boolean
     retailing?: boolean
+    store_mapping?: boolean | store_mappingDefaultArgs<ExtArgs>
+    product_mapping?: boolean | product_mappingDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["psr_data_temp"]>
 
 
@@ -2685,10 +2849,17 @@ export namespace Prisma {
   }
 
   export type psr_data_tempOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"psr_id" | "document_no" | "document_date" | "subbrandform" | "customer_name" | "customer_code" | "p_code" | "customer_type" | "category" | "brand" | "brandform" | "retailing", ExtArgs["result"]["psr_data_temp"]>
+  export type psr_data_tempInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    store_mapping?: boolean | store_mappingDefaultArgs<ExtArgs>
+    product_mapping?: boolean | product_mappingDefaultArgs<ExtArgs>
+  }
 
   export type $psr_data_tempPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "psr_data_temp"
-    objects: {}
+    objects: {
+      store_mapping: Prisma.$store_mappingPayload<ExtArgs>
+      product_mapping: Prisma.$product_mappingPayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       psr_id: number
       document_no: string
@@ -3042,6 +3213,8 @@ export namespace Prisma {
    */
   export interface Prisma__psr_data_tempClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    store_mapping<T extends store_mappingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, store_mappingDefaultArgs<ExtArgs>>): Prisma__store_mappingClient<$Result.GetResult<Prisma.$store_mappingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    product_mapping<T extends product_mappingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, product_mappingDefaultArgs<ExtArgs>>): Prisma__product_mappingClient<$Result.GetResult<Prisma.$product_mappingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3100,6 +3273,10 @@ export namespace Prisma {
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_data_tempInclude<ExtArgs> | null
+    /**
      * Filter, which psr_data_temp to fetch.
      */
     where: psr_data_tempWhereUniqueInput
@@ -3118,6 +3295,10 @@ export namespace Prisma {
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_data_tempInclude<ExtArgs> | null
+    /**
      * Filter, which psr_data_temp to fetch.
      */
     where: psr_data_tempWhereUniqueInput
@@ -3135,6 +3316,10 @@ export namespace Prisma {
      * Omit specific fields from the psr_data_temp
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_data_tempInclude<ExtArgs> | null
     /**
      * Filter, which psr_data_temp to fetch.
      */
@@ -3184,6 +3369,10 @@ export namespace Prisma {
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_data_tempInclude<ExtArgs> | null
+    /**
      * Filter, which psr_data_temp to fetch.
      */
     where?: psr_data_tempWhereInput
@@ -3232,6 +3421,10 @@ export namespace Prisma {
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_data_tempInclude<ExtArgs> | null
+    /**
      * Filter, which psr_data_temps to fetch.
      */
     where?: psr_data_tempWhereInput
@@ -3275,6 +3468,10 @@ export namespace Prisma {
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_data_tempInclude<ExtArgs> | null
+    /**
      * The data needed to create a psr_data_temp.
      */
     data: XOR<psr_data_tempCreateInput, psr_data_tempUncheckedCreateInput>
@@ -3303,6 +3500,10 @@ export namespace Prisma {
      * Omit specific fields from the psr_data_temp
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_data_tempInclude<ExtArgs> | null
     /**
      * The data needed to update a psr_data_temp.
      */
@@ -3344,6 +3545,10 @@ export namespace Prisma {
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_data_tempInclude<ExtArgs> | null
+    /**
      * The filter to search for the psr_data_temp to update in case it exists.
      */
     where: psr_data_tempWhereUniqueInput
@@ -3369,6 +3574,10 @@ export namespace Prisma {
      * Omit specific fields from the psr_data_temp
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_data_tempInclude<ExtArgs> | null
     /**
      * Filter which psr_data_temp to delete.
      */
@@ -3401,6 +3610,10 @@ export namespace Prisma {
      * Omit specific fields from the psr_data_temp
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_data_tempInclude<ExtArgs> | null
   }
 
 
@@ -3602,6 +3815,8 @@ export namespace Prisma {
     base_channel?: boolean
     short_channel?: boolean
     channel_desc?: boolean
+    store_mapping?: boolean | channel_mapping$store_mappingArgs<ExtArgs>
+    _count?: boolean | Channel_mappingCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["channel_mapping"]>
 
 
@@ -3615,10 +3830,16 @@ export namespace Prisma {
   }
 
   export type channel_mappingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"channel_id" | "customer_type" | "base_channel" | "short_channel" | "channel_desc", ExtArgs["result"]["channel_mapping"]>
+  export type channel_mappingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    store_mapping?: boolean | channel_mapping$store_mappingArgs<ExtArgs>
+    _count?: boolean | Channel_mappingCountOutputTypeDefaultArgs<ExtArgs>
+  }
 
   export type $channel_mappingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "channel_mapping"
-    objects: {}
+    objects: {
+      store_mapping: Prisma.$store_mappingPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       channel_id: number
       customer_type: string
@@ -3965,6 +4186,7 @@ export namespace Prisma {
    */
   export interface Prisma__channel_mappingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    store_mapping<T extends channel_mapping$store_mappingArgs<ExtArgs> = {}>(args?: Subset<T, channel_mapping$store_mappingArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$store_mappingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4016,6 +4238,10 @@ export namespace Prisma {
      */
     omit?: channel_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: channel_mappingInclude<ExtArgs> | null
+    /**
      * Filter, which channel_mapping to fetch.
      */
     where: channel_mappingWhereUniqueInput
@@ -4034,6 +4260,10 @@ export namespace Prisma {
      */
     omit?: channel_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: channel_mappingInclude<ExtArgs> | null
+    /**
      * Filter, which channel_mapping to fetch.
      */
     where: channel_mappingWhereUniqueInput
@@ -4051,6 +4281,10 @@ export namespace Prisma {
      * Omit specific fields from the channel_mapping
      */
     omit?: channel_mappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: channel_mappingInclude<ExtArgs> | null
     /**
      * Filter, which channel_mapping to fetch.
      */
@@ -4100,6 +4334,10 @@ export namespace Prisma {
      */
     omit?: channel_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: channel_mappingInclude<ExtArgs> | null
+    /**
      * Filter, which channel_mapping to fetch.
      */
     where?: channel_mappingWhereInput
@@ -4148,6 +4386,10 @@ export namespace Prisma {
      */
     omit?: channel_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: channel_mappingInclude<ExtArgs> | null
+    /**
      * Filter, which channel_mappings to fetch.
      */
     where?: channel_mappingWhereInput
@@ -4191,6 +4433,10 @@ export namespace Prisma {
      */
     omit?: channel_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: channel_mappingInclude<ExtArgs> | null
+    /**
      * The data needed to create a channel_mapping.
      */
     data: XOR<channel_mappingCreateInput, channel_mappingUncheckedCreateInput>
@@ -4219,6 +4465,10 @@ export namespace Prisma {
      * Omit specific fields from the channel_mapping
      */
     omit?: channel_mappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: channel_mappingInclude<ExtArgs> | null
     /**
      * The data needed to update a channel_mapping.
      */
@@ -4260,6 +4510,10 @@ export namespace Prisma {
      */
     omit?: channel_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: channel_mappingInclude<ExtArgs> | null
+    /**
      * The filter to search for the channel_mapping to update in case it exists.
      */
     where: channel_mappingWhereUniqueInput
@@ -4286,6 +4540,10 @@ export namespace Prisma {
      */
     omit?: channel_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: channel_mappingInclude<ExtArgs> | null
+    /**
      * Filter which channel_mapping to delete.
      */
     where: channel_mappingWhereUniqueInput
@@ -4306,6 +4564,30 @@ export namespace Prisma {
   }
 
   /**
+   * channel_mapping.store_mapping
+   */
+  export type channel_mapping$store_mappingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the store_mapping
+     */
+    select?: store_mappingSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the store_mapping
+     */
+    omit?: store_mappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: store_mappingInclude<ExtArgs> | null
+    where?: store_mappingWhereInput
+    orderBy?: store_mappingOrderByWithRelationInput | store_mappingOrderByWithRelationInput[]
+    cursor?: store_mappingWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Store_mappingScalarFieldEnum | Store_mappingScalarFieldEnum[]
+  }
+
+  /**
    * channel_mapping without action
    */
   export type channel_mappingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4317,6 +4599,10 @@ export namespace Prisma {
      * Omit specific fields from the channel_mapping
      */
     omit?: channel_mappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: channel_mappingInclude<ExtArgs> | null
   }
 
 
@@ -4566,6 +4852,10 @@ export namespace Prisma {
     RSM?: boolean
     ASM?: boolean
     TSI?: boolean
+    psr_data?: boolean | store_mapping$psr_dataArgs<ExtArgs>
+    psr_data_temp?: boolean | store_mapping$psr_data_tempArgs<ExtArgs>
+    channel_mapping?: boolean | channel_mappingDefaultArgs<ExtArgs>
+    _count?: boolean | Store_mappingCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["store_mapping"]>
 
 
@@ -4585,10 +4875,20 @@ export namespace Prisma {
   }
 
   export type store_mappingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id" | "Old_Store_Code" | "New_Store_Code" | "customer_name" | "customer_type" | "Branch" | "DSE_Code" | "ZM" | "RSM" | "ASM" | "TSI", ExtArgs["result"]["store_mapping"]>
+  export type store_mappingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    psr_data?: boolean | store_mapping$psr_dataArgs<ExtArgs>
+    psr_data_temp?: boolean | store_mapping$psr_data_tempArgs<ExtArgs>
+    channel_mapping?: boolean | channel_mappingDefaultArgs<ExtArgs>
+    _count?: boolean | Store_mappingCountOutputTypeDefaultArgs<ExtArgs>
+  }
 
   export type $store_mappingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "store_mapping"
-    objects: {}
+    objects: {
+      psr_data: Prisma.$psr_dataPayload<ExtArgs>[]
+      psr_data_temp: Prisma.$psr_data_tempPayload<ExtArgs>[]
+      channel_mapping: Prisma.$channel_mappingPayload<ExtArgs>
+    }
     scalars: $Extensions.GetPayloadResult<{
       Id: number
       Old_Store_Code: string
@@ -4941,6 +5241,9 @@ export namespace Prisma {
    */
   export interface Prisma__store_mappingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    psr_data<T extends store_mapping$psr_dataArgs<ExtArgs> = {}>(args?: Subset<T, store_mapping$psr_dataArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$psr_dataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    psr_data_temp<T extends store_mapping$psr_data_tempArgs<ExtArgs> = {}>(args?: Subset<T, store_mapping$psr_data_tempArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$psr_data_tempPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    channel_mapping<T extends channel_mappingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, channel_mappingDefaultArgs<ExtArgs>>): Prisma__channel_mappingClient<$Result.GetResult<Prisma.$channel_mappingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4998,6 +5301,10 @@ export namespace Prisma {
      */
     omit?: store_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: store_mappingInclude<ExtArgs> | null
+    /**
      * Filter, which store_mapping to fetch.
      */
     where: store_mappingWhereUniqueInput
@@ -5016,6 +5323,10 @@ export namespace Prisma {
      */
     omit?: store_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: store_mappingInclude<ExtArgs> | null
+    /**
      * Filter, which store_mapping to fetch.
      */
     where: store_mappingWhereUniqueInput
@@ -5033,6 +5344,10 @@ export namespace Prisma {
      * Omit specific fields from the store_mapping
      */
     omit?: store_mappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: store_mappingInclude<ExtArgs> | null
     /**
      * Filter, which store_mapping to fetch.
      */
@@ -5082,6 +5397,10 @@ export namespace Prisma {
      */
     omit?: store_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: store_mappingInclude<ExtArgs> | null
+    /**
      * Filter, which store_mapping to fetch.
      */
     where?: store_mappingWhereInput
@@ -5130,6 +5449,10 @@ export namespace Prisma {
      */
     omit?: store_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: store_mappingInclude<ExtArgs> | null
+    /**
      * Filter, which store_mappings to fetch.
      */
     where?: store_mappingWhereInput
@@ -5173,6 +5496,10 @@ export namespace Prisma {
      */
     omit?: store_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: store_mappingInclude<ExtArgs> | null
+    /**
      * The data needed to create a store_mapping.
      */
     data: XOR<store_mappingCreateInput, store_mappingUncheckedCreateInput>
@@ -5201,6 +5528,10 @@ export namespace Prisma {
      * Omit specific fields from the store_mapping
      */
     omit?: store_mappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: store_mappingInclude<ExtArgs> | null
     /**
      * The data needed to update a store_mapping.
      */
@@ -5242,6 +5573,10 @@ export namespace Prisma {
      */
     omit?: store_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: store_mappingInclude<ExtArgs> | null
+    /**
      * The filter to search for the store_mapping to update in case it exists.
      */
     where: store_mappingWhereUniqueInput
@@ -5268,6 +5603,10 @@ export namespace Prisma {
      */
     omit?: store_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: store_mappingInclude<ExtArgs> | null
+    /**
      * Filter which store_mapping to delete.
      */
     where: store_mappingWhereUniqueInput
@@ -5288,6 +5627,54 @@ export namespace Prisma {
   }
 
   /**
+   * store_mapping.psr_data
+   */
+  export type store_mapping$psr_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data
+     */
+    select?: psr_dataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data
+     */
+    omit?: psr_dataOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_dataInclude<ExtArgs> | null
+    where?: psr_dataWhereInput
+    orderBy?: psr_dataOrderByWithRelationInput | psr_dataOrderByWithRelationInput[]
+    cursor?: psr_dataWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Psr_dataScalarFieldEnum | Psr_dataScalarFieldEnum[]
+  }
+
+  /**
+   * store_mapping.psr_data_temp
+   */
+  export type store_mapping$psr_data_tempArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_temp
+     */
+    select?: psr_data_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_temp
+     */
+    omit?: psr_data_tempOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_data_tempInclude<ExtArgs> | null
+    where?: psr_data_tempWhereInput
+    orderBy?: psr_data_tempOrderByWithRelationInput | psr_data_tempOrderByWithRelationInput[]
+    cursor?: psr_data_tempWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Psr_data_tempScalarFieldEnum | Psr_data_tempScalarFieldEnum[]
+  }
+
+  /**
    * store_mapping without action
    */
   export type store_mappingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5299,6 +5686,10 @@ export namespace Prisma {
      * Omit specific fields from the store_mapping
      */
     omit?: store_mappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: store_mappingInclude<ExtArgs> | null
   }
 
 
@@ -5520,6 +5911,9 @@ export namespace Prisma {
     brand?: boolean
     brandform?: boolean
     subbrandform?: boolean
+    psr_data?: boolean | product_mapping$psr_dataArgs<ExtArgs>
+    psr_data_temp?: boolean | product_mapping$psr_data_tempArgs<ExtArgs>
+    _count?: boolean | Product_mappingCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["product_mapping"]>
 
 
@@ -5535,10 +5929,18 @@ export namespace Prisma {
   }
 
   export type product_mappingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id" | "p_code" | "desc_short" | "category" | "brand" | "brandform" | "subbrandform", ExtArgs["result"]["product_mapping"]>
+  export type product_mappingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    psr_data?: boolean | product_mapping$psr_dataArgs<ExtArgs>
+    psr_data_temp?: boolean | product_mapping$psr_data_tempArgs<ExtArgs>
+    _count?: boolean | Product_mappingCountOutputTypeDefaultArgs<ExtArgs>
+  }
 
   export type $product_mappingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "product_mapping"
-    objects: {}
+    objects: {
+      psr_data: Prisma.$psr_dataPayload<ExtArgs>[]
+      psr_data_temp: Prisma.$psr_data_tempPayload<ExtArgs>[]
+    }
     scalars: $Extensions.GetPayloadResult<{
       Id: number
       p_code: number
@@ -5887,6 +6289,8 @@ export namespace Prisma {
    */
   export interface Prisma__product_mappingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    psr_data<T extends product_mapping$psr_dataArgs<ExtArgs> = {}>(args?: Subset<T, product_mapping$psr_dataArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$psr_dataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    psr_data_temp<T extends product_mapping$psr_data_tempArgs<ExtArgs> = {}>(args?: Subset<T, product_mapping$psr_data_tempArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$psr_data_tempPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5940,6 +6344,10 @@ export namespace Prisma {
      */
     omit?: product_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_mappingInclude<ExtArgs> | null
+    /**
      * Filter, which product_mapping to fetch.
      */
     where: product_mappingWhereUniqueInput
@@ -5958,6 +6366,10 @@ export namespace Prisma {
      */
     omit?: product_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_mappingInclude<ExtArgs> | null
+    /**
      * Filter, which product_mapping to fetch.
      */
     where: product_mappingWhereUniqueInput
@@ -5975,6 +6387,10 @@ export namespace Prisma {
      * Omit specific fields from the product_mapping
      */
     omit?: product_mappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_mappingInclude<ExtArgs> | null
     /**
      * Filter, which product_mapping to fetch.
      */
@@ -6024,6 +6440,10 @@ export namespace Prisma {
      */
     omit?: product_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_mappingInclude<ExtArgs> | null
+    /**
      * Filter, which product_mapping to fetch.
      */
     where?: product_mappingWhereInput
@@ -6072,6 +6492,10 @@ export namespace Prisma {
      */
     omit?: product_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_mappingInclude<ExtArgs> | null
+    /**
      * Filter, which product_mappings to fetch.
      */
     where?: product_mappingWhereInput
@@ -6115,6 +6539,10 @@ export namespace Prisma {
      */
     omit?: product_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_mappingInclude<ExtArgs> | null
+    /**
      * The data needed to create a product_mapping.
      */
     data: XOR<product_mappingCreateInput, product_mappingUncheckedCreateInput>
@@ -6143,6 +6571,10 @@ export namespace Prisma {
      * Omit specific fields from the product_mapping
      */
     omit?: product_mappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_mappingInclude<ExtArgs> | null
     /**
      * The data needed to update a product_mapping.
      */
@@ -6184,6 +6616,10 @@ export namespace Prisma {
      */
     omit?: product_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_mappingInclude<ExtArgs> | null
+    /**
      * The filter to search for the product_mapping to update in case it exists.
      */
     where: product_mappingWhereUniqueInput
@@ -6210,6 +6646,10 @@ export namespace Prisma {
      */
     omit?: product_mappingOmit<ExtArgs> | null
     /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_mappingInclude<ExtArgs> | null
+    /**
      * Filter which product_mapping to delete.
      */
     where: product_mappingWhereUniqueInput
@@ -6230,6 +6670,54 @@ export namespace Prisma {
   }
 
   /**
+   * product_mapping.psr_data
+   */
+  export type product_mapping$psr_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data
+     */
+    select?: psr_dataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data
+     */
+    omit?: psr_dataOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_dataInclude<ExtArgs> | null
+    where?: psr_dataWhereInput
+    orderBy?: psr_dataOrderByWithRelationInput | psr_dataOrderByWithRelationInput[]
+    cursor?: psr_dataWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Psr_dataScalarFieldEnum | Psr_dataScalarFieldEnum[]
+  }
+
+  /**
+   * product_mapping.psr_data_temp
+   */
+  export type product_mapping$psr_data_tempArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_temp
+     */
+    select?: psr_data_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_temp
+     */
+    omit?: psr_data_tempOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: psr_data_tempInclude<ExtArgs> | null
+    where?: psr_data_tempWhereInput
+    orderBy?: psr_data_tempOrderByWithRelationInput | psr_data_tempOrderByWithRelationInput[]
+    cursor?: psr_data_tempWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Psr_data_tempScalarFieldEnum | Psr_data_tempScalarFieldEnum[]
+  }
+
+  /**
    * product_mapping without action
    */
   export type product_mappingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6241,6 +6729,10 @@ export namespace Prisma {
      * Omit specific fields from the product_mapping
      */
     omit?: product_mappingOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: product_mappingInclude<ExtArgs> | null
   }
 
 
@@ -8645,6 +9137,8 @@ export namespace Prisma {
     brand?: StringFilter<"psr_data"> | string
     brandform?: StringFilter<"psr_data"> | string
     retailing?: DecimalFilter<"psr_data"> | Decimal | DecimalJsLike | number | string
+    store_mapping?: XOR<Store_mappingScalarRelationFilter, store_mappingWhereInput>
+    product_mapping?: XOR<Product_mappingScalarRelationFilter, product_mappingWhereInput>
   }
 
   export type psr_dataOrderByWithRelationInput = {
@@ -8660,6 +9154,8 @@ export namespace Prisma {
     brand?: SortOrder
     brandform?: SortOrder
     retailing?: SortOrder
+    store_mapping?: store_mappingOrderByWithRelationInput
+    product_mapping?: product_mappingOrderByWithRelationInput
     _relevance?: psr_dataOrderByRelevanceInput
   }
 
@@ -8679,6 +9175,8 @@ export namespace Prisma {
     brand?: StringFilter<"psr_data"> | string
     brandform?: StringFilter<"psr_data"> | string
     retailing?: DecimalFilter<"psr_data"> | Decimal | DecimalJsLike | number | string
+    store_mapping?: XOR<Store_mappingScalarRelationFilter, store_mappingWhereInput>
+    product_mapping?: XOR<Product_mappingScalarRelationFilter, product_mappingWhereInput>
   }, "psr_id">
 
   export type psr_dataOrderByWithAggregationInput = {
@@ -8735,6 +9233,8 @@ export namespace Prisma {
     brand?: StringFilter<"psr_data_temp"> | string
     brandform?: StringFilter<"psr_data_temp"> | string
     retailing?: DecimalFilter<"psr_data_temp"> | Decimal | DecimalJsLike | number | string
+    store_mapping?: XOR<Store_mappingScalarRelationFilter, store_mappingWhereInput>
+    product_mapping?: XOR<Product_mappingScalarRelationFilter, product_mappingWhereInput>
   }
 
   export type psr_data_tempOrderByWithRelationInput = {
@@ -8750,6 +9250,8 @@ export namespace Prisma {
     brand?: SortOrder
     brandform?: SortOrder
     retailing?: SortOrder
+    store_mapping?: store_mappingOrderByWithRelationInput
+    product_mapping?: product_mappingOrderByWithRelationInput
     _relevance?: psr_data_tempOrderByRelevanceInput
   }
 
@@ -8769,6 +9271,8 @@ export namespace Prisma {
     brand?: StringFilter<"psr_data_temp"> | string
     brandform?: StringFilter<"psr_data_temp"> | string
     retailing?: DecimalFilter<"psr_data_temp"> | Decimal | DecimalJsLike | number | string
+    store_mapping?: XOR<Store_mappingScalarRelationFilter, store_mappingWhereInput>
+    product_mapping?: XOR<Product_mappingScalarRelationFilter, product_mappingWhereInput>
   }, "psr_id">
 
   export type psr_data_tempOrderByWithAggregationInput = {
@@ -8818,6 +9322,7 @@ export namespace Prisma {
     base_channel?: StringFilter<"channel_mapping"> | string
     short_channel?: StringFilter<"channel_mapping"> | string
     channel_desc?: StringFilter<"channel_mapping"> | string
+    store_mapping?: Store_mappingListRelationFilter
   }
 
   export type channel_mappingOrderByWithRelationInput = {
@@ -8826,19 +9331,21 @@ export namespace Prisma {
     base_channel?: SortOrder
     short_channel?: SortOrder
     channel_desc?: SortOrder
+    store_mapping?: store_mappingOrderByRelationAggregateInput
     _relevance?: channel_mappingOrderByRelevanceInput
   }
 
   export type channel_mappingWhereUniqueInput = Prisma.AtLeast<{
     channel_id?: number
+    customer_type?: string
     AND?: channel_mappingWhereInput | channel_mappingWhereInput[]
     OR?: channel_mappingWhereInput[]
     NOT?: channel_mappingWhereInput | channel_mappingWhereInput[]
-    customer_type?: StringFilter<"channel_mapping"> | string
     base_channel?: StringFilter<"channel_mapping"> | string
     short_channel?: StringFilter<"channel_mapping"> | string
     channel_desc?: StringFilter<"channel_mapping"> | string
-  }, "channel_id">
+    store_mapping?: Store_mappingListRelationFilter
+  }, "channel_id" | "customer_type">
 
   export type channel_mappingOrderByWithAggregationInput = {
     channel_id?: SortOrder
@@ -8879,6 +9386,9 @@ export namespace Prisma {
     RSM?: StringFilter<"store_mapping"> | string
     ASM?: StringFilter<"store_mapping"> | string
     TSI?: StringFilter<"store_mapping"> | string
+    psr_data?: Psr_dataListRelationFilter
+    psr_data_temp?: Psr_data_tempListRelationFilter
+    channel_mapping?: XOR<Channel_mappingScalarRelationFilter, channel_mappingWhereInput>
   }
 
   export type store_mappingOrderByWithRelationInput = {
@@ -8893,15 +9403,18 @@ export namespace Prisma {
     RSM?: SortOrder
     ASM?: SortOrder
     TSI?: SortOrder
+    psr_data?: psr_dataOrderByRelationAggregateInput
+    psr_data_temp?: psr_data_tempOrderByRelationAggregateInput
+    channel_mapping?: channel_mappingOrderByWithRelationInput
     _relevance?: store_mappingOrderByRelevanceInput
   }
 
   export type store_mappingWhereUniqueInput = Prisma.AtLeast<{
     Id?: number
+    Old_Store_Code?: string
     AND?: store_mappingWhereInput | store_mappingWhereInput[]
     OR?: store_mappingWhereInput[]
     NOT?: store_mappingWhereInput | store_mappingWhereInput[]
-    Old_Store_Code?: StringFilter<"store_mapping"> | string
     New_Store_Code?: StringFilter<"store_mapping"> | string
     customer_name?: StringFilter<"store_mapping"> | string
     customer_type?: StringFilter<"store_mapping"> | string
@@ -8911,7 +9424,10 @@ export namespace Prisma {
     RSM?: StringFilter<"store_mapping"> | string
     ASM?: StringFilter<"store_mapping"> | string
     TSI?: StringFilter<"store_mapping"> | string
-  }, "Id">
+    psr_data?: Psr_dataListRelationFilter
+    psr_data_temp?: Psr_data_tempListRelationFilter
+    channel_mapping?: XOR<Channel_mappingScalarRelationFilter, channel_mappingWhereInput>
+  }, "Id" | "Old_Store_Code">
 
   export type store_mappingOrderByWithAggregationInput = {
     Id?: SortOrder
@@ -8960,6 +9476,8 @@ export namespace Prisma {
     brand?: StringFilter<"product_mapping"> | string
     brandform?: StringFilter<"product_mapping"> | string
     subbrandform?: StringFilter<"product_mapping"> | string
+    psr_data?: Psr_dataListRelationFilter
+    psr_data_temp?: Psr_data_tempListRelationFilter
   }
 
   export type product_mappingOrderByWithRelationInput = {
@@ -8970,21 +9488,25 @@ export namespace Prisma {
     brand?: SortOrder
     brandform?: SortOrder
     subbrandform?: SortOrder
+    psr_data?: psr_dataOrderByRelationAggregateInput
+    psr_data_temp?: psr_data_tempOrderByRelationAggregateInput
     _relevance?: product_mappingOrderByRelevanceInput
   }
 
   export type product_mappingWhereUniqueInput = Prisma.AtLeast<{
     Id?: number
+    p_code?: number
     AND?: product_mappingWhereInput | product_mappingWhereInput[]
     OR?: product_mappingWhereInput[]
     NOT?: product_mappingWhereInput | product_mappingWhereInput[]
-    p_code?: IntFilter<"product_mapping"> | number
     desc_short?: StringFilter<"product_mapping"> | string
     category?: StringFilter<"product_mapping"> | string
     brand?: StringFilter<"product_mapping"> | string
     brandform?: StringFilter<"product_mapping"> | string
     subbrandform?: StringFilter<"product_mapping"> | string
-  }, "Id">
+    psr_data?: Psr_dataListRelationFilter
+    psr_data_temp?: Psr_data_tempListRelationFilter
+  }, "Id" | "p_code">
 
   export type product_mappingOrderByWithAggregationInput = {
     Id?: SortOrder
@@ -9149,6 +9671,7 @@ export namespace Prisma {
 
   export type PermissionSetWhereUniqueInput = Prisma.AtLeast<{
     id?: number
+    userId_page?: PermissionSetUserIdPageCompoundUniqueInput
     AND?: PermissionSetWhereInput | PermissionSetWhereInput[]
     OR?: PermissionSetWhereInput[]
     NOT?: PermissionSetWhereInput | PermissionSetWhereInput[]
@@ -9156,7 +9679,7 @@ export namespace Prisma {
     page?: StringFilter<"PermissionSet"> | string
     permissions?: JsonFilter<"PermissionSet">
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
-  }, "id">
+  }, "id" | "userId_page">
 
   export type PermissionSetOrderByWithAggregationInput = {
     id?: SortOrder
@@ -9185,13 +9708,13 @@ export namespace Prisma {
     document_date: Date | string
     subbrandform: string
     customer_name: string
-    customer_code: string
-    p_code: number
     customer_type: string
     category: string
     brand: string
     brandform: string
     retailing: Decimal | DecimalJsLike | number | string
+    store_mapping: store_mappingCreateNestedOneWithoutPsr_dataInput
+    product_mapping: product_mappingCreateNestedOneWithoutPsr_dataInput
   }
 
   export type psr_dataUncheckedCreateInput = {
@@ -9214,13 +9737,13 @@ export namespace Prisma {
     document_date?: DateTimeFieldUpdateOperationsInput | Date | string
     subbrandform?: StringFieldUpdateOperationsInput | string
     customer_name?: StringFieldUpdateOperationsInput | string
-    customer_code?: StringFieldUpdateOperationsInput | string
-    p_code?: IntFieldUpdateOperationsInput | number
     customer_type?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
     brand?: StringFieldUpdateOperationsInput | string
     brandform?: StringFieldUpdateOperationsInput | string
     retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    store_mapping?: store_mappingUpdateOneRequiredWithoutPsr_dataNestedInput
+    product_mapping?: product_mappingUpdateOneRequiredWithoutPsr_dataNestedInput
   }
 
   export type psr_dataUncheckedUpdateInput = {
@@ -9258,8 +9781,6 @@ export namespace Prisma {
     document_date?: DateTimeFieldUpdateOperationsInput | Date | string
     subbrandform?: StringFieldUpdateOperationsInput | string
     customer_name?: StringFieldUpdateOperationsInput | string
-    customer_code?: StringFieldUpdateOperationsInput | string
-    p_code?: IntFieldUpdateOperationsInput | number
     customer_type?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -9287,13 +9808,13 @@ export namespace Prisma {
     document_date: Date | string
     subbrandform: string
     customer_name: string
-    customer_code: string
-    p_code: number
     customer_type: string
     category: string
     brand: string
     brandform: string
     retailing: Decimal | DecimalJsLike | number | string
+    store_mapping: store_mappingCreateNestedOneWithoutPsr_data_tempInput
+    product_mapping: product_mappingCreateNestedOneWithoutPsr_data_tempInput
   }
 
   export type psr_data_tempUncheckedCreateInput = {
@@ -9316,13 +9837,13 @@ export namespace Prisma {
     document_date?: DateTimeFieldUpdateOperationsInput | Date | string
     subbrandform?: StringFieldUpdateOperationsInput | string
     customer_name?: StringFieldUpdateOperationsInput | string
-    customer_code?: StringFieldUpdateOperationsInput | string
-    p_code?: IntFieldUpdateOperationsInput | number
     customer_type?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
     brand?: StringFieldUpdateOperationsInput | string
     brandform?: StringFieldUpdateOperationsInput | string
     retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    store_mapping?: store_mappingUpdateOneRequiredWithoutPsr_data_tempNestedInput
+    product_mapping?: product_mappingUpdateOneRequiredWithoutPsr_data_tempNestedInput
   }
 
   export type psr_data_tempUncheckedUpdateInput = {
@@ -9360,8 +9881,6 @@ export namespace Prisma {
     document_date?: DateTimeFieldUpdateOperationsInput | Date | string
     subbrandform?: StringFieldUpdateOperationsInput | string
     customer_name?: StringFieldUpdateOperationsInput | string
-    customer_code?: StringFieldUpdateOperationsInput | string
-    p_code?: IntFieldUpdateOperationsInput | number
     customer_type?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -9389,6 +9908,7 @@ export namespace Prisma {
     base_channel: string
     short_channel: string
     channel_desc: string
+    store_mapping?: store_mappingCreateNestedManyWithoutChannel_mappingInput
   }
 
   export type channel_mappingUncheckedCreateInput = {
@@ -9397,6 +9917,7 @@ export namespace Prisma {
     base_channel: string
     short_channel: string
     channel_desc: string
+    store_mapping?: store_mappingUncheckedCreateNestedManyWithoutChannel_mappingInput
   }
 
   export type channel_mappingUpdateInput = {
@@ -9404,6 +9925,7 @@ export namespace Prisma {
     base_channel?: StringFieldUpdateOperationsInput | string
     short_channel?: StringFieldUpdateOperationsInput | string
     channel_desc?: StringFieldUpdateOperationsInput | string
+    store_mapping?: store_mappingUpdateManyWithoutChannel_mappingNestedInput
   }
 
   export type channel_mappingUncheckedUpdateInput = {
@@ -9412,6 +9934,7 @@ export namespace Prisma {
     base_channel?: StringFieldUpdateOperationsInput | string
     short_channel?: StringFieldUpdateOperationsInput | string
     channel_desc?: StringFieldUpdateOperationsInput | string
+    store_mapping?: store_mappingUncheckedUpdateManyWithoutChannel_mappingNestedInput
   }
 
   export type channel_mappingCreateManyInput = {
@@ -9441,13 +9964,15 @@ export namespace Prisma {
     Old_Store_Code: string
     New_Store_Code: string
     customer_name: string
-    customer_type: string
     Branch: string
     DSE_Code: string
     ZM: string
     RSM: string
     ASM: string
     TSI: string
+    psr_data?: psr_dataCreateNestedManyWithoutStore_mappingInput
+    psr_data_temp?: psr_data_tempCreateNestedManyWithoutStore_mappingInput
+    channel_mapping: channel_mappingCreateNestedOneWithoutStore_mappingInput
   }
 
   export type store_mappingUncheckedCreateInput = {
@@ -9462,19 +9987,23 @@ export namespace Prisma {
     RSM: string
     ASM: string
     TSI: string
+    psr_data?: psr_dataUncheckedCreateNestedManyWithoutStore_mappingInput
+    psr_data_temp?: psr_data_tempUncheckedCreateNestedManyWithoutStore_mappingInput
   }
 
   export type store_mappingUpdateInput = {
     Old_Store_Code?: StringFieldUpdateOperationsInput | string
     New_Store_Code?: StringFieldUpdateOperationsInput | string
     customer_name?: StringFieldUpdateOperationsInput | string
-    customer_type?: StringFieldUpdateOperationsInput | string
     Branch?: StringFieldUpdateOperationsInput | string
     DSE_Code?: StringFieldUpdateOperationsInput | string
     ZM?: StringFieldUpdateOperationsInput | string
     RSM?: StringFieldUpdateOperationsInput | string
     ASM?: StringFieldUpdateOperationsInput | string
     TSI?: StringFieldUpdateOperationsInput | string
+    psr_data?: psr_dataUpdateManyWithoutStore_mappingNestedInput
+    psr_data_temp?: psr_data_tempUpdateManyWithoutStore_mappingNestedInput
+    channel_mapping?: channel_mappingUpdateOneRequiredWithoutStore_mappingNestedInput
   }
 
   export type store_mappingUncheckedUpdateInput = {
@@ -9489,6 +10018,8 @@ export namespace Prisma {
     RSM?: StringFieldUpdateOperationsInput | string
     ASM?: StringFieldUpdateOperationsInput | string
     TSI?: StringFieldUpdateOperationsInput | string
+    psr_data?: psr_dataUncheckedUpdateManyWithoutStore_mappingNestedInput
+    psr_data_temp?: psr_data_tempUncheckedUpdateManyWithoutStore_mappingNestedInput
   }
 
   export type store_mappingCreateManyInput = {
@@ -9509,7 +10040,6 @@ export namespace Prisma {
     Old_Store_Code?: StringFieldUpdateOperationsInput | string
     New_Store_Code?: StringFieldUpdateOperationsInput | string
     customer_name?: StringFieldUpdateOperationsInput | string
-    customer_type?: StringFieldUpdateOperationsInput | string
     Branch?: StringFieldUpdateOperationsInput | string
     DSE_Code?: StringFieldUpdateOperationsInput | string
     ZM?: StringFieldUpdateOperationsInput | string
@@ -9539,6 +10069,8 @@ export namespace Prisma {
     brand: string
     brandform: string
     subbrandform: string
+    psr_data?: psr_dataCreateNestedManyWithoutProduct_mappingInput
+    psr_data_temp?: psr_data_tempCreateNestedManyWithoutProduct_mappingInput
   }
 
   export type product_mappingUncheckedCreateInput = {
@@ -9549,6 +10081,8 @@ export namespace Prisma {
     brand: string
     brandform: string
     subbrandform: string
+    psr_data?: psr_dataUncheckedCreateNestedManyWithoutProduct_mappingInput
+    psr_data_temp?: psr_data_tempUncheckedCreateNestedManyWithoutProduct_mappingInput
   }
 
   export type product_mappingUpdateInput = {
@@ -9558,6 +10092,8 @@ export namespace Prisma {
     brand?: StringFieldUpdateOperationsInput | string
     brandform?: StringFieldUpdateOperationsInput | string
     subbrandform?: StringFieldUpdateOperationsInput | string
+    psr_data?: psr_dataUpdateManyWithoutProduct_mappingNestedInput
+    psr_data_temp?: psr_data_tempUpdateManyWithoutProduct_mappingNestedInput
   }
 
   export type product_mappingUncheckedUpdateInput = {
@@ -9568,6 +10104,8 @@ export namespace Prisma {
     brand?: StringFieldUpdateOperationsInput | string
     brandform?: StringFieldUpdateOperationsInput | string
     subbrandform?: StringFieldUpdateOperationsInput | string
+    psr_data?: psr_dataUncheckedUpdateManyWithoutProduct_mappingNestedInput
+    psr_data_temp?: psr_data_tempUncheckedUpdateManyWithoutProduct_mappingNestedInput
   }
 
   export type product_mappingCreateManyInput = {
@@ -9826,6 +10364,16 @@ export namespace Prisma {
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
+  export type Store_mappingScalarRelationFilter = {
+    is?: store_mappingWhereInput
+    isNot?: store_mappingWhereInput
+  }
+
+  export type Product_mappingScalarRelationFilter = {
+    is?: product_mappingWhereInput
+    isNot?: product_mappingWhereInput
+  }
+
   export type psr_dataOrderByRelevanceInput = {
     fields: psr_dataOrderByRelevanceFieldEnum | psr_dataOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -10016,6 +10564,16 @@ export namespace Prisma {
     retailing?: SortOrder
   }
 
+  export type Store_mappingListRelationFilter = {
+    every?: store_mappingWhereInput
+    some?: store_mappingWhereInput
+    none?: store_mappingWhereInput
+  }
+
+  export type store_mappingOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type channel_mappingOrderByRelevanceInput = {
     fields: channel_mappingOrderByRelevanceFieldEnum | channel_mappingOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -10052,6 +10610,31 @@ export namespace Prisma {
 
   export type channel_mappingSumOrderByAggregateInput = {
     channel_id?: SortOrder
+  }
+
+  export type Psr_dataListRelationFilter = {
+    every?: psr_dataWhereInput
+    some?: psr_dataWhereInput
+    none?: psr_dataWhereInput
+  }
+
+  export type Psr_data_tempListRelationFilter = {
+    every?: psr_data_tempWhereInput
+    some?: psr_data_tempWhereInput
+    none?: psr_data_tempWhereInput
+  }
+
+  export type Channel_mappingScalarRelationFilter = {
+    is?: channel_mappingWhereInput
+    isNot?: channel_mappingWhereInput
+  }
+
+  export type psr_dataOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type psr_data_tempOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type store_mappingOrderByRelevanceInput = {
@@ -10380,6 +10963,11 @@ export namespace Prisma {
     search: string
   }
 
+  export type PermissionSetUserIdPageCompoundUniqueInput = {
+    userId: number
+    page: string
+  }
+
   export type PermissionSetCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
@@ -10435,12 +11023,48 @@ export namespace Prisma {
     _max?: NestedJsonFilter<$PrismaModel>
   }
 
+  export type store_mappingCreateNestedOneWithoutPsr_dataInput = {
+    create?: XOR<store_mappingCreateWithoutPsr_dataInput, store_mappingUncheckedCreateWithoutPsr_dataInput>
+    connectOrCreate?: store_mappingCreateOrConnectWithoutPsr_dataInput
+    connect?: store_mappingWhereUniqueInput
+  }
+
+  export type product_mappingCreateNestedOneWithoutPsr_dataInput = {
+    create?: XOR<product_mappingCreateWithoutPsr_dataInput, product_mappingUncheckedCreateWithoutPsr_dataInput>
+    connectOrCreate?: product_mappingCreateOrConnectWithoutPsr_dataInput
+    connect?: product_mappingWhereUniqueInput
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type DecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type store_mappingUpdateOneRequiredWithoutPsr_dataNestedInput = {
+    create?: XOR<store_mappingCreateWithoutPsr_dataInput, store_mappingUncheckedCreateWithoutPsr_dataInput>
+    connectOrCreate?: store_mappingCreateOrConnectWithoutPsr_dataInput
+    upsert?: store_mappingUpsertWithoutPsr_dataInput
+    connect?: store_mappingWhereUniqueInput
+    update?: XOR<XOR<store_mappingUpdateToOneWithWhereWithoutPsr_dataInput, store_mappingUpdateWithoutPsr_dataInput>, store_mappingUncheckedUpdateWithoutPsr_dataInput>
+  }
+
+  export type product_mappingUpdateOneRequiredWithoutPsr_dataNestedInput = {
+    create?: XOR<product_mappingCreateWithoutPsr_dataInput, product_mappingUncheckedCreateWithoutPsr_dataInput>
+    connectOrCreate?: product_mappingCreateOrConnectWithoutPsr_dataInput
+    upsert?: product_mappingUpsertWithoutPsr_dataInput
+    connect?: product_mappingWhereUniqueInput
+    update?: XOR<XOR<product_mappingUpdateToOneWithWhereWithoutPsr_dataInput, product_mappingUpdateWithoutPsr_dataInput>, product_mappingUncheckedUpdateWithoutPsr_dataInput>
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -10451,12 +11075,256 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type DecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string
-    increment?: Decimal | DecimalJsLike | number | string
-    decrement?: Decimal | DecimalJsLike | number | string
-    multiply?: Decimal | DecimalJsLike | number | string
-    divide?: Decimal | DecimalJsLike | number | string
+  export type store_mappingCreateNestedOneWithoutPsr_data_tempInput = {
+    create?: XOR<store_mappingCreateWithoutPsr_data_tempInput, store_mappingUncheckedCreateWithoutPsr_data_tempInput>
+    connectOrCreate?: store_mappingCreateOrConnectWithoutPsr_data_tempInput
+    connect?: store_mappingWhereUniqueInput
+  }
+
+  export type product_mappingCreateNestedOneWithoutPsr_data_tempInput = {
+    create?: XOR<product_mappingCreateWithoutPsr_data_tempInput, product_mappingUncheckedCreateWithoutPsr_data_tempInput>
+    connectOrCreate?: product_mappingCreateOrConnectWithoutPsr_data_tempInput
+    connect?: product_mappingWhereUniqueInput
+  }
+
+  export type store_mappingUpdateOneRequiredWithoutPsr_data_tempNestedInput = {
+    create?: XOR<store_mappingCreateWithoutPsr_data_tempInput, store_mappingUncheckedCreateWithoutPsr_data_tempInput>
+    connectOrCreate?: store_mappingCreateOrConnectWithoutPsr_data_tempInput
+    upsert?: store_mappingUpsertWithoutPsr_data_tempInput
+    connect?: store_mappingWhereUniqueInput
+    update?: XOR<XOR<store_mappingUpdateToOneWithWhereWithoutPsr_data_tempInput, store_mappingUpdateWithoutPsr_data_tempInput>, store_mappingUncheckedUpdateWithoutPsr_data_tempInput>
+  }
+
+  export type product_mappingUpdateOneRequiredWithoutPsr_data_tempNestedInput = {
+    create?: XOR<product_mappingCreateWithoutPsr_data_tempInput, product_mappingUncheckedCreateWithoutPsr_data_tempInput>
+    connectOrCreate?: product_mappingCreateOrConnectWithoutPsr_data_tempInput
+    upsert?: product_mappingUpsertWithoutPsr_data_tempInput
+    connect?: product_mappingWhereUniqueInput
+    update?: XOR<XOR<product_mappingUpdateToOneWithWhereWithoutPsr_data_tempInput, product_mappingUpdateWithoutPsr_data_tempInput>, product_mappingUncheckedUpdateWithoutPsr_data_tempInput>
+  }
+
+  export type store_mappingCreateNestedManyWithoutChannel_mappingInput = {
+    create?: XOR<store_mappingCreateWithoutChannel_mappingInput, store_mappingUncheckedCreateWithoutChannel_mappingInput> | store_mappingCreateWithoutChannel_mappingInput[] | store_mappingUncheckedCreateWithoutChannel_mappingInput[]
+    connectOrCreate?: store_mappingCreateOrConnectWithoutChannel_mappingInput | store_mappingCreateOrConnectWithoutChannel_mappingInput[]
+    createMany?: store_mappingCreateManyChannel_mappingInputEnvelope
+    connect?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
+  }
+
+  export type store_mappingUncheckedCreateNestedManyWithoutChannel_mappingInput = {
+    create?: XOR<store_mappingCreateWithoutChannel_mappingInput, store_mappingUncheckedCreateWithoutChannel_mappingInput> | store_mappingCreateWithoutChannel_mappingInput[] | store_mappingUncheckedCreateWithoutChannel_mappingInput[]
+    connectOrCreate?: store_mappingCreateOrConnectWithoutChannel_mappingInput | store_mappingCreateOrConnectWithoutChannel_mappingInput[]
+    createMany?: store_mappingCreateManyChannel_mappingInputEnvelope
+    connect?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
+  }
+
+  export type store_mappingUpdateManyWithoutChannel_mappingNestedInput = {
+    create?: XOR<store_mappingCreateWithoutChannel_mappingInput, store_mappingUncheckedCreateWithoutChannel_mappingInput> | store_mappingCreateWithoutChannel_mappingInput[] | store_mappingUncheckedCreateWithoutChannel_mappingInput[]
+    connectOrCreate?: store_mappingCreateOrConnectWithoutChannel_mappingInput | store_mappingCreateOrConnectWithoutChannel_mappingInput[]
+    upsert?: store_mappingUpsertWithWhereUniqueWithoutChannel_mappingInput | store_mappingUpsertWithWhereUniqueWithoutChannel_mappingInput[]
+    createMany?: store_mappingCreateManyChannel_mappingInputEnvelope
+    set?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
+    disconnect?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
+    delete?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
+    connect?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
+    update?: store_mappingUpdateWithWhereUniqueWithoutChannel_mappingInput | store_mappingUpdateWithWhereUniqueWithoutChannel_mappingInput[]
+    updateMany?: store_mappingUpdateManyWithWhereWithoutChannel_mappingInput | store_mappingUpdateManyWithWhereWithoutChannel_mappingInput[]
+    deleteMany?: store_mappingScalarWhereInput | store_mappingScalarWhereInput[]
+  }
+
+  export type store_mappingUncheckedUpdateManyWithoutChannel_mappingNestedInput = {
+    create?: XOR<store_mappingCreateWithoutChannel_mappingInput, store_mappingUncheckedCreateWithoutChannel_mappingInput> | store_mappingCreateWithoutChannel_mappingInput[] | store_mappingUncheckedCreateWithoutChannel_mappingInput[]
+    connectOrCreate?: store_mappingCreateOrConnectWithoutChannel_mappingInput | store_mappingCreateOrConnectWithoutChannel_mappingInput[]
+    upsert?: store_mappingUpsertWithWhereUniqueWithoutChannel_mappingInput | store_mappingUpsertWithWhereUniqueWithoutChannel_mappingInput[]
+    createMany?: store_mappingCreateManyChannel_mappingInputEnvelope
+    set?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
+    disconnect?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
+    delete?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
+    connect?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
+    update?: store_mappingUpdateWithWhereUniqueWithoutChannel_mappingInput | store_mappingUpdateWithWhereUniqueWithoutChannel_mappingInput[]
+    updateMany?: store_mappingUpdateManyWithWhereWithoutChannel_mappingInput | store_mappingUpdateManyWithWhereWithoutChannel_mappingInput[]
+    deleteMany?: store_mappingScalarWhereInput | store_mappingScalarWhereInput[]
+  }
+
+  export type psr_dataCreateNestedManyWithoutStore_mappingInput = {
+    create?: XOR<psr_dataCreateWithoutStore_mappingInput, psr_dataUncheckedCreateWithoutStore_mappingInput> | psr_dataCreateWithoutStore_mappingInput[] | psr_dataUncheckedCreateWithoutStore_mappingInput[]
+    connectOrCreate?: psr_dataCreateOrConnectWithoutStore_mappingInput | psr_dataCreateOrConnectWithoutStore_mappingInput[]
+    createMany?: psr_dataCreateManyStore_mappingInputEnvelope
+    connect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+  }
+
+  export type psr_data_tempCreateNestedManyWithoutStore_mappingInput = {
+    create?: XOR<psr_data_tempCreateWithoutStore_mappingInput, psr_data_tempUncheckedCreateWithoutStore_mappingInput> | psr_data_tempCreateWithoutStore_mappingInput[] | psr_data_tempUncheckedCreateWithoutStore_mappingInput[]
+    connectOrCreate?: psr_data_tempCreateOrConnectWithoutStore_mappingInput | psr_data_tempCreateOrConnectWithoutStore_mappingInput[]
+    createMany?: psr_data_tempCreateManyStore_mappingInputEnvelope
+    connect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+  }
+
+  export type channel_mappingCreateNestedOneWithoutStore_mappingInput = {
+    create?: XOR<channel_mappingCreateWithoutStore_mappingInput, channel_mappingUncheckedCreateWithoutStore_mappingInput>
+    connectOrCreate?: channel_mappingCreateOrConnectWithoutStore_mappingInput
+    connect?: channel_mappingWhereUniqueInput
+  }
+
+  export type psr_dataUncheckedCreateNestedManyWithoutStore_mappingInput = {
+    create?: XOR<psr_dataCreateWithoutStore_mappingInput, psr_dataUncheckedCreateWithoutStore_mappingInput> | psr_dataCreateWithoutStore_mappingInput[] | psr_dataUncheckedCreateWithoutStore_mappingInput[]
+    connectOrCreate?: psr_dataCreateOrConnectWithoutStore_mappingInput | psr_dataCreateOrConnectWithoutStore_mappingInput[]
+    createMany?: psr_dataCreateManyStore_mappingInputEnvelope
+    connect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+  }
+
+  export type psr_data_tempUncheckedCreateNestedManyWithoutStore_mappingInput = {
+    create?: XOR<psr_data_tempCreateWithoutStore_mappingInput, psr_data_tempUncheckedCreateWithoutStore_mappingInput> | psr_data_tempCreateWithoutStore_mappingInput[] | psr_data_tempUncheckedCreateWithoutStore_mappingInput[]
+    connectOrCreate?: psr_data_tempCreateOrConnectWithoutStore_mappingInput | psr_data_tempCreateOrConnectWithoutStore_mappingInput[]
+    createMany?: psr_data_tempCreateManyStore_mappingInputEnvelope
+    connect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+  }
+
+  export type psr_dataUpdateManyWithoutStore_mappingNestedInput = {
+    create?: XOR<psr_dataCreateWithoutStore_mappingInput, psr_dataUncheckedCreateWithoutStore_mappingInput> | psr_dataCreateWithoutStore_mappingInput[] | psr_dataUncheckedCreateWithoutStore_mappingInput[]
+    connectOrCreate?: psr_dataCreateOrConnectWithoutStore_mappingInput | psr_dataCreateOrConnectWithoutStore_mappingInput[]
+    upsert?: psr_dataUpsertWithWhereUniqueWithoutStore_mappingInput | psr_dataUpsertWithWhereUniqueWithoutStore_mappingInput[]
+    createMany?: psr_dataCreateManyStore_mappingInputEnvelope
+    set?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+    disconnect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+    delete?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+    connect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+    update?: psr_dataUpdateWithWhereUniqueWithoutStore_mappingInput | psr_dataUpdateWithWhereUniqueWithoutStore_mappingInput[]
+    updateMany?: psr_dataUpdateManyWithWhereWithoutStore_mappingInput | psr_dataUpdateManyWithWhereWithoutStore_mappingInput[]
+    deleteMany?: psr_dataScalarWhereInput | psr_dataScalarWhereInput[]
+  }
+
+  export type psr_data_tempUpdateManyWithoutStore_mappingNestedInput = {
+    create?: XOR<psr_data_tempCreateWithoutStore_mappingInput, psr_data_tempUncheckedCreateWithoutStore_mappingInput> | psr_data_tempCreateWithoutStore_mappingInput[] | psr_data_tempUncheckedCreateWithoutStore_mappingInput[]
+    connectOrCreate?: psr_data_tempCreateOrConnectWithoutStore_mappingInput | psr_data_tempCreateOrConnectWithoutStore_mappingInput[]
+    upsert?: psr_data_tempUpsertWithWhereUniqueWithoutStore_mappingInput | psr_data_tempUpsertWithWhereUniqueWithoutStore_mappingInput[]
+    createMany?: psr_data_tempCreateManyStore_mappingInputEnvelope
+    set?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+    disconnect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+    delete?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+    connect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+    update?: psr_data_tempUpdateWithWhereUniqueWithoutStore_mappingInput | psr_data_tempUpdateWithWhereUniqueWithoutStore_mappingInput[]
+    updateMany?: psr_data_tempUpdateManyWithWhereWithoutStore_mappingInput | psr_data_tempUpdateManyWithWhereWithoutStore_mappingInput[]
+    deleteMany?: psr_data_tempScalarWhereInput | psr_data_tempScalarWhereInput[]
+  }
+
+  export type channel_mappingUpdateOneRequiredWithoutStore_mappingNestedInput = {
+    create?: XOR<channel_mappingCreateWithoutStore_mappingInput, channel_mappingUncheckedCreateWithoutStore_mappingInput>
+    connectOrCreate?: channel_mappingCreateOrConnectWithoutStore_mappingInput
+    upsert?: channel_mappingUpsertWithoutStore_mappingInput
+    connect?: channel_mappingWhereUniqueInput
+    update?: XOR<XOR<channel_mappingUpdateToOneWithWhereWithoutStore_mappingInput, channel_mappingUpdateWithoutStore_mappingInput>, channel_mappingUncheckedUpdateWithoutStore_mappingInput>
+  }
+
+  export type psr_dataUncheckedUpdateManyWithoutStore_mappingNestedInput = {
+    create?: XOR<psr_dataCreateWithoutStore_mappingInput, psr_dataUncheckedCreateWithoutStore_mappingInput> | psr_dataCreateWithoutStore_mappingInput[] | psr_dataUncheckedCreateWithoutStore_mappingInput[]
+    connectOrCreate?: psr_dataCreateOrConnectWithoutStore_mappingInput | psr_dataCreateOrConnectWithoutStore_mappingInput[]
+    upsert?: psr_dataUpsertWithWhereUniqueWithoutStore_mappingInput | psr_dataUpsertWithWhereUniqueWithoutStore_mappingInput[]
+    createMany?: psr_dataCreateManyStore_mappingInputEnvelope
+    set?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+    disconnect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+    delete?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+    connect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+    update?: psr_dataUpdateWithWhereUniqueWithoutStore_mappingInput | psr_dataUpdateWithWhereUniqueWithoutStore_mappingInput[]
+    updateMany?: psr_dataUpdateManyWithWhereWithoutStore_mappingInput | psr_dataUpdateManyWithWhereWithoutStore_mappingInput[]
+    deleteMany?: psr_dataScalarWhereInput | psr_dataScalarWhereInput[]
+  }
+
+  export type psr_data_tempUncheckedUpdateManyWithoutStore_mappingNestedInput = {
+    create?: XOR<psr_data_tempCreateWithoutStore_mappingInput, psr_data_tempUncheckedCreateWithoutStore_mappingInput> | psr_data_tempCreateWithoutStore_mappingInput[] | psr_data_tempUncheckedCreateWithoutStore_mappingInput[]
+    connectOrCreate?: psr_data_tempCreateOrConnectWithoutStore_mappingInput | psr_data_tempCreateOrConnectWithoutStore_mappingInput[]
+    upsert?: psr_data_tempUpsertWithWhereUniqueWithoutStore_mappingInput | psr_data_tempUpsertWithWhereUniqueWithoutStore_mappingInput[]
+    createMany?: psr_data_tempCreateManyStore_mappingInputEnvelope
+    set?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+    disconnect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+    delete?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+    connect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+    update?: psr_data_tempUpdateWithWhereUniqueWithoutStore_mappingInput | psr_data_tempUpdateWithWhereUniqueWithoutStore_mappingInput[]
+    updateMany?: psr_data_tempUpdateManyWithWhereWithoutStore_mappingInput | psr_data_tempUpdateManyWithWhereWithoutStore_mappingInput[]
+    deleteMany?: psr_data_tempScalarWhereInput | psr_data_tempScalarWhereInput[]
+  }
+
+  export type psr_dataCreateNestedManyWithoutProduct_mappingInput = {
+    create?: XOR<psr_dataCreateWithoutProduct_mappingInput, psr_dataUncheckedCreateWithoutProduct_mappingInput> | psr_dataCreateWithoutProduct_mappingInput[] | psr_dataUncheckedCreateWithoutProduct_mappingInput[]
+    connectOrCreate?: psr_dataCreateOrConnectWithoutProduct_mappingInput | psr_dataCreateOrConnectWithoutProduct_mappingInput[]
+    createMany?: psr_dataCreateManyProduct_mappingInputEnvelope
+    connect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+  }
+
+  export type psr_data_tempCreateNestedManyWithoutProduct_mappingInput = {
+    create?: XOR<psr_data_tempCreateWithoutProduct_mappingInput, psr_data_tempUncheckedCreateWithoutProduct_mappingInput> | psr_data_tempCreateWithoutProduct_mappingInput[] | psr_data_tempUncheckedCreateWithoutProduct_mappingInput[]
+    connectOrCreate?: psr_data_tempCreateOrConnectWithoutProduct_mappingInput | psr_data_tempCreateOrConnectWithoutProduct_mappingInput[]
+    createMany?: psr_data_tempCreateManyProduct_mappingInputEnvelope
+    connect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+  }
+
+  export type psr_dataUncheckedCreateNestedManyWithoutProduct_mappingInput = {
+    create?: XOR<psr_dataCreateWithoutProduct_mappingInput, psr_dataUncheckedCreateWithoutProduct_mappingInput> | psr_dataCreateWithoutProduct_mappingInput[] | psr_dataUncheckedCreateWithoutProduct_mappingInput[]
+    connectOrCreate?: psr_dataCreateOrConnectWithoutProduct_mappingInput | psr_dataCreateOrConnectWithoutProduct_mappingInput[]
+    createMany?: psr_dataCreateManyProduct_mappingInputEnvelope
+    connect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+  }
+
+  export type psr_data_tempUncheckedCreateNestedManyWithoutProduct_mappingInput = {
+    create?: XOR<psr_data_tempCreateWithoutProduct_mappingInput, psr_data_tempUncheckedCreateWithoutProduct_mappingInput> | psr_data_tempCreateWithoutProduct_mappingInput[] | psr_data_tempUncheckedCreateWithoutProduct_mappingInput[]
+    connectOrCreate?: psr_data_tempCreateOrConnectWithoutProduct_mappingInput | psr_data_tempCreateOrConnectWithoutProduct_mappingInput[]
+    createMany?: psr_data_tempCreateManyProduct_mappingInputEnvelope
+    connect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+  }
+
+  export type psr_dataUpdateManyWithoutProduct_mappingNestedInput = {
+    create?: XOR<psr_dataCreateWithoutProduct_mappingInput, psr_dataUncheckedCreateWithoutProduct_mappingInput> | psr_dataCreateWithoutProduct_mappingInput[] | psr_dataUncheckedCreateWithoutProduct_mappingInput[]
+    connectOrCreate?: psr_dataCreateOrConnectWithoutProduct_mappingInput | psr_dataCreateOrConnectWithoutProduct_mappingInput[]
+    upsert?: psr_dataUpsertWithWhereUniqueWithoutProduct_mappingInput | psr_dataUpsertWithWhereUniqueWithoutProduct_mappingInput[]
+    createMany?: psr_dataCreateManyProduct_mappingInputEnvelope
+    set?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+    disconnect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+    delete?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+    connect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+    update?: psr_dataUpdateWithWhereUniqueWithoutProduct_mappingInput | psr_dataUpdateWithWhereUniqueWithoutProduct_mappingInput[]
+    updateMany?: psr_dataUpdateManyWithWhereWithoutProduct_mappingInput | psr_dataUpdateManyWithWhereWithoutProduct_mappingInput[]
+    deleteMany?: psr_dataScalarWhereInput | psr_dataScalarWhereInput[]
+  }
+
+  export type psr_data_tempUpdateManyWithoutProduct_mappingNestedInput = {
+    create?: XOR<psr_data_tempCreateWithoutProduct_mappingInput, psr_data_tempUncheckedCreateWithoutProduct_mappingInput> | psr_data_tempCreateWithoutProduct_mappingInput[] | psr_data_tempUncheckedCreateWithoutProduct_mappingInput[]
+    connectOrCreate?: psr_data_tempCreateOrConnectWithoutProduct_mappingInput | psr_data_tempCreateOrConnectWithoutProduct_mappingInput[]
+    upsert?: psr_data_tempUpsertWithWhereUniqueWithoutProduct_mappingInput | psr_data_tempUpsertWithWhereUniqueWithoutProduct_mappingInput[]
+    createMany?: psr_data_tempCreateManyProduct_mappingInputEnvelope
+    set?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+    disconnect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+    delete?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+    connect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+    update?: psr_data_tempUpdateWithWhereUniqueWithoutProduct_mappingInput | psr_data_tempUpdateWithWhereUniqueWithoutProduct_mappingInput[]
+    updateMany?: psr_data_tempUpdateManyWithWhereWithoutProduct_mappingInput | psr_data_tempUpdateManyWithWhereWithoutProduct_mappingInput[]
+    deleteMany?: psr_data_tempScalarWhereInput | psr_data_tempScalarWhereInput[]
+  }
+
+  export type psr_dataUncheckedUpdateManyWithoutProduct_mappingNestedInput = {
+    create?: XOR<psr_dataCreateWithoutProduct_mappingInput, psr_dataUncheckedCreateWithoutProduct_mappingInput> | psr_dataCreateWithoutProduct_mappingInput[] | psr_dataUncheckedCreateWithoutProduct_mappingInput[]
+    connectOrCreate?: psr_dataCreateOrConnectWithoutProduct_mappingInput | psr_dataCreateOrConnectWithoutProduct_mappingInput[]
+    upsert?: psr_dataUpsertWithWhereUniqueWithoutProduct_mappingInput | psr_dataUpsertWithWhereUniqueWithoutProduct_mappingInput[]
+    createMany?: psr_dataCreateManyProduct_mappingInputEnvelope
+    set?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+    disconnect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+    delete?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+    connect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
+    update?: psr_dataUpdateWithWhereUniqueWithoutProduct_mappingInput | psr_dataUpdateWithWhereUniqueWithoutProduct_mappingInput[]
+    updateMany?: psr_dataUpdateManyWithWhereWithoutProduct_mappingInput | psr_dataUpdateManyWithWhereWithoutProduct_mappingInput[]
+    deleteMany?: psr_dataScalarWhereInput | psr_dataScalarWhereInput[]
+  }
+
+  export type psr_data_tempUncheckedUpdateManyWithoutProduct_mappingNestedInput = {
+    create?: XOR<psr_data_tempCreateWithoutProduct_mappingInput, psr_data_tempUncheckedCreateWithoutProduct_mappingInput> | psr_data_tempCreateWithoutProduct_mappingInput[] | psr_data_tempUncheckedCreateWithoutProduct_mappingInput[]
+    connectOrCreate?: psr_data_tempCreateOrConnectWithoutProduct_mappingInput | psr_data_tempCreateOrConnectWithoutProduct_mappingInput[]
+    upsert?: psr_data_tempUpsertWithWhereUniqueWithoutProduct_mappingInput | psr_data_tempUpsertWithWhereUniqueWithoutProduct_mappingInput[]
+    createMany?: psr_data_tempCreateManyProduct_mappingInputEnvelope
+    set?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+    disconnect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+    delete?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+    connect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
+    update?: psr_data_tempUpdateWithWhereUniqueWithoutProduct_mappingInput | psr_data_tempUpdateWithWhereUniqueWithoutProduct_mappingInput[]
+    updateMany?: psr_data_tempUpdateManyWithWhereWithoutProduct_mappingInput | psr_data_tempUpdateManyWithWhereWithoutProduct_mappingInput[]
+    deleteMany?: psr_data_tempScalarWhereInput | psr_data_tempScalarWhereInput[]
   }
 
   export type PermissionSetCreateNestedManyWithoutUserInput = {
@@ -10790,6 +11658,636 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type store_mappingCreateWithoutPsr_dataInput = {
+    Old_Store_Code: string
+    New_Store_Code: string
+    customer_name: string
+    Branch: string
+    DSE_Code: string
+    ZM: string
+    RSM: string
+    ASM: string
+    TSI: string
+    psr_data_temp?: psr_data_tempCreateNestedManyWithoutStore_mappingInput
+    channel_mapping: channel_mappingCreateNestedOneWithoutStore_mappingInput
+  }
+
+  export type store_mappingUncheckedCreateWithoutPsr_dataInput = {
+    Id?: number
+    Old_Store_Code: string
+    New_Store_Code: string
+    customer_name: string
+    customer_type: string
+    Branch: string
+    DSE_Code: string
+    ZM: string
+    RSM: string
+    ASM: string
+    TSI: string
+    psr_data_temp?: psr_data_tempUncheckedCreateNestedManyWithoutStore_mappingInput
+  }
+
+  export type store_mappingCreateOrConnectWithoutPsr_dataInput = {
+    where: store_mappingWhereUniqueInput
+    create: XOR<store_mappingCreateWithoutPsr_dataInput, store_mappingUncheckedCreateWithoutPsr_dataInput>
+  }
+
+  export type product_mappingCreateWithoutPsr_dataInput = {
+    p_code: number
+    desc_short: string
+    category: string
+    brand: string
+    brandform: string
+    subbrandform: string
+    psr_data_temp?: psr_data_tempCreateNestedManyWithoutProduct_mappingInput
+  }
+
+  export type product_mappingUncheckedCreateWithoutPsr_dataInput = {
+    Id?: number
+    p_code: number
+    desc_short: string
+    category: string
+    brand: string
+    brandform: string
+    subbrandform: string
+    psr_data_temp?: psr_data_tempUncheckedCreateNestedManyWithoutProduct_mappingInput
+  }
+
+  export type product_mappingCreateOrConnectWithoutPsr_dataInput = {
+    where: product_mappingWhereUniqueInput
+    create: XOR<product_mappingCreateWithoutPsr_dataInput, product_mappingUncheckedCreateWithoutPsr_dataInput>
+  }
+
+  export type store_mappingUpsertWithoutPsr_dataInput = {
+    update: XOR<store_mappingUpdateWithoutPsr_dataInput, store_mappingUncheckedUpdateWithoutPsr_dataInput>
+    create: XOR<store_mappingCreateWithoutPsr_dataInput, store_mappingUncheckedCreateWithoutPsr_dataInput>
+    where?: store_mappingWhereInput
+  }
+
+  export type store_mappingUpdateToOneWithWhereWithoutPsr_dataInput = {
+    where?: store_mappingWhereInput
+    data: XOR<store_mappingUpdateWithoutPsr_dataInput, store_mappingUncheckedUpdateWithoutPsr_dataInput>
+  }
+
+  export type store_mappingUpdateWithoutPsr_dataInput = {
+    Old_Store_Code?: StringFieldUpdateOperationsInput | string
+    New_Store_Code?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    Branch?: StringFieldUpdateOperationsInput | string
+    DSE_Code?: StringFieldUpdateOperationsInput | string
+    ZM?: StringFieldUpdateOperationsInput | string
+    RSM?: StringFieldUpdateOperationsInput | string
+    ASM?: StringFieldUpdateOperationsInput | string
+    TSI?: StringFieldUpdateOperationsInput | string
+    psr_data_temp?: psr_data_tempUpdateManyWithoutStore_mappingNestedInput
+    channel_mapping?: channel_mappingUpdateOneRequiredWithoutStore_mappingNestedInput
+  }
+
+  export type store_mappingUncheckedUpdateWithoutPsr_dataInput = {
+    Id?: IntFieldUpdateOperationsInput | number
+    Old_Store_Code?: StringFieldUpdateOperationsInput | string
+    New_Store_Code?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_type?: StringFieldUpdateOperationsInput | string
+    Branch?: StringFieldUpdateOperationsInput | string
+    DSE_Code?: StringFieldUpdateOperationsInput | string
+    ZM?: StringFieldUpdateOperationsInput | string
+    RSM?: StringFieldUpdateOperationsInput | string
+    ASM?: StringFieldUpdateOperationsInput | string
+    TSI?: StringFieldUpdateOperationsInput | string
+    psr_data_temp?: psr_data_tempUncheckedUpdateManyWithoutStore_mappingNestedInput
+  }
+
+  export type product_mappingUpsertWithoutPsr_dataInput = {
+    update: XOR<product_mappingUpdateWithoutPsr_dataInput, product_mappingUncheckedUpdateWithoutPsr_dataInput>
+    create: XOR<product_mappingCreateWithoutPsr_dataInput, product_mappingUncheckedCreateWithoutPsr_dataInput>
+    where?: product_mappingWhereInput
+  }
+
+  export type product_mappingUpdateToOneWithWhereWithoutPsr_dataInput = {
+    where?: product_mappingWhereInput
+    data: XOR<product_mappingUpdateWithoutPsr_dataInput, product_mappingUncheckedUpdateWithoutPsr_dataInput>
+  }
+
+  export type product_mappingUpdateWithoutPsr_dataInput = {
+    p_code?: IntFieldUpdateOperationsInput | number
+    desc_short?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    psr_data_temp?: psr_data_tempUpdateManyWithoutProduct_mappingNestedInput
+  }
+
+  export type product_mappingUncheckedUpdateWithoutPsr_dataInput = {
+    Id?: IntFieldUpdateOperationsInput | number
+    p_code?: IntFieldUpdateOperationsInput | number
+    desc_short?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    psr_data_temp?: psr_data_tempUncheckedUpdateManyWithoutProduct_mappingNestedInput
+  }
+
+  export type store_mappingCreateWithoutPsr_data_tempInput = {
+    Old_Store_Code: string
+    New_Store_Code: string
+    customer_name: string
+    Branch: string
+    DSE_Code: string
+    ZM: string
+    RSM: string
+    ASM: string
+    TSI: string
+    psr_data?: psr_dataCreateNestedManyWithoutStore_mappingInput
+    channel_mapping: channel_mappingCreateNestedOneWithoutStore_mappingInput
+  }
+
+  export type store_mappingUncheckedCreateWithoutPsr_data_tempInput = {
+    Id?: number
+    Old_Store_Code: string
+    New_Store_Code: string
+    customer_name: string
+    customer_type: string
+    Branch: string
+    DSE_Code: string
+    ZM: string
+    RSM: string
+    ASM: string
+    TSI: string
+    psr_data?: psr_dataUncheckedCreateNestedManyWithoutStore_mappingInput
+  }
+
+  export type store_mappingCreateOrConnectWithoutPsr_data_tempInput = {
+    where: store_mappingWhereUniqueInput
+    create: XOR<store_mappingCreateWithoutPsr_data_tempInput, store_mappingUncheckedCreateWithoutPsr_data_tempInput>
+  }
+
+  export type product_mappingCreateWithoutPsr_data_tempInput = {
+    p_code: number
+    desc_short: string
+    category: string
+    brand: string
+    brandform: string
+    subbrandform: string
+    psr_data?: psr_dataCreateNestedManyWithoutProduct_mappingInput
+  }
+
+  export type product_mappingUncheckedCreateWithoutPsr_data_tempInput = {
+    Id?: number
+    p_code: number
+    desc_short: string
+    category: string
+    brand: string
+    brandform: string
+    subbrandform: string
+    psr_data?: psr_dataUncheckedCreateNestedManyWithoutProduct_mappingInput
+  }
+
+  export type product_mappingCreateOrConnectWithoutPsr_data_tempInput = {
+    where: product_mappingWhereUniqueInput
+    create: XOR<product_mappingCreateWithoutPsr_data_tempInput, product_mappingUncheckedCreateWithoutPsr_data_tempInput>
+  }
+
+  export type store_mappingUpsertWithoutPsr_data_tempInput = {
+    update: XOR<store_mappingUpdateWithoutPsr_data_tempInput, store_mappingUncheckedUpdateWithoutPsr_data_tempInput>
+    create: XOR<store_mappingCreateWithoutPsr_data_tempInput, store_mappingUncheckedCreateWithoutPsr_data_tempInput>
+    where?: store_mappingWhereInput
+  }
+
+  export type store_mappingUpdateToOneWithWhereWithoutPsr_data_tempInput = {
+    where?: store_mappingWhereInput
+    data: XOR<store_mappingUpdateWithoutPsr_data_tempInput, store_mappingUncheckedUpdateWithoutPsr_data_tempInput>
+  }
+
+  export type store_mappingUpdateWithoutPsr_data_tempInput = {
+    Old_Store_Code?: StringFieldUpdateOperationsInput | string
+    New_Store_Code?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    Branch?: StringFieldUpdateOperationsInput | string
+    DSE_Code?: StringFieldUpdateOperationsInput | string
+    ZM?: StringFieldUpdateOperationsInput | string
+    RSM?: StringFieldUpdateOperationsInput | string
+    ASM?: StringFieldUpdateOperationsInput | string
+    TSI?: StringFieldUpdateOperationsInput | string
+    psr_data?: psr_dataUpdateManyWithoutStore_mappingNestedInput
+    channel_mapping?: channel_mappingUpdateOneRequiredWithoutStore_mappingNestedInput
+  }
+
+  export type store_mappingUncheckedUpdateWithoutPsr_data_tempInput = {
+    Id?: IntFieldUpdateOperationsInput | number
+    Old_Store_Code?: StringFieldUpdateOperationsInput | string
+    New_Store_Code?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_type?: StringFieldUpdateOperationsInput | string
+    Branch?: StringFieldUpdateOperationsInput | string
+    DSE_Code?: StringFieldUpdateOperationsInput | string
+    ZM?: StringFieldUpdateOperationsInput | string
+    RSM?: StringFieldUpdateOperationsInput | string
+    ASM?: StringFieldUpdateOperationsInput | string
+    TSI?: StringFieldUpdateOperationsInput | string
+    psr_data?: psr_dataUncheckedUpdateManyWithoutStore_mappingNestedInput
+  }
+
+  export type product_mappingUpsertWithoutPsr_data_tempInput = {
+    update: XOR<product_mappingUpdateWithoutPsr_data_tempInput, product_mappingUncheckedUpdateWithoutPsr_data_tempInput>
+    create: XOR<product_mappingCreateWithoutPsr_data_tempInput, product_mappingUncheckedCreateWithoutPsr_data_tempInput>
+    where?: product_mappingWhereInput
+  }
+
+  export type product_mappingUpdateToOneWithWhereWithoutPsr_data_tempInput = {
+    where?: product_mappingWhereInput
+    data: XOR<product_mappingUpdateWithoutPsr_data_tempInput, product_mappingUncheckedUpdateWithoutPsr_data_tempInput>
+  }
+
+  export type product_mappingUpdateWithoutPsr_data_tempInput = {
+    p_code?: IntFieldUpdateOperationsInput | number
+    desc_short?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    psr_data?: psr_dataUpdateManyWithoutProduct_mappingNestedInput
+  }
+
+  export type product_mappingUncheckedUpdateWithoutPsr_data_tempInput = {
+    Id?: IntFieldUpdateOperationsInput | number
+    p_code?: IntFieldUpdateOperationsInput | number
+    desc_short?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    psr_data?: psr_dataUncheckedUpdateManyWithoutProduct_mappingNestedInput
+  }
+
+  export type store_mappingCreateWithoutChannel_mappingInput = {
+    Old_Store_Code: string
+    New_Store_Code: string
+    customer_name: string
+    Branch: string
+    DSE_Code: string
+    ZM: string
+    RSM: string
+    ASM: string
+    TSI: string
+    psr_data?: psr_dataCreateNestedManyWithoutStore_mappingInput
+    psr_data_temp?: psr_data_tempCreateNestedManyWithoutStore_mappingInput
+  }
+
+  export type store_mappingUncheckedCreateWithoutChannel_mappingInput = {
+    Id?: number
+    Old_Store_Code: string
+    New_Store_Code: string
+    customer_name: string
+    Branch: string
+    DSE_Code: string
+    ZM: string
+    RSM: string
+    ASM: string
+    TSI: string
+    psr_data?: psr_dataUncheckedCreateNestedManyWithoutStore_mappingInput
+    psr_data_temp?: psr_data_tempUncheckedCreateNestedManyWithoutStore_mappingInput
+  }
+
+  export type store_mappingCreateOrConnectWithoutChannel_mappingInput = {
+    where: store_mappingWhereUniqueInput
+    create: XOR<store_mappingCreateWithoutChannel_mappingInput, store_mappingUncheckedCreateWithoutChannel_mappingInput>
+  }
+
+  export type store_mappingCreateManyChannel_mappingInputEnvelope = {
+    data: store_mappingCreateManyChannel_mappingInput | store_mappingCreateManyChannel_mappingInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type store_mappingUpsertWithWhereUniqueWithoutChannel_mappingInput = {
+    where: store_mappingWhereUniqueInput
+    update: XOR<store_mappingUpdateWithoutChannel_mappingInput, store_mappingUncheckedUpdateWithoutChannel_mappingInput>
+    create: XOR<store_mappingCreateWithoutChannel_mappingInput, store_mappingUncheckedCreateWithoutChannel_mappingInput>
+  }
+
+  export type store_mappingUpdateWithWhereUniqueWithoutChannel_mappingInput = {
+    where: store_mappingWhereUniqueInput
+    data: XOR<store_mappingUpdateWithoutChannel_mappingInput, store_mappingUncheckedUpdateWithoutChannel_mappingInput>
+  }
+
+  export type store_mappingUpdateManyWithWhereWithoutChannel_mappingInput = {
+    where: store_mappingScalarWhereInput
+    data: XOR<store_mappingUpdateManyMutationInput, store_mappingUncheckedUpdateManyWithoutChannel_mappingInput>
+  }
+
+  export type store_mappingScalarWhereInput = {
+    AND?: store_mappingScalarWhereInput | store_mappingScalarWhereInput[]
+    OR?: store_mappingScalarWhereInput[]
+    NOT?: store_mappingScalarWhereInput | store_mappingScalarWhereInput[]
+    Id?: IntFilter<"store_mapping"> | number
+    Old_Store_Code?: StringFilter<"store_mapping"> | string
+    New_Store_Code?: StringFilter<"store_mapping"> | string
+    customer_name?: StringFilter<"store_mapping"> | string
+    customer_type?: StringFilter<"store_mapping"> | string
+    Branch?: StringFilter<"store_mapping"> | string
+    DSE_Code?: StringFilter<"store_mapping"> | string
+    ZM?: StringFilter<"store_mapping"> | string
+    RSM?: StringFilter<"store_mapping"> | string
+    ASM?: StringFilter<"store_mapping"> | string
+    TSI?: StringFilter<"store_mapping"> | string
+  }
+
+  export type psr_dataCreateWithoutStore_mappingInput = {
+    document_no: string
+    document_date: Date | string
+    subbrandform: string
+    customer_name: string
+    customer_type: string
+    category: string
+    brand: string
+    brandform: string
+    retailing: Decimal | DecimalJsLike | number | string
+    product_mapping: product_mappingCreateNestedOneWithoutPsr_dataInput
+  }
+
+  export type psr_dataUncheckedCreateWithoutStore_mappingInput = {
+    psr_id?: number
+    document_no: string
+    document_date: Date | string
+    subbrandform: string
+    customer_name: string
+    p_code: number
+    customer_type: string
+    category: string
+    brand: string
+    brandform: string
+    retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_dataCreateOrConnectWithoutStore_mappingInput = {
+    where: psr_dataWhereUniqueInput
+    create: XOR<psr_dataCreateWithoutStore_mappingInput, psr_dataUncheckedCreateWithoutStore_mappingInput>
+  }
+
+  export type psr_dataCreateManyStore_mappingInputEnvelope = {
+    data: psr_dataCreateManyStore_mappingInput | psr_dataCreateManyStore_mappingInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type psr_data_tempCreateWithoutStore_mappingInput = {
+    document_no: string
+    document_date: Date | string
+    subbrandform: string
+    customer_name: string
+    customer_type: string
+    category: string
+    brand: string
+    brandform: string
+    retailing: Decimal | DecimalJsLike | number | string
+    product_mapping: product_mappingCreateNestedOneWithoutPsr_data_tempInput
+  }
+
+  export type psr_data_tempUncheckedCreateWithoutStore_mappingInput = {
+    psr_id?: number
+    document_no: string
+    document_date: Date | string
+    subbrandform: string
+    customer_name: string
+    p_code: number
+    customer_type: string
+    category: string
+    brand: string
+    brandform: string
+    retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_tempCreateOrConnectWithoutStore_mappingInput = {
+    where: psr_data_tempWhereUniqueInput
+    create: XOR<psr_data_tempCreateWithoutStore_mappingInput, psr_data_tempUncheckedCreateWithoutStore_mappingInput>
+  }
+
+  export type psr_data_tempCreateManyStore_mappingInputEnvelope = {
+    data: psr_data_tempCreateManyStore_mappingInput | psr_data_tempCreateManyStore_mappingInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type channel_mappingCreateWithoutStore_mappingInput = {
+    customer_type: string
+    base_channel: string
+    short_channel: string
+    channel_desc: string
+  }
+
+  export type channel_mappingUncheckedCreateWithoutStore_mappingInput = {
+    channel_id?: number
+    customer_type: string
+    base_channel: string
+    short_channel: string
+    channel_desc: string
+  }
+
+  export type channel_mappingCreateOrConnectWithoutStore_mappingInput = {
+    where: channel_mappingWhereUniqueInput
+    create: XOR<channel_mappingCreateWithoutStore_mappingInput, channel_mappingUncheckedCreateWithoutStore_mappingInput>
+  }
+
+  export type psr_dataUpsertWithWhereUniqueWithoutStore_mappingInput = {
+    where: psr_dataWhereUniqueInput
+    update: XOR<psr_dataUpdateWithoutStore_mappingInput, psr_dataUncheckedUpdateWithoutStore_mappingInput>
+    create: XOR<psr_dataCreateWithoutStore_mappingInput, psr_dataUncheckedCreateWithoutStore_mappingInput>
+  }
+
+  export type psr_dataUpdateWithWhereUniqueWithoutStore_mappingInput = {
+    where: psr_dataWhereUniqueInput
+    data: XOR<psr_dataUpdateWithoutStore_mappingInput, psr_dataUncheckedUpdateWithoutStore_mappingInput>
+  }
+
+  export type psr_dataUpdateManyWithWhereWithoutStore_mappingInput = {
+    where: psr_dataScalarWhereInput
+    data: XOR<psr_dataUpdateManyMutationInput, psr_dataUncheckedUpdateManyWithoutStore_mappingInput>
+  }
+
+  export type psr_dataScalarWhereInput = {
+    AND?: psr_dataScalarWhereInput | psr_dataScalarWhereInput[]
+    OR?: psr_dataScalarWhereInput[]
+    NOT?: psr_dataScalarWhereInput | psr_dataScalarWhereInput[]
+    psr_id?: IntFilter<"psr_data"> | number
+    document_no?: StringFilter<"psr_data"> | string
+    document_date?: DateTimeFilter<"psr_data"> | Date | string
+    subbrandform?: StringFilter<"psr_data"> | string
+    customer_name?: StringFilter<"psr_data"> | string
+    customer_code?: StringFilter<"psr_data"> | string
+    p_code?: IntFilter<"psr_data"> | number
+    customer_type?: StringFilter<"psr_data"> | string
+    category?: StringFilter<"psr_data"> | string
+    brand?: StringFilter<"psr_data"> | string
+    brandform?: StringFilter<"psr_data"> | string
+    retailing?: DecimalFilter<"psr_data"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_tempUpsertWithWhereUniqueWithoutStore_mappingInput = {
+    where: psr_data_tempWhereUniqueInput
+    update: XOR<psr_data_tempUpdateWithoutStore_mappingInput, psr_data_tempUncheckedUpdateWithoutStore_mappingInput>
+    create: XOR<psr_data_tempCreateWithoutStore_mappingInput, psr_data_tempUncheckedCreateWithoutStore_mappingInput>
+  }
+
+  export type psr_data_tempUpdateWithWhereUniqueWithoutStore_mappingInput = {
+    where: psr_data_tempWhereUniqueInput
+    data: XOR<psr_data_tempUpdateWithoutStore_mappingInput, psr_data_tempUncheckedUpdateWithoutStore_mappingInput>
+  }
+
+  export type psr_data_tempUpdateManyWithWhereWithoutStore_mappingInput = {
+    where: psr_data_tempScalarWhereInput
+    data: XOR<psr_data_tempUpdateManyMutationInput, psr_data_tempUncheckedUpdateManyWithoutStore_mappingInput>
+  }
+
+  export type psr_data_tempScalarWhereInput = {
+    AND?: psr_data_tempScalarWhereInput | psr_data_tempScalarWhereInput[]
+    OR?: psr_data_tempScalarWhereInput[]
+    NOT?: psr_data_tempScalarWhereInput | psr_data_tempScalarWhereInput[]
+    psr_id?: IntFilter<"psr_data_temp"> | number
+    document_no?: StringFilter<"psr_data_temp"> | string
+    document_date?: DateTimeFilter<"psr_data_temp"> | Date | string
+    subbrandform?: StringFilter<"psr_data_temp"> | string
+    customer_name?: StringFilter<"psr_data_temp"> | string
+    customer_code?: StringFilter<"psr_data_temp"> | string
+    p_code?: IntFilter<"psr_data_temp"> | number
+    customer_type?: StringFilter<"psr_data_temp"> | string
+    category?: StringFilter<"psr_data_temp"> | string
+    brand?: StringFilter<"psr_data_temp"> | string
+    brandform?: StringFilter<"psr_data_temp"> | string
+    retailing?: DecimalFilter<"psr_data_temp"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type channel_mappingUpsertWithoutStore_mappingInput = {
+    update: XOR<channel_mappingUpdateWithoutStore_mappingInput, channel_mappingUncheckedUpdateWithoutStore_mappingInput>
+    create: XOR<channel_mappingCreateWithoutStore_mappingInput, channel_mappingUncheckedCreateWithoutStore_mappingInput>
+    where?: channel_mappingWhereInput
+  }
+
+  export type channel_mappingUpdateToOneWithWhereWithoutStore_mappingInput = {
+    where?: channel_mappingWhereInput
+    data: XOR<channel_mappingUpdateWithoutStore_mappingInput, channel_mappingUncheckedUpdateWithoutStore_mappingInput>
+  }
+
+  export type channel_mappingUpdateWithoutStore_mappingInput = {
+    customer_type?: StringFieldUpdateOperationsInput | string
+    base_channel?: StringFieldUpdateOperationsInput | string
+    short_channel?: StringFieldUpdateOperationsInput | string
+    channel_desc?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type channel_mappingUncheckedUpdateWithoutStore_mappingInput = {
+    channel_id?: IntFieldUpdateOperationsInput | number
+    customer_type?: StringFieldUpdateOperationsInput | string
+    base_channel?: StringFieldUpdateOperationsInput | string
+    short_channel?: StringFieldUpdateOperationsInput | string
+    channel_desc?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type psr_dataCreateWithoutProduct_mappingInput = {
+    document_no: string
+    document_date: Date | string
+    subbrandform: string
+    customer_name: string
+    customer_type: string
+    category: string
+    brand: string
+    brandform: string
+    retailing: Decimal | DecimalJsLike | number | string
+    store_mapping: store_mappingCreateNestedOneWithoutPsr_dataInput
+  }
+
+  export type psr_dataUncheckedCreateWithoutProduct_mappingInput = {
+    psr_id?: number
+    document_no: string
+    document_date: Date | string
+    subbrandform: string
+    customer_name: string
+    customer_code: string
+    customer_type: string
+    category: string
+    brand: string
+    brandform: string
+    retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_dataCreateOrConnectWithoutProduct_mappingInput = {
+    where: psr_dataWhereUniqueInput
+    create: XOR<psr_dataCreateWithoutProduct_mappingInput, psr_dataUncheckedCreateWithoutProduct_mappingInput>
+  }
+
+  export type psr_dataCreateManyProduct_mappingInputEnvelope = {
+    data: psr_dataCreateManyProduct_mappingInput | psr_dataCreateManyProduct_mappingInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type psr_data_tempCreateWithoutProduct_mappingInput = {
+    document_no: string
+    document_date: Date | string
+    subbrandform: string
+    customer_name: string
+    customer_type: string
+    category: string
+    brand: string
+    brandform: string
+    retailing: Decimal | DecimalJsLike | number | string
+    store_mapping: store_mappingCreateNestedOneWithoutPsr_data_tempInput
+  }
+
+  export type psr_data_tempUncheckedCreateWithoutProduct_mappingInput = {
+    psr_id?: number
+    document_no: string
+    document_date: Date | string
+    subbrandform: string
+    customer_name: string
+    customer_code: string
+    customer_type: string
+    category: string
+    brand: string
+    brandform: string
+    retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_tempCreateOrConnectWithoutProduct_mappingInput = {
+    where: psr_data_tempWhereUniqueInput
+    create: XOR<psr_data_tempCreateWithoutProduct_mappingInput, psr_data_tempUncheckedCreateWithoutProduct_mappingInput>
+  }
+
+  export type psr_data_tempCreateManyProduct_mappingInputEnvelope = {
+    data: psr_data_tempCreateManyProduct_mappingInput | psr_data_tempCreateManyProduct_mappingInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type psr_dataUpsertWithWhereUniqueWithoutProduct_mappingInput = {
+    where: psr_dataWhereUniqueInput
+    update: XOR<psr_dataUpdateWithoutProduct_mappingInput, psr_dataUncheckedUpdateWithoutProduct_mappingInput>
+    create: XOR<psr_dataCreateWithoutProduct_mappingInput, psr_dataUncheckedCreateWithoutProduct_mappingInput>
+  }
+
+  export type psr_dataUpdateWithWhereUniqueWithoutProduct_mappingInput = {
+    where: psr_dataWhereUniqueInput
+    data: XOR<psr_dataUpdateWithoutProduct_mappingInput, psr_dataUncheckedUpdateWithoutProduct_mappingInput>
+  }
+
+  export type psr_dataUpdateManyWithWhereWithoutProduct_mappingInput = {
+    where: psr_dataScalarWhereInput
+    data: XOR<psr_dataUpdateManyMutationInput, psr_dataUncheckedUpdateManyWithoutProduct_mappingInput>
+  }
+
+  export type psr_data_tempUpsertWithWhereUniqueWithoutProduct_mappingInput = {
+    where: psr_data_tempWhereUniqueInput
+    update: XOR<psr_data_tempUpdateWithoutProduct_mappingInput, psr_data_tempUncheckedUpdateWithoutProduct_mappingInput>
+    create: XOR<psr_data_tempCreateWithoutProduct_mappingInput, psr_data_tempUncheckedCreateWithoutProduct_mappingInput>
+  }
+
+  export type psr_data_tempUpdateWithWhereUniqueWithoutProduct_mappingInput = {
+    where: psr_data_tempWhereUniqueInput
+    data: XOR<psr_data_tempUpdateWithoutProduct_mappingInput, psr_data_tempUncheckedUpdateWithoutProduct_mappingInput>
+  }
+
+  export type psr_data_tempUpdateManyWithWhereWithoutProduct_mappingInput = {
+    where: psr_data_tempScalarWhereInput
+    data: XOR<psr_data_tempUpdateManyMutationInput, psr_data_tempUncheckedUpdateManyWithoutProduct_mappingInput>
+  }
+
   export type PermissionSetCreateWithoutUserInput = {
     page: string
     permissions: JsonNullValueInput | InputJsonValue
@@ -10925,6 +12423,281 @@ export namespace Prisma {
     otpAttempts?: NullableIntFieldUpdateOperationsInput | number | null
     lastOTPAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     otpCooldownUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type store_mappingCreateManyChannel_mappingInput = {
+    Id?: number
+    Old_Store_Code: string
+    New_Store_Code: string
+    customer_name: string
+    Branch: string
+    DSE_Code: string
+    ZM: string
+    RSM: string
+    ASM: string
+    TSI: string
+  }
+
+  export type store_mappingUpdateWithoutChannel_mappingInput = {
+    Old_Store_Code?: StringFieldUpdateOperationsInput | string
+    New_Store_Code?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    Branch?: StringFieldUpdateOperationsInput | string
+    DSE_Code?: StringFieldUpdateOperationsInput | string
+    ZM?: StringFieldUpdateOperationsInput | string
+    RSM?: StringFieldUpdateOperationsInput | string
+    ASM?: StringFieldUpdateOperationsInput | string
+    TSI?: StringFieldUpdateOperationsInput | string
+    psr_data?: psr_dataUpdateManyWithoutStore_mappingNestedInput
+    psr_data_temp?: psr_data_tempUpdateManyWithoutStore_mappingNestedInput
+  }
+
+  export type store_mappingUncheckedUpdateWithoutChannel_mappingInput = {
+    Id?: IntFieldUpdateOperationsInput | number
+    Old_Store_Code?: StringFieldUpdateOperationsInput | string
+    New_Store_Code?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    Branch?: StringFieldUpdateOperationsInput | string
+    DSE_Code?: StringFieldUpdateOperationsInput | string
+    ZM?: StringFieldUpdateOperationsInput | string
+    RSM?: StringFieldUpdateOperationsInput | string
+    ASM?: StringFieldUpdateOperationsInput | string
+    TSI?: StringFieldUpdateOperationsInput | string
+    psr_data?: psr_dataUncheckedUpdateManyWithoutStore_mappingNestedInput
+    psr_data_temp?: psr_data_tempUncheckedUpdateManyWithoutStore_mappingNestedInput
+  }
+
+  export type store_mappingUncheckedUpdateManyWithoutChannel_mappingInput = {
+    Id?: IntFieldUpdateOperationsInput | number
+    Old_Store_Code?: StringFieldUpdateOperationsInput | string
+    New_Store_Code?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    Branch?: StringFieldUpdateOperationsInput | string
+    DSE_Code?: StringFieldUpdateOperationsInput | string
+    ZM?: StringFieldUpdateOperationsInput | string
+    RSM?: StringFieldUpdateOperationsInput | string
+    ASM?: StringFieldUpdateOperationsInput | string
+    TSI?: StringFieldUpdateOperationsInput | string
+  }
+
+  export type psr_dataCreateManyStore_mappingInput = {
+    psr_id?: number
+    document_no: string
+    document_date: Date | string
+    subbrandform: string
+    customer_name: string
+    p_code: number
+    customer_type: string
+    category: string
+    brand: string
+    brandform: string
+    retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_tempCreateManyStore_mappingInput = {
+    psr_id?: number
+    document_no: string
+    document_date: Date | string
+    subbrandform: string
+    customer_name: string
+    p_code: number
+    customer_type: string
+    category: string
+    brand: string
+    brandform: string
+    retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_dataUpdateWithoutStore_mappingInput = {
+    document_no?: StringFieldUpdateOperationsInput | string
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_type?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    product_mapping?: product_mappingUpdateOneRequiredWithoutPsr_dataNestedInput
+  }
+
+  export type psr_dataUncheckedUpdateWithoutStore_mappingInput = {
+    psr_id?: IntFieldUpdateOperationsInput | number
+    document_no?: StringFieldUpdateOperationsInput | string
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    p_code?: IntFieldUpdateOperationsInput | number
+    customer_type?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_dataUncheckedUpdateManyWithoutStore_mappingInput = {
+    psr_id?: IntFieldUpdateOperationsInput | number
+    document_no?: StringFieldUpdateOperationsInput | string
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    p_code?: IntFieldUpdateOperationsInput | number
+    customer_type?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_tempUpdateWithoutStore_mappingInput = {
+    document_no?: StringFieldUpdateOperationsInput | string
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_type?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    product_mapping?: product_mappingUpdateOneRequiredWithoutPsr_data_tempNestedInput
+  }
+
+  export type psr_data_tempUncheckedUpdateWithoutStore_mappingInput = {
+    psr_id?: IntFieldUpdateOperationsInput | number
+    document_no?: StringFieldUpdateOperationsInput | string
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    p_code?: IntFieldUpdateOperationsInput | number
+    customer_type?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_tempUncheckedUpdateManyWithoutStore_mappingInput = {
+    psr_id?: IntFieldUpdateOperationsInput | number
+    document_no?: StringFieldUpdateOperationsInput | string
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    p_code?: IntFieldUpdateOperationsInput | number
+    customer_type?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_dataCreateManyProduct_mappingInput = {
+    psr_id?: number
+    document_no: string
+    document_date: Date | string
+    subbrandform: string
+    customer_name: string
+    customer_code: string
+    customer_type: string
+    category: string
+    brand: string
+    brandform: string
+    retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_tempCreateManyProduct_mappingInput = {
+    psr_id?: number
+    document_no: string
+    document_date: Date | string
+    subbrandform: string
+    customer_name: string
+    customer_code: string
+    customer_type: string
+    category: string
+    brand: string
+    brandform: string
+    retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_dataUpdateWithoutProduct_mappingInput = {
+    document_no?: StringFieldUpdateOperationsInput | string
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_type?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    store_mapping?: store_mappingUpdateOneRequiredWithoutPsr_dataNestedInput
+  }
+
+  export type psr_dataUncheckedUpdateWithoutProduct_mappingInput = {
+    psr_id?: IntFieldUpdateOperationsInput | number
+    document_no?: StringFieldUpdateOperationsInput | string
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_code?: StringFieldUpdateOperationsInput | string
+    customer_type?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_dataUncheckedUpdateManyWithoutProduct_mappingInput = {
+    psr_id?: IntFieldUpdateOperationsInput | number
+    document_no?: StringFieldUpdateOperationsInput | string
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_code?: StringFieldUpdateOperationsInput | string
+    customer_type?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_tempUpdateWithoutProduct_mappingInput = {
+    document_no?: StringFieldUpdateOperationsInput | string
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_type?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    store_mapping?: store_mappingUpdateOneRequiredWithoutPsr_data_tempNestedInput
+  }
+
+  export type psr_data_tempUncheckedUpdateWithoutProduct_mappingInput = {
+    psr_id?: IntFieldUpdateOperationsInput | number
+    document_no?: StringFieldUpdateOperationsInput | string
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_code?: StringFieldUpdateOperationsInput | string
+    customer_type?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_tempUncheckedUpdateManyWithoutProduct_mappingInput = {
+    psr_id?: IntFieldUpdateOperationsInput | number
+    document_no?: StringFieldUpdateOperationsInput | string
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_code?: StringFieldUpdateOperationsInput | string
+    customer_type?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type PermissionSetCreateManyUserInput = {
