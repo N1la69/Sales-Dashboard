@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
 import { verifyUser } from "@/lib/auth/verifyUser";
+import { NextRequest, NextResponse } from "next/server";
 
 const publicPaths = [
   "/login",
@@ -10,28 +10,24 @@ const publicPaths = [
   "/api/user/auth",
 ];
 
-export function isPublicPath(pathname: string) {
+function isPublicPath(pathname: string) {
   return publicPaths.some((p) => pathname.startsWith(p));
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next/static|_next/image|favicon.ico).*)",
-    // Exclude API routes and static files from middleware
-    // This ensures that the middleware does not interfere with API calls or static assets
-  ],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };
 
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (isPublicPath(pathname)) {
-    return NextResponse.next(); // ✅ skip auth check
+    return NextResponse.next();
   }
 
-  const { message, status } = await verifyUser(request);
+  const { status, message, user } = await verifyUser(request);
 
-  if (status !== 200) {
+  if (status !== 200 || !user) {
     console.info("Auth failed:", message);
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = "/login";
@@ -39,5 +35,12 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(loginUrl);
   }
 
-  return NextResponse.next();
+  // ✅ Attach user to headers
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-user", JSON.stringify(user));
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
 }

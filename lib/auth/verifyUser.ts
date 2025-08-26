@@ -12,7 +12,7 @@ export const verifyUser = async (request: NextRequest) => {
         });
 
         const data = await res.json();
-        return { status: res.status, message: data.message || data.error, user: data.user };
+        return { status: res.status, message: data.message || data.error, user: data?.data || {} };
     } catch (error: any) {
         console.error("verifyUser fetch failed:", error?.message || error);
         return { status: 500, message: "INTERNAL_SERVER_ERROR" };
