@@ -6,9 +6,21 @@ import ResetPasswordPage from "@/components/pages/auth/reset-password";
 import Dashboard from "@/components/pages/public/dashboard";
 import RankingPage from "@/components/pages/public/ranking";
 import StorePage from "@/components/pages/public/store";
-import { BarChart3, LayoutDashboard, LogIn, LucideIcon, ShieldQuestion, Store, Unlock, UploadCloud, UsersRound } from "lucide-react";
+import {
+  BarChart3,
+  ChartBar,
+  LayoutDashboard,
+  LogIn,
+  LucideIcon,
+  ShieldQuestion,
+  Store,
+  Unlock,
+  UploadCloud,
+  UsersRound,
+} from "lucide-react";
 import { JSX } from "react";
 import filterValues from "./filterValues";
+import DistributionPage from "@/components/pages/public/distribution";
 
 // NAVBAR PAGES
 interface NavLink {
@@ -65,6 +77,16 @@ export const PublicNavLinks: NavLink[] = [
   },
   {
     id: 4,
+    path: "/distribution",
+    title: "Distribution",
+    page: "distribution",
+    key: "distribution",
+    icon: ChartBar,
+    module: DistributionPage,
+    toRender: true,
+  },
+  {
+    id: 4,
     path: "/forgot-password",
     title: "Forgot Password",
     page: "forgot-password",
@@ -105,7 +127,7 @@ export const AdminNavLinks: NavLink[] = [
     icon: UsersRound,
     module: UserManagementPage,
     toRender: true,
-  }
+  },
 ];
 
 export const filters = [
