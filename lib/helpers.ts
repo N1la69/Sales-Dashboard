@@ -920,13 +920,95 @@ export async function getStoreDetails(storeCode: string) {
     select: {
       Old_Store_Code: true,
       customer_name: true,
+      customer_type: true, // needed for join
     },
   });
+
+  let channelDesc = "Unknown";
+
+  if (store?.customer_type) {
+    const channel = await prisma.channel_mapping.findFirst({
+      where: { customer_type: store.customer_type },
+      select: { channel_desc: true },
+    });
+    channelDesc = channel?.channel_desc || "Unknown";
+  }
 
   return {
     storeCode,
     storeName: store?.customer_name || "Unknown",
+    channelDesc,
   };
+}
+
+export async function getLastStoreBills(
+  storeCode: string,
+  source: string,
+  year?: number[],
+  month?: number[]
+) {
+  const tables = resolveTables(source);
+
+  const storeMapping = await prisma.store_mapping.findFirst({
+    where: { Old_Store_Code: storeCode },
+    select: { Old_Store_Code: true },
+  });
+  if (!storeMapping)
+    throw new Error(`Store mapping not found for ${storeCode}`);
+
+  // ---- Fiscal Year filter logic (Jul–Jun) ----
+  const yearFilter = year?.length
+    ? `AND (CASE WHEN MONTH(document_date) >= 7 THEN YEAR(document_date)+1 ELSE YEAR(document_date) END) IN (${year
+        .map(() => "?")
+        .join(",")})`
+    : "";
+  const monthFilter = month?.length
+    ? `AND (CASE WHEN MONTH(document_date) >= 7 THEN MONTH(document_date)-6 ELSE MONTH(document_date)+6 END) IN (${month
+        .map(() => "?")
+        .join(",")})`
+    : "";
+
+  const filterParams = [...(year ?? []), ...(month ?? [])];
+  const allParams = [storeCode, ...filterParams];
+
+  // ---- Query for last 6 invoices ----
+  const billQuery = tables
+    .map(
+      (table) => `
+        SELECT
+          document_no AS documentNo,
+          SUM(retailing) AS totalRetailing,
+          MAX(document_date) AS documentDate
+        FROM ${table}
+        WHERE customer_code = ?
+          AND document_no LIKE '%-I%'
+          ${yearFilter} ${monthFilter}
+        GROUP BY document_no
+      `
+    )
+    .join(" UNION ALL ");
+
+  // Wrap union to sort + limit
+  const finalQuery = `
+    SELECT documentNo, SUM(totalRetailing) AS totalRetailing, MAX(documentDate) AS documentDate
+    FROM (
+      ${billQuery}
+    ) t
+    GROUP BY documentNo
+    ORDER BY MAX(documentDate) DESC
+    LIMIT 6
+  `;
+
+  const results = await prisma.$queryRawUnsafe<any[]>(
+    finalQuery,
+    ...tables.flatMap(() => allParams)
+  );
+
+  return results.map((row) => ({
+    documentNo: row.documentNo,
+    totalRetailing: Number(row.totalRetailing),
+    documentDate: new Date(row.documentDate).toISOString(),
+  }));
 }
 
 export async function getStoreRetailingTrend(
@@ -1128,70 +1210,90 @@ export async function getCategoryRetailing(
   month?: number[]
 ) {
   const tables = resolveTables(source);
-  const storeCodeEscaped = `'${storeCode}'`;
 
-  const yearCondition = year?.length
-    ? `AND (CASE WHEN MONTH(p.document_date) >= 7 THEN YEAR(p.document_date)+1 ELSE YEAR(p.document_date) END) IN (${year.join(
-        ","
-      )})`
-    : "";
-
-  const monthCondition = month?.length
-    ? `AND (CASE WHEN MONTH(p.document_date) >= 7 THEN MONTH(p.document_date)-6 ELSE MONTH(p.document_date)+6 END) IN (${month.join(
-        ","
-      )})`
-    : "";
-
-  const subqueries = tables.map(
-    (table) => `
-    SELECT 
-      pm.category AS category,
-      (CASE WHEN MONTH(p.document_date) >= 7 THEN YEAR(p.document_date)+1 ELSE YEAR(p.document_date) END) AS fiscal_year,
-      SUM(p.retailing) AS total
-    FROM ${table} p
-    INNER JOIN store_mapping sm ON p.customer_code = sm.Old_Store_Code
-    INNER JOIN product_mapping pm ON p.p_code = pm.p_code
-    WHERE sm.Old_Store_Code = ${storeCodeEscaped}
-      ${yearCondition}
-      ${monthCondition}
-    GROUP BY pm.category, fiscal_year
-  `
+  // Step 1: Preload product_mapping (tiny table vs psr_data)
+  const products = await prisma.product_mapping.findMany({
+    select: { p_code: true, category: true },
+  });
+  const productMap = new Map(
+    products.map((p) => [p.p_code, p.category ?? "Unknown"])
   );
 
-  const combinedQuery = subqueries.join(" UNION ALL");
+  // Step 2: Build date range from fiscal filters
+  let dateCondition: any = {};
+  if (year && year.length > 0) {
+    const minFY = Math.min(...year);
+    const maxFY = Math.max(...year);
+    const minDate = new Date(minFY - 1, 6, 1); // Jul of prev year
+    const maxDate = new Date(maxFY, 5, 30); // Jun of that year
+    dateCondition = { gte: minDate, lte: maxDate };
+  }
 
-  const rawResults = await prisma.$queryRawUnsafe<any[]>(combinedQuery);
+  // Step 3: Query psr_data (and psr_data_temp if combined)
+  let rawResults: { p_code: number; document_date: Date; retailing: number }[] =
+    [];
 
-  // Aggregate category -> fiscal_year totals
+  for (const table of tables) {
+    const delegate = prisma[table as "psr_data" | "psr_data_temp"] as any;
+    const data = await delegate.findMany({
+      where: {
+        customer_code: storeCode,
+        ...(year?.length ? { document_date: dateCondition } : {}),
+      },
+      select: {
+        p_code: true,
+        document_date: true,
+        retailing: true, // Decimal coming from Prisma
+      },
+    });
+
+    // ✅ Convert Decimal -> number
+    rawResults.push(
+      ...data.map((row: any) => ({
+        p_code: row.p_code,
+        document_date: row.document_date,
+        retailing: Number(row.retailing),
+      }))
+    );
+  }
+
+  // Step 4: Apply month filter in memory (because fiscal month ≠ calendar month)
+  if (month && month.length > 0) {
+    rawResults = rawResults.filter((row) => {
+      const calMonth = row.document_date.getMonth(); // 0=Jan..11=Dec
+      const fiscalMonth = calMonth >= 6 ? calMonth - 6 + 1 : calMonth + 6 + 1;
+      // July=7 => fiscalMonth=1, Aug=8 =>2, ... June=6 =>12
+      return month.includes(fiscalMonth);
+    });
+  }
+
+  // Step 5: Aggregate by category + fiscal year
   const categoryMap = new Map<string, Map<number, number>>();
+
   for (const row of rawResults) {
-    const category = row.category ?? "Unknown";
-    const fy = Number(row.fiscal_year);
-    const total = Number(row.total);
+    const category = productMap.get(row.p_code) ?? "Unknown";
+    const fy =
+      row.document_date.getMonth() >= 6
+        ? row.document_date.getFullYear() + 1
+        : row.document_date.getFullYear();
 
     if (!categoryMap.has(category)) categoryMap.set(category, new Map());
     const yearMap = categoryMap.get(category)!;
-    yearMap.set(fy, (yearMap.get(fy) ?? 0) + total);
+    yearMap.set(fy, (yearMap.get(fy) ?? 0) + row.retailing);
   }
 
-  // Build final result in dashboard-style format
+  // Step 6: Transform to final structure
   const result = Array.from(categoryMap.entries()).map(
     ([category, yearMap]) => {
       const breakdown = Array.from(yearMap.entries())
-        .map(([fy, value]) => ({
-          year: fy,
-          value,
-        }))
-        .sort((a, b) => b.year - a.year); // latest year first
+        .map(([fy, value]) => ({ year: fy, value }))
+        .sort((a, b) => b.year - a.year);
 
-      return {
-        category,
-        breakdown,
-      };
+      return { category, breakdown };
     }
   );
 
-  // Sort categories by latest FY value descending
+  // Step 7: Sort by latest FY value
   return result.sort((a, b) => {
     const aLatest = a.breakdown[0]?.value ?? 0;
     const bLatest = b.breakdown[0]?.value ?? 0;

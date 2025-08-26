@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 "use client";
 
 import BranchSelector from "@/components/structures/BranchSelector";
@@ -20,6 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import StoreCategoryTable from "@/components/structures/StoreCategoryTable";
 import { filters } from "@/constants/data";
+import { BillTable } from "@/components/structures/BillTable";
 
 // ================= GraphQL Queries =================
 const GET_ALL_BRANCHES = gql`
@@ -120,6 +119,27 @@ const GET_STORE_DETAILS = gql`
     getStoreDetails(storeCode: $storeCode) {
       storeCode
       storeName
+      channelDesc
+    }
+  }
+`;
+
+const GET_LAST_STORE_BILLS = gql`
+  query GetLastStoreBills(
+    $storeCode: String!
+    $source: String
+    $year: [Int]
+    $month: [Int]
+  ) {
+    getLastStoreBills(
+      storeCode: $storeCode
+      source: $source
+      year: $year
+      month: $month
+    ) {
+      documentNo
+      totalRetailing
+      documentDate
     }
   }
 `;
@@ -134,6 +154,7 @@ const StorePage = () => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [selectedStore, setSelectedStore] = useState<string>("");
   const [storeName, setStoreName] = useState<string | null>(null);
+  const [storeChannel, setStoreChannel] = useState<string | null>(null);
 
   const [pendingFilters, setPendingFilters] = useState<{
     year: number[];
@@ -213,7 +234,17 @@ const StorePage = () => {
     onCompleted: (data) => {
       if (data?.getStoreDetails) {
         setStoreName(data.getStoreDetails.storeName);
+        setStoreChannel(data.getStoreDetails.channelDesc);
       }
+    },
+  });
+
+  const { data, loading, error } = useQuery(GET_LAST_STORE_BILLS, {
+    variables: {
+      storeCode: selectedStore,
+      source: dataSource,
+      year: appliedFilters.year,
+      month: appliedFilters.month,
     },
   });
 
@@ -408,9 +439,15 @@ const StorePage = () => {
                   <h2 className="text-xl font-semibold mb-3">
                     Retailing Trend for:{" "}
                     <span className="text-blue-600 dark:text-blue-400">
-                      {selectedStore} {storeName && ` - ${storeName}`}
+                      {selectedStore} {storeName && ` -- ${storeName}`}
                     </span>
                   </h2>
+                  <h3 className="text-lg font-normal mb-1">
+                    Channel:{" "}
+                    <span className="text-indigo-700 dark:text-indigo-300 font-semibold">
+                      {storeChannel}
+                    </span>
+                  </h3>
 
                   {trendLoading ? (
                     <Skeleton className="h-60 w-full rounded-xl" />
@@ -443,6 +480,16 @@ const StorePage = () => {
                     />
                   )}
                 </div>
+              </div>
+
+              {/* Bills */}
+              <div className="py-3">
+                <h2 className="text-xl font-semibold mb-3">Last 6 Bills:</h2>
+                <BillTable
+                  bills={data?.getLastStoreBills || []}
+                  loading={loading}
+                  error={error}
+                />
               </div>
 
               {/* Category Stats */}

@@ -127,6 +127,13 @@ export const typeDefs = gql`
   type StoreDetails {
     storeCode: String
     storeName: String
+    channelDesc: String
+  }
+
+  type StoreBill {
+    documentNo: String
+    totalRetailing: Float
+    documentDate: String
   }
 
   type TopStore {
@@ -190,6 +197,12 @@ export const typeDefs = gql`
       month: [Int]
     ): [StoreRetailingTrend]
     getStoreDetails(storeCode: String!, source: String): StoreDetails
+    getLastStoreBills(
+      storeCode: String!
+      source: String
+      year: [Int]
+      month: [Int]
+    ): [StoreBill]
     getStoreStats(
       storeCode: String!
       source: String

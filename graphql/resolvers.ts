@@ -4,6 +4,7 @@ import {
   getCategoryRetailing,
   getHighestRetailingBranch,
   getHighestRetailingBrand,
+  getLastStoreBills,
   getMonthlyRetailingTrend,
   getRetailingBreakdown,
   getRetailingByBaseChannel,
@@ -15,7 +16,6 @@ import {
   getTopBrandforms,
   getTopStoresQuery,
   getTotalRetailing,
-  resolveTables,
   suggestStores,
 } from "@/lib/helpers";
 import prisma from "@/lib/utils";
@@ -126,6 +126,22 @@ export const resolvers = {
     },
     getStoreDetails: async (_: any, { storeCode }: { storeCode: string }) => {
       return await getStoreDetails(storeCode);
+    },
+    getLastStoreBills: async (
+      _: any,
+      {
+        storeCode,
+        source,
+        year,
+        month,
+      }: {
+        storeCode: string;
+        source?: string;
+        year?: number[];
+        month?: number[];
+      }
+    ) => {
+      return await getLastStoreBills(storeCode, source ?? "", year, month);
     },
 
     // RANKING
