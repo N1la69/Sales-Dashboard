@@ -24,10 +24,14 @@ model psr_data {
   customer_code String   @db.VarChar(45) //
   p_code        Int      @db.Int() //
   customer_type String   @db.VarChar(90)
-  category      String   @db.VarChar(45)
+  category      String   @db.VarChar(255)
   brand         String   @db.VarChar(45)
   brandform     String   @db.VarChar(45)
   retailing     Decimal  @db.Decimal(12, 2) //
+
+  // Relations
+  store_mapping   store_mapping   @relation(fields: [customer_code], references: [Old_Store_Code])
+  product_mapping product_mapping @relation(fields: [p_code], references: [p_code])
 }
 
 model psr_data_temp {
@@ -39,23 +43,30 @@ model psr_data_temp {
   customer_code String   @db.VarChar(45)
   p_code        Int      @db.Int()
   customer_type String   @db.VarChar(90)
-  category      String   @db.VarChar(45)
+  category      String   @db.VarChar(255)
   brand         String   @db.VarChar(45)
   brandform     String   @db.VarChar(45)
   retailing     Decimal  @db.Decimal(12, 2)
+
+  // Relations
+  store_mapping   store_mapping   @relation(fields: [customer_code], references: [Old_Store_Code])
+  product_mapping product_mapping @relation(fields: [p_code], references: [p_code])
 }
 
 model channel_mapping {
   channel_id    Int    @id @default(autoincrement())
-  customer_type String @db.VarChar(90)
+  customer_type String @unique @db.VarChar(90)
   base_channel  String @db.VarChar(45) //
   short_channel String @db.VarChar(45) //
   channel_desc  String @db.VarChar(45)
+
+  // Reverse relation
+  store_mapping store_mapping[]
 }
 
 model store_mapping {
   Id             Int    @id @default(autoincrement())
-  Old_Store_Code String @db.VarChar(45)
+  Old_Store_Code String @unique @db.VarChar(45)
   New_Store_Code String @db.VarChar(45)
   customer_name  String @db.VarChar(120)
   customer_type  String @db.VarChar(90)
@@ -65,16 +76,25 @@ model store_mapping {
   RSM            String @db.VarChar(45)
   ASM            String @db.VarChar(45)
   TSI            String @db.VarChar(45)
+
+  // Relations
+  psr_data        psr_data[]
+  psr_data_temp   psr_data_temp[]
+  channel_mapping channel_mapping @relation(fields: [customer_type], references: [customer_type])
 }
 
 model product_mapping {
   Id           Int    @id @default(autoincrement())
-  p_code       Int    @db.Int()
+  p_code       Int    @unique @db.Int()
   desc_short   String @db.VarChar(90)
   category     String @db.VarChar(45)
   brand        String @db.VarChar(45)
   brandform    String @db.VarChar(45)
   subbrandform String @db.VarChar(90)
+
+  // Reverse relation
+  psr_data      psr_data[]
+  psr_data_temp psr_data_temp[]
 }
 
 model User {
@@ -107,4 +127,6 @@ model PermissionSet {
   userId      Int
   page        String @db.VarChar(100)
   permissions Json
+
+  @@unique([userId, page]) // 👈 makes (userId, page) unique
 }

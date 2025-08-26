@@ -52,10 +52,6 @@ export function getFiscalYear(date: Date): number {
   return month >= 7 ? year + 1 : year;
 }
 
-function getFiscalMonth(month: number): number {
-  return month >= 7 ? month - 6 : month + 6;
-}
-
 export function addInClause(
   query: string,
   params: any[],
