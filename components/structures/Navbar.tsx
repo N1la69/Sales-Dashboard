@@ -24,24 +24,29 @@ import { Button } from "../ui/button";
 export default function Navbar() {
   const { state } = useAppContext();
   const { user } = state;
+  const currentUser = user?.user;
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+  const IS_LOGGED_IN = useMemo(() => !!currentUser, [currentUser]);
+  const IS_ADMIN = currentUser?.role === "admin";
+  const IS_ADMIN_PAGE = useMemo(
+    () => pathname?.startsWith("/admin"),
+    [pathname]
+  );
 
-  const IS_LOGGED_IN = useMemo(() => !!user, [user]);
-  const isAdminPage = useMemo(() => pathname?.startsWith("/admin"), [pathname]);
-
+  // ✅ If admin, show AdminNavLinks or PublicNavLinks depending on page
+  // ✅ If not admin, only show PublicNavLinks
   const navLinks = useMemo(() => {
-    return isAdminPage
-      ? AdminNavLinks.filter((link) => link.toRender)
-      : PublicNavLinks.filter((link) => link.toRender);
-  }, [isAdminPage]);
-
-  const isActive = (path?: string) => {
-    if (!path) return false;
-    return pathname === path;
-  };
+    if (IS_ADMIN) {
+      return IS_ADMIN_PAGE
+        ? AdminNavLinks.filter((link) => link.toRender)
+        : PublicNavLinks.filter((link) => link.toRender);
+    }
+    return PublicNavLinks.filter((link) => link.toRender);
+  }, [IS_ADMIN_PAGE, IS_ADMIN]);
+  const isActive = (path?: string) => path && pathname === path;
 
   return (
     <nav className="fixed top-0 left-0 z-50 w-full bg-white/70 dark:bg-gray-900/70 backdrop-blur-xl shadow-sm">
@@ -55,9 +60,9 @@ export default function Navbar() {
         </div>
 
         {/* Center Section: Nav Links (desktop only) */}
-        <ul className="hidden md:flex items-center space-x-6">
-          {IS_LOGGED_IN &&
-            navLinks.map((page) => {
+        {IS_LOGGED_IN && (
+          <ul className="hidden md:flex items-center space-x-6">
+            {navLinks.map((page) => {
               const active = isActive(page.path);
               return (
                 <li key={page.id}>
@@ -67,10 +72,9 @@ export default function Navbar() {
                       "group flex items-center gap-2 px-2 py-1 font-medium text-sm transition-all duration-200 relative",
                       active
                         ? "text-blue-600 dark:text-blue-400"
-                        : "text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200"
+                        : "text-gray-500 hover:text-gray-900 dark:dark:text-gray-400 dark:hover:text-gray-200"
                     )}
                   >
-                    {/* Icon on left */}
                     {page.icon && (
                       <page.icon
                         className={cn(
@@ -81,11 +85,7 @@ export default function Navbar() {
                         )}
                       />
                     )}
-
-                    {/* Label */}
                     <span>{page.title}</span>
-
-                    {/* Animated underline */}
                     <span
                       className={cn(
                         "absolute bottom-0 left-0 h-[2px] bg-blue-500 dark:bg-blue-300 transition-all duration-300",
@@ -96,24 +96,26 @@ export default function Navbar() {
                 </li>
               );
             })}
-        </ul>
+          </ul>
+        )}
 
-        {/* Right Section: Theme, User */}
+        {/* Right Section: Theme + User */}
         <div className="flex items-center space-x-4 md:pr-2 lg:pr-6">
-          {IS_LOGGED_IN && (
+          {/* 🔹 Only admins get the Admin/Public switcher */}
+          {IS_LOGGED_IN && IS_ADMIN && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
                   className="hidden md:flex text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
                 >
-                  {isAdminPage ? "Public" : "Admin"} Pages
+                  {IS_ADMIN_PAGE ? "Public" : "Admin"} Pages
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel>Switch Pages</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {(isAdminPage
+                {(IS_ADMIN_PAGE
                   ? PublicNavLinks.filter((link) => link.toRender)
                   : AdminNavLinks.filter((link) => link.toRender)
                 ).map((page) => {
@@ -147,7 +149,6 @@ export default function Navbar() {
             size="icon"
             onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
             aria-label="Toggle dark mode"
-            className="md:none mr-6"
           >
             {mounted && theme === "dark" ? (
               <Sun className="h-[1.2rem] w-[1.2rem]" />
@@ -166,11 +167,14 @@ export default function Navbar() {
                   aria-label="User profile menu"
                 >
                   <Avatar className="h-9 w-9 border-2 border-transparent hover:border-blue-500 transition-all">
-                    <AvatarImage src={user?.image} alt={user?.name} />
-                    <AvatarFallback>{user?.name?.[0]}</AvatarFallback>
+                    <AvatarImage
+                      src={currentUser?.image}
+                      alt={currentUser?.name}
+                    />
+                    <AvatarFallback>{currentUser?.name?.[0]}</AvatarFallback>
                   </Avatar>
                   <span className="hidden lg:block text-sm font-semibold text-gray-900 dark:text-gray-200">
-                    {user?.name}
+                    {currentUser?.name}
                   </span>
                 </Button>
               </DropdownMenuTrigger>
@@ -178,9 +182,7 @@ export default function Navbar() {
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  onClick={() => {
-                    window.location.href = "/profile";
-                  }}
+                  onClick={() => (window.location.href = "/profile")}
                 >
                   Profile
                 </DropdownMenuItem>

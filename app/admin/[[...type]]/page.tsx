@@ -1,10 +1,10 @@
 "use client";
 
+import { PermissionSet } from "@/app/generated/prisma";
 import { AdminNavLinks } from "@/constants/data";
+import { useAppContext } from "@/hooks/AppContext";
 import { notFound } from "next/navigation";
 import { use, useEffect } from "react";
-import { useAppContext } from "@/hooks/AppContext";
-import { PermissionSet } from "@/app/generated/prisma";
 
 export default function AdminRouter({
   params,
@@ -36,18 +36,20 @@ export default function AdminRouter({
     console.log("No user after loading");
     notFound();
   }
-  console.log("User is present", { user, pageKey });
   // ❌ Invalid page
   if (!page?.module) {
     console.log("Invalid page", { pageKey });
     notFound();
   }
 
-  const permissions: PermissionSet[] = user.permissions || [];
+  const permissions: PermissionSet[] = Array.isArray(user.permissions)
+    ? user.permissions
+    : [];
 
   // ✅ Check "read" access AFTER user is ready
   const hasReadAccess = permissions.some(
-    (perm) => perm.page === pageKey && perm.permissions.includes("read")
+    (perm) =>
+      perm.page === pageKey && String(perm.permissions)?.includes("read")
   );
 
   if (!hasReadAccess) {

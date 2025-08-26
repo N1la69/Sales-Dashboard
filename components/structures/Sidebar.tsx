@@ -25,20 +25,30 @@ import { Button } from "../ui/button";
 export function AppSidebar() {
   const { state } = useAppContext();
   const { user } = state;
+  const currentUser = user?.user;
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+
   useEffect(() => setMounted(true), []);
 
-  const IS_LOGGED_IN = useMemo(() => !!user, [user]);
-  const isAdminPage = useMemo(() => pathname?.startsWith("/admin"), [pathname]);
+  // ✅ same logic as Navbar
+  const IS_LOGGED_IN = useMemo(() => !!currentUser, [currentUser]);
+  const IS_ADMIN = currentUser?.role === "admin";
+  const IS_ADMIN_PAGE = useMemo(
+    () => pathname?.startsWith("/admin"),
+    [pathname]
+  );
 
   const navLinks = useMemo(() => {
-    return isAdminPage
-      ? AdminNavLinks.filter((link) => link.toRender)
-      : PublicNavLinks.filter((link) => link.toRender);
-  }, [isAdminPage]);
+    if (IS_ADMIN) {
+      return IS_ADMIN_PAGE
+        ? AdminNavLinks.filter((link) => link.toRender)
+        : PublicNavLinks.filter((link) => link.toRender);
+    }
+    return PublicNavLinks.filter((link) => link.toRender);
+  }, [IS_ADMIN, IS_ADMIN_PAGE]);
 
   // Handle body overflow when sidebar is open
   useEffect(() => {
@@ -97,7 +107,7 @@ export function AppSidebar() {
             {IS_LOGGED_IN &&
               navLinks.map((page) => {
                 const active = pathname === page.path;
-                const Icon = page.icon; // assuming navLinks have { icon: Home }
+                const Icon = page.icon;
                 return (
                   <li key={page.id}>
                     <Link
@@ -110,7 +120,6 @@ export function AppSidebar() {
                           : "text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100"
                       )}
                     >
-                      {/* Animated left border for active link */}
                       <span
                         className={cn(
                           "absolute left-0 top-1/2 -translate-y-1/2 h-2/3 w-[3px] rounded-full bg-blue-500 dark:bg-blue-400 transition-all duration-300",
@@ -119,7 +128,6 @@ export function AppSidebar() {
                             : "opacity-0 scale-y-0 group-hover:opacity-60 group-hover:scale-y-100"
                         )}
                       />
-                      {/* Icon */}
                       {Icon && (
                         <Icon
                           className={cn(
@@ -130,8 +138,6 @@ export function AppSidebar() {
                           )}
                         />
                       )}
-
-                      {/* Label */}
                       <span>{page.title}</span>
                     </Link>
                   </li>
@@ -142,18 +148,18 @@ export function AppSidebar() {
 
         {/* Bottom Section */}
         <div className="border-t border-gray-200 dark:border-gray-700 p-4 flex flex-col gap-3">
-          {/* Switch Pages Dropdown */}
-          {IS_LOGGED_IN && (
+          {/* 🔹 Only admins get the Admin/Public switcher */}
+          {IS_LOGGED_IN && IS_ADMIN && (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="justify-between w-full">
-                  {isAdminPage ? "Public Pages" : "Admin Pages"}
+                  {IS_ADMIN_PAGE ? "Public Pages" : "Admin Pages"}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent side="top" className="w-56">
                 <DropdownMenuLabel>Switch Pages</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                {(isAdminPage
+                {(IS_ADMIN_PAGE
                   ? PublicNavLinks.filter((link) => link.toRender)
                   : AdminNavLinks.filter((link) => link.toRender)
                 ).map((page) => (
@@ -162,7 +168,6 @@ export function AppSidebar() {
                       href={page.path ?? "/"}
                       className="flex items-center gap-2"
                     >
-                      {/* Render icon if available */}
                       {page.icon && (
                         <page.icon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                       )}
@@ -199,11 +204,14 @@ export function AppSidebar() {
                   className="flex items-center gap-3 justify-start px-2"
                 >
                   <Avatar className="h-9 w-9 border border-gray-300 dark:border-gray-600">
-                    <AvatarImage src={user?.image} alt={user?.name} />
-                    <AvatarFallback>{user?.name?.[0]}</AvatarFallback>
+                    <AvatarImage
+                      src={currentUser?.image}
+                      alt={currentUser?.name}
+                    />
+                    <AvatarFallback>{currentUser?.name?.[0]}</AvatarFallback>
                   </Avatar>
                   <span className="text-sm font-medium text-gray-900 dark:text-gray-200">
-                    {user?.name}
+                    {currentUser?.name}
                   </span>
                 </Button>
               </DropdownMenuTrigger>
