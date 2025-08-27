@@ -164,15 +164,16 @@ export class UserModel {
   /**
    * Update user fields
    */
-  async updateUser(data: Partial<PrismaUser>) {
+  async updateUser(data: Partial<PrismaUser> & { password?: string }) {
+    process.stdout.write('\x1Bc');
+    console.log("Incoming data:", data);
     const updated = await prisma.user.update({
       where: { id: this.user.id },
-      data,
+      data
     });
     this.user = updated;
     return this.userDetails;
   }
-
   /**
    * Activate or deactivate user
    */

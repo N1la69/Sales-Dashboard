@@ -100,7 +100,14 @@ async function PUT(req: NextApiRequest, res: NextApiResponse) {
         if (!user) throw { message: "User not found", status: 404 };
 
         const userModel = new UserModel(user);
-        const updated = await userModel.updateUser(data);
+        const { password, ...restItems } = data;
+        let updated;
+        if (password) {
+            await userModel.setPassword(password);
+        }
+        if (Object.keys(restItems).length) {
+            updated = await userModel.updateUser(restItems);
+        }
 
         return res.status(200).json({
             success: true,
