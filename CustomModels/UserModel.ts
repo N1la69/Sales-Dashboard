@@ -40,7 +40,7 @@ export class UserModel {
   }
 
   isAdmin(): boolean {
-    return this.user.role === "admin" || this.user.role === "superadmin";
+    return this.user.role === "ADMIN" || this.user.role === "SUPERADMIN";
   }
 
   generateJWT(): string {

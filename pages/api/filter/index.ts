@@ -9,7 +9,7 @@ const clean = (values: { [key: string]: string }[], key: string) =>
 // 🔹 Role → allowed filter keys mapping
 const roleFilters: Record<string, string[]> = {
     OWNER: ["branches", "zms", "rsms", "asms", "tsis"],
-    admin: ["branches", "zms", "rsms", "asms", "tsis"],
+    ADMIN: ["branches", "zms", "rsms", "asms", "tsis"],
     ZM: ["branches", "rsms", "asms", "tsis"],
     RSM: ["branches", "asms", "tsis"],
     ASM: ["branches", "tsis"],

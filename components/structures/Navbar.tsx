@@ -12,7 +12,7 @@ import { AdminNavLinks, PublicNavLinks } from "@/constants/data";
 import { useAppContext } from "@/hooks/AppContext";
 import { logOutUser } from "@/lib/auth/logOutUser";
 import { cn } from "@/lib/utils";
-import { Moon, Sun } from "lucide-react";
+import { CircleUserRound, LogOut, Moon, Settings, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import Link from "next/link";
@@ -30,7 +30,7 @@ export default function Navbar() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const IS_LOGGED_IN = useMemo(() => !!currentUser, [currentUser]);
-  const IS_ADMIN = currentUser?.role === "admin";
+  const IS_ADMIN = currentUser?.role === "ADMIN";
   const IS_ADMIN_PAGE = useMemo(
     () => pathname?.startsWith("/admin"),
     [pathname]
@@ -178,17 +178,22 @@ export default function Navbar() {
                   </span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuContent align="end" className="w-35 flex flex-col">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onClick={() => (window.location.href = "/profile")}
                 >
+                  <CircleUserRound className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                   Profile
                 </DropdownMenuItem>
-                <DropdownMenuItem>Settings</DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Settings className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                  Settings
+                </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => logOutUser()}>
+                  <LogOut className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                   Log out
                 </DropdownMenuItem>
               </DropdownMenuContent>

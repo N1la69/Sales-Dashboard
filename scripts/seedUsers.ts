@@ -19,7 +19,7 @@ async function main() {
         data: {
             name: "Test Admin",
             email: "admin@example.com",
-            role: "admin",
+            role: "ADMIN",
             isActive: true,
             hash,
             salt,
