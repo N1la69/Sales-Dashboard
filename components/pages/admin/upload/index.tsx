@@ -15,7 +15,14 @@ const UploadPage = () => {
     "overwrite"
   );
   const [loadingType, setLoadingType] = useState<
-    "" | "psr" | "channel" | "store" | "product" | "merge" | "clear"
+    | ""
+    | "psr"
+    | "channel"
+    | "store"
+    | "product"
+    | "merge"
+    | "clear"
+    | "transform"
   >("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -60,6 +67,29 @@ const UploadPage = () => {
       setSuccess(`${type.toUpperCase()} file uploaded successfully!`);
     } catch (err: any) {
       setError(err.message || `An error occurred during ${type} upload.`);
+    } finally {
+      setLoadingType("");
+    }
+  };
+
+  const handleTransformPsrData = async () => {
+    setLoadingType("transform");
+    resetMessages();
+
+    try {
+      const response = await fetch("/api/transform-psr", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        const resData = await response.json();
+        throw new Error(resData.error || "Failed to transform PSR data.");
+      }
+
+      const resData = await response.json();
+      setSuccess(resData.message);
+    } catch (err: any) {
+      setError(err.message || "An error occurred while transforming data.");
     } finally {
       setLoadingType("");
     }
@@ -172,6 +202,16 @@ const UploadPage = () => {
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
               {loadingType === "psr" ? "Uploading..." : "Upload"}
+            </Button>
+
+            <Button
+              onClick={handleTransformPsrData}
+              disabled={loadingType === "transform"}
+              className="bg-indigo text-white hover:bg-indigo-hover"
+            >
+              {loadingType === "transform"
+                ? "Transforming..."
+                : "Transform Temp Data"}
             </Button>
 
             <Button

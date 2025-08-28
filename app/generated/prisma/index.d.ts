@@ -14,15 +14,25 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 
 
 /**
- * Model psr_data
- * 
- */
-export type psr_data = $Result.DefaultSelection<Prisma.$psr_dataPayload>
-/**
  * Model psr_data_temp
  * 
  */
 export type psr_data_temp = $Result.DefaultSelection<Prisma.$psr_data_tempPayload>
+/**
+ * Model psr_data_historical
+ * 
+ */
+export type psr_data_historical = $Result.DefaultSelection<Prisma.$psr_data_historicalPayload>
+/**
+ * Model psr_finalized_temp
+ * 
+ */
+export type psr_finalized_temp = $Result.DefaultSelection<Prisma.$psr_finalized_tempPayload>
+/**
+ * Model psr_data_finalized
+ * 
+ */
+export type psr_data_finalized = $Result.DefaultSelection<Prisma.$psr_data_finalizedPayload>
 /**
  * Model channel_mapping
  * 
@@ -38,6 +48,11 @@ export type store_mapping = $Result.DefaultSelection<Prisma.$store_mappingPayloa
  * 
  */
 export type product_mapping = $Result.DefaultSelection<Prisma.$product_mappingPayload>
+/**
+ * Model mapping_change_flag
+ * 
+ */
+export type mapping_change_flag = $Result.DefaultSelection<Prisma.$mapping_change_flagPayload>
 /**
  * Model User
  * 
@@ -56,8 +71,8 @@ export type PermissionSet = $Result.DefaultSelection<Prisma.$PermissionSetPayloa
  * @example
  * ```
  * const prisma = new PrismaClient()
- * // Fetch zero or more Psr_data
- * const psr_data = await prisma.psr_data.findMany()
+ * // Fetch zero or more Psr_data_temps
+ * const psr_data_temps = await prisma.psr_data_temp.findMany()
  * ```
  *
  *
@@ -77,8 +92,8 @@ export class PrismaClient<
    * @example
    * ```
    * const prisma = new PrismaClient()
-   * // Fetch zero or more Psr_data
-   * const psr_data = await prisma.psr_data.findMany()
+   * // Fetch zero or more Psr_data_temps
+   * const psr_data_temps = await prisma.psr_data_temp.findMany()
    * ```
    *
    *
@@ -175,16 +190,6 @@ export class PrismaClient<
   }>>
 
       /**
-   * `prisma.psr_data`: Exposes CRUD operations for the **psr_data** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Psr_data
-    * const psr_data = await prisma.psr_data.findMany()
-    * ```
-    */
-  get psr_data(): Prisma.psr_dataDelegate<ExtArgs, ClientOptions>;
-
-  /**
    * `prisma.psr_data_temp`: Exposes CRUD operations for the **psr_data_temp** model.
     * Example usage:
     * ```ts
@@ -193,6 +198,36 @@ export class PrismaClient<
     * ```
     */
   get psr_data_temp(): Prisma.psr_data_tempDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.psr_data_historical`: Exposes CRUD operations for the **psr_data_historical** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Psr_data_historicals
+    * const psr_data_historicals = await prisma.psr_data_historical.findMany()
+    * ```
+    */
+  get psr_data_historical(): Prisma.psr_data_historicalDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.psr_finalized_temp`: Exposes CRUD operations for the **psr_finalized_temp** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Psr_finalized_temps
+    * const psr_finalized_temps = await prisma.psr_finalized_temp.findMany()
+    * ```
+    */
+  get psr_finalized_temp(): Prisma.psr_finalized_tempDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.psr_data_finalized`: Exposes CRUD operations for the **psr_data_finalized** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Psr_data_finalizeds
+    * const psr_data_finalizeds = await prisma.psr_data_finalized.findMany()
+    * ```
+    */
+  get psr_data_finalized(): Prisma.psr_data_finalizedDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.channel_mapping`: Exposes CRUD operations for the **channel_mapping** model.
@@ -223,6 +258,16 @@ export class PrismaClient<
     * ```
     */
   get product_mapping(): Prisma.product_mappingDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.mapping_change_flag`: Exposes CRUD operations for the **mapping_change_flag** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Mapping_change_flags
+    * const mapping_change_flags = await prisma.mapping_change_flag.findMany()
+    * ```
+    */
+  get mapping_change_flag(): Prisma.mapping_change_flagDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.user`: Exposes CRUD operations for the **User** model.
@@ -683,11 +728,14 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    psr_data: 'psr_data',
     psr_data_temp: 'psr_data_temp',
+    psr_data_historical: 'psr_data_historical',
+    psr_finalized_temp: 'psr_finalized_temp',
+    psr_data_finalized: 'psr_data_finalized',
     channel_mapping: 'channel_mapping',
     store_mapping: 'store_mapping',
     product_mapping: 'product_mapping',
+    mapping_change_flag: 'mapping_change_flag',
     User: 'User',
     PermissionSet: 'PermissionSet'
   };
@@ -708,76 +756,10 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "psr_data" | "psr_data_temp" | "channel_mapping" | "store_mapping" | "product_mapping" | "user" | "permissionSet"
+      modelProps: "psr_data_temp" | "psr_data_historical" | "psr_finalized_temp" | "psr_data_finalized" | "channel_mapping" | "store_mapping" | "product_mapping" | "mapping_change_flag" | "user" | "permissionSet"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
-      psr_data: {
-        payload: Prisma.$psr_dataPayload<ExtArgs>
-        fields: Prisma.psr_dataFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.psr_dataFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$psr_dataPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.psr_dataFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$psr_dataPayload>
-          }
-          findFirst: {
-            args: Prisma.psr_dataFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$psr_dataPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.psr_dataFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$psr_dataPayload>
-          }
-          findMany: {
-            args: Prisma.psr_dataFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$psr_dataPayload>[]
-          }
-          create: {
-            args: Prisma.psr_dataCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$psr_dataPayload>
-          }
-          createMany: {
-            args: Prisma.psr_dataCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          delete: {
-            args: Prisma.psr_dataDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$psr_dataPayload>
-          }
-          update: {
-            args: Prisma.psr_dataUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$psr_dataPayload>
-          }
-          deleteMany: {
-            args: Prisma.psr_dataDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.psr_dataUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.psr_dataUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$psr_dataPayload>
-          }
-          aggregate: {
-            args: Prisma.Psr_dataAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregatePsr_data>
-          }
-          groupBy: {
-            args: Prisma.psr_dataGroupByArgs<ExtArgs>
-            result: $Utils.Optional<Psr_dataGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.psr_dataCountArgs<ExtArgs>
-            result: $Utils.Optional<Psr_dataCountAggregateOutputType> | number
-          }
-        }
-      }
       psr_data_temp: {
         payload: Prisma.$psr_data_tempPayload<ExtArgs>
         fields: Prisma.psr_data_tempFieldRefs
@@ -841,6 +823,204 @@ export namespace Prisma {
           count: {
             args: Prisma.psr_data_tempCountArgs<ExtArgs>
             result: $Utils.Optional<Psr_data_tempCountAggregateOutputType> | number
+          }
+        }
+      }
+      psr_data_historical: {
+        payload: Prisma.$psr_data_historicalPayload<ExtArgs>
+        fields: Prisma.psr_data_historicalFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.psr_data_historicalFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_data_historicalPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.psr_data_historicalFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_data_historicalPayload>
+          }
+          findFirst: {
+            args: Prisma.psr_data_historicalFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_data_historicalPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.psr_data_historicalFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_data_historicalPayload>
+          }
+          findMany: {
+            args: Prisma.psr_data_historicalFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_data_historicalPayload>[]
+          }
+          create: {
+            args: Prisma.psr_data_historicalCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_data_historicalPayload>
+          }
+          createMany: {
+            args: Prisma.psr_data_historicalCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.psr_data_historicalDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_data_historicalPayload>
+          }
+          update: {
+            args: Prisma.psr_data_historicalUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_data_historicalPayload>
+          }
+          deleteMany: {
+            args: Prisma.psr_data_historicalDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.psr_data_historicalUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.psr_data_historicalUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_data_historicalPayload>
+          }
+          aggregate: {
+            args: Prisma.Psr_data_historicalAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePsr_data_historical>
+          }
+          groupBy: {
+            args: Prisma.psr_data_historicalGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Psr_data_historicalGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.psr_data_historicalCountArgs<ExtArgs>
+            result: $Utils.Optional<Psr_data_historicalCountAggregateOutputType> | number
+          }
+        }
+      }
+      psr_finalized_temp: {
+        payload: Prisma.$psr_finalized_tempPayload<ExtArgs>
+        fields: Prisma.psr_finalized_tempFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.psr_finalized_tempFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_finalized_tempPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.psr_finalized_tempFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_finalized_tempPayload>
+          }
+          findFirst: {
+            args: Prisma.psr_finalized_tempFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_finalized_tempPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.psr_finalized_tempFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_finalized_tempPayload>
+          }
+          findMany: {
+            args: Prisma.psr_finalized_tempFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_finalized_tempPayload>[]
+          }
+          create: {
+            args: Prisma.psr_finalized_tempCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_finalized_tempPayload>
+          }
+          createMany: {
+            args: Prisma.psr_finalized_tempCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.psr_finalized_tempDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_finalized_tempPayload>
+          }
+          update: {
+            args: Prisma.psr_finalized_tempUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_finalized_tempPayload>
+          }
+          deleteMany: {
+            args: Prisma.psr_finalized_tempDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.psr_finalized_tempUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.psr_finalized_tempUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_finalized_tempPayload>
+          }
+          aggregate: {
+            args: Prisma.Psr_finalized_tempAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePsr_finalized_temp>
+          }
+          groupBy: {
+            args: Prisma.psr_finalized_tempGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Psr_finalized_tempGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.psr_finalized_tempCountArgs<ExtArgs>
+            result: $Utils.Optional<Psr_finalized_tempCountAggregateOutputType> | number
+          }
+        }
+      }
+      psr_data_finalized: {
+        payload: Prisma.$psr_data_finalizedPayload<ExtArgs>
+        fields: Prisma.psr_data_finalizedFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.psr_data_finalizedFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_data_finalizedPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.psr_data_finalizedFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_data_finalizedPayload>
+          }
+          findFirst: {
+            args: Prisma.psr_data_finalizedFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_data_finalizedPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.psr_data_finalizedFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_data_finalizedPayload>
+          }
+          findMany: {
+            args: Prisma.psr_data_finalizedFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_data_finalizedPayload>[]
+          }
+          create: {
+            args: Prisma.psr_data_finalizedCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_data_finalizedPayload>
+          }
+          createMany: {
+            args: Prisma.psr_data_finalizedCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.psr_data_finalizedDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_data_finalizedPayload>
+          }
+          update: {
+            args: Prisma.psr_data_finalizedUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_data_finalizedPayload>
+          }
+          deleteMany: {
+            args: Prisma.psr_data_finalizedDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.psr_data_finalizedUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.psr_data_finalizedUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_data_finalizedPayload>
+          }
+          aggregate: {
+            args: Prisma.Psr_data_finalizedAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePsr_data_finalized>
+          }
+          groupBy: {
+            args: Prisma.psr_data_finalizedGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Psr_data_finalizedGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.psr_data_finalizedCountArgs<ExtArgs>
+            result: $Utils.Optional<Psr_data_finalizedCountAggregateOutputType> | number
           }
         }
       }
@@ -1039,6 +1219,72 @@ export namespace Prisma {
           count: {
             args: Prisma.product_mappingCountArgs<ExtArgs>
             result: $Utils.Optional<Product_mappingCountAggregateOutputType> | number
+          }
+        }
+      }
+      mapping_change_flag: {
+        payload: Prisma.$mapping_change_flagPayload<ExtArgs>
+        fields: Prisma.mapping_change_flagFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.mapping_change_flagFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.mapping_change_flagFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>
+          }
+          findFirst: {
+            args: Prisma.mapping_change_flagFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.mapping_change_flagFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>
+          }
+          findMany: {
+            args: Prisma.mapping_change_flagFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>[]
+          }
+          create: {
+            args: Prisma.mapping_change_flagCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>
+          }
+          createMany: {
+            args: Prisma.mapping_change_flagCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.mapping_change_flagDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>
+          }
+          update: {
+            args: Prisma.mapping_change_flagUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>
+          }
+          deleteMany: {
+            args: Prisma.mapping_change_flagDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.mapping_change_flagUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.mapping_change_flagUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>
+          }
+          aggregate: {
+            args: Prisma.Mapping_change_flagAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMapping_change_flag>
+          }
+          groupBy: {
+            args: Prisma.mapping_change_flagGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Mapping_change_flagGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.mapping_change_flagCountArgs<ExtArgs>
+            result: $Utils.Optional<Mapping_change_flagCountAggregateOutputType> | number
           }
         }
       }
@@ -1266,11 +1512,14 @@ export namespace Prisma {
     omit?: Prisma.GlobalOmitConfig
   }
   export type GlobalOmitConfig = {
-    psr_data?: psr_dataOmit
     psr_data_temp?: psr_data_tempOmit
+    psr_data_historical?: psr_data_historicalOmit
+    psr_finalized_temp?: psr_finalized_tempOmit
+    psr_data_finalized?: psr_data_finalizedOmit
     channel_mapping?: channel_mappingOmit
     store_mapping?: store_mappingOmit
     product_mapping?: product_mappingOmit
+    mapping_change_flag?: mapping_change_flagOmit
     user?: UserOmit
     permissionSet?: PermissionSetOmit
   }
@@ -1368,117 +1617,6 @@ export namespace Prisma {
 
 
   /**
-   * Count Type Channel_mappingCountOutputType
-   */
-
-  export type Channel_mappingCountOutputType = {
-    store_mapping: number
-  }
-
-  export type Channel_mappingCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    store_mapping?: boolean | Channel_mappingCountOutputTypeCountStore_mappingArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * Channel_mappingCountOutputType without action
-   */
-  export type Channel_mappingCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Channel_mappingCountOutputType
-     */
-    select?: Channel_mappingCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * Channel_mappingCountOutputType without action
-   */
-  export type Channel_mappingCountOutputTypeCountStore_mappingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: store_mappingWhereInput
-  }
-
-
-  /**
-   * Count Type Store_mappingCountOutputType
-   */
-
-  export type Store_mappingCountOutputType = {
-    psr_data: number
-    psr_data_temp: number
-  }
-
-  export type Store_mappingCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    psr_data?: boolean | Store_mappingCountOutputTypeCountPsr_dataArgs
-    psr_data_temp?: boolean | Store_mappingCountOutputTypeCountPsr_data_tempArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * Store_mappingCountOutputType without action
-   */
-  export type Store_mappingCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Store_mappingCountOutputType
-     */
-    select?: Store_mappingCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * Store_mappingCountOutputType without action
-   */
-  export type Store_mappingCountOutputTypeCountPsr_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: psr_dataWhereInput
-  }
-
-  /**
-   * Store_mappingCountOutputType without action
-   */
-  export type Store_mappingCountOutputTypeCountPsr_data_tempArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: psr_data_tempWhereInput
-  }
-
-
-  /**
-   * Count Type Product_mappingCountOutputType
-   */
-
-  export type Product_mappingCountOutputType = {
-    psr_data: number
-    psr_data_temp: number
-  }
-
-  export type Product_mappingCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    psr_data?: boolean | Product_mappingCountOutputTypeCountPsr_dataArgs
-    psr_data_temp?: boolean | Product_mappingCountOutputTypeCountPsr_data_tempArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * Product_mappingCountOutputType without action
-   */
-  export type Product_mappingCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the Product_mappingCountOutputType
-     */
-    select?: Product_mappingCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * Product_mappingCountOutputType without action
-   */
-  export type Product_mappingCountOutputTypeCountPsr_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: psr_dataWhereInput
-  }
-
-  /**
-   * Product_mappingCountOutputType without action
-   */
-  export type Product_mappingCountOutputTypeCountPsr_data_tempArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: psr_data_tempWhereInput
-  }
-
-
-  /**
    * Count Type UserCountOutputType
    */
 
@@ -1512,1058 +1650,6 @@ export namespace Prisma {
   /**
    * Models
    */
-
-  /**
-   * Model psr_data
-   */
-
-  export type AggregatePsr_data = {
-    _count: Psr_dataCountAggregateOutputType | null
-    _avg: Psr_dataAvgAggregateOutputType | null
-    _sum: Psr_dataSumAggregateOutputType | null
-    _min: Psr_dataMinAggregateOutputType | null
-    _max: Psr_dataMaxAggregateOutputType | null
-  }
-
-  export type Psr_dataAvgAggregateOutputType = {
-    psr_id: number | null
-    p_code: number | null
-    retailing: Decimal | null
-  }
-
-  export type Psr_dataSumAggregateOutputType = {
-    psr_id: number | null
-    p_code: number | null
-    retailing: Decimal | null
-  }
-
-  export type Psr_dataMinAggregateOutputType = {
-    psr_id: number | null
-    document_no: string | null
-    document_date: Date | null
-    subbrandform: string | null
-    customer_name: string | null
-    customer_code: string | null
-    p_code: number | null
-    customer_type: string | null
-    category: string | null
-    brand: string | null
-    brandform: string | null
-    retailing: Decimal | null
-  }
-
-  export type Psr_dataMaxAggregateOutputType = {
-    psr_id: number | null
-    document_no: string | null
-    document_date: Date | null
-    subbrandform: string | null
-    customer_name: string | null
-    customer_code: string | null
-    p_code: number | null
-    customer_type: string | null
-    category: string | null
-    brand: string | null
-    brandform: string | null
-    retailing: Decimal | null
-  }
-
-  export type Psr_dataCountAggregateOutputType = {
-    psr_id: number
-    document_no: number
-    document_date: number
-    subbrandform: number
-    customer_name: number
-    customer_code: number
-    p_code: number
-    customer_type: number
-    category: number
-    brand: number
-    brandform: number
-    retailing: number
-    _all: number
-  }
-
-
-  export type Psr_dataAvgAggregateInputType = {
-    psr_id?: true
-    p_code?: true
-    retailing?: true
-  }
-
-  export type Psr_dataSumAggregateInputType = {
-    psr_id?: true
-    p_code?: true
-    retailing?: true
-  }
-
-  export type Psr_dataMinAggregateInputType = {
-    psr_id?: true
-    document_no?: true
-    document_date?: true
-    subbrandform?: true
-    customer_name?: true
-    customer_code?: true
-    p_code?: true
-    customer_type?: true
-    category?: true
-    brand?: true
-    brandform?: true
-    retailing?: true
-  }
-
-  export type Psr_dataMaxAggregateInputType = {
-    psr_id?: true
-    document_no?: true
-    document_date?: true
-    subbrandform?: true
-    customer_name?: true
-    customer_code?: true
-    p_code?: true
-    customer_type?: true
-    category?: true
-    brand?: true
-    brandform?: true
-    retailing?: true
-  }
-
-  export type Psr_dataCountAggregateInputType = {
-    psr_id?: true
-    document_no?: true
-    document_date?: true
-    subbrandform?: true
-    customer_name?: true
-    customer_code?: true
-    p_code?: true
-    customer_type?: true
-    category?: true
-    brand?: true
-    brandform?: true
-    retailing?: true
-    _all?: true
-  }
-
-  export type Psr_dataAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which psr_data to aggregate.
-     */
-    where?: psr_dataWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of psr_data to fetch.
-     */
-    orderBy?: psr_dataOrderByWithRelationInput | psr_dataOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: psr_dataWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` psr_data from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` psr_data.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned psr_data
-    **/
-    _count?: true | Psr_dataCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: Psr_dataAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: Psr_dataSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: Psr_dataMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: Psr_dataMaxAggregateInputType
-  }
-
-  export type GetPsr_dataAggregateType<T extends Psr_dataAggregateArgs> = {
-        [P in keyof T & keyof AggregatePsr_data]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregatePsr_data[P]>
-      : GetScalarType<T[P], AggregatePsr_data[P]>
-  }
-
-
-
-
-  export type psr_dataGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: psr_dataWhereInput
-    orderBy?: psr_dataOrderByWithAggregationInput | psr_dataOrderByWithAggregationInput[]
-    by: Psr_dataScalarFieldEnum[] | Psr_dataScalarFieldEnum
-    having?: psr_dataScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: Psr_dataCountAggregateInputType | true
-    _avg?: Psr_dataAvgAggregateInputType
-    _sum?: Psr_dataSumAggregateInputType
-    _min?: Psr_dataMinAggregateInputType
-    _max?: Psr_dataMaxAggregateInputType
-  }
-
-  export type Psr_dataGroupByOutputType = {
-    psr_id: number
-    document_no: string
-    document_date: Date
-    subbrandform: string
-    customer_name: string
-    customer_code: string
-    p_code: number
-    customer_type: string
-    category: string
-    brand: string
-    brandform: string
-    retailing: Decimal
-    _count: Psr_dataCountAggregateOutputType | null
-    _avg: Psr_dataAvgAggregateOutputType | null
-    _sum: Psr_dataSumAggregateOutputType | null
-    _min: Psr_dataMinAggregateOutputType | null
-    _max: Psr_dataMaxAggregateOutputType | null
-  }
-
-  type GetPsr_dataGroupByPayload<T extends psr_dataGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<Psr_dataGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof Psr_dataGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], Psr_dataGroupByOutputType[P]>
-            : GetScalarType<T[P], Psr_dataGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type psr_dataSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    psr_id?: boolean
-    document_no?: boolean
-    document_date?: boolean
-    subbrandform?: boolean
-    customer_name?: boolean
-    customer_code?: boolean
-    p_code?: boolean
-    customer_type?: boolean
-    category?: boolean
-    brand?: boolean
-    brandform?: boolean
-    retailing?: boolean
-    store_mapping?: boolean | store_mappingDefaultArgs<ExtArgs>
-    product_mapping?: boolean | product_mappingDefaultArgs<ExtArgs>
-  }, ExtArgs["result"]["psr_data"]>
-
-
-
-  export type psr_dataSelectScalar = {
-    psr_id?: boolean
-    document_no?: boolean
-    document_date?: boolean
-    subbrandform?: boolean
-    customer_name?: boolean
-    customer_code?: boolean
-    p_code?: boolean
-    customer_type?: boolean
-    category?: boolean
-    brand?: boolean
-    brandform?: boolean
-    retailing?: boolean
-  }
-
-  export type psr_dataOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"psr_id" | "document_no" | "document_date" | "subbrandform" | "customer_name" | "customer_code" | "p_code" | "customer_type" | "category" | "brand" | "brandform" | "retailing", ExtArgs["result"]["psr_data"]>
-  export type psr_dataInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    store_mapping?: boolean | store_mappingDefaultArgs<ExtArgs>
-    product_mapping?: boolean | product_mappingDefaultArgs<ExtArgs>
-  }
-
-  export type $psr_dataPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "psr_data"
-    objects: {
-      store_mapping: Prisma.$store_mappingPayload<ExtArgs>
-      product_mapping: Prisma.$product_mappingPayload<ExtArgs>
-    }
-    scalars: $Extensions.GetPayloadResult<{
-      psr_id: number
-      document_no: string
-      document_date: Date
-      subbrandform: string
-      customer_name: string
-      customer_code: string
-      p_code: number
-      customer_type: string
-      category: string
-      brand: string
-      brandform: string
-      retailing: Prisma.Decimal
-    }, ExtArgs["result"]["psr_data"]>
-    composites: {}
-  }
-
-  type psr_dataGetPayload<S extends boolean | null | undefined | psr_dataDefaultArgs> = $Result.GetResult<Prisma.$psr_dataPayload, S>
-
-  type psr_dataCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<psr_dataFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: Psr_dataCountAggregateInputType | true
-    }
-
-  export interface psr_dataDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['psr_data'], meta: { name: 'psr_data' } }
-    /**
-     * Find zero or one Psr_data that matches the filter.
-     * @param {psr_dataFindUniqueArgs} args - Arguments to find a Psr_data
-     * @example
-     * // Get one Psr_data
-     * const psr_data = await prisma.psr_data.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends psr_dataFindUniqueArgs>(args: SelectSubset<T, psr_dataFindUniqueArgs<ExtArgs>>): Prisma__psr_dataClient<$Result.GetResult<Prisma.$psr_dataPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Psr_data that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {psr_dataFindUniqueOrThrowArgs} args - Arguments to find a Psr_data
-     * @example
-     * // Get one Psr_data
-     * const psr_data = await prisma.psr_data.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends psr_dataFindUniqueOrThrowArgs>(args: SelectSubset<T, psr_dataFindUniqueOrThrowArgs<ExtArgs>>): Prisma__psr_dataClient<$Result.GetResult<Prisma.$psr_dataPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Psr_data that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {psr_dataFindFirstArgs} args - Arguments to find a Psr_data
-     * @example
-     * // Get one Psr_data
-     * const psr_data = await prisma.psr_data.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends psr_dataFindFirstArgs>(args?: SelectSubset<T, psr_dataFindFirstArgs<ExtArgs>>): Prisma__psr_dataClient<$Result.GetResult<Prisma.$psr_dataPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Psr_data that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {psr_dataFindFirstOrThrowArgs} args - Arguments to find a Psr_data
-     * @example
-     * // Get one Psr_data
-     * const psr_data = await prisma.psr_data.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends psr_dataFindFirstOrThrowArgs>(args?: SelectSubset<T, psr_dataFindFirstOrThrowArgs<ExtArgs>>): Prisma__psr_dataClient<$Result.GetResult<Prisma.$psr_dataPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Psr_data that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {psr_dataFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Psr_data
-     * const psr_data = await prisma.psr_data.findMany()
-     * 
-     * // Get first 10 Psr_data
-     * const psr_data = await prisma.psr_data.findMany({ take: 10 })
-     * 
-     * // Only select the `psr_id`
-     * const psr_dataWithPsr_idOnly = await prisma.psr_data.findMany({ select: { psr_id: true } })
-     * 
-     */
-    findMany<T extends psr_dataFindManyArgs>(args?: SelectSubset<T, psr_dataFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$psr_dataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Psr_data.
-     * @param {psr_dataCreateArgs} args - Arguments to create a Psr_data.
-     * @example
-     * // Create one Psr_data
-     * const Psr_data = await prisma.psr_data.create({
-     *   data: {
-     *     // ... data to create a Psr_data
-     *   }
-     * })
-     * 
-     */
-    create<T extends psr_dataCreateArgs>(args: SelectSubset<T, psr_dataCreateArgs<ExtArgs>>): Prisma__psr_dataClient<$Result.GetResult<Prisma.$psr_dataPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Psr_data.
-     * @param {psr_dataCreateManyArgs} args - Arguments to create many Psr_data.
-     * @example
-     * // Create many Psr_data
-     * const psr_data = await prisma.psr_data.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends psr_dataCreateManyArgs>(args?: SelectSubset<T, psr_dataCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a Psr_data.
-     * @param {psr_dataDeleteArgs} args - Arguments to delete one Psr_data.
-     * @example
-     * // Delete one Psr_data
-     * const Psr_data = await prisma.psr_data.delete({
-     *   where: {
-     *     // ... filter to delete one Psr_data
-     *   }
-     * })
-     * 
-     */
-    delete<T extends psr_dataDeleteArgs>(args: SelectSubset<T, psr_dataDeleteArgs<ExtArgs>>): Prisma__psr_dataClient<$Result.GetResult<Prisma.$psr_dataPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Psr_data.
-     * @param {psr_dataUpdateArgs} args - Arguments to update one Psr_data.
-     * @example
-     * // Update one Psr_data
-     * const psr_data = await prisma.psr_data.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends psr_dataUpdateArgs>(args: SelectSubset<T, psr_dataUpdateArgs<ExtArgs>>): Prisma__psr_dataClient<$Result.GetResult<Prisma.$psr_dataPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Psr_data.
-     * @param {psr_dataDeleteManyArgs} args - Arguments to filter Psr_data to delete.
-     * @example
-     * // Delete a few Psr_data
-     * const { count } = await prisma.psr_data.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends psr_dataDeleteManyArgs>(args?: SelectSubset<T, psr_dataDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Psr_data.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {psr_dataUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Psr_data
-     * const psr_data = await prisma.psr_data.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends psr_dataUpdateManyArgs>(args: SelectSubset<T, psr_dataUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one Psr_data.
-     * @param {psr_dataUpsertArgs} args - Arguments to update or create a Psr_data.
-     * @example
-     * // Update or create a Psr_data
-     * const psr_data = await prisma.psr_data.upsert({
-     *   create: {
-     *     // ... data to create a Psr_data
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Psr_data we want to update
-     *   }
-     * })
-     */
-    upsert<T extends psr_dataUpsertArgs>(args: SelectSubset<T, psr_dataUpsertArgs<ExtArgs>>): Prisma__psr_dataClient<$Result.GetResult<Prisma.$psr_dataPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Psr_data.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {psr_dataCountArgs} args - Arguments to filter Psr_data to count.
-     * @example
-     * // Count the number of Psr_data
-     * const count = await prisma.psr_data.count({
-     *   where: {
-     *     // ... the filter for the Psr_data we want to count
-     *   }
-     * })
-    **/
-    count<T extends psr_dataCountArgs>(
-      args?: Subset<T, psr_dataCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], Psr_dataCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Psr_data.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {Psr_dataAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends Psr_dataAggregateArgs>(args: Subset<T, Psr_dataAggregateArgs>): Prisma.PrismaPromise<GetPsr_dataAggregateType<T>>
-
-    /**
-     * Group by Psr_data.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {psr_dataGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends psr_dataGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: psr_dataGroupByArgs['orderBy'] }
-        : { orderBy?: psr_dataGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, psr_dataGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPsr_dataGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the psr_data model
-   */
-  readonly fields: psr_dataFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for psr_data.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__psr_dataClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    store_mapping<T extends store_mappingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, store_mappingDefaultArgs<ExtArgs>>): Prisma__store_mappingClient<$Result.GetResult<Prisma.$store_mappingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    product_mapping<T extends product_mappingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, product_mappingDefaultArgs<ExtArgs>>): Prisma__product_mappingClient<$Result.GetResult<Prisma.$product_mappingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the psr_data model
-   */
-  interface psr_dataFieldRefs {
-    readonly psr_id: FieldRef<"psr_data", 'Int'>
-    readonly document_no: FieldRef<"psr_data", 'String'>
-    readonly document_date: FieldRef<"psr_data", 'DateTime'>
-    readonly subbrandform: FieldRef<"psr_data", 'String'>
-    readonly customer_name: FieldRef<"psr_data", 'String'>
-    readonly customer_code: FieldRef<"psr_data", 'String'>
-    readonly p_code: FieldRef<"psr_data", 'Int'>
-    readonly customer_type: FieldRef<"psr_data", 'String'>
-    readonly category: FieldRef<"psr_data", 'String'>
-    readonly brand: FieldRef<"psr_data", 'String'>
-    readonly brandform: FieldRef<"psr_data", 'String'>
-    readonly retailing: FieldRef<"psr_data", 'Decimal'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * psr_data findUnique
-   */
-  export type psr_dataFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the psr_data
-     */
-    select?: psr_dataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the psr_data
-     */
-    omit?: psr_dataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_dataInclude<ExtArgs> | null
-    /**
-     * Filter, which psr_data to fetch.
-     */
-    where: psr_dataWhereUniqueInput
-  }
-
-  /**
-   * psr_data findUniqueOrThrow
-   */
-  export type psr_dataFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the psr_data
-     */
-    select?: psr_dataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the psr_data
-     */
-    omit?: psr_dataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_dataInclude<ExtArgs> | null
-    /**
-     * Filter, which psr_data to fetch.
-     */
-    where: psr_dataWhereUniqueInput
-  }
-
-  /**
-   * psr_data findFirst
-   */
-  export type psr_dataFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the psr_data
-     */
-    select?: psr_dataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the psr_data
-     */
-    omit?: psr_dataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_dataInclude<ExtArgs> | null
-    /**
-     * Filter, which psr_data to fetch.
-     */
-    where?: psr_dataWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of psr_data to fetch.
-     */
-    orderBy?: psr_dataOrderByWithRelationInput | psr_dataOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for psr_data.
-     */
-    cursor?: psr_dataWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` psr_data from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` psr_data.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of psr_data.
-     */
-    distinct?: Psr_dataScalarFieldEnum | Psr_dataScalarFieldEnum[]
-  }
-
-  /**
-   * psr_data findFirstOrThrow
-   */
-  export type psr_dataFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the psr_data
-     */
-    select?: psr_dataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the psr_data
-     */
-    omit?: psr_dataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_dataInclude<ExtArgs> | null
-    /**
-     * Filter, which psr_data to fetch.
-     */
-    where?: psr_dataWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of psr_data to fetch.
-     */
-    orderBy?: psr_dataOrderByWithRelationInput | psr_dataOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for psr_data.
-     */
-    cursor?: psr_dataWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` psr_data from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` psr_data.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of psr_data.
-     */
-    distinct?: Psr_dataScalarFieldEnum | Psr_dataScalarFieldEnum[]
-  }
-
-  /**
-   * psr_data findMany
-   */
-  export type psr_dataFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the psr_data
-     */
-    select?: psr_dataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the psr_data
-     */
-    omit?: psr_dataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_dataInclude<ExtArgs> | null
-    /**
-     * Filter, which psr_data to fetch.
-     */
-    where?: psr_dataWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of psr_data to fetch.
-     */
-    orderBy?: psr_dataOrderByWithRelationInput | psr_dataOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing psr_data.
-     */
-    cursor?: psr_dataWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` psr_data from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` psr_data.
-     */
-    skip?: number
-    distinct?: Psr_dataScalarFieldEnum | Psr_dataScalarFieldEnum[]
-  }
-
-  /**
-   * psr_data create
-   */
-  export type psr_dataCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the psr_data
-     */
-    select?: psr_dataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the psr_data
-     */
-    omit?: psr_dataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_dataInclude<ExtArgs> | null
-    /**
-     * The data needed to create a psr_data.
-     */
-    data: XOR<psr_dataCreateInput, psr_dataUncheckedCreateInput>
-  }
-
-  /**
-   * psr_data createMany
-   */
-  export type psr_dataCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many psr_data.
-     */
-    data: psr_dataCreateManyInput | psr_dataCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * psr_data update
-   */
-  export type psr_dataUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the psr_data
-     */
-    select?: psr_dataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the psr_data
-     */
-    omit?: psr_dataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_dataInclude<ExtArgs> | null
-    /**
-     * The data needed to update a psr_data.
-     */
-    data: XOR<psr_dataUpdateInput, psr_dataUncheckedUpdateInput>
-    /**
-     * Choose, which psr_data to update.
-     */
-    where: psr_dataWhereUniqueInput
-  }
-
-  /**
-   * psr_data updateMany
-   */
-  export type psr_dataUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update psr_data.
-     */
-    data: XOR<psr_dataUpdateManyMutationInput, psr_dataUncheckedUpdateManyInput>
-    /**
-     * Filter which psr_data to update
-     */
-    where?: psr_dataWhereInput
-    /**
-     * Limit how many psr_data to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * psr_data upsert
-   */
-  export type psr_dataUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the psr_data
-     */
-    select?: psr_dataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the psr_data
-     */
-    omit?: psr_dataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_dataInclude<ExtArgs> | null
-    /**
-     * The filter to search for the psr_data to update in case it exists.
-     */
-    where: psr_dataWhereUniqueInput
-    /**
-     * In case the psr_data found by the `where` argument doesn't exist, create a new psr_data with this data.
-     */
-    create: XOR<psr_dataCreateInput, psr_dataUncheckedCreateInput>
-    /**
-     * In case the psr_data was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<psr_dataUpdateInput, psr_dataUncheckedUpdateInput>
-  }
-
-  /**
-   * psr_data delete
-   */
-  export type psr_dataDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the psr_data
-     */
-    select?: psr_dataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the psr_data
-     */
-    omit?: psr_dataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_dataInclude<ExtArgs> | null
-    /**
-     * Filter which psr_data to delete.
-     */
-    where: psr_dataWhereUniqueInput
-  }
-
-  /**
-   * psr_data deleteMany
-   */
-  export type psr_dataDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which psr_data to delete
-     */
-    where?: psr_dataWhereInput
-    /**
-     * Limit how many psr_data to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * psr_data without action
-   */
-  export type psr_dataDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the psr_data
-     */
-    select?: psr_dataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the psr_data
-     */
-    omit?: psr_dataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_dataInclude<ExtArgs> | null
-  }
-
 
   /**
    * Model psr_data_temp
@@ -2827,8 +1913,6 @@ export namespace Prisma {
     brand?: boolean
     brandform?: boolean
     retailing?: boolean
-    store_mapping?: boolean | store_mappingDefaultArgs<ExtArgs>
-    product_mapping?: boolean | product_mappingDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["psr_data_temp"]>
 
 
@@ -2849,17 +1933,10 @@ export namespace Prisma {
   }
 
   export type psr_data_tempOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"psr_id" | "document_no" | "document_date" | "subbrandform" | "customer_name" | "customer_code" | "p_code" | "customer_type" | "category" | "brand" | "brandform" | "retailing", ExtArgs["result"]["psr_data_temp"]>
-  export type psr_data_tempInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    store_mapping?: boolean | store_mappingDefaultArgs<ExtArgs>
-    product_mapping?: boolean | product_mappingDefaultArgs<ExtArgs>
-  }
 
   export type $psr_data_tempPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "psr_data_temp"
-    objects: {
-      store_mapping: Prisma.$store_mappingPayload<ExtArgs>
-      product_mapping: Prisma.$product_mappingPayload<ExtArgs>
-    }
+    objects: {}
     scalars: $Extensions.GetPayloadResult<{
       psr_id: number
       document_no: string
@@ -3213,8 +2290,6 @@ export namespace Prisma {
    */
   export interface Prisma__psr_data_tempClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    store_mapping<T extends store_mappingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, store_mappingDefaultArgs<ExtArgs>>): Prisma__store_mappingClient<$Result.GetResult<Prisma.$store_mappingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
-    product_mapping<T extends product_mappingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, product_mappingDefaultArgs<ExtArgs>>): Prisma__product_mappingClient<$Result.GetResult<Prisma.$product_mappingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3273,10 +2348,6 @@ export namespace Prisma {
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_data_tempInclude<ExtArgs> | null
-    /**
      * Filter, which psr_data_temp to fetch.
      */
     where: psr_data_tempWhereUniqueInput
@@ -3295,10 +2366,6 @@ export namespace Prisma {
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_data_tempInclude<ExtArgs> | null
-    /**
      * Filter, which psr_data_temp to fetch.
      */
     where: psr_data_tempWhereUniqueInput
@@ -3316,10 +2383,6 @@ export namespace Prisma {
      * Omit specific fields from the psr_data_temp
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_data_tempInclude<ExtArgs> | null
     /**
      * Filter, which psr_data_temp to fetch.
      */
@@ -3369,10 +2432,6 @@ export namespace Prisma {
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_data_tempInclude<ExtArgs> | null
-    /**
      * Filter, which psr_data_temp to fetch.
      */
     where?: psr_data_tempWhereInput
@@ -3421,10 +2480,6 @@ export namespace Prisma {
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_data_tempInclude<ExtArgs> | null
-    /**
      * Filter, which psr_data_temps to fetch.
      */
     where?: psr_data_tempWhereInput
@@ -3468,10 +2523,6 @@ export namespace Prisma {
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_data_tempInclude<ExtArgs> | null
-    /**
      * The data needed to create a psr_data_temp.
      */
     data: XOR<psr_data_tempCreateInput, psr_data_tempUncheckedCreateInput>
@@ -3500,10 +2551,6 @@ export namespace Prisma {
      * Omit specific fields from the psr_data_temp
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_data_tempInclude<ExtArgs> | null
     /**
      * The data needed to update a psr_data_temp.
      */
@@ -3545,10 +2592,6 @@ export namespace Prisma {
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_data_tempInclude<ExtArgs> | null
-    /**
      * The filter to search for the psr_data_temp to update in case it exists.
      */
     where: psr_data_tempWhereUniqueInput
@@ -3574,10 +2617,6 @@ export namespace Prisma {
      * Omit specific fields from the psr_data_temp
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_data_tempInclude<ExtArgs> | null
     /**
      * Filter which psr_data_temp to delete.
      */
@@ -3610,10 +2649,3089 @@ export namespace Prisma {
      * Omit specific fields from the psr_data_temp
      */
     omit?: psr_data_tempOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model psr_data_historical
+   */
+
+  export type AggregatePsr_data_historical = {
+    _count: Psr_data_historicalCountAggregateOutputType | null
+    _avg: Psr_data_historicalAvgAggregateOutputType | null
+    _sum: Psr_data_historicalSumAggregateOutputType | null
+    _min: Psr_data_historicalMinAggregateOutputType | null
+    _max: Psr_data_historicalMaxAggregateOutputType | null
+  }
+
+  export type Psr_data_historicalAvgAggregateOutputType = {
+    psr_id: number | null
+    p_code: number | null
+    retailing: Decimal | null
+  }
+
+  export type Psr_data_historicalSumAggregateOutputType = {
+    psr_id: number | null
+    p_code: number | null
+    retailing: Decimal | null
+  }
+
+  export type Psr_data_historicalMinAggregateOutputType = {
+    psr_id: number | null
+    document_no: string | null
+    document_date: Date | null
+    subbrandform: string | null
+    customer_name: string | null
+    customer_code: string | null
+    p_code: number | null
+    customer_type: string | null
+    category: string | null
+    brand: string | null
+    brandform: string | null
+    retailing: Decimal | null
+  }
+
+  export type Psr_data_historicalMaxAggregateOutputType = {
+    psr_id: number | null
+    document_no: string | null
+    document_date: Date | null
+    subbrandform: string | null
+    customer_name: string | null
+    customer_code: string | null
+    p_code: number | null
+    customer_type: string | null
+    category: string | null
+    brand: string | null
+    brandform: string | null
+    retailing: Decimal | null
+  }
+
+  export type Psr_data_historicalCountAggregateOutputType = {
+    psr_id: number
+    document_no: number
+    document_date: number
+    subbrandform: number
+    customer_name: number
+    customer_code: number
+    p_code: number
+    customer_type: number
+    category: number
+    brand: number
+    brandform: number
+    retailing: number
+    _all: number
+  }
+
+
+  export type Psr_data_historicalAvgAggregateInputType = {
+    psr_id?: true
+    p_code?: true
+    retailing?: true
+  }
+
+  export type Psr_data_historicalSumAggregateInputType = {
+    psr_id?: true
+    p_code?: true
+    retailing?: true
+  }
+
+  export type Psr_data_historicalMinAggregateInputType = {
+    psr_id?: true
+    document_no?: true
+    document_date?: true
+    subbrandform?: true
+    customer_name?: true
+    customer_code?: true
+    p_code?: true
+    customer_type?: true
+    category?: true
+    brand?: true
+    brandform?: true
+    retailing?: true
+  }
+
+  export type Psr_data_historicalMaxAggregateInputType = {
+    psr_id?: true
+    document_no?: true
+    document_date?: true
+    subbrandform?: true
+    customer_name?: true
+    customer_code?: true
+    p_code?: true
+    customer_type?: true
+    category?: true
+    brand?: true
+    brandform?: true
+    retailing?: true
+  }
+
+  export type Psr_data_historicalCountAggregateInputType = {
+    psr_id?: true
+    document_no?: true
+    document_date?: true
+    subbrandform?: true
+    customer_name?: true
+    customer_code?: true
+    p_code?: true
+    customer_type?: true
+    category?: true
+    brand?: true
+    brandform?: true
+    retailing?: true
+    _all?: true
+  }
+
+  export type Psr_data_historicalAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Choose, which related nodes to fetch as well
+     * Filter which psr_data_historical to aggregate.
      */
-    include?: psr_data_tempInclude<ExtArgs> | null
+    where?: psr_data_historicalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of psr_data_historicals to fetch.
+     */
+    orderBy?: psr_data_historicalOrderByWithRelationInput | psr_data_historicalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: psr_data_historicalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` psr_data_historicals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` psr_data_historicals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned psr_data_historicals
+    **/
+    _count?: true | Psr_data_historicalCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Psr_data_historicalAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Psr_data_historicalSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Psr_data_historicalMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Psr_data_historicalMaxAggregateInputType
+  }
+
+  export type GetPsr_data_historicalAggregateType<T extends Psr_data_historicalAggregateArgs> = {
+        [P in keyof T & keyof AggregatePsr_data_historical]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePsr_data_historical[P]>
+      : GetScalarType<T[P], AggregatePsr_data_historical[P]>
+  }
+
+
+
+
+  export type psr_data_historicalGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: psr_data_historicalWhereInput
+    orderBy?: psr_data_historicalOrderByWithAggregationInput | psr_data_historicalOrderByWithAggregationInput[]
+    by: Psr_data_historicalScalarFieldEnum[] | Psr_data_historicalScalarFieldEnum
+    having?: psr_data_historicalScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Psr_data_historicalCountAggregateInputType | true
+    _avg?: Psr_data_historicalAvgAggregateInputType
+    _sum?: Psr_data_historicalSumAggregateInputType
+    _min?: Psr_data_historicalMinAggregateInputType
+    _max?: Psr_data_historicalMaxAggregateInputType
+  }
+
+  export type Psr_data_historicalGroupByOutputType = {
+    psr_id: number
+    document_no: string
+    document_date: Date
+    subbrandform: string
+    customer_name: string
+    customer_code: string
+    p_code: number
+    customer_type: string
+    category: string
+    brand: string
+    brandform: string
+    retailing: Decimal
+    _count: Psr_data_historicalCountAggregateOutputType | null
+    _avg: Psr_data_historicalAvgAggregateOutputType | null
+    _sum: Psr_data_historicalSumAggregateOutputType | null
+    _min: Psr_data_historicalMinAggregateOutputType | null
+    _max: Psr_data_historicalMaxAggregateOutputType | null
+  }
+
+  type GetPsr_data_historicalGroupByPayload<T extends psr_data_historicalGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Psr_data_historicalGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Psr_data_historicalGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Psr_data_historicalGroupByOutputType[P]>
+            : GetScalarType<T[P], Psr_data_historicalGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type psr_data_historicalSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    psr_id?: boolean
+    document_no?: boolean
+    document_date?: boolean
+    subbrandform?: boolean
+    customer_name?: boolean
+    customer_code?: boolean
+    p_code?: boolean
+    customer_type?: boolean
+    category?: boolean
+    brand?: boolean
+    brandform?: boolean
+    retailing?: boolean
+  }, ExtArgs["result"]["psr_data_historical"]>
+
+
+
+  export type psr_data_historicalSelectScalar = {
+    psr_id?: boolean
+    document_no?: boolean
+    document_date?: boolean
+    subbrandform?: boolean
+    customer_name?: boolean
+    customer_code?: boolean
+    p_code?: boolean
+    customer_type?: boolean
+    category?: boolean
+    brand?: boolean
+    brandform?: boolean
+    retailing?: boolean
+  }
+
+  export type psr_data_historicalOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"psr_id" | "document_no" | "document_date" | "subbrandform" | "customer_name" | "customer_code" | "p_code" | "customer_type" | "category" | "brand" | "brandform" | "retailing", ExtArgs["result"]["psr_data_historical"]>
+
+  export type $psr_data_historicalPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "psr_data_historical"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      psr_id: number
+      document_no: string
+      document_date: Date
+      subbrandform: string
+      customer_name: string
+      customer_code: string
+      p_code: number
+      customer_type: string
+      category: string
+      brand: string
+      brandform: string
+      retailing: Prisma.Decimal
+    }, ExtArgs["result"]["psr_data_historical"]>
+    composites: {}
+  }
+
+  type psr_data_historicalGetPayload<S extends boolean | null | undefined | psr_data_historicalDefaultArgs> = $Result.GetResult<Prisma.$psr_data_historicalPayload, S>
+
+  type psr_data_historicalCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<psr_data_historicalFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Psr_data_historicalCountAggregateInputType | true
+    }
+
+  export interface psr_data_historicalDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['psr_data_historical'], meta: { name: 'psr_data_historical' } }
+    /**
+     * Find zero or one Psr_data_historical that matches the filter.
+     * @param {psr_data_historicalFindUniqueArgs} args - Arguments to find a Psr_data_historical
+     * @example
+     * // Get one Psr_data_historical
+     * const psr_data_historical = await prisma.psr_data_historical.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends psr_data_historicalFindUniqueArgs>(args: SelectSubset<T, psr_data_historicalFindUniqueArgs<ExtArgs>>): Prisma__psr_data_historicalClient<$Result.GetResult<Prisma.$psr_data_historicalPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Psr_data_historical that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {psr_data_historicalFindUniqueOrThrowArgs} args - Arguments to find a Psr_data_historical
+     * @example
+     * // Get one Psr_data_historical
+     * const psr_data_historical = await prisma.psr_data_historical.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends psr_data_historicalFindUniqueOrThrowArgs>(args: SelectSubset<T, psr_data_historicalFindUniqueOrThrowArgs<ExtArgs>>): Prisma__psr_data_historicalClient<$Result.GetResult<Prisma.$psr_data_historicalPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Psr_data_historical that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_data_historicalFindFirstArgs} args - Arguments to find a Psr_data_historical
+     * @example
+     * // Get one Psr_data_historical
+     * const psr_data_historical = await prisma.psr_data_historical.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends psr_data_historicalFindFirstArgs>(args?: SelectSubset<T, psr_data_historicalFindFirstArgs<ExtArgs>>): Prisma__psr_data_historicalClient<$Result.GetResult<Prisma.$psr_data_historicalPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Psr_data_historical that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_data_historicalFindFirstOrThrowArgs} args - Arguments to find a Psr_data_historical
+     * @example
+     * // Get one Psr_data_historical
+     * const psr_data_historical = await prisma.psr_data_historical.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends psr_data_historicalFindFirstOrThrowArgs>(args?: SelectSubset<T, psr_data_historicalFindFirstOrThrowArgs<ExtArgs>>): Prisma__psr_data_historicalClient<$Result.GetResult<Prisma.$psr_data_historicalPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Psr_data_historicals that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_data_historicalFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Psr_data_historicals
+     * const psr_data_historicals = await prisma.psr_data_historical.findMany()
+     * 
+     * // Get first 10 Psr_data_historicals
+     * const psr_data_historicals = await prisma.psr_data_historical.findMany({ take: 10 })
+     * 
+     * // Only select the `psr_id`
+     * const psr_data_historicalWithPsr_idOnly = await prisma.psr_data_historical.findMany({ select: { psr_id: true } })
+     * 
+     */
+    findMany<T extends psr_data_historicalFindManyArgs>(args?: SelectSubset<T, psr_data_historicalFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$psr_data_historicalPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Psr_data_historical.
+     * @param {psr_data_historicalCreateArgs} args - Arguments to create a Psr_data_historical.
+     * @example
+     * // Create one Psr_data_historical
+     * const Psr_data_historical = await prisma.psr_data_historical.create({
+     *   data: {
+     *     // ... data to create a Psr_data_historical
+     *   }
+     * })
+     * 
+     */
+    create<T extends psr_data_historicalCreateArgs>(args: SelectSubset<T, psr_data_historicalCreateArgs<ExtArgs>>): Prisma__psr_data_historicalClient<$Result.GetResult<Prisma.$psr_data_historicalPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Psr_data_historicals.
+     * @param {psr_data_historicalCreateManyArgs} args - Arguments to create many Psr_data_historicals.
+     * @example
+     * // Create many Psr_data_historicals
+     * const psr_data_historical = await prisma.psr_data_historical.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends psr_data_historicalCreateManyArgs>(args?: SelectSubset<T, psr_data_historicalCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Psr_data_historical.
+     * @param {psr_data_historicalDeleteArgs} args - Arguments to delete one Psr_data_historical.
+     * @example
+     * // Delete one Psr_data_historical
+     * const Psr_data_historical = await prisma.psr_data_historical.delete({
+     *   where: {
+     *     // ... filter to delete one Psr_data_historical
+     *   }
+     * })
+     * 
+     */
+    delete<T extends psr_data_historicalDeleteArgs>(args: SelectSubset<T, psr_data_historicalDeleteArgs<ExtArgs>>): Prisma__psr_data_historicalClient<$Result.GetResult<Prisma.$psr_data_historicalPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Psr_data_historical.
+     * @param {psr_data_historicalUpdateArgs} args - Arguments to update one Psr_data_historical.
+     * @example
+     * // Update one Psr_data_historical
+     * const psr_data_historical = await prisma.psr_data_historical.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends psr_data_historicalUpdateArgs>(args: SelectSubset<T, psr_data_historicalUpdateArgs<ExtArgs>>): Prisma__psr_data_historicalClient<$Result.GetResult<Prisma.$psr_data_historicalPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Psr_data_historicals.
+     * @param {psr_data_historicalDeleteManyArgs} args - Arguments to filter Psr_data_historicals to delete.
+     * @example
+     * // Delete a few Psr_data_historicals
+     * const { count } = await prisma.psr_data_historical.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends psr_data_historicalDeleteManyArgs>(args?: SelectSubset<T, psr_data_historicalDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Psr_data_historicals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_data_historicalUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Psr_data_historicals
+     * const psr_data_historical = await prisma.psr_data_historical.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends psr_data_historicalUpdateManyArgs>(args: SelectSubset<T, psr_data_historicalUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Psr_data_historical.
+     * @param {psr_data_historicalUpsertArgs} args - Arguments to update or create a Psr_data_historical.
+     * @example
+     * // Update or create a Psr_data_historical
+     * const psr_data_historical = await prisma.psr_data_historical.upsert({
+     *   create: {
+     *     // ... data to create a Psr_data_historical
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Psr_data_historical we want to update
+     *   }
+     * })
+     */
+    upsert<T extends psr_data_historicalUpsertArgs>(args: SelectSubset<T, psr_data_historicalUpsertArgs<ExtArgs>>): Prisma__psr_data_historicalClient<$Result.GetResult<Prisma.$psr_data_historicalPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Psr_data_historicals.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_data_historicalCountArgs} args - Arguments to filter Psr_data_historicals to count.
+     * @example
+     * // Count the number of Psr_data_historicals
+     * const count = await prisma.psr_data_historical.count({
+     *   where: {
+     *     // ... the filter for the Psr_data_historicals we want to count
+     *   }
+     * })
+    **/
+    count<T extends psr_data_historicalCountArgs>(
+      args?: Subset<T, psr_data_historicalCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Psr_data_historicalCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Psr_data_historical.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Psr_data_historicalAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Psr_data_historicalAggregateArgs>(args: Subset<T, Psr_data_historicalAggregateArgs>): Prisma.PrismaPromise<GetPsr_data_historicalAggregateType<T>>
+
+    /**
+     * Group by Psr_data_historical.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_data_historicalGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends psr_data_historicalGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: psr_data_historicalGroupByArgs['orderBy'] }
+        : { orderBy?: psr_data_historicalGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, psr_data_historicalGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPsr_data_historicalGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the psr_data_historical model
+   */
+  readonly fields: psr_data_historicalFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for psr_data_historical.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__psr_data_historicalClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the psr_data_historical model
+   */
+  interface psr_data_historicalFieldRefs {
+    readonly psr_id: FieldRef<"psr_data_historical", 'Int'>
+    readonly document_no: FieldRef<"psr_data_historical", 'String'>
+    readonly document_date: FieldRef<"psr_data_historical", 'DateTime'>
+    readonly subbrandform: FieldRef<"psr_data_historical", 'String'>
+    readonly customer_name: FieldRef<"psr_data_historical", 'String'>
+    readonly customer_code: FieldRef<"psr_data_historical", 'String'>
+    readonly p_code: FieldRef<"psr_data_historical", 'Int'>
+    readonly customer_type: FieldRef<"psr_data_historical", 'String'>
+    readonly category: FieldRef<"psr_data_historical", 'String'>
+    readonly brand: FieldRef<"psr_data_historical", 'String'>
+    readonly brandform: FieldRef<"psr_data_historical", 'String'>
+    readonly retailing: FieldRef<"psr_data_historical", 'Decimal'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * psr_data_historical findUnique
+   */
+  export type psr_data_historicalFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_historical
+     */
+    select?: psr_data_historicalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_historical
+     */
+    omit?: psr_data_historicalOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_data_historical to fetch.
+     */
+    where: psr_data_historicalWhereUniqueInput
+  }
+
+  /**
+   * psr_data_historical findUniqueOrThrow
+   */
+  export type psr_data_historicalFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_historical
+     */
+    select?: psr_data_historicalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_historical
+     */
+    omit?: psr_data_historicalOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_data_historical to fetch.
+     */
+    where: psr_data_historicalWhereUniqueInput
+  }
+
+  /**
+   * psr_data_historical findFirst
+   */
+  export type psr_data_historicalFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_historical
+     */
+    select?: psr_data_historicalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_historical
+     */
+    omit?: psr_data_historicalOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_data_historical to fetch.
+     */
+    where?: psr_data_historicalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of psr_data_historicals to fetch.
+     */
+    orderBy?: psr_data_historicalOrderByWithRelationInput | psr_data_historicalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for psr_data_historicals.
+     */
+    cursor?: psr_data_historicalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` psr_data_historicals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` psr_data_historicals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of psr_data_historicals.
+     */
+    distinct?: Psr_data_historicalScalarFieldEnum | Psr_data_historicalScalarFieldEnum[]
+  }
+
+  /**
+   * psr_data_historical findFirstOrThrow
+   */
+  export type psr_data_historicalFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_historical
+     */
+    select?: psr_data_historicalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_historical
+     */
+    omit?: psr_data_historicalOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_data_historical to fetch.
+     */
+    where?: psr_data_historicalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of psr_data_historicals to fetch.
+     */
+    orderBy?: psr_data_historicalOrderByWithRelationInput | psr_data_historicalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for psr_data_historicals.
+     */
+    cursor?: psr_data_historicalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` psr_data_historicals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` psr_data_historicals.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of psr_data_historicals.
+     */
+    distinct?: Psr_data_historicalScalarFieldEnum | Psr_data_historicalScalarFieldEnum[]
+  }
+
+  /**
+   * psr_data_historical findMany
+   */
+  export type psr_data_historicalFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_historical
+     */
+    select?: psr_data_historicalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_historical
+     */
+    omit?: psr_data_historicalOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_data_historicals to fetch.
+     */
+    where?: psr_data_historicalWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of psr_data_historicals to fetch.
+     */
+    orderBy?: psr_data_historicalOrderByWithRelationInput | psr_data_historicalOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing psr_data_historicals.
+     */
+    cursor?: psr_data_historicalWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` psr_data_historicals from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` psr_data_historicals.
+     */
+    skip?: number
+    distinct?: Psr_data_historicalScalarFieldEnum | Psr_data_historicalScalarFieldEnum[]
+  }
+
+  /**
+   * psr_data_historical create
+   */
+  export type psr_data_historicalCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_historical
+     */
+    select?: psr_data_historicalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_historical
+     */
+    omit?: psr_data_historicalOmit<ExtArgs> | null
+    /**
+     * The data needed to create a psr_data_historical.
+     */
+    data: XOR<psr_data_historicalCreateInput, psr_data_historicalUncheckedCreateInput>
+  }
+
+  /**
+   * psr_data_historical createMany
+   */
+  export type psr_data_historicalCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many psr_data_historicals.
+     */
+    data: psr_data_historicalCreateManyInput | psr_data_historicalCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * psr_data_historical update
+   */
+  export type psr_data_historicalUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_historical
+     */
+    select?: psr_data_historicalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_historical
+     */
+    omit?: psr_data_historicalOmit<ExtArgs> | null
+    /**
+     * The data needed to update a psr_data_historical.
+     */
+    data: XOR<psr_data_historicalUpdateInput, psr_data_historicalUncheckedUpdateInput>
+    /**
+     * Choose, which psr_data_historical to update.
+     */
+    where: psr_data_historicalWhereUniqueInput
+  }
+
+  /**
+   * psr_data_historical updateMany
+   */
+  export type psr_data_historicalUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update psr_data_historicals.
+     */
+    data: XOR<psr_data_historicalUpdateManyMutationInput, psr_data_historicalUncheckedUpdateManyInput>
+    /**
+     * Filter which psr_data_historicals to update
+     */
+    where?: psr_data_historicalWhereInput
+    /**
+     * Limit how many psr_data_historicals to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * psr_data_historical upsert
+   */
+  export type psr_data_historicalUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_historical
+     */
+    select?: psr_data_historicalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_historical
+     */
+    omit?: psr_data_historicalOmit<ExtArgs> | null
+    /**
+     * The filter to search for the psr_data_historical to update in case it exists.
+     */
+    where: psr_data_historicalWhereUniqueInput
+    /**
+     * In case the psr_data_historical found by the `where` argument doesn't exist, create a new psr_data_historical with this data.
+     */
+    create: XOR<psr_data_historicalCreateInput, psr_data_historicalUncheckedCreateInput>
+    /**
+     * In case the psr_data_historical was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<psr_data_historicalUpdateInput, psr_data_historicalUncheckedUpdateInput>
+  }
+
+  /**
+   * psr_data_historical delete
+   */
+  export type psr_data_historicalDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_historical
+     */
+    select?: psr_data_historicalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_historical
+     */
+    omit?: psr_data_historicalOmit<ExtArgs> | null
+    /**
+     * Filter which psr_data_historical to delete.
+     */
+    where: psr_data_historicalWhereUniqueInput
+  }
+
+  /**
+   * psr_data_historical deleteMany
+   */
+  export type psr_data_historicalDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which psr_data_historicals to delete
+     */
+    where?: psr_data_historicalWhereInput
+    /**
+     * Limit how many psr_data_historicals to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * psr_data_historical without action
+   */
+  export type psr_data_historicalDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_historical
+     */
+    select?: psr_data_historicalSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_historical
+     */
+    omit?: psr_data_historicalOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model psr_finalized_temp
+   */
+
+  export type AggregatePsr_finalized_temp = {
+    _count: Psr_finalized_tempCountAggregateOutputType | null
+    _avg: Psr_finalized_tempAvgAggregateOutputType | null
+    _sum: Psr_finalized_tempSumAggregateOutputType | null
+    _min: Psr_finalized_tempMinAggregateOutputType | null
+    _max: Psr_finalized_tempMaxAggregateOutputType | null
+  }
+
+  export type Psr_finalized_tempAvgAggregateOutputType = {
+    id: number | null
+    retailing: Decimal | null
+  }
+
+  export type Psr_finalized_tempSumAggregateOutputType = {
+    id: number | null
+    retailing: Decimal | null
+  }
+
+  export type Psr_finalized_tempMinAggregateOutputType = {
+    id: number | null
+    document_date: Date | null
+    customer_code: string | null
+    branch: string | null
+    ZM: string | null
+    RSM: string | null
+    ASM: string | null
+    TSI: string | null
+    category: string | null
+    brand: string | null
+    brandform: string | null
+    subbrandform: string | null
+    base_channel: string | null
+    short_channel: string | null
+    channel_desc: string | null
+    retailing: Decimal | null
+  }
+
+  export type Psr_finalized_tempMaxAggregateOutputType = {
+    id: number | null
+    document_date: Date | null
+    customer_code: string | null
+    branch: string | null
+    ZM: string | null
+    RSM: string | null
+    ASM: string | null
+    TSI: string | null
+    category: string | null
+    brand: string | null
+    brandform: string | null
+    subbrandform: string | null
+    base_channel: string | null
+    short_channel: string | null
+    channel_desc: string | null
+    retailing: Decimal | null
+  }
+
+  export type Psr_finalized_tempCountAggregateOutputType = {
+    id: number
+    document_date: number
+    customer_code: number
+    branch: number
+    ZM: number
+    RSM: number
+    ASM: number
+    TSI: number
+    category: number
+    brand: number
+    brandform: number
+    subbrandform: number
+    base_channel: number
+    short_channel: number
+    channel_desc: number
+    retailing: number
+    _all: number
+  }
+
+
+  export type Psr_finalized_tempAvgAggregateInputType = {
+    id?: true
+    retailing?: true
+  }
+
+  export type Psr_finalized_tempSumAggregateInputType = {
+    id?: true
+    retailing?: true
+  }
+
+  export type Psr_finalized_tempMinAggregateInputType = {
+    id?: true
+    document_date?: true
+    customer_code?: true
+    branch?: true
+    ZM?: true
+    RSM?: true
+    ASM?: true
+    TSI?: true
+    category?: true
+    brand?: true
+    brandform?: true
+    subbrandform?: true
+    base_channel?: true
+    short_channel?: true
+    channel_desc?: true
+    retailing?: true
+  }
+
+  export type Psr_finalized_tempMaxAggregateInputType = {
+    id?: true
+    document_date?: true
+    customer_code?: true
+    branch?: true
+    ZM?: true
+    RSM?: true
+    ASM?: true
+    TSI?: true
+    category?: true
+    brand?: true
+    brandform?: true
+    subbrandform?: true
+    base_channel?: true
+    short_channel?: true
+    channel_desc?: true
+    retailing?: true
+  }
+
+  export type Psr_finalized_tempCountAggregateInputType = {
+    id?: true
+    document_date?: true
+    customer_code?: true
+    branch?: true
+    ZM?: true
+    RSM?: true
+    ASM?: true
+    TSI?: true
+    category?: true
+    brand?: true
+    brandform?: true
+    subbrandform?: true
+    base_channel?: true
+    short_channel?: true
+    channel_desc?: true
+    retailing?: true
+    _all?: true
+  }
+
+  export type Psr_finalized_tempAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which psr_finalized_temp to aggregate.
+     */
+    where?: psr_finalized_tempWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of psr_finalized_temps to fetch.
+     */
+    orderBy?: psr_finalized_tempOrderByWithRelationInput | psr_finalized_tempOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: psr_finalized_tempWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` psr_finalized_temps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` psr_finalized_temps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned psr_finalized_temps
+    **/
+    _count?: true | Psr_finalized_tempCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Psr_finalized_tempAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Psr_finalized_tempSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Psr_finalized_tempMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Psr_finalized_tempMaxAggregateInputType
+  }
+
+  export type GetPsr_finalized_tempAggregateType<T extends Psr_finalized_tempAggregateArgs> = {
+        [P in keyof T & keyof AggregatePsr_finalized_temp]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePsr_finalized_temp[P]>
+      : GetScalarType<T[P], AggregatePsr_finalized_temp[P]>
+  }
+
+
+
+
+  export type psr_finalized_tempGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: psr_finalized_tempWhereInput
+    orderBy?: psr_finalized_tempOrderByWithAggregationInput | psr_finalized_tempOrderByWithAggregationInput[]
+    by: Psr_finalized_tempScalarFieldEnum[] | Psr_finalized_tempScalarFieldEnum
+    having?: psr_finalized_tempScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Psr_finalized_tempCountAggregateInputType | true
+    _avg?: Psr_finalized_tempAvgAggregateInputType
+    _sum?: Psr_finalized_tempSumAggregateInputType
+    _min?: Psr_finalized_tempMinAggregateInputType
+    _max?: Psr_finalized_tempMaxAggregateInputType
+  }
+
+  export type Psr_finalized_tempGroupByOutputType = {
+    id: number
+    document_date: Date
+    customer_code: string
+    branch: string | null
+    ZM: string | null
+    RSM: string | null
+    ASM: string | null
+    TSI: string | null
+    category: string | null
+    brand: string | null
+    brandform: string | null
+    subbrandform: string | null
+    base_channel: string | null
+    short_channel: string | null
+    channel_desc: string | null
+    retailing: Decimal
+    _count: Psr_finalized_tempCountAggregateOutputType | null
+    _avg: Psr_finalized_tempAvgAggregateOutputType | null
+    _sum: Psr_finalized_tempSumAggregateOutputType | null
+    _min: Psr_finalized_tempMinAggregateOutputType | null
+    _max: Psr_finalized_tempMaxAggregateOutputType | null
+  }
+
+  type GetPsr_finalized_tempGroupByPayload<T extends psr_finalized_tempGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Psr_finalized_tempGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Psr_finalized_tempGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Psr_finalized_tempGroupByOutputType[P]>
+            : GetScalarType<T[P], Psr_finalized_tempGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type psr_finalized_tempSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    document_date?: boolean
+    customer_code?: boolean
+    branch?: boolean
+    ZM?: boolean
+    RSM?: boolean
+    ASM?: boolean
+    TSI?: boolean
+    category?: boolean
+    brand?: boolean
+    brandform?: boolean
+    subbrandform?: boolean
+    base_channel?: boolean
+    short_channel?: boolean
+    channel_desc?: boolean
+    retailing?: boolean
+  }, ExtArgs["result"]["psr_finalized_temp"]>
+
+
+
+  export type psr_finalized_tempSelectScalar = {
+    id?: boolean
+    document_date?: boolean
+    customer_code?: boolean
+    branch?: boolean
+    ZM?: boolean
+    RSM?: boolean
+    ASM?: boolean
+    TSI?: boolean
+    category?: boolean
+    brand?: boolean
+    brandform?: boolean
+    subbrandform?: boolean
+    base_channel?: boolean
+    short_channel?: boolean
+    channel_desc?: boolean
+    retailing?: boolean
+  }
+
+  export type psr_finalized_tempOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "document_date" | "customer_code" | "branch" | "ZM" | "RSM" | "ASM" | "TSI" | "category" | "brand" | "brandform" | "subbrandform" | "base_channel" | "short_channel" | "channel_desc" | "retailing", ExtArgs["result"]["psr_finalized_temp"]>
+
+  export type $psr_finalized_tempPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "psr_finalized_temp"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      document_date: Date
+      customer_code: string
+      branch: string | null
+      ZM: string | null
+      RSM: string | null
+      ASM: string | null
+      TSI: string | null
+      category: string | null
+      brand: string | null
+      brandform: string | null
+      subbrandform: string | null
+      base_channel: string | null
+      short_channel: string | null
+      channel_desc: string | null
+      retailing: Prisma.Decimal
+    }, ExtArgs["result"]["psr_finalized_temp"]>
+    composites: {}
+  }
+
+  type psr_finalized_tempGetPayload<S extends boolean | null | undefined | psr_finalized_tempDefaultArgs> = $Result.GetResult<Prisma.$psr_finalized_tempPayload, S>
+
+  type psr_finalized_tempCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<psr_finalized_tempFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Psr_finalized_tempCountAggregateInputType | true
+    }
+
+  export interface psr_finalized_tempDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['psr_finalized_temp'], meta: { name: 'psr_finalized_temp' } }
+    /**
+     * Find zero or one Psr_finalized_temp that matches the filter.
+     * @param {psr_finalized_tempFindUniqueArgs} args - Arguments to find a Psr_finalized_temp
+     * @example
+     * // Get one Psr_finalized_temp
+     * const psr_finalized_temp = await prisma.psr_finalized_temp.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends psr_finalized_tempFindUniqueArgs>(args: SelectSubset<T, psr_finalized_tempFindUniqueArgs<ExtArgs>>): Prisma__psr_finalized_tempClient<$Result.GetResult<Prisma.$psr_finalized_tempPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Psr_finalized_temp that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {psr_finalized_tempFindUniqueOrThrowArgs} args - Arguments to find a Psr_finalized_temp
+     * @example
+     * // Get one Psr_finalized_temp
+     * const psr_finalized_temp = await prisma.psr_finalized_temp.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends psr_finalized_tempFindUniqueOrThrowArgs>(args: SelectSubset<T, psr_finalized_tempFindUniqueOrThrowArgs<ExtArgs>>): Prisma__psr_finalized_tempClient<$Result.GetResult<Prisma.$psr_finalized_tempPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Psr_finalized_temp that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_finalized_tempFindFirstArgs} args - Arguments to find a Psr_finalized_temp
+     * @example
+     * // Get one Psr_finalized_temp
+     * const psr_finalized_temp = await prisma.psr_finalized_temp.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends psr_finalized_tempFindFirstArgs>(args?: SelectSubset<T, psr_finalized_tempFindFirstArgs<ExtArgs>>): Prisma__psr_finalized_tempClient<$Result.GetResult<Prisma.$psr_finalized_tempPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Psr_finalized_temp that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_finalized_tempFindFirstOrThrowArgs} args - Arguments to find a Psr_finalized_temp
+     * @example
+     * // Get one Psr_finalized_temp
+     * const psr_finalized_temp = await prisma.psr_finalized_temp.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends psr_finalized_tempFindFirstOrThrowArgs>(args?: SelectSubset<T, psr_finalized_tempFindFirstOrThrowArgs<ExtArgs>>): Prisma__psr_finalized_tempClient<$Result.GetResult<Prisma.$psr_finalized_tempPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Psr_finalized_temps that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_finalized_tempFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Psr_finalized_temps
+     * const psr_finalized_temps = await prisma.psr_finalized_temp.findMany()
+     * 
+     * // Get first 10 Psr_finalized_temps
+     * const psr_finalized_temps = await prisma.psr_finalized_temp.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const psr_finalized_tempWithIdOnly = await prisma.psr_finalized_temp.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends psr_finalized_tempFindManyArgs>(args?: SelectSubset<T, psr_finalized_tempFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$psr_finalized_tempPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Psr_finalized_temp.
+     * @param {psr_finalized_tempCreateArgs} args - Arguments to create a Psr_finalized_temp.
+     * @example
+     * // Create one Psr_finalized_temp
+     * const Psr_finalized_temp = await prisma.psr_finalized_temp.create({
+     *   data: {
+     *     // ... data to create a Psr_finalized_temp
+     *   }
+     * })
+     * 
+     */
+    create<T extends psr_finalized_tempCreateArgs>(args: SelectSubset<T, psr_finalized_tempCreateArgs<ExtArgs>>): Prisma__psr_finalized_tempClient<$Result.GetResult<Prisma.$psr_finalized_tempPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Psr_finalized_temps.
+     * @param {psr_finalized_tempCreateManyArgs} args - Arguments to create many Psr_finalized_temps.
+     * @example
+     * // Create many Psr_finalized_temps
+     * const psr_finalized_temp = await prisma.psr_finalized_temp.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends psr_finalized_tempCreateManyArgs>(args?: SelectSubset<T, psr_finalized_tempCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Psr_finalized_temp.
+     * @param {psr_finalized_tempDeleteArgs} args - Arguments to delete one Psr_finalized_temp.
+     * @example
+     * // Delete one Psr_finalized_temp
+     * const Psr_finalized_temp = await prisma.psr_finalized_temp.delete({
+     *   where: {
+     *     // ... filter to delete one Psr_finalized_temp
+     *   }
+     * })
+     * 
+     */
+    delete<T extends psr_finalized_tempDeleteArgs>(args: SelectSubset<T, psr_finalized_tempDeleteArgs<ExtArgs>>): Prisma__psr_finalized_tempClient<$Result.GetResult<Prisma.$psr_finalized_tempPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Psr_finalized_temp.
+     * @param {psr_finalized_tempUpdateArgs} args - Arguments to update one Psr_finalized_temp.
+     * @example
+     * // Update one Psr_finalized_temp
+     * const psr_finalized_temp = await prisma.psr_finalized_temp.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends psr_finalized_tempUpdateArgs>(args: SelectSubset<T, psr_finalized_tempUpdateArgs<ExtArgs>>): Prisma__psr_finalized_tempClient<$Result.GetResult<Prisma.$psr_finalized_tempPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Psr_finalized_temps.
+     * @param {psr_finalized_tempDeleteManyArgs} args - Arguments to filter Psr_finalized_temps to delete.
+     * @example
+     * // Delete a few Psr_finalized_temps
+     * const { count } = await prisma.psr_finalized_temp.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends psr_finalized_tempDeleteManyArgs>(args?: SelectSubset<T, psr_finalized_tempDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Psr_finalized_temps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_finalized_tempUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Psr_finalized_temps
+     * const psr_finalized_temp = await prisma.psr_finalized_temp.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends psr_finalized_tempUpdateManyArgs>(args: SelectSubset<T, psr_finalized_tempUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Psr_finalized_temp.
+     * @param {psr_finalized_tempUpsertArgs} args - Arguments to update or create a Psr_finalized_temp.
+     * @example
+     * // Update or create a Psr_finalized_temp
+     * const psr_finalized_temp = await prisma.psr_finalized_temp.upsert({
+     *   create: {
+     *     // ... data to create a Psr_finalized_temp
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Psr_finalized_temp we want to update
+     *   }
+     * })
+     */
+    upsert<T extends psr_finalized_tempUpsertArgs>(args: SelectSubset<T, psr_finalized_tempUpsertArgs<ExtArgs>>): Prisma__psr_finalized_tempClient<$Result.GetResult<Prisma.$psr_finalized_tempPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Psr_finalized_temps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_finalized_tempCountArgs} args - Arguments to filter Psr_finalized_temps to count.
+     * @example
+     * // Count the number of Psr_finalized_temps
+     * const count = await prisma.psr_finalized_temp.count({
+     *   where: {
+     *     // ... the filter for the Psr_finalized_temps we want to count
+     *   }
+     * })
+    **/
+    count<T extends psr_finalized_tempCountArgs>(
+      args?: Subset<T, psr_finalized_tempCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Psr_finalized_tempCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Psr_finalized_temp.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Psr_finalized_tempAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Psr_finalized_tempAggregateArgs>(args: Subset<T, Psr_finalized_tempAggregateArgs>): Prisma.PrismaPromise<GetPsr_finalized_tempAggregateType<T>>
+
+    /**
+     * Group by Psr_finalized_temp.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_finalized_tempGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends psr_finalized_tempGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: psr_finalized_tempGroupByArgs['orderBy'] }
+        : { orderBy?: psr_finalized_tempGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, psr_finalized_tempGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPsr_finalized_tempGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the psr_finalized_temp model
+   */
+  readonly fields: psr_finalized_tempFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for psr_finalized_temp.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__psr_finalized_tempClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the psr_finalized_temp model
+   */
+  interface psr_finalized_tempFieldRefs {
+    readonly id: FieldRef<"psr_finalized_temp", 'Int'>
+    readonly document_date: FieldRef<"psr_finalized_temp", 'DateTime'>
+    readonly customer_code: FieldRef<"psr_finalized_temp", 'String'>
+    readonly branch: FieldRef<"psr_finalized_temp", 'String'>
+    readonly ZM: FieldRef<"psr_finalized_temp", 'String'>
+    readonly RSM: FieldRef<"psr_finalized_temp", 'String'>
+    readonly ASM: FieldRef<"psr_finalized_temp", 'String'>
+    readonly TSI: FieldRef<"psr_finalized_temp", 'String'>
+    readonly category: FieldRef<"psr_finalized_temp", 'String'>
+    readonly brand: FieldRef<"psr_finalized_temp", 'String'>
+    readonly brandform: FieldRef<"psr_finalized_temp", 'String'>
+    readonly subbrandform: FieldRef<"psr_finalized_temp", 'String'>
+    readonly base_channel: FieldRef<"psr_finalized_temp", 'String'>
+    readonly short_channel: FieldRef<"psr_finalized_temp", 'String'>
+    readonly channel_desc: FieldRef<"psr_finalized_temp", 'String'>
+    readonly retailing: FieldRef<"psr_finalized_temp", 'Decimal'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * psr_finalized_temp findUnique
+   */
+  export type psr_finalized_tempFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_finalized_temp
+     */
+    select?: psr_finalized_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_finalized_temp
+     */
+    omit?: psr_finalized_tempOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_finalized_temp to fetch.
+     */
+    where: psr_finalized_tempWhereUniqueInput
+  }
+
+  /**
+   * psr_finalized_temp findUniqueOrThrow
+   */
+  export type psr_finalized_tempFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_finalized_temp
+     */
+    select?: psr_finalized_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_finalized_temp
+     */
+    omit?: psr_finalized_tempOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_finalized_temp to fetch.
+     */
+    where: psr_finalized_tempWhereUniqueInput
+  }
+
+  /**
+   * psr_finalized_temp findFirst
+   */
+  export type psr_finalized_tempFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_finalized_temp
+     */
+    select?: psr_finalized_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_finalized_temp
+     */
+    omit?: psr_finalized_tempOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_finalized_temp to fetch.
+     */
+    where?: psr_finalized_tempWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of psr_finalized_temps to fetch.
+     */
+    orderBy?: psr_finalized_tempOrderByWithRelationInput | psr_finalized_tempOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for psr_finalized_temps.
+     */
+    cursor?: psr_finalized_tempWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` psr_finalized_temps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` psr_finalized_temps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of psr_finalized_temps.
+     */
+    distinct?: Psr_finalized_tempScalarFieldEnum | Psr_finalized_tempScalarFieldEnum[]
+  }
+
+  /**
+   * psr_finalized_temp findFirstOrThrow
+   */
+  export type psr_finalized_tempFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_finalized_temp
+     */
+    select?: psr_finalized_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_finalized_temp
+     */
+    omit?: psr_finalized_tempOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_finalized_temp to fetch.
+     */
+    where?: psr_finalized_tempWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of psr_finalized_temps to fetch.
+     */
+    orderBy?: psr_finalized_tempOrderByWithRelationInput | psr_finalized_tempOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for psr_finalized_temps.
+     */
+    cursor?: psr_finalized_tempWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` psr_finalized_temps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` psr_finalized_temps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of psr_finalized_temps.
+     */
+    distinct?: Psr_finalized_tempScalarFieldEnum | Psr_finalized_tempScalarFieldEnum[]
+  }
+
+  /**
+   * psr_finalized_temp findMany
+   */
+  export type psr_finalized_tempFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_finalized_temp
+     */
+    select?: psr_finalized_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_finalized_temp
+     */
+    omit?: psr_finalized_tempOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_finalized_temps to fetch.
+     */
+    where?: psr_finalized_tempWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of psr_finalized_temps to fetch.
+     */
+    orderBy?: psr_finalized_tempOrderByWithRelationInput | psr_finalized_tempOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing psr_finalized_temps.
+     */
+    cursor?: psr_finalized_tempWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` psr_finalized_temps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` psr_finalized_temps.
+     */
+    skip?: number
+    distinct?: Psr_finalized_tempScalarFieldEnum | Psr_finalized_tempScalarFieldEnum[]
+  }
+
+  /**
+   * psr_finalized_temp create
+   */
+  export type psr_finalized_tempCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_finalized_temp
+     */
+    select?: psr_finalized_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_finalized_temp
+     */
+    omit?: psr_finalized_tempOmit<ExtArgs> | null
+    /**
+     * The data needed to create a psr_finalized_temp.
+     */
+    data: XOR<psr_finalized_tempCreateInput, psr_finalized_tempUncheckedCreateInput>
+  }
+
+  /**
+   * psr_finalized_temp createMany
+   */
+  export type psr_finalized_tempCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many psr_finalized_temps.
+     */
+    data: psr_finalized_tempCreateManyInput | psr_finalized_tempCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * psr_finalized_temp update
+   */
+  export type psr_finalized_tempUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_finalized_temp
+     */
+    select?: psr_finalized_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_finalized_temp
+     */
+    omit?: psr_finalized_tempOmit<ExtArgs> | null
+    /**
+     * The data needed to update a psr_finalized_temp.
+     */
+    data: XOR<psr_finalized_tempUpdateInput, psr_finalized_tempUncheckedUpdateInput>
+    /**
+     * Choose, which psr_finalized_temp to update.
+     */
+    where: psr_finalized_tempWhereUniqueInput
+  }
+
+  /**
+   * psr_finalized_temp updateMany
+   */
+  export type psr_finalized_tempUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update psr_finalized_temps.
+     */
+    data: XOR<psr_finalized_tempUpdateManyMutationInput, psr_finalized_tempUncheckedUpdateManyInput>
+    /**
+     * Filter which psr_finalized_temps to update
+     */
+    where?: psr_finalized_tempWhereInput
+    /**
+     * Limit how many psr_finalized_temps to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * psr_finalized_temp upsert
+   */
+  export type psr_finalized_tempUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_finalized_temp
+     */
+    select?: psr_finalized_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_finalized_temp
+     */
+    omit?: psr_finalized_tempOmit<ExtArgs> | null
+    /**
+     * The filter to search for the psr_finalized_temp to update in case it exists.
+     */
+    where: psr_finalized_tempWhereUniqueInput
+    /**
+     * In case the psr_finalized_temp found by the `where` argument doesn't exist, create a new psr_finalized_temp with this data.
+     */
+    create: XOR<psr_finalized_tempCreateInput, psr_finalized_tempUncheckedCreateInput>
+    /**
+     * In case the psr_finalized_temp was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<psr_finalized_tempUpdateInput, psr_finalized_tempUncheckedUpdateInput>
+  }
+
+  /**
+   * psr_finalized_temp delete
+   */
+  export type psr_finalized_tempDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_finalized_temp
+     */
+    select?: psr_finalized_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_finalized_temp
+     */
+    omit?: psr_finalized_tempOmit<ExtArgs> | null
+    /**
+     * Filter which psr_finalized_temp to delete.
+     */
+    where: psr_finalized_tempWhereUniqueInput
+  }
+
+  /**
+   * psr_finalized_temp deleteMany
+   */
+  export type psr_finalized_tempDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which psr_finalized_temps to delete
+     */
+    where?: psr_finalized_tempWhereInput
+    /**
+     * Limit how many psr_finalized_temps to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * psr_finalized_temp without action
+   */
+  export type psr_finalized_tempDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_finalized_temp
+     */
+    select?: psr_finalized_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_finalized_temp
+     */
+    omit?: psr_finalized_tempOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model psr_data_finalized
+   */
+
+  export type AggregatePsr_data_finalized = {
+    _count: Psr_data_finalizedCountAggregateOutputType | null
+    _avg: Psr_data_finalizedAvgAggregateOutputType | null
+    _sum: Psr_data_finalizedSumAggregateOutputType | null
+    _min: Psr_data_finalizedMinAggregateOutputType | null
+    _max: Psr_data_finalizedMaxAggregateOutputType | null
+  }
+
+  export type Psr_data_finalizedAvgAggregateOutputType = {
+    id: number | null
+    retailing: Decimal | null
+  }
+
+  export type Psr_data_finalizedSumAggregateOutputType = {
+    id: number | null
+    retailing: Decimal | null
+  }
+
+  export type Psr_data_finalizedMinAggregateOutputType = {
+    id: number | null
+    document_date: Date | null
+    customer_code: string | null
+    branch: string | null
+    ZM: string | null
+    RSM: string | null
+    ASM: string | null
+    TSI: string | null
+    category: string | null
+    brand: string | null
+    brandform: string | null
+    subbrandform: string | null
+    base_channel: string | null
+    short_channel: string | null
+    channel_desc: string | null
+    retailing: Decimal | null
+  }
+
+  export type Psr_data_finalizedMaxAggregateOutputType = {
+    id: number | null
+    document_date: Date | null
+    customer_code: string | null
+    branch: string | null
+    ZM: string | null
+    RSM: string | null
+    ASM: string | null
+    TSI: string | null
+    category: string | null
+    brand: string | null
+    brandform: string | null
+    subbrandform: string | null
+    base_channel: string | null
+    short_channel: string | null
+    channel_desc: string | null
+    retailing: Decimal | null
+  }
+
+  export type Psr_data_finalizedCountAggregateOutputType = {
+    id: number
+    document_date: number
+    customer_code: number
+    branch: number
+    ZM: number
+    RSM: number
+    ASM: number
+    TSI: number
+    category: number
+    brand: number
+    brandform: number
+    subbrandform: number
+    base_channel: number
+    short_channel: number
+    channel_desc: number
+    retailing: number
+    _all: number
+  }
+
+
+  export type Psr_data_finalizedAvgAggregateInputType = {
+    id?: true
+    retailing?: true
+  }
+
+  export type Psr_data_finalizedSumAggregateInputType = {
+    id?: true
+    retailing?: true
+  }
+
+  export type Psr_data_finalizedMinAggregateInputType = {
+    id?: true
+    document_date?: true
+    customer_code?: true
+    branch?: true
+    ZM?: true
+    RSM?: true
+    ASM?: true
+    TSI?: true
+    category?: true
+    brand?: true
+    brandform?: true
+    subbrandform?: true
+    base_channel?: true
+    short_channel?: true
+    channel_desc?: true
+    retailing?: true
+  }
+
+  export type Psr_data_finalizedMaxAggregateInputType = {
+    id?: true
+    document_date?: true
+    customer_code?: true
+    branch?: true
+    ZM?: true
+    RSM?: true
+    ASM?: true
+    TSI?: true
+    category?: true
+    brand?: true
+    brandform?: true
+    subbrandform?: true
+    base_channel?: true
+    short_channel?: true
+    channel_desc?: true
+    retailing?: true
+  }
+
+  export type Psr_data_finalizedCountAggregateInputType = {
+    id?: true
+    document_date?: true
+    customer_code?: true
+    branch?: true
+    ZM?: true
+    RSM?: true
+    ASM?: true
+    TSI?: true
+    category?: true
+    brand?: true
+    brandform?: true
+    subbrandform?: true
+    base_channel?: true
+    short_channel?: true
+    channel_desc?: true
+    retailing?: true
+    _all?: true
+  }
+
+  export type Psr_data_finalizedAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which psr_data_finalized to aggregate.
+     */
+    where?: psr_data_finalizedWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of psr_data_finalizeds to fetch.
+     */
+    orderBy?: psr_data_finalizedOrderByWithRelationInput | psr_data_finalizedOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: psr_data_finalizedWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` psr_data_finalizeds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` psr_data_finalizeds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned psr_data_finalizeds
+    **/
+    _count?: true | Psr_data_finalizedCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Psr_data_finalizedAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Psr_data_finalizedSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Psr_data_finalizedMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Psr_data_finalizedMaxAggregateInputType
+  }
+
+  export type GetPsr_data_finalizedAggregateType<T extends Psr_data_finalizedAggregateArgs> = {
+        [P in keyof T & keyof AggregatePsr_data_finalized]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePsr_data_finalized[P]>
+      : GetScalarType<T[P], AggregatePsr_data_finalized[P]>
+  }
+
+
+
+
+  export type psr_data_finalizedGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: psr_data_finalizedWhereInput
+    orderBy?: psr_data_finalizedOrderByWithAggregationInput | psr_data_finalizedOrderByWithAggregationInput[]
+    by: Psr_data_finalizedScalarFieldEnum[] | Psr_data_finalizedScalarFieldEnum
+    having?: psr_data_finalizedScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Psr_data_finalizedCountAggregateInputType | true
+    _avg?: Psr_data_finalizedAvgAggregateInputType
+    _sum?: Psr_data_finalizedSumAggregateInputType
+    _min?: Psr_data_finalizedMinAggregateInputType
+    _max?: Psr_data_finalizedMaxAggregateInputType
+  }
+
+  export type Psr_data_finalizedGroupByOutputType = {
+    id: number
+    document_date: Date
+    customer_code: string
+    branch: string | null
+    ZM: string | null
+    RSM: string | null
+    ASM: string | null
+    TSI: string | null
+    category: string | null
+    brand: string | null
+    brandform: string | null
+    subbrandform: string | null
+    base_channel: string | null
+    short_channel: string | null
+    channel_desc: string | null
+    retailing: Decimal
+    _count: Psr_data_finalizedCountAggregateOutputType | null
+    _avg: Psr_data_finalizedAvgAggregateOutputType | null
+    _sum: Psr_data_finalizedSumAggregateOutputType | null
+    _min: Psr_data_finalizedMinAggregateOutputType | null
+    _max: Psr_data_finalizedMaxAggregateOutputType | null
+  }
+
+  type GetPsr_data_finalizedGroupByPayload<T extends psr_data_finalizedGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Psr_data_finalizedGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Psr_data_finalizedGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Psr_data_finalizedGroupByOutputType[P]>
+            : GetScalarType<T[P], Psr_data_finalizedGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type psr_data_finalizedSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    document_date?: boolean
+    customer_code?: boolean
+    branch?: boolean
+    ZM?: boolean
+    RSM?: boolean
+    ASM?: boolean
+    TSI?: boolean
+    category?: boolean
+    brand?: boolean
+    brandform?: boolean
+    subbrandform?: boolean
+    base_channel?: boolean
+    short_channel?: boolean
+    channel_desc?: boolean
+    retailing?: boolean
+  }, ExtArgs["result"]["psr_data_finalized"]>
+
+
+
+  export type psr_data_finalizedSelectScalar = {
+    id?: boolean
+    document_date?: boolean
+    customer_code?: boolean
+    branch?: boolean
+    ZM?: boolean
+    RSM?: boolean
+    ASM?: boolean
+    TSI?: boolean
+    category?: boolean
+    brand?: boolean
+    brandform?: boolean
+    subbrandform?: boolean
+    base_channel?: boolean
+    short_channel?: boolean
+    channel_desc?: boolean
+    retailing?: boolean
+  }
+
+  export type psr_data_finalizedOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "document_date" | "customer_code" | "branch" | "ZM" | "RSM" | "ASM" | "TSI" | "category" | "brand" | "brandform" | "subbrandform" | "base_channel" | "short_channel" | "channel_desc" | "retailing", ExtArgs["result"]["psr_data_finalized"]>
+
+  export type $psr_data_finalizedPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "psr_data_finalized"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      document_date: Date
+      customer_code: string
+      branch: string | null
+      ZM: string | null
+      RSM: string | null
+      ASM: string | null
+      TSI: string | null
+      category: string | null
+      brand: string | null
+      brandform: string | null
+      subbrandform: string | null
+      base_channel: string | null
+      short_channel: string | null
+      channel_desc: string | null
+      retailing: Prisma.Decimal
+    }, ExtArgs["result"]["psr_data_finalized"]>
+    composites: {}
+  }
+
+  type psr_data_finalizedGetPayload<S extends boolean | null | undefined | psr_data_finalizedDefaultArgs> = $Result.GetResult<Prisma.$psr_data_finalizedPayload, S>
+
+  type psr_data_finalizedCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<psr_data_finalizedFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Psr_data_finalizedCountAggregateInputType | true
+    }
+
+  export interface psr_data_finalizedDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['psr_data_finalized'], meta: { name: 'psr_data_finalized' } }
+    /**
+     * Find zero or one Psr_data_finalized that matches the filter.
+     * @param {psr_data_finalizedFindUniqueArgs} args - Arguments to find a Psr_data_finalized
+     * @example
+     * // Get one Psr_data_finalized
+     * const psr_data_finalized = await prisma.psr_data_finalized.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends psr_data_finalizedFindUniqueArgs>(args: SelectSubset<T, psr_data_finalizedFindUniqueArgs<ExtArgs>>): Prisma__psr_data_finalizedClient<$Result.GetResult<Prisma.$psr_data_finalizedPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Psr_data_finalized that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {psr_data_finalizedFindUniqueOrThrowArgs} args - Arguments to find a Psr_data_finalized
+     * @example
+     * // Get one Psr_data_finalized
+     * const psr_data_finalized = await prisma.psr_data_finalized.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends psr_data_finalizedFindUniqueOrThrowArgs>(args: SelectSubset<T, psr_data_finalizedFindUniqueOrThrowArgs<ExtArgs>>): Prisma__psr_data_finalizedClient<$Result.GetResult<Prisma.$psr_data_finalizedPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Psr_data_finalized that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_data_finalizedFindFirstArgs} args - Arguments to find a Psr_data_finalized
+     * @example
+     * // Get one Psr_data_finalized
+     * const psr_data_finalized = await prisma.psr_data_finalized.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends psr_data_finalizedFindFirstArgs>(args?: SelectSubset<T, psr_data_finalizedFindFirstArgs<ExtArgs>>): Prisma__psr_data_finalizedClient<$Result.GetResult<Prisma.$psr_data_finalizedPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Psr_data_finalized that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_data_finalizedFindFirstOrThrowArgs} args - Arguments to find a Psr_data_finalized
+     * @example
+     * // Get one Psr_data_finalized
+     * const psr_data_finalized = await prisma.psr_data_finalized.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends psr_data_finalizedFindFirstOrThrowArgs>(args?: SelectSubset<T, psr_data_finalizedFindFirstOrThrowArgs<ExtArgs>>): Prisma__psr_data_finalizedClient<$Result.GetResult<Prisma.$psr_data_finalizedPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Psr_data_finalizeds that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_data_finalizedFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Psr_data_finalizeds
+     * const psr_data_finalizeds = await prisma.psr_data_finalized.findMany()
+     * 
+     * // Get first 10 Psr_data_finalizeds
+     * const psr_data_finalizeds = await prisma.psr_data_finalized.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const psr_data_finalizedWithIdOnly = await prisma.psr_data_finalized.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends psr_data_finalizedFindManyArgs>(args?: SelectSubset<T, psr_data_finalizedFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$psr_data_finalizedPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Psr_data_finalized.
+     * @param {psr_data_finalizedCreateArgs} args - Arguments to create a Psr_data_finalized.
+     * @example
+     * // Create one Psr_data_finalized
+     * const Psr_data_finalized = await prisma.psr_data_finalized.create({
+     *   data: {
+     *     // ... data to create a Psr_data_finalized
+     *   }
+     * })
+     * 
+     */
+    create<T extends psr_data_finalizedCreateArgs>(args: SelectSubset<T, psr_data_finalizedCreateArgs<ExtArgs>>): Prisma__psr_data_finalizedClient<$Result.GetResult<Prisma.$psr_data_finalizedPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Psr_data_finalizeds.
+     * @param {psr_data_finalizedCreateManyArgs} args - Arguments to create many Psr_data_finalizeds.
+     * @example
+     * // Create many Psr_data_finalizeds
+     * const psr_data_finalized = await prisma.psr_data_finalized.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends psr_data_finalizedCreateManyArgs>(args?: SelectSubset<T, psr_data_finalizedCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Psr_data_finalized.
+     * @param {psr_data_finalizedDeleteArgs} args - Arguments to delete one Psr_data_finalized.
+     * @example
+     * // Delete one Psr_data_finalized
+     * const Psr_data_finalized = await prisma.psr_data_finalized.delete({
+     *   where: {
+     *     // ... filter to delete one Psr_data_finalized
+     *   }
+     * })
+     * 
+     */
+    delete<T extends psr_data_finalizedDeleteArgs>(args: SelectSubset<T, psr_data_finalizedDeleteArgs<ExtArgs>>): Prisma__psr_data_finalizedClient<$Result.GetResult<Prisma.$psr_data_finalizedPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Psr_data_finalized.
+     * @param {psr_data_finalizedUpdateArgs} args - Arguments to update one Psr_data_finalized.
+     * @example
+     * // Update one Psr_data_finalized
+     * const psr_data_finalized = await prisma.psr_data_finalized.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends psr_data_finalizedUpdateArgs>(args: SelectSubset<T, psr_data_finalizedUpdateArgs<ExtArgs>>): Prisma__psr_data_finalizedClient<$Result.GetResult<Prisma.$psr_data_finalizedPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Psr_data_finalizeds.
+     * @param {psr_data_finalizedDeleteManyArgs} args - Arguments to filter Psr_data_finalizeds to delete.
+     * @example
+     * // Delete a few Psr_data_finalizeds
+     * const { count } = await prisma.psr_data_finalized.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends psr_data_finalizedDeleteManyArgs>(args?: SelectSubset<T, psr_data_finalizedDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Psr_data_finalizeds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_data_finalizedUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Psr_data_finalizeds
+     * const psr_data_finalized = await prisma.psr_data_finalized.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends psr_data_finalizedUpdateManyArgs>(args: SelectSubset<T, psr_data_finalizedUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Psr_data_finalized.
+     * @param {psr_data_finalizedUpsertArgs} args - Arguments to update or create a Psr_data_finalized.
+     * @example
+     * // Update or create a Psr_data_finalized
+     * const psr_data_finalized = await prisma.psr_data_finalized.upsert({
+     *   create: {
+     *     // ... data to create a Psr_data_finalized
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Psr_data_finalized we want to update
+     *   }
+     * })
+     */
+    upsert<T extends psr_data_finalizedUpsertArgs>(args: SelectSubset<T, psr_data_finalizedUpsertArgs<ExtArgs>>): Prisma__psr_data_finalizedClient<$Result.GetResult<Prisma.$psr_data_finalizedPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Psr_data_finalizeds.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_data_finalizedCountArgs} args - Arguments to filter Psr_data_finalizeds to count.
+     * @example
+     * // Count the number of Psr_data_finalizeds
+     * const count = await prisma.psr_data_finalized.count({
+     *   where: {
+     *     // ... the filter for the Psr_data_finalizeds we want to count
+     *   }
+     * })
+    **/
+    count<T extends psr_data_finalizedCountArgs>(
+      args?: Subset<T, psr_data_finalizedCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Psr_data_finalizedCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Psr_data_finalized.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Psr_data_finalizedAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Psr_data_finalizedAggregateArgs>(args: Subset<T, Psr_data_finalizedAggregateArgs>): Prisma.PrismaPromise<GetPsr_data_finalizedAggregateType<T>>
+
+    /**
+     * Group by Psr_data_finalized.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_data_finalizedGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends psr_data_finalizedGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: psr_data_finalizedGroupByArgs['orderBy'] }
+        : { orderBy?: psr_data_finalizedGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, psr_data_finalizedGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPsr_data_finalizedGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the psr_data_finalized model
+   */
+  readonly fields: psr_data_finalizedFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for psr_data_finalized.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__psr_data_finalizedClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the psr_data_finalized model
+   */
+  interface psr_data_finalizedFieldRefs {
+    readonly id: FieldRef<"psr_data_finalized", 'Int'>
+    readonly document_date: FieldRef<"psr_data_finalized", 'DateTime'>
+    readonly customer_code: FieldRef<"psr_data_finalized", 'String'>
+    readonly branch: FieldRef<"psr_data_finalized", 'String'>
+    readonly ZM: FieldRef<"psr_data_finalized", 'String'>
+    readonly RSM: FieldRef<"psr_data_finalized", 'String'>
+    readonly ASM: FieldRef<"psr_data_finalized", 'String'>
+    readonly TSI: FieldRef<"psr_data_finalized", 'String'>
+    readonly category: FieldRef<"psr_data_finalized", 'String'>
+    readonly brand: FieldRef<"psr_data_finalized", 'String'>
+    readonly brandform: FieldRef<"psr_data_finalized", 'String'>
+    readonly subbrandform: FieldRef<"psr_data_finalized", 'String'>
+    readonly base_channel: FieldRef<"psr_data_finalized", 'String'>
+    readonly short_channel: FieldRef<"psr_data_finalized", 'String'>
+    readonly channel_desc: FieldRef<"psr_data_finalized", 'String'>
+    readonly retailing: FieldRef<"psr_data_finalized", 'Decimal'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * psr_data_finalized findUnique
+   */
+  export type psr_data_finalizedFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_finalized
+     */
+    select?: psr_data_finalizedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_finalized
+     */
+    omit?: psr_data_finalizedOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_data_finalized to fetch.
+     */
+    where: psr_data_finalizedWhereUniqueInput
+  }
+
+  /**
+   * psr_data_finalized findUniqueOrThrow
+   */
+  export type psr_data_finalizedFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_finalized
+     */
+    select?: psr_data_finalizedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_finalized
+     */
+    omit?: psr_data_finalizedOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_data_finalized to fetch.
+     */
+    where: psr_data_finalizedWhereUniqueInput
+  }
+
+  /**
+   * psr_data_finalized findFirst
+   */
+  export type psr_data_finalizedFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_finalized
+     */
+    select?: psr_data_finalizedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_finalized
+     */
+    omit?: psr_data_finalizedOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_data_finalized to fetch.
+     */
+    where?: psr_data_finalizedWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of psr_data_finalizeds to fetch.
+     */
+    orderBy?: psr_data_finalizedOrderByWithRelationInput | psr_data_finalizedOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for psr_data_finalizeds.
+     */
+    cursor?: psr_data_finalizedWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` psr_data_finalizeds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` psr_data_finalizeds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of psr_data_finalizeds.
+     */
+    distinct?: Psr_data_finalizedScalarFieldEnum | Psr_data_finalizedScalarFieldEnum[]
+  }
+
+  /**
+   * psr_data_finalized findFirstOrThrow
+   */
+  export type psr_data_finalizedFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_finalized
+     */
+    select?: psr_data_finalizedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_finalized
+     */
+    omit?: psr_data_finalizedOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_data_finalized to fetch.
+     */
+    where?: psr_data_finalizedWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of psr_data_finalizeds to fetch.
+     */
+    orderBy?: psr_data_finalizedOrderByWithRelationInput | psr_data_finalizedOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for psr_data_finalizeds.
+     */
+    cursor?: psr_data_finalizedWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` psr_data_finalizeds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` psr_data_finalizeds.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of psr_data_finalizeds.
+     */
+    distinct?: Psr_data_finalizedScalarFieldEnum | Psr_data_finalizedScalarFieldEnum[]
+  }
+
+  /**
+   * psr_data_finalized findMany
+   */
+  export type psr_data_finalizedFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_finalized
+     */
+    select?: psr_data_finalizedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_finalized
+     */
+    omit?: psr_data_finalizedOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_data_finalizeds to fetch.
+     */
+    where?: psr_data_finalizedWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of psr_data_finalizeds to fetch.
+     */
+    orderBy?: psr_data_finalizedOrderByWithRelationInput | psr_data_finalizedOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing psr_data_finalizeds.
+     */
+    cursor?: psr_data_finalizedWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` psr_data_finalizeds from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` psr_data_finalizeds.
+     */
+    skip?: number
+    distinct?: Psr_data_finalizedScalarFieldEnum | Psr_data_finalizedScalarFieldEnum[]
+  }
+
+  /**
+   * psr_data_finalized create
+   */
+  export type psr_data_finalizedCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_finalized
+     */
+    select?: psr_data_finalizedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_finalized
+     */
+    omit?: psr_data_finalizedOmit<ExtArgs> | null
+    /**
+     * The data needed to create a psr_data_finalized.
+     */
+    data: XOR<psr_data_finalizedCreateInput, psr_data_finalizedUncheckedCreateInput>
+  }
+
+  /**
+   * psr_data_finalized createMany
+   */
+  export type psr_data_finalizedCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many psr_data_finalizeds.
+     */
+    data: psr_data_finalizedCreateManyInput | psr_data_finalizedCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * psr_data_finalized update
+   */
+  export type psr_data_finalizedUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_finalized
+     */
+    select?: psr_data_finalizedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_finalized
+     */
+    omit?: psr_data_finalizedOmit<ExtArgs> | null
+    /**
+     * The data needed to update a psr_data_finalized.
+     */
+    data: XOR<psr_data_finalizedUpdateInput, psr_data_finalizedUncheckedUpdateInput>
+    /**
+     * Choose, which psr_data_finalized to update.
+     */
+    where: psr_data_finalizedWhereUniqueInput
+  }
+
+  /**
+   * psr_data_finalized updateMany
+   */
+  export type psr_data_finalizedUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update psr_data_finalizeds.
+     */
+    data: XOR<psr_data_finalizedUpdateManyMutationInput, psr_data_finalizedUncheckedUpdateManyInput>
+    /**
+     * Filter which psr_data_finalizeds to update
+     */
+    where?: psr_data_finalizedWhereInput
+    /**
+     * Limit how many psr_data_finalizeds to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * psr_data_finalized upsert
+   */
+  export type psr_data_finalizedUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_finalized
+     */
+    select?: psr_data_finalizedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_finalized
+     */
+    omit?: psr_data_finalizedOmit<ExtArgs> | null
+    /**
+     * The filter to search for the psr_data_finalized to update in case it exists.
+     */
+    where: psr_data_finalizedWhereUniqueInput
+    /**
+     * In case the psr_data_finalized found by the `where` argument doesn't exist, create a new psr_data_finalized with this data.
+     */
+    create: XOR<psr_data_finalizedCreateInput, psr_data_finalizedUncheckedCreateInput>
+    /**
+     * In case the psr_data_finalized was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<psr_data_finalizedUpdateInput, psr_data_finalizedUncheckedUpdateInput>
+  }
+
+  /**
+   * psr_data_finalized delete
+   */
+  export type psr_data_finalizedDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_finalized
+     */
+    select?: psr_data_finalizedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_finalized
+     */
+    omit?: psr_data_finalizedOmit<ExtArgs> | null
+    /**
+     * Filter which psr_data_finalized to delete.
+     */
+    where: psr_data_finalizedWhereUniqueInput
+  }
+
+  /**
+   * psr_data_finalized deleteMany
+   */
+  export type psr_data_finalizedDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which psr_data_finalizeds to delete
+     */
+    where?: psr_data_finalizedWhereInput
+    /**
+     * Limit how many psr_data_finalizeds to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * psr_data_finalized without action
+   */
+  export type psr_data_finalizedDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_data_finalized
+     */
+    select?: psr_data_finalizedSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_data_finalized
+     */
+    omit?: psr_data_finalizedOmit<ExtArgs> | null
   }
 
 
@@ -3643,6 +5761,7 @@ export namespace Prisma {
     base_channel: string | null
     short_channel: string | null
     channel_desc: string | null
+    created_at: Date | null
   }
 
   export type Channel_mappingMaxAggregateOutputType = {
@@ -3651,6 +5770,7 @@ export namespace Prisma {
     base_channel: string | null
     short_channel: string | null
     channel_desc: string | null
+    created_at: Date | null
   }
 
   export type Channel_mappingCountAggregateOutputType = {
@@ -3659,6 +5779,7 @@ export namespace Prisma {
     base_channel: number
     short_channel: number
     channel_desc: number
+    created_at: number
     _all: number
   }
 
@@ -3677,6 +5798,7 @@ export namespace Prisma {
     base_channel?: true
     short_channel?: true
     channel_desc?: true
+    created_at?: true
   }
 
   export type Channel_mappingMaxAggregateInputType = {
@@ -3685,6 +5807,7 @@ export namespace Prisma {
     base_channel?: true
     short_channel?: true
     channel_desc?: true
+    created_at?: true
   }
 
   export type Channel_mappingCountAggregateInputType = {
@@ -3693,6 +5816,7 @@ export namespace Prisma {
     base_channel?: true
     short_channel?: true
     channel_desc?: true
+    created_at?: true
     _all?: true
   }
 
@@ -3788,6 +5912,7 @@ export namespace Prisma {
     base_channel: string
     short_channel: string
     channel_desc: string
+    created_at: Date
     _count: Channel_mappingCountAggregateOutputType | null
     _avg: Channel_mappingAvgAggregateOutputType | null
     _sum: Channel_mappingSumAggregateOutputType | null
@@ -3815,8 +5940,7 @@ export namespace Prisma {
     base_channel?: boolean
     short_channel?: boolean
     channel_desc?: boolean
-    store_mapping?: boolean | channel_mapping$store_mappingArgs<ExtArgs>
-    _count?: boolean | Channel_mappingCountOutputTypeDefaultArgs<ExtArgs>
+    created_at?: boolean
   }, ExtArgs["result"]["channel_mapping"]>
 
 
@@ -3827,25 +5951,21 @@ export namespace Prisma {
     base_channel?: boolean
     short_channel?: boolean
     channel_desc?: boolean
+    created_at?: boolean
   }
 
-  export type channel_mappingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"channel_id" | "customer_type" | "base_channel" | "short_channel" | "channel_desc", ExtArgs["result"]["channel_mapping"]>
-  export type channel_mappingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    store_mapping?: boolean | channel_mapping$store_mappingArgs<ExtArgs>
-    _count?: boolean | Channel_mappingCountOutputTypeDefaultArgs<ExtArgs>
-  }
+  export type channel_mappingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"channel_id" | "customer_type" | "base_channel" | "short_channel" | "channel_desc" | "created_at", ExtArgs["result"]["channel_mapping"]>
 
   export type $channel_mappingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "channel_mapping"
-    objects: {
-      store_mapping: Prisma.$store_mappingPayload<ExtArgs>[]
-    }
+    objects: {}
     scalars: $Extensions.GetPayloadResult<{
       channel_id: number
       customer_type: string
       base_channel: string
       short_channel: string
       channel_desc: string
+      created_at: Date
     }, ExtArgs["result"]["channel_mapping"]>
     composites: {}
   }
@@ -4186,7 +6306,6 @@ export namespace Prisma {
    */
   export interface Prisma__channel_mappingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    store_mapping<T extends channel_mapping$store_mappingArgs<ExtArgs> = {}>(args?: Subset<T, channel_mapping$store_mappingArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$store_mappingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -4221,6 +6340,7 @@ export namespace Prisma {
     readonly base_channel: FieldRef<"channel_mapping", 'String'>
     readonly short_channel: FieldRef<"channel_mapping", 'String'>
     readonly channel_desc: FieldRef<"channel_mapping", 'String'>
+    readonly created_at: FieldRef<"channel_mapping", 'DateTime'>
   }
     
 
@@ -4237,10 +6357,6 @@ export namespace Prisma {
      * Omit specific fields from the channel_mapping
      */
     omit?: channel_mappingOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: channel_mappingInclude<ExtArgs> | null
     /**
      * Filter, which channel_mapping to fetch.
      */
@@ -4260,10 +6376,6 @@ export namespace Prisma {
      */
     omit?: channel_mappingOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: channel_mappingInclude<ExtArgs> | null
-    /**
      * Filter, which channel_mapping to fetch.
      */
     where: channel_mappingWhereUniqueInput
@@ -4281,10 +6393,6 @@ export namespace Prisma {
      * Omit specific fields from the channel_mapping
      */
     omit?: channel_mappingOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: channel_mappingInclude<ExtArgs> | null
     /**
      * Filter, which channel_mapping to fetch.
      */
@@ -4334,10 +6442,6 @@ export namespace Prisma {
      */
     omit?: channel_mappingOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: channel_mappingInclude<ExtArgs> | null
-    /**
      * Filter, which channel_mapping to fetch.
      */
     where?: channel_mappingWhereInput
@@ -4386,10 +6490,6 @@ export namespace Prisma {
      */
     omit?: channel_mappingOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: channel_mappingInclude<ExtArgs> | null
-    /**
      * Filter, which channel_mappings to fetch.
      */
     where?: channel_mappingWhereInput
@@ -4433,10 +6533,6 @@ export namespace Prisma {
      */
     omit?: channel_mappingOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: channel_mappingInclude<ExtArgs> | null
-    /**
      * The data needed to create a channel_mapping.
      */
     data: XOR<channel_mappingCreateInput, channel_mappingUncheckedCreateInput>
@@ -4465,10 +6561,6 @@ export namespace Prisma {
      * Omit specific fields from the channel_mapping
      */
     omit?: channel_mappingOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: channel_mappingInclude<ExtArgs> | null
     /**
      * The data needed to update a channel_mapping.
      */
@@ -4510,10 +6602,6 @@ export namespace Prisma {
      */
     omit?: channel_mappingOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: channel_mappingInclude<ExtArgs> | null
-    /**
      * The filter to search for the channel_mapping to update in case it exists.
      */
     where: channel_mappingWhereUniqueInput
@@ -4540,10 +6628,6 @@ export namespace Prisma {
      */
     omit?: channel_mappingOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: channel_mappingInclude<ExtArgs> | null
-    /**
      * Filter which channel_mapping to delete.
      */
     where: channel_mappingWhereUniqueInput
@@ -4564,30 +6648,6 @@ export namespace Prisma {
   }
 
   /**
-   * channel_mapping.store_mapping
-   */
-  export type channel_mapping$store_mappingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the store_mapping
-     */
-    select?: store_mappingSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the store_mapping
-     */
-    omit?: store_mappingOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: store_mappingInclude<ExtArgs> | null
-    where?: store_mappingWhereInput
-    orderBy?: store_mappingOrderByWithRelationInput | store_mappingOrderByWithRelationInput[]
-    cursor?: store_mappingWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Store_mappingScalarFieldEnum | Store_mappingScalarFieldEnum[]
-  }
-
-  /**
    * channel_mapping without action
    */
   export type channel_mappingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4599,10 +6659,6 @@ export namespace Prisma {
      * Omit specific fields from the channel_mapping
      */
     omit?: channel_mappingOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: channel_mappingInclude<ExtArgs> | null
   }
 
 
@@ -4638,6 +6694,7 @@ export namespace Prisma {
     RSM: string | null
     ASM: string | null
     TSI: string | null
+    created_at: Date | null
   }
 
   export type Store_mappingMaxAggregateOutputType = {
@@ -4652,6 +6709,7 @@ export namespace Prisma {
     RSM: string | null
     ASM: string | null
     TSI: string | null
+    created_at: Date | null
   }
 
   export type Store_mappingCountAggregateOutputType = {
@@ -4666,6 +6724,7 @@ export namespace Prisma {
     RSM: number
     ASM: number
     TSI: number
+    created_at: number
     _all: number
   }
 
@@ -4690,6 +6749,7 @@ export namespace Prisma {
     RSM?: true
     ASM?: true
     TSI?: true
+    created_at?: true
   }
 
   export type Store_mappingMaxAggregateInputType = {
@@ -4704,6 +6764,7 @@ export namespace Prisma {
     RSM?: true
     ASM?: true
     TSI?: true
+    created_at?: true
   }
 
   export type Store_mappingCountAggregateInputType = {
@@ -4718,6 +6779,7 @@ export namespace Prisma {
     RSM?: true
     ASM?: true
     TSI?: true
+    created_at?: true
     _all?: true
   }
 
@@ -4819,6 +6881,7 @@ export namespace Prisma {
     RSM: string
     ASM: string
     TSI: string
+    created_at: Date
     _count: Store_mappingCountAggregateOutputType | null
     _avg: Store_mappingAvgAggregateOutputType | null
     _sum: Store_mappingSumAggregateOutputType | null
@@ -4852,10 +6915,7 @@ export namespace Prisma {
     RSM?: boolean
     ASM?: boolean
     TSI?: boolean
-    psr_data?: boolean | store_mapping$psr_dataArgs<ExtArgs>
-    psr_data_temp?: boolean | store_mapping$psr_data_tempArgs<ExtArgs>
-    channel_mapping?: boolean | channel_mappingDefaultArgs<ExtArgs>
-    _count?: boolean | Store_mappingCountOutputTypeDefaultArgs<ExtArgs>
+    created_at?: boolean
   }, ExtArgs["result"]["store_mapping"]>
 
 
@@ -4872,23 +6932,14 @@ export namespace Prisma {
     RSM?: boolean
     ASM?: boolean
     TSI?: boolean
+    created_at?: boolean
   }
 
-  export type store_mappingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id" | "Old_Store_Code" | "New_Store_Code" | "customer_name" | "customer_type" | "Branch" | "DSE_Code" | "ZM" | "RSM" | "ASM" | "TSI", ExtArgs["result"]["store_mapping"]>
-  export type store_mappingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    psr_data?: boolean | store_mapping$psr_dataArgs<ExtArgs>
-    psr_data_temp?: boolean | store_mapping$psr_data_tempArgs<ExtArgs>
-    channel_mapping?: boolean | channel_mappingDefaultArgs<ExtArgs>
-    _count?: boolean | Store_mappingCountOutputTypeDefaultArgs<ExtArgs>
-  }
+  export type store_mappingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id" | "Old_Store_Code" | "New_Store_Code" | "customer_name" | "customer_type" | "Branch" | "DSE_Code" | "ZM" | "RSM" | "ASM" | "TSI" | "created_at", ExtArgs["result"]["store_mapping"]>
 
   export type $store_mappingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "store_mapping"
-    objects: {
-      psr_data: Prisma.$psr_dataPayload<ExtArgs>[]
-      psr_data_temp: Prisma.$psr_data_tempPayload<ExtArgs>[]
-      channel_mapping: Prisma.$channel_mappingPayload<ExtArgs>
-    }
+    objects: {}
     scalars: $Extensions.GetPayloadResult<{
       Id: number
       Old_Store_Code: string
@@ -4901,6 +6952,7 @@ export namespace Prisma {
       RSM: string
       ASM: string
       TSI: string
+      created_at: Date
     }, ExtArgs["result"]["store_mapping"]>
     composites: {}
   }
@@ -5241,9 +7293,6 @@ export namespace Prisma {
    */
   export interface Prisma__store_mappingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    psr_data<T extends store_mapping$psr_dataArgs<ExtArgs> = {}>(args?: Subset<T, store_mapping$psr_dataArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$psr_dataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    psr_data_temp<T extends store_mapping$psr_data_tempArgs<ExtArgs> = {}>(args?: Subset<T, store_mapping$psr_data_tempArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$psr_data_tempPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    channel_mapping<T extends channel_mappingDefaultArgs<ExtArgs> = {}>(args?: Subset<T, channel_mappingDefaultArgs<ExtArgs>>): Prisma__channel_mappingClient<$Result.GetResult<Prisma.$channel_mappingPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -5284,6 +7333,7 @@ export namespace Prisma {
     readonly RSM: FieldRef<"store_mapping", 'String'>
     readonly ASM: FieldRef<"store_mapping", 'String'>
     readonly TSI: FieldRef<"store_mapping", 'String'>
+    readonly created_at: FieldRef<"store_mapping", 'DateTime'>
   }
     
 
@@ -5300,10 +7350,6 @@ export namespace Prisma {
      * Omit specific fields from the store_mapping
      */
     omit?: store_mappingOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: store_mappingInclude<ExtArgs> | null
     /**
      * Filter, which store_mapping to fetch.
      */
@@ -5323,10 +7369,6 @@ export namespace Prisma {
      */
     omit?: store_mappingOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: store_mappingInclude<ExtArgs> | null
-    /**
      * Filter, which store_mapping to fetch.
      */
     where: store_mappingWhereUniqueInput
@@ -5344,10 +7386,6 @@ export namespace Prisma {
      * Omit specific fields from the store_mapping
      */
     omit?: store_mappingOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: store_mappingInclude<ExtArgs> | null
     /**
      * Filter, which store_mapping to fetch.
      */
@@ -5397,10 +7435,6 @@ export namespace Prisma {
      */
     omit?: store_mappingOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: store_mappingInclude<ExtArgs> | null
-    /**
      * Filter, which store_mapping to fetch.
      */
     where?: store_mappingWhereInput
@@ -5449,10 +7483,6 @@ export namespace Prisma {
      */
     omit?: store_mappingOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: store_mappingInclude<ExtArgs> | null
-    /**
      * Filter, which store_mappings to fetch.
      */
     where?: store_mappingWhereInput
@@ -5496,10 +7526,6 @@ export namespace Prisma {
      */
     omit?: store_mappingOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: store_mappingInclude<ExtArgs> | null
-    /**
      * The data needed to create a store_mapping.
      */
     data: XOR<store_mappingCreateInput, store_mappingUncheckedCreateInput>
@@ -5528,10 +7554,6 @@ export namespace Prisma {
      * Omit specific fields from the store_mapping
      */
     omit?: store_mappingOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: store_mappingInclude<ExtArgs> | null
     /**
      * The data needed to update a store_mapping.
      */
@@ -5573,10 +7595,6 @@ export namespace Prisma {
      */
     omit?: store_mappingOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: store_mappingInclude<ExtArgs> | null
-    /**
      * The filter to search for the store_mapping to update in case it exists.
      */
     where: store_mappingWhereUniqueInput
@@ -5603,10 +7621,6 @@ export namespace Prisma {
      */
     omit?: store_mappingOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: store_mappingInclude<ExtArgs> | null
-    /**
      * Filter which store_mapping to delete.
      */
     where: store_mappingWhereUniqueInput
@@ -5627,54 +7641,6 @@ export namespace Prisma {
   }
 
   /**
-   * store_mapping.psr_data
-   */
-  export type store_mapping$psr_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the psr_data
-     */
-    select?: psr_dataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the psr_data
-     */
-    omit?: psr_dataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_dataInclude<ExtArgs> | null
-    where?: psr_dataWhereInput
-    orderBy?: psr_dataOrderByWithRelationInput | psr_dataOrderByWithRelationInput[]
-    cursor?: psr_dataWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Psr_dataScalarFieldEnum | Psr_dataScalarFieldEnum[]
-  }
-
-  /**
-   * store_mapping.psr_data_temp
-   */
-  export type store_mapping$psr_data_tempArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the psr_data_temp
-     */
-    select?: psr_data_tempSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the psr_data_temp
-     */
-    omit?: psr_data_tempOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_data_tempInclude<ExtArgs> | null
-    where?: psr_data_tempWhereInput
-    orderBy?: psr_data_tempOrderByWithRelationInput | psr_data_tempOrderByWithRelationInput[]
-    cursor?: psr_data_tempWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Psr_data_tempScalarFieldEnum | Psr_data_tempScalarFieldEnum[]
-  }
-
-  /**
    * store_mapping without action
    */
   export type store_mappingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -5686,10 +7652,6 @@ export namespace Prisma {
      * Omit specific fields from the store_mapping
      */
     omit?: store_mappingOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: store_mappingInclude<ExtArgs> | null
   }
 
 
@@ -5723,6 +7685,7 @@ export namespace Prisma {
     brand: string | null
     brandform: string | null
     subbrandform: string | null
+    created_at: Date | null
   }
 
   export type Product_mappingMaxAggregateOutputType = {
@@ -5733,6 +7696,7 @@ export namespace Prisma {
     brand: string | null
     brandform: string | null
     subbrandform: string | null
+    created_at: Date | null
   }
 
   export type Product_mappingCountAggregateOutputType = {
@@ -5743,6 +7707,7 @@ export namespace Prisma {
     brand: number
     brandform: number
     subbrandform: number
+    created_at: number
     _all: number
   }
 
@@ -5765,6 +7730,7 @@ export namespace Prisma {
     brand?: true
     brandform?: true
     subbrandform?: true
+    created_at?: true
   }
 
   export type Product_mappingMaxAggregateInputType = {
@@ -5775,6 +7741,7 @@ export namespace Prisma {
     brand?: true
     brandform?: true
     subbrandform?: true
+    created_at?: true
   }
 
   export type Product_mappingCountAggregateInputType = {
@@ -5785,6 +7752,7 @@ export namespace Prisma {
     brand?: true
     brandform?: true
     subbrandform?: true
+    created_at?: true
     _all?: true
   }
 
@@ -5882,6 +7850,7 @@ export namespace Prisma {
     brand: string
     brandform: string
     subbrandform: string
+    created_at: Date
     _count: Product_mappingCountAggregateOutputType | null
     _avg: Product_mappingAvgAggregateOutputType | null
     _sum: Product_mappingSumAggregateOutputType | null
@@ -5911,9 +7880,7 @@ export namespace Prisma {
     brand?: boolean
     brandform?: boolean
     subbrandform?: boolean
-    psr_data?: boolean | product_mapping$psr_dataArgs<ExtArgs>
-    psr_data_temp?: boolean | product_mapping$psr_data_tempArgs<ExtArgs>
-    _count?: boolean | Product_mappingCountOutputTypeDefaultArgs<ExtArgs>
+    created_at?: boolean
   }, ExtArgs["result"]["product_mapping"]>
 
 
@@ -5926,21 +7893,14 @@ export namespace Prisma {
     brand?: boolean
     brandform?: boolean
     subbrandform?: boolean
+    created_at?: boolean
   }
 
-  export type product_mappingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id" | "p_code" | "desc_short" | "category" | "brand" | "brandform" | "subbrandform", ExtArgs["result"]["product_mapping"]>
-  export type product_mappingInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    psr_data?: boolean | product_mapping$psr_dataArgs<ExtArgs>
-    psr_data_temp?: boolean | product_mapping$psr_data_tempArgs<ExtArgs>
-    _count?: boolean | Product_mappingCountOutputTypeDefaultArgs<ExtArgs>
-  }
+  export type product_mappingOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"Id" | "p_code" | "desc_short" | "category" | "brand" | "brandform" | "subbrandform" | "created_at", ExtArgs["result"]["product_mapping"]>
 
   export type $product_mappingPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "product_mapping"
-    objects: {
-      psr_data: Prisma.$psr_dataPayload<ExtArgs>[]
-      psr_data_temp: Prisma.$psr_data_tempPayload<ExtArgs>[]
-    }
+    objects: {}
     scalars: $Extensions.GetPayloadResult<{
       Id: number
       p_code: number
@@ -5949,6 +7909,7 @@ export namespace Prisma {
       brand: string
       brandform: string
       subbrandform: string
+      created_at: Date
     }, ExtArgs["result"]["product_mapping"]>
     composites: {}
   }
@@ -6289,8 +8250,6 @@ export namespace Prisma {
    */
   export interface Prisma__product_mappingClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    psr_data<T extends product_mapping$psr_dataArgs<ExtArgs> = {}>(args?: Subset<T, product_mapping$psr_dataArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$psr_dataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    psr_data_temp<T extends product_mapping$psr_data_tempArgs<ExtArgs> = {}>(args?: Subset<T, product_mapping$psr_data_tempArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$psr_data_tempPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -6327,6 +8286,7 @@ export namespace Prisma {
     readonly brand: FieldRef<"product_mapping", 'String'>
     readonly brandform: FieldRef<"product_mapping", 'String'>
     readonly subbrandform: FieldRef<"product_mapping", 'String'>
+    readonly created_at: FieldRef<"product_mapping", 'DateTime'>
   }
     
 
@@ -6343,10 +8303,6 @@ export namespace Prisma {
      * Omit specific fields from the product_mapping
      */
     omit?: product_mappingOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: product_mappingInclude<ExtArgs> | null
     /**
      * Filter, which product_mapping to fetch.
      */
@@ -6366,10 +8322,6 @@ export namespace Prisma {
      */
     omit?: product_mappingOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: product_mappingInclude<ExtArgs> | null
-    /**
      * Filter, which product_mapping to fetch.
      */
     where: product_mappingWhereUniqueInput
@@ -6387,10 +8339,6 @@ export namespace Prisma {
      * Omit specific fields from the product_mapping
      */
     omit?: product_mappingOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: product_mappingInclude<ExtArgs> | null
     /**
      * Filter, which product_mapping to fetch.
      */
@@ -6440,10 +8388,6 @@ export namespace Prisma {
      */
     omit?: product_mappingOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: product_mappingInclude<ExtArgs> | null
-    /**
      * Filter, which product_mapping to fetch.
      */
     where?: product_mappingWhereInput
@@ -6492,10 +8436,6 @@ export namespace Prisma {
      */
     omit?: product_mappingOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: product_mappingInclude<ExtArgs> | null
-    /**
      * Filter, which product_mappings to fetch.
      */
     where?: product_mappingWhereInput
@@ -6539,10 +8479,6 @@ export namespace Prisma {
      */
     omit?: product_mappingOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: product_mappingInclude<ExtArgs> | null
-    /**
      * The data needed to create a product_mapping.
      */
     data: XOR<product_mappingCreateInput, product_mappingUncheckedCreateInput>
@@ -6571,10 +8507,6 @@ export namespace Prisma {
      * Omit specific fields from the product_mapping
      */
     omit?: product_mappingOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: product_mappingInclude<ExtArgs> | null
     /**
      * The data needed to update a product_mapping.
      */
@@ -6616,10 +8548,6 @@ export namespace Prisma {
      */
     omit?: product_mappingOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: product_mappingInclude<ExtArgs> | null
-    /**
      * The filter to search for the product_mapping to update in case it exists.
      */
     where: product_mappingWhereUniqueInput
@@ -6646,10 +8574,6 @@ export namespace Prisma {
      */
     omit?: product_mappingOmit<ExtArgs> | null
     /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: product_mappingInclude<ExtArgs> | null
-    /**
      * Filter which product_mapping to delete.
      */
     where: product_mappingWhereUniqueInput
@@ -6670,54 +8594,6 @@ export namespace Prisma {
   }
 
   /**
-   * product_mapping.psr_data
-   */
-  export type product_mapping$psr_dataArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the psr_data
-     */
-    select?: psr_dataSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the psr_data
-     */
-    omit?: psr_dataOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_dataInclude<ExtArgs> | null
-    where?: psr_dataWhereInput
-    orderBy?: psr_dataOrderByWithRelationInput | psr_dataOrderByWithRelationInput[]
-    cursor?: psr_dataWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Psr_dataScalarFieldEnum | Psr_dataScalarFieldEnum[]
-  }
-
-  /**
-   * product_mapping.psr_data_temp
-   */
-  export type product_mapping$psr_data_tempArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the psr_data_temp
-     */
-    select?: psr_data_tempSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the psr_data_temp
-     */
-    omit?: psr_data_tempOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: psr_data_tempInclude<ExtArgs> | null
-    where?: psr_data_tempWhereInput
-    orderBy?: psr_data_tempOrderByWithRelationInput | psr_data_tempOrderByWithRelationInput[]
-    cursor?: psr_data_tempWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Psr_data_tempScalarFieldEnum | Psr_data_tempScalarFieldEnum[]
-  }
-
-  /**
    * product_mapping without action
    */
   export type product_mappingDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6729,10 +8605,900 @@ export namespace Prisma {
      * Omit specific fields from the product_mapping
      */
     omit?: product_mappingOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model mapping_change_flag
+   */
+
+  export type AggregateMapping_change_flag = {
+    _count: Mapping_change_flagCountAggregateOutputType | null
+    _avg: Mapping_change_flagAvgAggregateOutputType | null
+    _sum: Mapping_change_flagSumAggregateOutputType | null
+    _min: Mapping_change_flagMinAggregateOutputType | null
+    _max: Mapping_change_flagMaxAggregateOutputType | null
+  }
+
+  export type Mapping_change_flagAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type Mapping_change_flagSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type Mapping_change_flagMinAggregateOutputType = {
+    id: number | null
+    changed_at: Date | null
+    processed: boolean | null
+  }
+
+  export type Mapping_change_flagMaxAggregateOutputType = {
+    id: number | null
+    changed_at: Date | null
+    processed: boolean | null
+  }
+
+  export type Mapping_change_flagCountAggregateOutputType = {
+    id: number
+    changed_at: number
+    processed: number
+    _all: number
+  }
+
+
+  export type Mapping_change_flagAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type Mapping_change_flagSumAggregateInputType = {
+    id?: true
+  }
+
+  export type Mapping_change_flagMinAggregateInputType = {
+    id?: true
+    changed_at?: true
+    processed?: true
+  }
+
+  export type Mapping_change_flagMaxAggregateInputType = {
+    id?: true
+    changed_at?: true
+    processed?: true
+  }
+
+  export type Mapping_change_flagCountAggregateInputType = {
+    id?: true
+    changed_at?: true
+    processed?: true
+    _all?: true
+  }
+
+  export type Mapping_change_flagAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Choose, which related nodes to fetch as well
+     * Filter which mapping_change_flag to aggregate.
      */
-    include?: product_mappingInclude<ExtArgs> | null
+    where?: mapping_change_flagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mapping_change_flags to fetch.
+     */
+    orderBy?: mapping_change_flagOrderByWithRelationInput | mapping_change_flagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: mapping_change_flagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mapping_change_flags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mapping_change_flags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned mapping_change_flags
+    **/
+    _count?: true | Mapping_change_flagCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Mapping_change_flagAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Mapping_change_flagSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Mapping_change_flagMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Mapping_change_flagMaxAggregateInputType
+  }
+
+  export type GetMapping_change_flagAggregateType<T extends Mapping_change_flagAggregateArgs> = {
+        [P in keyof T & keyof AggregateMapping_change_flag]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMapping_change_flag[P]>
+      : GetScalarType<T[P], AggregateMapping_change_flag[P]>
+  }
+
+
+
+
+  export type mapping_change_flagGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mapping_change_flagWhereInput
+    orderBy?: mapping_change_flagOrderByWithAggregationInput | mapping_change_flagOrderByWithAggregationInput[]
+    by: Mapping_change_flagScalarFieldEnum[] | Mapping_change_flagScalarFieldEnum
+    having?: mapping_change_flagScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Mapping_change_flagCountAggregateInputType | true
+    _avg?: Mapping_change_flagAvgAggregateInputType
+    _sum?: Mapping_change_flagSumAggregateInputType
+    _min?: Mapping_change_flagMinAggregateInputType
+    _max?: Mapping_change_flagMaxAggregateInputType
+  }
+
+  export type Mapping_change_flagGroupByOutputType = {
+    id: number
+    changed_at: Date
+    processed: boolean
+    _count: Mapping_change_flagCountAggregateOutputType | null
+    _avg: Mapping_change_flagAvgAggregateOutputType | null
+    _sum: Mapping_change_flagSumAggregateOutputType | null
+    _min: Mapping_change_flagMinAggregateOutputType | null
+    _max: Mapping_change_flagMaxAggregateOutputType | null
+  }
+
+  type GetMapping_change_flagGroupByPayload<T extends mapping_change_flagGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Mapping_change_flagGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Mapping_change_flagGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Mapping_change_flagGroupByOutputType[P]>
+            : GetScalarType<T[P], Mapping_change_flagGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type mapping_change_flagSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    changed_at?: boolean
+    processed?: boolean
+  }, ExtArgs["result"]["mapping_change_flag"]>
+
+
+
+  export type mapping_change_flagSelectScalar = {
+    id?: boolean
+    changed_at?: boolean
+    processed?: boolean
+  }
+
+  export type mapping_change_flagOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "changed_at" | "processed", ExtArgs["result"]["mapping_change_flag"]>
+
+  export type $mapping_change_flagPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "mapping_change_flag"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      changed_at: Date
+      processed: boolean
+    }, ExtArgs["result"]["mapping_change_flag"]>
+    composites: {}
+  }
+
+  type mapping_change_flagGetPayload<S extends boolean | null | undefined | mapping_change_flagDefaultArgs> = $Result.GetResult<Prisma.$mapping_change_flagPayload, S>
+
+  type mapping_change_flagCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<mapping_change_flagFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Mapping_change_flagCountAggregateInputType | true
+    }
+
+  export interface mapping_change_flagDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['mapping_change_flag'], meta: { name: 'mapping_change_flag' } }
+    /**
+     * Find zero or one Mapping_change_flag that matches the filter.
+     * @param {mapping_change_flagFindUniqueArgs} args - Arguments to find a Mapping_change_flag
+     * @example
+     * // Get one Mapping_change_flag
+     * const mapping_change_flag = await prisma.mapping_change_flag.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends mapping_change_flagFindUniqueArgs>(args: SelectSubset<T, mapping_change_flagFindUniqueArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Mapping_change_flag that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {mapping_change_flagFindUniqueOrThrowArgs} args - Arguments to find a Mapping_change_flag
+     * @example
+     * // Get one Mapping_change_flag
+     * const mapping_change_flag = await prisma.mapping_change_flag.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends mapping_change_flagFindUniqueOrThrowArgs>(args: SelectSubset<T, mapping_change_flagFindUniqueOrThrowArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mapping_change_flag that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mapping_change_flagFindFirstArgs} args - Arguments to find a Mapping_change_flag
+     * @example
+     * // Get one Mapping_change_flag
+     * const mapping_change_flag = await prisma.mapping_change_flag.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends mapping_change_flagFindFirstArgs>(args?: SelectSubset<T, mapping_change_flagFindFirstArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mapping_change_flag that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mapping_change_flagFindFirstOrThrowArgs} args - Arguments to find a Mapping_change_flag
+     * @example
+     * // Get one Mapping_change_flag
+     * const mapping_change_flag = await prisma.mapping_change_flag.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends mapping_change_flagFindFirstOrThrowArgs>(args?: SelectSubset<T, mapping_change_flagFindFirstOrThrowArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Mapping_change_flags that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mapping_change_flagFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Mapping_change_flags
+     * const mapping_change_flags = await prisma.mapping_change_flag.findMany()
+     * 
+     * // Get first 10 Mapping_change_flags
+     * const mapping_change_flags = await prisma.mapping_change_flag.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const mapping_change_flagWithIdOnly = await prisma.mapping_change_flag.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends mapping_change_flagFindManyArgs>(args?: SelectSubset<T, mapping_change_flagFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Mapping_change_flag.
+     * @param {mapping_change_flagCreateArgs} args - Arguments to create a Mapping_change_flag.
+     * @example
+     * // Create one Mapping_change_flag
+     * const Mapping_change_flag = await prisma.mapping_change_flag.create({
+     *   data: {
+     *     // ... data to create a Mapping_change_flag
+     *   }
+     * })
+     * 
+     */
+    create<T extends mapping_change_flagCreateArgs>(args: SelectSubset<T, mapping_change_flagCreateArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Mapping_change_flags.
+     * @param {mapping_change_flagCreateManyArgs} args - Arguments to create many Mapping_change_flags.
+     * @example
+     * // Create many Mapping_change_flags
+     * const mapping_change_flag = await prisma.mapping_change_flag.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends mapping_change_flagCreateManyArgs>(args?: SelectSubset<T, mapping_change_flagCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Mapping_change_flag.
+     * @param {mapping_change_flagDeleteArgs} args - Arguments to delete one Mapping_change_flag.
+     * @example
+     * // Delete one Mapping_change_flag
+     * const Mapping_change_flag = await prisma.mapping_change_flag.delete({
+     *   where: {
+     *     // ... filter to delete one Mapping_change_flag
+     *   }
+     * })
+     * 
+     */
+    delete<T extends mapping_change_flagDeleteArgs>(args: SelectSubset<T, mapping_change_flagDeleteArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Mapping_change_flag.
+     * @param {mapping_change_flagUpdateArgs} args - Arguments to update one Mapping_change_flag.
+     * @example
+     * // Update one Mapping_change_flag
+     * const mapping_change_flag = await prisma.mapping_change_flag.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends mapping_change_flagUpdateArgs>(args: SelectSubset<T, mapping_change_flagUpdateArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Mapping_change_flags.
+     * @param {mapping_change_flagDeleteManyArgs} args - Arguments to filter Mapping_change_flags to delete.
+     * @example
+     * // Delete a few Mapping_change_flags
+     * const { count } = await prisma.mapping_change_flag.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends mapping_change_flagDeleteManyArgs>(args?: SelectSubset<T, mapping_change_flagDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mapping_change_flags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mapping_change_flagUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Mapping_change_flags
+     * const mapping_change_flag = await prisma.mapping_change_flag.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends mapping_change_flagUpdateManyArgs>(args: SelectSubset<T, mapping_change_flagUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Mapping_change_flag.
+     * @param {mapping_change_flagUpsertArgs} args - Arguments to update or create a Mapping_change_flag.
+     * @example
+     * // Update or create a Mapping_change_flag
+     * const mapping_change_flag = await prisma.mapping_change_flag.upsert({
+     *   create: {
+     *     // ... data to create a Mapping_change_flag
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Mapping_change_flag we want to update
+     *   }
+     * })
+     */
+    upsert<T extends mapping_change_flagUpsertArgs>(args: SelectSubset<T, mapping_change_flagUpsertArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Mapping_change_flags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mapping_change_flagCountArgs} args - Arguments to filter Mapping_change_flags to count.
+     * @example
+     * // Count the number of Mapping_change_flags
+     * const count = await prisma.mapping_change_flag.count({
+     *   where: {
+     *     // ... the filter for the Mapping_change_flags we want to count
+     *   }
+     * })
+    **/
+    count<T extends mapping_change_flagCountArgs>(
+      args?: Subset<T, mapping_change_flagCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Mapping_change_flagCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Mapping_change_flag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Mapping_change_flagAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Mapping_change_flagAggregateArgs>(args: Subset<T, Mapping_change_flagAggregateArgs>): Prisma.PrismaPromise<GetMapping_change_flagAggregateType<T>>
+
+    /**
+     * Group by Mapping_change_flag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mapping_change_flagGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends mapping_change_flagGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: mapping_change_flagGroupByArgs['orderBy'] }
+        : { orderBy?: mapping_change_flagGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, mapping_change_flagGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMapping_change_flagGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the mapping_change_flag model
+   */
+  readonly fields: mapping_change_flagFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for mapping_change_flag.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__mapping_change_flagClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the mapping_change_flag model
+   */
+  interface mapping_change_flagFieldRefs {
+    readonly id: FieldRef<"mapping_change_flag", 'Int'>
+    readonly changed_at: FieldRef<"mapping_change_flag", 'DateTime'>
+    readonly processed: FieldRef<"mapping_change_flag", 'Boolean'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * mapping_change_flag findUnique
+   */
+  export type mapping_change_flagFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+    /**
+     * Filter, which mapping_change_flag to fetch.
+     */
+    where: mapping_change_flagWhereUniqueInput
+  }
+
+  /**
+   * mapping_change_flag findUniqueOrThrow
+   */
+  export type mapping_change_flagFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+    /**
+     * Filter, which mapping_change_flag to fetch.
+     */
+    where: mapping_change_flagWhereUniqueInput
+  }
+
+  /**
+   * mapping_change_flag findFirst
+   */
+  export type mapping_change_flagFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+    /**
+     * Filter, which mapping_change_flag to fetch.
+     */
+    where?: mapping_change_flagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mapping_change_flags to fetch.
+     */
+    orderBy?: mapping_change_flagOrderByWithRelationInput | mapping_change_flagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for mapping_change_flags.
+     */
+    cursor?: mapping_change_flagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mapping_change_flags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mapping_change_flags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of mapping_change_flags.
+     */
+    distinct?: Mapping_change_flagScalarFieldEnum | Mapping_change_flagScalarFieldEnum[]
+  }
+
+  /**
+   * mapping_change_flag findFirstOrThrow
+   */
+  export type mapping_change_flagFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+    /**
+     * Filter, which mapping_change_flag to fetch.
+     */
+    where?: mapping_change_flagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mapping_change_flags to fetch.
+     */
+    orderBy?: mapping_change_flagOrderByWithRelationInput | mapping_change_flagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for mapping_change_flags.
+     */
+    cursor?: mapping_change_flagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mapping_change_flags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mapping_change_flags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of mapping_change_flags.
+     */
+    distinct?: Mapping_change_flagScalarFieldEnum | Mapping_change_flagScalarFieldEnum[]
+  }
+
+  /**
+   * mapping_change_flag findMany
+   */
+  export type mapping_change_flagFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+    /**
+     * Filter, which mapping_change_flags to fetch.
+     */
+    where?: mapping_change_flagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mapping_change_flags to fetch.
+     */
+    orderBy?: mapping_change_flagOrderByWithRelationInput | mapping_change_flagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing mapping_change_flags.
+     */
+    cursor?: mapping_change_flagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mapping_change_flags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mapping_change_flags.
+     */
+    skip?: number
+    distinct?: Mapping_change_flagScalarFieldEnum | Mapping_change_flagScalarFieldEnum[]
+  }
+
+  /**
+   * mapping_change_flag create
+   */
+  export type mapping_change_flagCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+    /**
+     * The data needed to create a mapping_change_flag.
+     */
+    data?: XOR<mapping_change_flagCreateInput, mapping_change_flagUncheckedCreateInput>
+  }
+
+  /**
+   * mapping_change_flag createMany
+   */
+  export type mapping_change_flagCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many mapping_change_flags.
+     */
+    data: mapping_change_flagCreateManyInput | mapping_change_flagCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * mapping_change_flag update
+   */
+  export type mapping_change_flagUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+    /**
+     * The data needed to update a mapping_change_flag.
+     */
+    data: XOR<mapping_change_flagUpdateInput, mapping_change_flagUncheckedUpdateInput>
+    /**
+     * Choose, which mapping_change_flag to update.
+     */
+    where: mapping_change_flagWhereUniqueInput
+  }
+
+  /**
+   * mapping_change_flag updateMany
+   */
+  export type mapping_change_flagUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update mapping_change_flags.
+     */
+    data: XOR<mapping_change_flagUpdateManyMutationInput, mapping_change_flagUncheckedUpdateManyInput>
+    /**
+     * Filter which mapping_change_flags to update
+     */
+    where?: mapping_change_flagWhereInput
+    /**
+     * Limit how many mapping_change_flags to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * mapping_change_flag upsert
+   */
+  export type mapping_change_flagUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+    /**
+     * The filter to search for the mapping_change_flag to update in case it exists.
+     */
+    where: mapping_change_flagWhereUniqueInput
+    /**
+     * In case the mapping_change_flag found by the `where` argument doesn't exist, create a new mapping_change_flag with this data.
+     */
+    create: XOR<mapping_change_flagCreateInput, mapping_change_flagUncheckedCreateInput>
+    /**
+     * In case the mapping_change_flag was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<mapping_change_flagUpdateInput, mapping_change_flagUncheckedUpdateInput>
+  }
+
+  /**
+   * mapping_change_flag delete
+   */
+  export type mapping_change_flagDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+    /**
+     * Filter which mapping_change_flag to delete.
+     */
+    where: mapping_change_flagWhereUniqueInput
+  }
+
+  /**
+   * mapping_change_flag deleteMany
+   */
+  export type mapping_change_flagDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which mapping_change_flags to delete
+     */
+    where?: mapping_change_flagWhereInput
+    /**
+     * Limit how many mapping_change_flags to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * mapping_change_flag without action
+   */
+  export type mapping_change_flagDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
   }
 
 
@@ -8824,24 +11590,6 @@ export namespace Prisma {
   export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
-  export const Psr_dataScalarFieldEnum: {
-    psr_id: 'psr_id',
-    document_no: 'document_no',
-    document_date: 'document_date',
-    subbrandform: 'subbrandform',
-    customer_name: 'customer_name',
-    customer_code: 'customer_code',
-    p_code: 'p_code',
-    customer_type: 'customer_type',
-    category: 'category',
-    brand: 'brand',
-    brandform: 'brandform',
-    retailing: 'retailing'
-  };
-
-  export type Psr_dataScalarFieldEnum = (typeof Psr_dataScalarFieldEnum)[keyof typeof Psr_dataScalarFieldEnum]
-
-
   export const Psr_data_tempScalarFieldEnum: {
     psr_id: 'psr_id',
     document_no: 'document_no',
@@ -8860,12 +11608,75 @@ export namespace Prisma {
   export type Psr_data_tempScalarFieldEnum = (typeof Psr_data_tempScalarFieldEnum)[keyof typeof Psr_data_tempScalarFieldEnum]
 
 
+  export const Psr_data_historicalScalarFieldEnum: {
+    psr_id: 'psr_id',
+    document_no: 'document_no',
+    document_date: 'document_date',
+    subbrandform: 'subbrandform',
+    customer_name: 'customer_name',
+    customer_code: 'customer_code',
+    p_code: 'p_code',
+    customer_type: 'customer_type',
+    category: 'category',
+    brand: 'brand',
+    brandform: 'brandform',
+    retailing: 'retailing'
+  };
+
+  export type Psr_data_historicalScalarFieldEnum = (typeof Psr_data_historicalScalarFieldEnum)[keyof typeof Psr_data_historicalScalarFieldEnum]
+
+
+  export const Psr_finalized_tempScalarFieldEnum: {
+    id: 'id',
+    document_date: 'document_date',
+    customer_code: 'customer_code',
+    branch: 'branch',
+    ZM: 'ZM',
+    RSM: 'RSM',
+    ASM: 'ASM',
+    TSI: 'TSI',
+    category: 'category',
+    brand: 'brand',
+    brandform: 'brandform',
+    subbrandform: 'subbrandform',
+    base_channel: 'base_channel',
+    short_channel: 'short_channel',
+    channel_desc: 'channel_desc',
+    retailing: 'retailing'
+  };
+
+  export type Psr_finalized_tempScalarFieldEnum = (typeof Psr_finalized_tempScalarFieldEnum)[keyof typeof Psr_finalized_tempScalarFieldEnum]
+
+
+  export const Psr_data_finalizedScalarFieldEnum: {
+    id: 'id',
+    document_date: 'document_date',
+    customer_code: 'customer_code',
+    branch: 'branch',
+    ZM: 'ZM',
+    RSM: 'RSM',
+    ASM: 'ASM',
+    TSI: 'TSI',
+    category: 'category',
+    brand: 'brand',
+    brandform: 'brandform',
+    subbrandform: 'subbrandform',
+    base_channel: 'base_channel',
+    short_channel: 'short_channel',
+    channel_desc: 'channel_desc',
+    retailing: 'retailing'
+  };
+
+  export type Psr_data_finalizedScalarFieldEnum = (typeof Psr_data_finalizedScalarFieldEnum)[keyof typeof Psr_data_finalizedScalarFieldEnum]
+
+
   export const Channel_mappingScalarFieldEnum: {
     channel_id: 'channel_id',
     customer_type: 'customer_type',
     base_channel: 'base_channel',
     short_channel: 'short_channel',
-    channel_desc: 'channel_desc'
+    channel_desc: 'channel_desc',
+    created_at: 'created_at'
   };
 
   export type Channel_mappingScalarFieldEnum = (typeof Channel_mappingScalarFieldEnum)[keyof typeof Channel_mappingScalarFieldEnum]
@@ -8882,7 +11693,8 @@ export namespace Prisma {
     ZM: 'ZM',
     RSM: 'RSM',
     ASM: 'ASM',
-    TSI: 'TSI'
+    TSI: 'TSI',
+    created_at: 'created_at'
   };
 
   export type Store_mappingScalarFieldEnum = (typeof Store_mappingScalarFieldEnum)[keyof typeof Store_mappingScalarFieldEnum]
@@ -8895,10 +11707,20 @@ export namespace Prisma {
     category: 'category',
     brand: 'brand',
     brandform: 'brandform',
-    subbrandform: 'subbrandform'
+    subbrandform: 'subbrandform',
+    created_at: 'created_at'
   };
 
   export type Product_mappingScalarFieldEnum = (typeof Product_mappingScalarFieldEnum)[keyof typeof Product_mappingScalarFieldEnum]
+
+
+  export const Mapping_change_flagScalarFieldEnum: {
+    id: 'id',
+    changed_at: 'changed_at',
+    processed: 'processed'
+  };
+
+  export type Mapping_change_flagScalarFieldEnum = (typeof Mapping_change_flagScalarFieldEnum)[keyof typeof Mapping_change_flagScalarFieldEnum]
 
 
   export const UserScalarFieldEnum: {
@@ -8948,20 +11770,6 @@ export namespace Prisma {
   export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 
-  export const psr_dataOrderByRelevanceFieldEnum: {
-    document_no: 'document_no',
-    subbrandform: 'subbrandform',
-    customer_name: 'customer_name',
-    customer_code: 'customer_code',
-    customer_type: 'customer_type',
-    category: 'category',
-    brand: 'brand',
-    brandform: 'brandform'
-  };
-
-  export type psr_dataOrderByRelevanceFieldEnum = (typeof psr_dataOrderByRelevanceFieldEnum)[keyof typeof psr_dataOrderByRelevanceFieldEnum]
-
-
   export const psr_data_tempOrderByRelevanceFieldEnum: {
     document_no: 'document_no',
     subbrandform: 'subbrandform',
@@ -8974,6 +11782,66 @@ export namespace Prisma {
   };
 
   export type psr_data_tempOrderByRelevanceFieldEnum = (typeof psr_data_tempOrderByRelevanceFieldEnum)[keyof typeof psr_data_tempOrderByRelevanceFieldEnum]
+
+
+  export const psr_data_historicalOrderByRelevanceFieldEnum: {
+    document_no: 'document_no',
+    subbrandform: 'subbrandform',
+    customer_name: 'customer_name',
+    customer_code: 'customer_code',
+    customer_type: 'customer_type',
+    category: 'category',
+    brand: 'brand',
+    brandform: 'brandform'
+  };
+
+  export type psr_data_historicalOrderByRelevanceFieldEnum = (typeof psr_data_historicalOrderByRelevanceFieldEnum)[keyof typeof psr_data_historicalOrderByRelevanceFieldEnum]
+
+
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+  export const psr_finalized_tempOrderByRelevanceFieldEnum: {
+    customer_code: 'customer_code',
+    branch: 'branch',
+    ZM: 'ZM',
+    RSM: 'RSM',
+    ASM: 'ASM',
+    TSI: 'TSI',
+    category: 'category',
+    brand: 'brand',
+    brandform: 'brandform',
+    subbrandform: 'subbrandform',
+    base_channel: 'base_channel',
+    short_channel: 'short_channel',
+    channel_desc: 'channel_desc'
+  };
+
+  export type psr_finalized_tempOrderByRelevanceFieldEnum = (typeof psr_finalized_tempOrderByRelevanceFieldEnum)[keyof typeof psr_finalized_tempOrderByRelevanceFieldEnum]
+
+
+  export const psr_data_finalizedOrderByRelevanceFieldEnum: {
+    customer_code: 'customer_code',
+    branch: 'branch',
+    ZM: 'ZM',
+    RSM: 'RSM',
+    ASM: 'ASM',
+    TSI: 'TSI',
+    category: 'category',
+    brand: 'brand',
+    brandform: 'brandform',
+    subbrandform: 'subbrandform',
+    base_channel: 'base_channel',
+    short_channel: 'short_channel',
+    channel_desc: 'channel_desc'
+  };
+
+  export type psr_data_finalizedOrderByRelevanceFieldEnum = (typeof psr_data_finalizedOrderByRelevanceFieldEnum)[keyof typeof psr_data_finalizedOrderByRelevanceFieldEnum]
 
 
   export const channel_mappingOrderByRelevanceFieldEnum: {
@@ -9011,14 +11879,6 @@ export namespace Prisma {
   };
 
   export type product_mappingOrderByRelevanceFieldEnum = (typeof product_mappingOrderByRelevanceFieldEnum)[keyof typeof product_mappingOrderByRelevanceFieldEnum]
-
-
-  export const NullsOrder: {
-    first: 'first',
-    last: 'last'
-  };
-
-  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
   export const UserOrderByRelevanceFieldEnum: {
@@ -9121,102 +11981,6 @@ export namespace Prisma {
    */
 
 
-  export type psr_dataWhereInput = {
-    AND?: psr_dataWhereInput | psr_dataWhereInput[]
-    OR?: psr_dataWhereInput[]
-    NOT?: psr_dataWhereInput | psr_dataWhereInput[]
-    psr_id?: IntFilter<"psr_data"> | number
-    document_no?: StringFilter<"psr_data"> | string
-    document_date?: DateTimeFilter<"psr_data"> | Date | string
-    subbrandform?: StringFilter<"psr_data"> | string
-    customer_name?: StringFilter<"psr_data"> | string
-    customer_code?: StringFilter<"psr_data"> | string
-    p_code?: IntFilter<"psr_data"> | number
-    customer_type?: StringFilter<"psr_data"> | string
-    category?: StringFilter<"psr_data"> | string
-    brand?: StringFilter<"psr_data"> | string
-    brandform?: StringFilter<"psr_data"> | string
-    retailing?: DecimalFilter<"psr_data"> | Decimal | DecimalJsLike | number | string
-    store_mapping?: XOR<Store_mappingScalarRelationFilter, store_mappingWhereInput>
-    product_mapping?: XOR<Product_mappingScalarRelationFilter, product_mappingWhereInput>
-  }
-
-  export type psr_dataOrderByWithRelationInput = {
-    psr_id?: SortOrder
-    document_no?: SortOrder
-    document_date?: SortOrder
-    subbrandform?: SortOrder
-    customer_name?: SortOrder
-    customer_code?: SortOrder
-    p_code?: SortOrder
-    customer_type?: SortOrder
-    category?: SortOrder
-    brand?: SortOrder
-    brandform?: SortOrder
-    retailing?: SortOrder
-    store_mapping?: store_mappingOrderByWithRelationInput
-    product_mapping?: product_mappingOrderByWithRelationInput
-    _relevance?: psr_dataOrderByRelevanceInput
-  }
-
-  export type psr_dataWhereUniqueInput = Prisma.AtLeast<{
-    psr_id?: number
-    AND?: psr_dataWhereInput | psr_dataWhereInput[]
-    OR?: psr_dataWhereInput[]
-    NOT?: psr_dataWhereInput | psr_dataWhereInput[]
-    document_no?: StringFilter<"psr_data"> | string
-    document_date?: DateTimeFilter<"psr_data"> | Date | string
-    subbrandform?: StringFilter<"psr_data"> | string
-    customer_name?: StringFilter<"psr_data"> | string
-    customer_code?: StringFilter<"psr_data"> | string
-    p_code?: IntFilter<"psr_data"> | number
-    customer_type?: StringFilter<"psr_data"> | string
-    category?: StringFilter<"psr_data"> | string
-    brand?: StringFilter<"psr_data"> | string
-    brandform?: StringFilter<"psr_data"> | string
-    retailing?: DecimalFilter<"psr_data"> | Decimal | DecimalJsLike | number | string
-    store_mapping?: XOR<Store_mappingScalarRelationFilter, store_mappingWhereInput>
-    product_mapping?: XOR<Product_mappingScalarRelationFilter, product_mappingWhereInput>
-  }, "psr_id">
-
-  export type psr_dataOrderByWithAggregationInput = {
-    psr_id?: SortOrder
-    document_no?: SortOrder
-    document_date?: SortOrder
-    subbrandform?: SortOrder
-    customer_name?: SortOrder
-    customer_code?: SortOrder
-    p_code?: SortOrder
-    customer_type?: SortOrder
-    category?: SortOrder
-    brand?: SortOrder
-    brandform?: SortOrder
-    retailing?: SortOrder
-    _count?: psr_dataCountOrderByAggregateInput
-    _avg?: psr_dataAvgOrderByAggregateInput
-    _max?: psr_dataMaxOrderByAggregateInput
-    _min?: psr_dataMinOrderByAggregateInput
-    _sum?: psr_dataSumOrderByAggregateInput
-  }
-
-  export type psr_dataScalarWhereWithAggregatesInput = {
-    AND?: psr_dataScalarWhereWithAggregatesInput | psr_dataScalarWhereWithAggregatesInput[]
-    OR?: psr_dataScalarWhereWithAggregatesInput[]
-    NOT?: psr_dataScalarWhereWithAggregatesInput | psr_dataScalarWhereWithAggregatesInput[]
-    psr_id?: IntWithAggregatesFilter<"psr_data"> | number
-    document_no?: StringWithAggregatesFilter<"psr_data"> | string
-    document_date?: DateTimeWithAggregatesFilter<"psr_data"> | Date | string
-    subbrandform?: StringWithAggregatesFilter<"psr_data"> | string
-    customer_name?: StringWithAggregatesFilter<"psr_data"> | string
-    customer_code?: StringWithAggregatesFilter<"psr_data"> | string
-    p_code?: IntWithAggregatesFilter<"psr_data"> | number
-    customer_type?: StringWithAggregatesFilter<"psr_data"> | string
-    category?: StringWithAggregatesFilter<"psr_data"> | string
-    brand?: StringWithAggregatesFilter<"psr_data"> | string
-    brandform?: StringWithAggregatesFilter<"psr_data"> | string
-    retailing?: DecimalWithAggregatesFilter<"psr_data"> | Decimal | DecimalJsLike | number | string
-  }
-
   export type psr_data_tempWhereInput = {
     AND?: psr_data_tempWhereInput | psr_data_tempWhereInput[]
     OR?: psr_data_tempWhereInput[]
@@ -9233,8 +11997,6 @@ export namespace Prisma {
     brand?: StringFilter<"psr_data_temp"> | string
     brandform?: StringFilter<"psr_data_temp"> | string
     retailing?: DecimalFilter<"psr_data_temp"> | Decimal | DecimalJsLike | number | string
-    store_mapping?: XOR<Store_mappingScalarRelationFilter, store_mappingWhereInput>
-    product_mapping?: XOR<Product_mappingScalarRelationFilter, product_mappingWhereInput>
   }
 
   export type psr_data_tempOrderByWithRelationInput = {
@@ -9250,8 +12012,6 @@ export namespace Prisma {
     brand?: SortOrder
     brandform?: SortOrder
     retailing?: SortOrder
-    store_mapping?: store_mappingOrderByWithRelationInput
-    product_mapping?: product_mappingOrderByWithRelationInput
     _relevance?: psr_data_tempOrderByRelevanceInput
   }
 
@@ -9271,8 +12031,6 @@ export namespace Prisma {
     brand?: StringFilter<"psr_data_temp"> | string
     brandform?: StringFilter<"psr_data_temp"> | string
     retailing?: DecimalFilter<"psr_data_temp"> | Decimal | DecimalJsLike | number | string
-    store_mapping?: XOR<Store_mappingScalarRelationFilter, store_mappingWhereInput>
-    product_mapping?: XOR<Product_mappingScalarRelationFilter, product_mappingWhereInput>
   }, "psr_id">
 
   export type psr_data_tempOrderByWithAggregationInput = {
@@ -9313,6 +12071,316 @@ export namespace Prisma {
     retailing?: DecimalWithAggregatesFilter<"psr_data_temp"> | Decimal | DecimalJsLike | number | string
   }
 
+  export type psr_data_historicalWhereInput = {
+    AND?: psr_data_historicalWhereInput | psr_data_historicalWhereInput[]
+    OR?: psr_data_historicalWhereInput[]
+    NOT?: psr_data_historicalWhereInput | psr_data_historicalWhereInput[]
+    psr_id?: IntFilter<"psr_data_historical"> | number
+    document_no?: StringFilter<"psr_data_historical"> | string
+    document_date?: DateTimeFilter<"psr_data_historical"> | Date | string
+    subbrandform?: StringFilter<"psr_data_historical"> | string
+    customer_name?: StringFilter<"psr_data_historical"> | string
+    customer_code?: StringFilter<"psr_data_historical"> | string
+    p_code?: IntFilter<"psr_data_historical"> | number
+    customer_type?: StringFilter<"psr_data_historical"> | string
+    category?: StringFilter<"psr_data_historical"> | string
+    brand?: StringFilter<"psr_data_historical"> | string
+    brandform?: StringFilter<"psr_data_historical"> | string
+    retailing?: DecimalFilter<"psr_data_historical"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_historicalOrderByWithRelationInput = {
+    psr_id?: SortOrder
+    document_no?: SortOrder
+    document_date?: SortOrder
+    subbrandform?: SortOrder
+    customer_name?: SortOrder
+    customer_code?: SortOrder
+    p_code?: SortOrder
+    customer_type?: SortOrder
+    category?: SortOrder
+    brand?: SortOrder
+    brandform?: SortOrder
+    retailing?: SortOrder
+    _relevance?: psr_data_historicalOrderByRelevanceInput
+  }
+
+  export type psr_data_historicalWhereUniqueInput = Prisma.AtLeast<{
+    psr_id?: number
+    AND?: psr_data_historicalWhereInput | psr_data_historicalWhereInput[]
+    OR?: psr_data_historicalWhereInput[]
+    NOT?: psr_data_historicalWhereInput | psr_data_historicalWhereInput[]
+    document_no?: StringFilter<"psr_data_historical"> | string
+    document_date?: DateTimeFilter<"psr_data_historical"> | Date | string
+    subbrandform?: StringFilter<"psr_data_historical"> | string
+    customer_name?: StringFilter<"psr_data_historical"> | string
+    customer_code?: StringFilter<"psr_data_historical"> | string
+    p_code?: IntFilter<"psr_data_historical"> | number
+    customer_type?: StringFilter<"psr_data_historical"> | string
+    category?: StringFilter<"psr_data_historical"> | string
+    brand?: StringFilter<"psr_data_historical"> | string
+    brandform?: StringFilter<"psr_data_historical"> | string
+    retailing?: DecimalFilter<"psr_data_historical"> | Decimal | DecimalJsLike | number | string
+  }, "psr_id">
+
+  export type psr_data_historicalOrderByWithAggregationInput = {
+    psr_id?: SortOrder
+    document_no?: SortOrder
+    document_date?: SortOrder
+    subbrandform?: SortOrder
+    customer_name?: SortOrder
+    customer_code?: SortOrder
+    p_code?: SortOrder
+    customer_type?: SortOrder
+    category?: SortOrder
+    brand?: SortOrder
+    brandform?: SortOrder
+    retailing?: SortOrder
+    _count?: psr_data_historicalCountOrderByAggregateInput
+    _avg?: psr_data_historicalAvgOrderByAggregateInput
+    _max?: psr_data_historicalMaxOrderByAggregateInput
+    _min?: psr_data_historicalMinOrderByAggregateInput
+    _sum?: psr_data_historicalSumOrderByAggregateInput
+  }
+
+  export type psr_data_historicalScalarWhereWithAggregatesInput = {
+    AND?: psr_data_historicalScalarWhereWithAggregatesInput | psr_data_historicalScalarWhereWithAggregatesInput[]
+    OR?: psr_data_historicalScalarWhereWithAggregatesInput[]
+    NOT?: psr_data_historicalScalarWhereWithAggregatesInput | psr_data_historicalScalarWhereWithAggregatesInput[]
+    psr_id?: IntWithAggregatesFilter<"psr_data_historical"> | number
+    document_no?: StringWithAggregatesFilter<"psr_data_historical"> | string
+    document_date?: DateTimeWithAggregatesFilter<"psr_data_historical"> | Date | string
+    subbrandform?: StringWithAggregatesFilter<"psr_data_historical"> | string
+    customer_name?: StringWithAggregatesFilter<"psr_data_historical"> | string
+    customer_code?: StringWithAggregatesFilter<"psr_data_historical"> | string
+    p_code?: IntWithAggregatesFilter<"psr_data_historical"> | number
+    customer_type?: StringWithAggregatesFilter<"psr_data_historical"> | string
+    category?: StringWithAggregatesFilter<"psr_data_historical"> | string
+    brand?: StringWithAggregatesFilter<"psr_data_historical"> | string
+    brandform?: StringWithAggregatesFilter<"psr_data_historical"> | string
+    retailing?: DecimalWithAggregatesFilter<"psr_data_historical"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_finalized_tempWhereInput = {
+    AND?: psr_finalized_tempWhereInput | psr_finalized_tempWhereInput[]
+    OR?: psr_finalized_tempWhereInput[]
+    NOT?: psr_finalized_tempWhereInput | psr_finalized_tempWhereInput[]
+    id?: IntFilter<"psr_finalized_temp"> | number
+    document_date?: DateTimeFilter<"psr_finalized_temp"> | Date | string
+    customer_code?: StringFilter<"psr_finalized_temp"> | string
+    branch?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    ZM?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    RSM?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    ASM?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    TSI?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    category?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    brand?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    brandform?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    subbrandform?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    base_channel?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    short_channel?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    channel_desc?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    retailing?: DecimalFilter<"psr_finalized_temp"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_finalized_tempOrderByWithRelationInput = {
+    id?: SortOrder
+    document_date?: SortOrder
+    customer_code?: SortOrder
+    branch?: SortOrderInput | SortOrder
+    ZM?: SortOrderInput | SortOrder
+    RSM?: SortOrderInput | SortOrder
+    ASM?: SortOrderInput | SortOrder
+    TSI?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    brand?: SortOrderInput | SortOrder
+    brandform?: SortOrderInput | SortOrder
+    subbrandform?: SortOrderInput | SortOrder
+    base_channel?: SortOrderInput | SortOrder
+    short_channel?: SortOrderInput | SortOrder
+    channel_desc?: SortOrderInput | SortOrder
+    retailing?: SortOrder
+    _relevance?: psr_finalized_tempOrderByRelevanceInput
+  }
+
+  export type psr_finalized_tempWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: psr_finalized_tempWhereInput | psr_finalized_tempWhereInput[]
+    OR?: psr_finalized_tempWhereInput[]
+    NOT?: psr_finalized_tempWhereInput | psr_finalized_tempWhereInput[]
+    document_date?: DateTimeFilter<"psr_finalized_temp"> | Date | string
+    customer_code?: StringFilter<"psr_finalized_temp"> | string
+    branch?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    ZM?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    RSM?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    ASM?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    TSI?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    category?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    brand?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    brandform?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    subbrandform?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    base_channel?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    short_channel?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    channel_desc?: StringNullableFilter<"psr_finalized_temp"> | string | null
+    retailing?: DecimalFilter<"psr_finalized_temp"> | Decimal | DecimalJsLike | number | string
+  }, "id">
+
+  export type psr_finalized_tempOrderByWithAggregationInput = {
+    id?: SortOrder
+    document_date?: SortOrder
+    customer_code?: SortOrder
+    branch?: SortOrderInput | SortOrder
+    ZM?: SortOrderInput | SortOrder
+    RSM?: SortOrderInput | SortOrder
+    ASM?: SortOrderInput | SortOrder
+    TSI?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    brand?: SortOrderInput | SortOrder
+    brandform?: SortOrderInput | SortOrder
+    subbrandform?: SortOrderInput | SortOrder
+    base_channel?: SortOrderInput | SortOrder
+    short_channel?: SortOrderInput | SortOrder
+    channel_desc?: SortOrderInput | SortOrder
+    retailing?: SortOrder
+    _count?: psr_finalized_tempCountOrderByAggregateInput
+    _avg?: psr_finalized_tempAvgOrderByAggregateInput
+    _max?: psr_finalized_tempMaxOrderByAggregateInput
+    _min?: psr_finalized_tempMinOrderByAggregateInput
+    _sum?: psr_finalized_tempSumOrderByAggregateInput
+  }
+
+  export type psr_finalized_tempScalarWhereWithAggregatesInput = {
+    AND?: psr_finalized_tempScalarWhereWithAggregatesInput | psr_finalized_tempScalarWhereWithAggregatesInput[]
+    OR?: psr_finalized_tempScalarWhereWithAggregatesInput[]
+    NOT?: psr_finalized_tempScalarWhereWithAggregatesInput | psr_finalized_tempScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"psr_finalized_temp"> | number
+    document_date?: DateTimeWithAggregatesFilter<"psr_finalized_temp"> | Date | string
+    customer_code?: StringWithAggregatesFilter<"psr_finalized_temp"> | string
+    branch?: StringNullableWithAggregatesFilter<"psr_finalized_temp"> | string | null
+    ZM?: StringNullableWithAggregatesFilter<"psr_finalized_temp"> | string | null
+    RSM?: StringNullableWithAggregatesFilter<"psr_finalized_temp"> | string | null
+    ASM?: StringNullableWithAggregatesFilter<"psr_finalized_temp"> | string | null
+    TSI?: StringNullableWithAggregatesFilter<"psr_finalized_temp"> | string | null
+    category?: StringNullableWithAggregatesFilter<"psr_finalized_temp"> | string | null
+    brand?: StringNullableWithAggregatesFilter<"psr_finalized_temp"> | string | null
+    brandform?: StringNullableWithAggregatesFilter<"psr_finalized_temp"> | string | null
+    subbrandform?: StringNullableWithAggregatesFilter<"psr_finalized_temp"> | string | null
+    base_channel?: StringNullableWithAggregatesFilter<"psr_finalized_temp"> | string | null
+    short_channel?: StringNullableWithAggregatesFilter<"psr_finalized_temp"> | string | null
+    channel_desc?: StringNullableWithAggregatesFilter<"psr_finalized_temp"> | string | null
+    retailing?: DecimalWithAggregatesFilter<"psr_finalized_temp"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_finalizedWhereInput = {
+    AND?: psr_data_finalizedWhereInput | psr_data_finalizedWhereInput[]
+    OR?: psr_data_finalizedWhereInput[]
+    NOT?: psr_data_finalizedWhereInput | psr_data_finalizedWhereInput[]
+    id?: IntFilter<"psr_data_finalized"> | number
+    document_date?: DateTimeFilter<"psr_data_finalized"> | Date | string
+    customer_code?: StringFilter<"psr_data_finalized"> | string
+    branch?: StringNullableFilter<"psr_data_finalized"> | string | null
+    ZM?: StringNullableFilter<"psr_data_finalized"> | string | null
+    RSM?: StringNullableFilter<"psr_data_finalized"> | string | null
+    ASM?: StringNullableFilter<"psr_data_finalized"> | string | null
+    TSI?: StringNullableFilter<"psr_data_finalized"> | string | null
+    category?: StringNullableFilter<"psr_data_finalized"> | string | null
+    brand?: StringNullableFilter<"psr_data_finalized"> | string | null
+    brandform?: StringNullableFilter<"psr_data_finalized"> | string | null
+    subbrandform?: StringNullableFilter<"psr_data_finalized"> | string | null
+    base_channel?: StringNullableFilter<"psr_data_finalized"> | string | null
+    short_channel?: StringNullableFilter<"psr_data_finalized"> | string | null
+    channel_desc?: StringNullableFilter<"psr_data_finalized"> | string | null
+    retailing?: DecimalFilter<"psr_data_finalized"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_finalizedOrderByWithRelationInput = {
+    id?: SortOrder
+    document_date?: SortOrder
+    customer_code?: SortOrder
+    branch?: SortOrderInput | SortOrder
+    ZM?: SortOrderInput | SortOrder
+    RSM?: SortOrderInput | SortOrder
+    ASM?: SortOrderInput | SortOrder
+    TSI?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    brand?: SortOrderInput | SortOrder
+    brandform?: SortOrderInput | SortOrder
+    subbrandform?: SortOrderInput | SortOrder
+    base_channel?: SortOrderInput | SortOrder
+    short_channel?: SortOrderInput | SortOrder
+    channel_desc?: SortOrderInput | SortOrder
+    retailing?: SortOrder
+    _relevance?: psr_data_finalizedOrderByRelevanceInput
+  }
+
+  export type psr_data_finalizedWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: psr_data_finalizedWhereInput | psr_data_finalizedWhereInput[]
+    OR?: psr_data_finalizedWhereInput[]
+    NOT?: psr_data_finalizedWhereInput | psr_data_finalizedWhereInput[]
+    document_date?: DateTimeFilter<"psr_data_finalized"> | Date | string
+    customer_code?: StringFilter<"psr_data_finalized"> | string
+    branch?: StringNullableFilter<"psr_data_finalized"> | string | null
+    ZM?: StringNullableFilter<"psr_data_finalized"> | string | null
+    RSM?: StringNullableFilter<"psr_data_finalized"> | string | null
+    ASM?: StringNullableFilter<"psr_data_finalized"> | string | null
+    TSI?: StringNullableFilter<"psr_data_finalized"> | string | null
+    category?: StringNullableFilter<"psr_data_finalized"> | string | null
+    brand?: StringNullableFilter<"psr_data_finalized"> | string | null
+    brandform?: StringNullableFilter<"psr_data_finalized"> | string | null
+    subbrandform?: StringNullableFilter<"psr_data_finalized"> | string | null
+    base_channel?: StringNullableFilter<"psr_data_finalized"> | string | null
+    short_channel?: StringNullableFilter<"psr_data_finalized"> | string | null
+    channel_desc?: StringNullableFilter<"psr_data_finalized"> | string | null
+    retailing?: DecimalFilter<"psr_data_finalized"> | Decimal | DecimalJsLike | number | string
+  }, "id">
+
+  export type psr_data_finalizedOrderByWithAggregationInput = {
+    id?: SortOrder
+    document_date?: SortOrder
+    customer_code?: SortOrder
+    branch?: SortOrderInput | SortOrder
+    ZM?: SortOrderInput | SortOrder
+    RSM?: SortOrderInput | SortOrder
+    ASM?: SortOrderInput | SortOrder
+    TSI?: SortOrderInput | SortOrder
+    category?: SortOrderInput | SortOrder
+    brand?: SortOrderInput | SortOrder
+    brandform?: SortOrderInput | SortOrder
+    subbrandform?: SortOrderInput | SortOrder
+    base_channel?: SortOrderInput | SortOrder
+    short_channel?: SortOrderInput | SortOrder
+    channel_desc?: SortOrderInput | SortOrder
+    retailing?: SortOrder
+    _count?: psr_data_finalizedCountOrderByAggregateInput
+    _avg?: psr_data_finalizedAvgOrderByAggregateInput
+    _max?: psr_data_finalizedMaxOrderByAggregateInput
+    _min?: psr_data_finalizedMinOrderByAggregateInput
+    _sum?: psr_data_finalizedSumOrderByAggregateInput
+  }
+
+  export type psr_data_finalizedScalarWhereWithAggregatesInput = {
+    AND?: psr_data_finalizedScalarWhereWithAggregatesInput | psr_data_finalizedScalarWhereWithAggregatesInput[]
+    OR?: psr_data_finalizedScalarWhereWithAggregatesInput[]
+    NOT?: psr_data_finalizedScalarWhereWithAggregatesInput | psr_data_finalizedScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"psr_data_finalized"> | number
+    document_date?: DateTimeWithAggregatesFilter<"psr_data_finalized"> | Date | string
+    customer_code?: StringWithAggregatesFilter<"psr_data_finalized"> | string
+    branch?: StringNullableWithAggregatesFilter<"psr_data_finalized"> | string | null
+    ZM?: StringNullableWithAggregatesFilter<"psr_data_finalized"> | string | null
+    RSM?: StringNullableWithAggregatesFilter<"psr_data_finalized"> | string | null
+    ASM?: StringNullableWithAggregatesFilter<"psr_data_finalized"> | string | null
+    TSI?: StringNullableWithAggregatesFilter<"psr_data_finalized"> | string | null
+    category?: StringNullableWithAggregatesFilter<"psr_data_finalized"> | string | null
+    brand?: StringNullableWithAggregatesFilter<"psr_data_finalized"> | string | null
+    brandform?: StringNullableWithAggregatesFilter<"psr_data_finalized"> | string | null
+    subbrandform?: StringNullableWithAggregatesFilter<"psr_data_finalized"> | string | null
+    base_channel?: StringNullableWithAggregatesFilter<"psr_data_finalized"> | string | null
+    short_channel?: StringNullableWithAggregatesFilter<"psr_data_finalized"> | string | null
+    channel_desc?: StringNullableWithAggregatesFilter<"psr_data_finalized"> | string | null
+    retailing?: DecimalWithAggregatesFilter<"psr_data_finalized"> | Decimal | DecimalJsLike | number | string
+  }
+
   export type channel_mappingWhereInput = {
     AND?: channel_mappingWhereInput | channel_mappingWhereInput[]
     OR?: channel_mappingWhereInput[]
@@ -9322,7 +12390,7 @@ export namespace Prisma {
     base_channel?: StringFilter<"channel_mapping"> | string
     short_channel?: StringFilter<"channel_mapping"> | string
     channel_desc?: StringFilter<"channel_mapping"> | string
-    store_mapping?: Store_mappingListRelationFilter
+    created_at?: DateTimeFilter<"channel_mapping"> | Date | string
   }
 
   export type channel_mappingOrderByWithRelationInput = {
@@ -9331,21 +12399,21 @@ export namespace Prisma {
     base_channel?: SortOrder
     short_channel?: SortOrder
     channel_desc?: SortOrder
-    store_mapping?: store_mappingOrderByRelationAggregateInput
+    created_at?: SortOrder
     _relevance?: channel_mappingOrderByRelevanceInput
   }
 
   export type channel_mappingWhereUniqueInput = Prisma.AtLeast<{
     channel_id?: number
-    customer_type?: string
     AND?: channel_mappingWhereInput | channel_mappingWhereInput[]
     OR?: channel_mappingWhereInput[]
     NOT?: channel_mappingWhereInput | channel_mappingWhereInput[]
+    customer_type?: StringFilter<"channel_mapping"> | string
     base_channel?: StringFilter<"channel_mapping"> | string
     short_channel?: StringFilter<"channel_mapping"> | string
     channel_desc?: StringFilter<"channel_mapping"> | string
-    store_mapping?: Store_mappingListRelationFilter
-  }, "channel_id" | "customer_type">
+    created_at?: DateTimeFilter<"channel_mapping"> | Date | string
+  }, "channel_id">
 
   export type channel_mappingOrderByWithAggregationInput = {
     channel_id?: SortOrder
@@ -9353,6 +12421,7 @@ export namespace Prisma {
     base_channel?: SortOrder
     short_channel?: SortOrder
     channel_desc?: SortOrder
+    created_at?: SortOrder
     _count?: channel_mappingCountOrderByAggregateInput
     _avg?: channel_mappingAvgOrderByAggregateInput
     _max?: channel_mappingMaxOrderByAggregateInput
@@ -9369,6 +12438,7 @@ export namespace Prisma {
     base_channel?: StringWithAggregatesFilter<"channel_mapping"> | string
     short_channel?: StringWithAggregatesFilter<"channel_mapping"> | string
     channel_desc?: StringWithAggregatesFilter<"channel_mapping"> | string
+    created_at?: DateTimeWithAggregatesFilter<"channel_mapping"> | Date | string
   }
 
   export type store_mappingWhereInput = {
@@ -9386,9 +12456,7 @@ export namespace Prisma {
     RSM?: StringFilter<"store_mapping"> | string
     ASM?: StringFilter<"store_mapping"> | string
     TSI?: StringFilter<"store_mapping"> | string
-    psr_data?: Psr_dataListRelationFilter
-    psr_data_temp?: Psr_data_tempListRelationFilter
-    channel_mapping?: XOR<Channel_mappingScalarRelationFilter, channel_mappingWhereInput>
+    created_at?: DateTimeFilter<"store_mapping"> | Date | string
   }
 
   export type store_mappingOrderByWithRelationInput = {
@@ -9403,18 +12471,16 @@ export namespace Prisma {
     RSM?: SortOrder
     ASM?: SortOrder
     TSI?: SortOrder
-    psr_data?: psr_dataOrderByRelationAggregateInput
-    psr_data_temp?: psr_data_tempOrderByRelationAggregateInput
-    channel_mapping?: channel_mappingOrderByWithRelationInput
+    created_at?: SortOrder
     _relevance?: store_mappingOrderByRelevanceInput
   }
 
   export type store_mappingWhereUniqueInput = Prisma.AtLeast<{
     Id?: number
-    Old_Store_Code?: string
     AND?: store_mappingWhereInput | store_mappingWhereInput[]
     OR?: store_mappingWhereInput[]
     NOT?: store_mappingWhereInput | store_mappingWhereInput[]
+    Old_Store_Code?: StringFilter<"store_mapping"> | string
     New_Store_Code?: StringFilter<"store_mapping"> | string
     customer_name?: StringFilter<"store_mapping"> | string
     customer_type?: StringFilter<"store_mapping"> | string
@@ -9424,10 +12490,8 @@ export namespace Prisma {
     RSM?: StringFilter<"store_mapping"> | string
     ASM?: StringFilter<"store_mapping"> | string
     TSI?: StringFilter<"store_mapping"> | string
-    psr_data?: Psr_dataListRelationFilter
-    psr_data_temp?: Psr_data_tempListRelationFilter
-    channel_mapping?: XOR<Channel_mappingScalarRelationFilter, channel_mappingWhereInput>
-  }, "Id" | "Old_Store_Code">
+    created_at?: DateTimeFilter<"store_mapping"> | Date | string
+  }, "Id">
 
   export type store_mappingOrderByWithAggregationInput = {
     Id?: SortOrder
@@ -9441,6 +12505,7 @@ export namespace Prisma {
     RSM?: SortOrder
     ASM?: SortOrder
     TSI?: SortOrder
+    created_at?: SortOrder
     _count?: store_mappingCountOrderByAggregateInput
     _avg?: store_mappingAvgOrderByAggregateInput
     _max?: store_mappingMaxOrderByAggregateInput
@@ -9463,6 +12528,7 @@ export namespace Prisma {
     RSM?: StringWithAggregatesFilter<"store_mapping"> | string
     ASM?: StringWithAggregatesFilter<"store_mapping"> | string
     TSI?: StringWithAggregatesFilter<"store_mapping"> | string
+    created_at?: DateTimeWithAggregatesFilter<"store_mapping"> | Date | string
   }
 
   export type product_mappingWhereInput = {
@@ -9476,8 +12542,7 @@ export namespace Prisma {
     brand?: StringFilter<"product_mapping"> | string
     brandform?: StringFilter<"product_mapping"> | string
     subbrandform?: StringFilter<"product_mapping"> | string
-    psr_data?: Psr_dataListRelationFilter
-    psr_data_temp?: Psr_data_tempListRelationFilter
+    created_at?: DateTimeFilter<"product_mapping"> | Date | string
   }
 
   export type product_mappingOrderByWithRelationInput = {
@@ -9488,8 +12553,7 @@ export namespace Prisma {
     brand?: SortOrder
     brandform?: SortOrder
     subbrandform?: SortOrder
-    psr_data?: psr_dataOrderByRelationAggregateInput
-    psr_data_temp?: psr_data_tempOrderByRelationAggregateInput
+    created_at?: SortOrder
     _relevance?: product_mappingOrderByRelevanceInput
   }
 
@@ -9504,8 +12568,7 @@ export namespace Prisma {
     brand?: StringFilter<"product_mapping"> | string
     brandform?: StringFilter<"product_mapping"> | string
     subbrandform?: StringFilter<"product_mapping"> | string
-    psr_data?: Psr_dataListRelationFilter
-    psr_data_temp?: Psr_data_tempListRelationFilter
+    created_at?: DateTimeFilter<"product_mapping"> | Date | string
   }, "Id" | "p_code">
 
   export type product_mappingOrderByWithAggregationInput = {
@@ -9516,6 +12579,7 @@ export namespace Prisma {
     brand?: SortOrder
     brandform?: SortOrder
     subbrandform?: SortOrder
+    created_at?: SortOrder
     _count?: product_mappingCountOrderByAggregateInput
     _avg?: product_mappingAvgOrderByAggregateInput
     _max?: product_mappingMaxOrderByAggregateInput
@@ -9534,6 +12598,51 @@ export namespace Prisma {
     brand?: StringWithAggregatesFilter<"product_mapping"> | string
     brandform?: StringWithAggregatesFilter<"product_mapping"> | string
     subbrandform?: StringWithAggregatesFilter<"product_mapping"> | string
+    created_at?: DateTimeWithAggregatesFilter<"product_mapping"> | Date | string
+  }
+
+  export type mapping_change_flagWhereInput = {
+    AND?: mapping_change_flagWhereInput | mapping_change_flagWhereInput[]
+    OR?: mapping_change_flagWhereInput[]
+    NOT?: mapping_change_flagWhereInput | mapping_change_flagWhereInput[]
+    id?: IntFilter<"mapping_change_flag"> | number
+    changed_at?: DateTimeFilter<"mapping_change_flag"> | Date | string
+    processed?: BoolFilter<"mapping_change_flag"> | boolean
+  }
+
+  export type mapping_change_flagOrderByWithRelationInput = {
+    id?: SortOrder
+    changed_at?: SortOrder
+    processed?: SortOrder
+  }
+
+  export type mapping_change_flagWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: mapping_change_flagWhereInput | mapping_change_flagWhereInput[]
+    OR?: mapping_change_flagWhereInput[]
+    NOT?: mapping_change_flagWhereInput | mapping_change_flagWhereInput[]
+    changed_at?: DateTimeFilter<"mapping_change_flag"> | Date | string
+    processed?: BoolFilter<"mapping_change_flag"> | boolean
+  }, "id">
+
+  export type mapping_change_flagOrderByWithAggregationInput = {
+    id?: SortOrder
+    changed_at?: SortOrder
+    processed?: SortOrder
+    _count?: mapping_change_flagCountOrderByAggregateInput
+    _avg?: mapping_change_flagAvgOrderByAggregateInput
+    _max?: mapping_change_flagMaxOrderByAggregateInput
+    _min?: mapping_change_flagMinOrderByAggregateInput
+    _sum?: mapping_change_flagSumOrderByAggregateInput
+  }
+
+  export type mapping_change_flagScalarWhereWithAggregatesInput = {
+    AND?: mapping_change_flagScalarWhereWithAggregatesInput | mapping_change_flagScalarWhereWithAggregatesInput[]
+    OR?: mapping_change_flagScalarWhereWithAggregatesInput[]
+    NOT?: mapping_change_flagScalarWhereWithAggregatesInput | mapping_change_flagScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"mapping_change_flag"> | number
+    changed_at?: DateTimeWithAggregatesFilter<"mapping_change_flag"> | Date | string
+    processed?: BoolWithAggregatesFilter<"mapping_change_flag"> | boolean
   }
 
   export type UserWhereInput = {
@@ -9703,118 +12812,18 @@ export namespace Prisma {
     permissions?: JsonWithAggregatesFilter<"PermissionSet">
   }
 
-  export type psr_dataCreateInput = {
-    document_no: string
-    document_date: Date | string
-    subbrandform: string
-    customer_name: string
-    customer_type: string
-    category: string
-    brand: string
-    brandform: string
-    retailing: Decimal | DecimalJsLike | number | string
-    store_mapping: store_mappingCreateNestedOneWithoutPsr_dataInput
-    product_mapping: product_mappingCreateNestedOneWithoutPsr_dataInput
-  }
-
-  export type psr_dataUncheckedCreateInput = {
-    psr_id?: number
-    document_no: string
-    document_date: Date | string
-    subbrandform: string
-    customer_name: string
-    customer_code: string
-    p_code: number
-    customer_type: string
-    category: string
-    brand: string
-    brandform: string
-    retailing: Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_dataUpdateInput = {
-    document_no?: StringFieldUpdateOperationsInput | string
-    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    customer_type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    store_mapping?: store_mappingUpdateOneRequiredWithoutPsr_dataNestedInput
-    product_mapping?: product_mappingUpdateOneRequiredWithoutPsr_dataNestedInput
-  }
-
-  export type psr_dataUncheckedUpdateInput = {
-    psr_id?: IntFieldUpdateOperationsInput | number
-    document_no?: StringFieldUpdateOperationsInput | string
-    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    customer_code?: StringFieldUpdateOperationsInput | string
-    p_code?: IntFieldUpdateOperationsInput | number
-    customer_type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_dataCreateManyInput = {
-    psr_id?: number
-    document_no: string
-    document_date: Date | string
-    subbrandform: string
-    customer_name: string
-    customer_code: string
-    p_code: number
-    customer_type: string
-    category: string
-    brand: string
-    brandform: string
-    retailing: Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_dataUpdateManyMutationInput = {
-    document_no?: StringFieldUpdateOperationsInput | string
-    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    customer_type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_dataUncheckedUpdateManyInput = {
-    psr_id?: IntFieldUpdateOperationsInput | number
-    document_no?: StringFieldUpdateOperationsInput | string
-    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    customer_code?: StringFieldUpdateOperationsInput | string
-    p_code?: IntFieldUpdateOperationsInput | number
-    customer_type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-  }
-
   export type psr_data_tempCreateInput = {
     document_no: string
     document_date: Date | string
     subbrandform: string
     customer_name: string
+    customer_code: string
+    p_code: number
     customer_type: string
     category: string
     brand: string
     brandform: string
     retailing: Decimal | DecimalJsLike | number | string
-    store_mapping: store_mappingCreateNestedOneWithoutPsr_data_tempInput
-    product_mapping: product_mappingCreateNestedOneWithoutPsr_data_tempInput
   }
 
   export type psr_data_tempUncheckedCreateInput = {
@@ -9837,13 +12846,13 @@ export namespace Prisma {
     document_date?: DateTimeFieldUpdateOperationsInput | Date | string
     subbrandform?: StringFieldUpdateOperationsInput | string
     customer_name?: StringFieldUpdateOperationsInput | string
+    customer_code?: StringFieldUpdateOperationsInput | string
+    p_code?: IntFieldUpdateOperationsInput | number
     customer_type?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
     brand?: StringFieldUpdateOperationsInput | string
     brandform?: StringFieldUpdateOperationsInput | string
     retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    store_mapping?: store_mappingUpdateOneRequiredWithoutPsr_data_tempNestedInput
-    product_mapping?: product_mappingUpdateOneRequiredWithoutPsr_data_tempNestedInput
   }
 
   export type psr_data_tempUncheckedUpdateInput = {
@@ -9881,6 +12890,8 @@ export namespace Prisma {
     document_date?: DateTimeFieldUpdateOperationsInput | Date | string
     subbrandform?: StringFieldUpdateOperationsInput | string
     customer_name?: StringFieldUpdateOperationsInput | string
+    customer_code?: StringFieldUpdateOperationsInput | string
+    p_code?: IntFieldUpdateOperationsInput | number
     customer_type?: StringFieldUpdateOperationsInput | string
     category?: StringFieldUpdateOperationsInput | string
     brand?: StringFieldUpdateOperationsInput | string
@@ -9903,12 +12914,374 @@ export namespace Prisma {
     retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
+  export type psr_data_historicalCreateInput = {
+    document_no: string
+    document_date: Date | string
+    subbrandform: string
+    customer_name: string
+    customer_code: string
+    p_code: number
+    customer_type: string
+    category: string
+    brand: string
+    brandform: string
+    retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_historicalUncheckedCreateInput = {
+    psr_id?: number
+    document_no: string
+    document_date: Date | string
+    subbrandform: string
+    customer_name: string
+    customer_code: string
+    p_code: number
+    customer_type: string
+    category: string
+    brand: string
+    brandform: string
+    retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_historicalUpdateInput = {
+    document_no?: StringFieldUpdateOperationsInput | string
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_code?: StringFieldUpdateOperationsInput | string
+    p_code?: IntFieldUpdateOperationsInput | number
+    customer_type?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_historicalUncheckedUpdateInput = {
+    psr_id?: IntFieldUpdateOperationsInput | number
+    document_no?: StringFieldUpdateOperationsInput | string
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_code?: StringFieldUpdateOperationsInput | string
+    p_code?: IntFieldUpdateOperationsInput | number
+    customer_type?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_historicalCreateManyInput = {
+    psr_id?: number
+    document_no: string
+    document_date: Date | string
+    subbrandform: string
+    customer_name: string
+    customer_code: string
+    p_code: number
+    customer_type: string
+    category: string
+    brand: string
+    brandform: string
+    retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_historicalUpdateManyMutationInput = {
+    document_no?: StringFieldUpdateOperationsInput | string
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_code?: StringFieldUpdateOperationsInput | string
+    p_code?: IntFieldUpdateOperationsInput | number
+    customer_type?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_historicalUncheckedUpdateManyInput = {
+    psr_id?: IntFieldUpdateOperationsInput | number
+    document_no?: StringFieldUpdateOperationsInput | string
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    subbrandform?: StringFieldUpdateOperationsInput | string
+    customer_name?: StringFieldUpdateOperationsInput | string
+    customer_code?: StringFieldUpdateOperationsInput | string
+    p_code?: IntFieldUpdateOperationsInput | number
+    customer_type?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    brand?: StringFieldUpdateOperationsInput | string
+    brandform?: StringFieldUpdateOperationsInput | string
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_finalized_tempCreateInput = {
+    document_date: Date | string
+    customer_code: string
+    branch?: string | null
+    ZM?: string | null
+    RSM?: string | null
+    ASM?: string | null
+    TSI?: string | null
+    category?: string | null
+    brand?: string | null
+    brandform?: string | null
+    subbrandform?: string | null
+    base_channel?: string | null
+    short_channel?: string | null
+    channel_desc?: string | null
+    retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_finalized_tempUncheckedCreateInput = {
+    id?: number
+    document_date: Date | string
+    customer_code: string
+    branch?: string | null
+    ZM?: string | null
+    RSM?: string | null
+    ASM?: string | null
+    TSI?: string | null
+    category?: string | null
+    brand?: string | null
+    brandform?: string | null
+    subbrandform?: string | null
+    base_channel?: string | null
+    short_channel?: string | null
+    channel_desc?: string | null
+    retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_finalized_tempUpdateInput = {
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    customer_code?: StringFieldUpdateOperationsInput | string
+    branch?: NullableStringFieldUpdateOperationsInput | string | null
+    ZM?: NullableStringFieldUpdateOperationsInput | string | null
+    RSM?: NullableStringFieldUpdateOperationsInput | string | null
+    ASM?: NullableStringFieldUpdateOperationsInput | string | null
+    TSI?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    brandform?: NullableStringFieldUpdateOperationsInput | string | null
+    subbrandform?: NullableStringFieldUpdateOperationsInput | string | null
+    base_channel?: NullableStringFieldUpdateOperationsInput | string | null
+    short_channel?: NullableStringFieldUpdateOperationsInput | string | null
+    channel_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_finalized_tempUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    customer_code?: StringFieldUpdateOperationsInput | string
+    branch?: NullableStringFieldUpdateOperationsInput | string | null
+    ZM?: NullableStringFieldUpdateOperationsInput | string | null
+    RSM?: NullableStringFieldUpdateOperationsInput | string | null
+    ASM?: NullableStringFieldUpdateOperationsInput | string | null
+    TSI?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    brandform?: NullableStringFieldUpdateOperationsInput | string | null
+    subbrandform?: NullableStringFieldUpdateOperationsInput | string | null
+    base_channel?: NullableStringFieldUpdateOperationsInput | string | null
+    short_channel?: NullableStringFieldUpdateOperationsInput | string | null
+    channel_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_finalized_tempCreateManyInput = {
+    id?: number
+    document_date: Date | string
+    customer_code: string
+    branch?: string | null
+    ZM?: string | null
+    RSM?: string | null
+    ASM?: string | null
+    TSI?: string | null
+    category?: string | null
+    brand?: string | null
+    brandform?: string | null
+    subbrandform?: string | null
+    base_channel?: string | null
+    short_channel?: string | null
+    channel_desc?: string | null
+    retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_finalized_tempUpdateManyMutationInput = {
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    customer_code?: StringFieldUpdateOperationsInput | string
+    branch?: NullableStringFieldUpdateOperationsInput | string | null
+    ZM?: NullableStringFieldUpdateOperationsInput | string | null
+    RSM?: NullableStringFieldUpdateOperationsInput | string | null
+    ASM?: NullableStringFieldUpdateOperationsInput | string | null
+    TSI?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    brandform?: NullableStringFieldUpdateOperationsInput | string | null
+    subbrandform?: NullableStringFieldUpdateOperationsInput | string | null
+    base_channel?: NullableStringFieldUpdateOperationsInput | string | null
+    short_channel?: NullableStringFieldUpdateOperationsInput | string | null
+    channel_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_finalized_tempUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    customer_code?: StringFieldUpdateOperationsInput | string
+    branch?: NullableStringFieldUpdateOperationsInput | string | null
+    ZM?: NullableStringFieldUpdateOperationsInput | string | null
+    RSM?: NullableStringFieldUpdateOperationsInput | string | null
+    ASM?: NullableStringFieldUpdateOperationsInput | string | null
+    TSI?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    brandform?: NullableStringFieldUpdateOperationsInput | string | null
+    subbrandform?: NullableStringFieldUpdateOperationsInput | string | null
+    base_channel?: NullableStringFieldUpdateOperationsInput | string | null
+    short_channel?: NullableStringFieldUpdateOperationsInput | string | null
+    channel_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_finalizedCreateInput = {
+    document_date: Date | string
+    customer_code: string
+    branch?: string | null
+    ZM?: string | null
+    RSM?: string | null
+    ASM?: string | null
+    TSI?: string | null
+    category?: string | null
+    brand?: string | null
+    brandform?: string | null
+    subbrandform?: string | null
+    base_channel?: string | null
+    short_channel?: string | null
+    channel_desc?: string | null
+    retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_finalizedUncheckedCreateInput = {
+    id?: number
+    document_date: Date | string
+    customer_code: string
+    branch?: string | null
+    ZM?: string | null
+    RSM?: string | null
+    ASM?: string | null
+    TSI?: string | null
+    category?: string | null
+    brand?: string | null
+    brandform?: string | null
+    subbrandform?: string | null
+    base_channel?: string | null
+    short_channel?: string | null
+    channel_desc?: string | null
+    retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_finalizedUpdateInput = {
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    customer_code?: StringFieldUpdateOperationsInput | string
+    branch?: NullableStringFieldUpdateOperationsInput | string | null
+    ZM?: NullableStringFieldUpdateOperationsInput | string | null
+    RSM?: NullableStringFieldUpdateOperationsInput | string | null
+    ASM?: NullableStringFieldUpdateOperationsInput | string | null
+    TSI?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    brandform?: NullableStringFieldUpdateOperationsInput | string | null
+    subbrandform?: NullableStringFieldUpdateOperationsInput | string | null
+    base_channel?: NullableStringFieldUpdateOperationsInput | string | null
+    short_channel?: NullableStringFieldUpdateOperationsInput | string | null
+    channel_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_finalizedUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    customer_code?: StringFieldUpdateOperationsInput | string
+    branch?: NullableStringFieldUpdateOperationsInput | string | null
+    ZM?: NullableStringFieldUpdateOperationsInput | string | null
+    RSM?: NullableStringFieldUpdateOperationsInput | string | null
+    ASM?: NullableStringFieldUpdateOperationsInput | string | null
+    TSI?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    brandform?: NullableStringFieldUpdateOperationsInput | string | null
+    subbrandform?: NullableStringFieldUpdateOperationsInput | string | null
+    base_channel?: NullableStringFieldUpdateOperationsInput | string | null
+    short_channel?: NullableStringFieldUpdateOperationsInput | string | null
+    channel_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_finalizedCreateManyInput = {
+    id?: number
+    document_date: Date | string
+    customer_code: string
+    branch?: string | null
+    ZM?: string | null
+    RSM?: string | null
+    ASM?: string | null
+    TSI?: string | null
+    category?: string | null
+    brand?: string | null
+    brandform?: string | null
+    subbrandform?: string | null
+    base_channel?: string | null
+    short_channel?: string | null
+    channel_desc?: string | null
+    retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_finalizedUpdateManyMutationInput = {
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    customer_code?: StringFieldUpdateOperationsInput | string
+    branch?: NullableStringFieldUpdateOperationsInput | string | null
+    ZM?: NullableStringFieldUpdateOperationsInput | string | null
+    RSM?: NullableStringFieldUpdateOperationsInput | string | null
+    ASM?: NullableStringFieldUpdateOperationsInput | string | null
+    TSI?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    brandform?: NullableStringFieldUpdateOperationsInput | string | null
+    subbrandform?: NullableStringFieldUpdateOperationsInput | string | null
+    base_channel?: NullableStringFieldUpdateOperationsInput | string | null
+    short_channel?: NullableStringFieldUpdateOperationsInput | string | null
+    channel_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type psr_data_finalizedUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    customer_code?: StringFieldUpdateOperationsInput | string
+    branch?: NullableStringFieldUpdateOperationsInput | string | null
+    ZM?: NullableStringFieldUpdateOperationsInput | string | null
+    RSM?: NullableStringFieldUpdateOperationsInput | string | null
+    ASM?: NullableStringFieldUpdateOperationsInput | string | null
+    TSI?: NullableStringFieldUpdateOperationsInput | string | null
+    category?: NullableStringFieldUpdateOperationsInput | string | null
+    brand?: NullableStringFieldUpdateOperationsInput | string | null
+    brandform?: NullableStringFieldUpdateOperationsInput | string | null
+    subbrandform?: NullableStringFieldUpdateOperationsInput | string | null
+    base_channel?: NullableStringFieldUpdateOperationsInput | string | null
+    short_channel?: NullableStringFieldUpdateOperationsInput | string | null
+    channel_desc?: NullableStringFieldUpdateOperationsInput | string | null
+    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
   export type channel_mappingCreateInput = {
     customer_type: string
     base_channel: string
     short_channel: string
     channel_desc: string
-    store_mapping?: store_mappingCreateNestedManyWithoutChannel_mappingInput
+    created_at?: Date | string
   }
 
   export type channel_mappingUncheckedCreateInput = {
@@ -9917,7 +13290,7 @@ export namespace Prisma {
     base_channel: string
     short_channel: string
     channel_desc: string
-    store_mapping?: store_mappingUncheckedCreateNestedManyWithoutChannel_mappingInput
+    created_at?: Date | string
   }
 
   export type channel_mappingUpdateInput = {
@@ -9925,7 +13298,7 @@ export namespace Prisma {
     base_channel?: StringFieldUpdateOperationsInput | string
     short_channel?: StringFieldUpdateOperationsInput | string
     channel_desc?: StringFieldUpdateOperationsInput | string
-    store_mapping?: store_mappingUpdateManyWithoutChannel_mappingNestedInput
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type channel_mappingUncheckedUpdateInput = {
@@ -9934,7 +13307,7 @@ export namespace Prisma {
     base_channel?: StringFieldUpdateOperationsInput | string
     short_channel?: StringFieldUpdateOperationsInput | string
     channel_desc?: StringFieldUpdateOperationsInput | string
-    store_mapping?: store_mappingUncheckedUpdateManyWithoutChannel_mappingNestedInput
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type channel_mappingCreateManyInput = {
@@ -9943,6 +13316,7 @@ export namespace Prisma {
     base_channel: string
     short_channel: string
     channel_desc: string
+    created_at?: Date | string
   }
 
   export type channel_mappingUpdateManyMutationInput = {
@@ -9950,6 +13324,7 @@ export namespace Prisma {
     base_channel?: StringFieldUpdateOperationsInput | string
     short_channel?: StringFieldUpdateOperationsInput | string
     channel_desc?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type channel_mappingUncheckedUpdateManyInput = {
@@ -9958,21 +13333,21 @@ export namespace Prisma {
     base_channel?: StringFieldUpdateOperationsInput | string
     short_channel?: StringFieldUpdateOperationsInput | string
     channel_desc?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type store_mappingCreateInput = {
     Old_Store_Code: string
     New_Store_Code: string
     customer_name: string
+    customer_type: string
     Branch: string
     DSE_Code: string
     ZM: string
     RSM: string
     ASM: string
     TSI: string
-    psr_data?: psr_dataCreateNestedManyWithoutStore_mappingInput
-    psr_data_temp?: psr_data_tempCreateNestedManyWithoutStore_mappingInput
-    channel_mapping: channel_mappingCreateNestedOneWithoutStore_mappingInput
+    created_at?: Date | string
   }
 
   export type store_mappingUncheckedCreateInput = {
@@ -9987,23 +13362,21 @@ export namespace Prisma {
     RSM: string
     ASM: string
     TSI: string
-    psr_data?: psr_dataUncheckedCreateNestedManyWithoutStore_mappingInput
-    psr_data_temp?: psr_data_tempUncheckedCreateNestedManyWithoutStore_mappingInput
+    created_at?: Date | string
   }
 
   export type store_mappingUpdateInput = {
     Old_Store_Code?: StringFieldUpdateOperationsInput | string
     New_Store_Code?: StringFieldUpdateOperationsInput | string
     customer_name?: StringFieldUpdateOperationsInput | string
+    customer_type?: StringFieldUpdateOperationsInput | string
     Branch?: StringFieldUpdateOperationsInput | string
     DSE_Code?: StringFieldUpdateOperationsInput | string
     ZM?: StringFieldUpdateOperationsInput | string
     RSM?: StringFieldUpdateOperationsInput | string
     ASM?: StringFieldUpdateOperationsInput | string
     TSI?: StringFieldUpdateOperationsInput | string
-    psr_data?: psr_dataUpdateManyWithoutStore_mappingNestedInput
-    psr_data_temp?: psr_data_tempUpdateManyWithoutStore_mappingNestedInput
-    channel_mapping?: channel_mappingUpdateOneRequiredWithoutStore_mappingNestedInput
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type store_mappingUncheckedUpdateInput = {
@@ -10018,8 +13391,7 @@ export namespace Prisma {
     RSM?: StringFieldUpdateOperationsInput | string
     ASM?: StringFieldUpdateOperationsInput | string
     TSI?: StringFieldUpdateOperationsInput | string
-    psr_data?: psr_dataUncheckedUpdateManyWithoutStore_mappingNestedInput
-    psr_data_temp?: psr_data_tempUncheckedUpdateManyWithoutStore_mappingNestedInput
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type store_mappingCreateManyInput = {
@@ -10034,18 +13406,21 @@ export namespace Prisma {
     RSM: string
     ASM: string
     TSI: string
+    created_at?: Date | string
   }
 
   export type store_mappingUpdateManyMutationInput = {
     Old_Store_Code?: StringFieldUpdateOperationsInput | string
     New_Store_Code?: StringFieldUpdateOperationsInput | string
     customer_name?: StringFieldUpdateOperationsInput | string
+    customer_type?: StringFieldUpdateOperationsInput | string
     Branch?: StringFieldUpdateOperationsInput | string
     DSE_Code?: StringFieldUpdateOperationsInput | string
     ZM?: StringFieldUpdateOperationsInput | string
     RSM?: StringFieldUpdateOperationsInput | string
     ASM?: StringFieldUpdateOperationsInput | string
     TSI?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type store_mappingUncheckedUpdateManyInput = {
@@ -10060,6 +13435,7 @@ export namespace Prisma {
     RSM?: StringFieldUpdateOperationsInput | string
     ASM?: StringFieldUpdateOperationsInput | string
     TSI?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type product_mappingCreateInput = {
@@ -10069,8 +13445,7 @@ export namespace Prisma {
     brand: string
     brandform: string
     subbrandform: string
-    psr_data?: psr_dataCreateNestedManyWithoutProduct_mappingInput
-    psr_data_temp?: psr_data_tempCreateNestedManyWithoutProduct_mappingInput
+    created_at?: Date | string
   }
 
   export type product_mappingUncheckedCreateInput = {
@@ -10081,8 +13456,7 @@ export namespace Prisma {
     brand: string
     brandform: string
     subbrandform: string
-    psr_data?: psr_dataUncheckedCreateNestedManyWithoutProduct_mappingInput
-    psr_data_temp?: psr_data_tempUncheckedCreateNestedManyWithoutProduct_mappingInput
+    created_at?: Date | string
   }
 
   export type product_mappingUpdateInput = {
@@ -10092,8 +13466,7 @@ export namespace Prisma {
     brand?: StringFieldUpdateOperationsInput | string
     brandform?: StringFieldUpdateOperationsInput | string
     subbrandform?: StringFieldUpdateOperationsInput | string
-    psr_data?: psr_dataUpdateManyWithoutProduct_mappingNestedInput
-    psr_data_temp?: psr_data_tempUpdateManyWithoutProduct_mappingNestedInput
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type product_mappingUncheckedUpdateInput = {
@@ -10104,8 +13477,7 @@ export namespace Prisma {
     brand?: StringFieldUpdateOperationsInput | string
     brandform?: StringFieldUpdateOperationsInput | string
     subbrandform?: StringFieldUpdateOperationsInput | string
-    psr_data?: psr_dataUncheckedUpdateManyWithoutProduct_mappingNestedInput
-    psr_data_temp?: psr_data_tempUncheckedUpdateManyWithoutProduct_mappingNestedInput
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type product_mappingCreateManyInput = {
@@ -10116,6 +13488,7 @@ export namespace Prisma {
     brand: string
     brandform: string
     subbrandform: string
+    created_at?: Date | string
   }
 
   export type product_mappingUpdateManyMutationInput = {
@@ -10125,6 +13498,7 @@ export namespace Prisma {
     brand?: StringFieldUpdateOperationsInput | string
     brandform?: StringFieldUpdateOperationsInput | string
     subbrandform?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type product_mappingUncheckedUpdateManyInput = {
@@ -10135,6 +13509,46 @@ export namespace Prisma {
     brand?: StringFieldUpdateOperationsInput | string
     brandform?: StringFieldUpdateOperationsInput | string
     subbrandform?: StringFieldUpdateOperationsInput | string
+    created_at?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mapping_change_flagCreateInput = {
+    changed_at?: Date | string
+    processed?: boolean
+  }
+
+  export type mapping_change_flagUncheckedCreateInput = {
+    id?: number
+    changed_at?: Date | string
+    processed?: boolean
+  }
+
+  export type mapping_change_flagUpdateInput = {
+    changed_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    processed?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type mapping_change_flagUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    changed_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    processed?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type mapping_change_flagCreateManyInput = {
+    id?: number
+    changed_at?: Date | string
+    processed?: boolean
+  }
+
+  export type mapping_change_flagUpdateManyMutationInput = {
+    changed_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    processed?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type mapping_change_flagUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    changed_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    processed?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UserCreateInput = {
@@ -10364,23 +13778,13 @@ export namespace Prisma {
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
-  export type Store_mappingScalarRelationFilter = {
-    is?: store_mappingWhereInput
-    isNot?: store_mappingWhereInput
-  }
-
-  export type Product_mappingScalarRelationFilter = {
-    is?: product_mappingWhereInput
-    isNot?: product_mappingWhereInput
-  }
-
-  export type psr_dataOrderByRelevanceInput = {
-    fields: psr_dataOrderByRelevanceFieldEnum | psr_dataOrderByRelevanceFieldEnum[]
+  export type psr_data_tempOrderByRelevanceInput = {
+    fields: psr_data_tempOrderByRelevanceFieldEnum | psr_data_tempOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
   }
 
-  export type psr_dataCountOrderByAggregateInput = {
+  export type psr_data_tempCountOrderByAggregateInput = {
     psr_id?: SortOrder
     document_no?: SortOrder
     document_date?: SortOrder
@@ -10395,28 +13799,13 @@ export namespace Prisma {
     retailing?: SortOrder
   }
 
-  export type psr_dataAvgOrderByAggregateInput = {
+  export type psr_data_tempAvgOrderByAggregateInput = {
     psr_id?: SortOrder
     p_code?: SortOrder
     retailing?: SortOrder
   }
 
-  export type psr_dataMaxOrderByAggregateInput = {
-    psr_id?: SortOrder
-    document_no?: SortOrder
-    document_date?: SortOrder
-    subbrandform?: SortOrder
-    customer_name?: SortOrder
-    customer_code?: SortOrder
-    p_code?: SortOrder
-    customer_type?: SortOrder
-    category?: SortOrder
-    brand?: SortOrder
-    brandform?: SortOrder
-    retailing?: SortOrder
-  }
-
-  export type psr_dataMinOrderByAggregateInput = {
+  export type psr_data_tempMaxOrderByAggregateInput = {
     psr_id?: SortOrder
     document_no?: SortOrder
     document_date?: SortOrder
@@ -10431,7 +13820,22 @@ export namespace Prisma {
     retailing?: SortOrder
   }
 
-  export type psr_dataSumOrderByAggregateInput = {
+  export type psr_data_tempMinOrderByAggregateInput = {
+    psr_id?: SortOrder
+    document_no?: SortOrder
+    document_date?: SortOrder
+    subbrandform?: SortOrder
+    customer_name?: SortOrder
+    customer_code?: SortOrder
+    p_code?: SortOrder
+    customer_type?: SortOrder
+    category?: SortOrder
+    brand?: SortOrder
+    brandform?: SortOrder
+    retailing?: SortOrder
+  }
+
+  export type psr_data_tempSumOrderByAggregateInput = {
     psr_id?: SortOrder
     p_code?: SortOrder
     retailing?: SortOrder
@@ -10501,13 +13905,13 @@ export namespace Prisma {
     _max?: NestedDecimalFilter<$PrismaModel>
   }
 
-  export type psr_data_tempOrderByRelevanceInput = {
-    fields: psr_data_tempOrderByRelevanceFieldEnum | psr_data_tempOrderByRelevanceFieldEnum[]
+  export type psr_data_historicalOrderByRelevanceInput = {
+    fields: psr_data_historicalOrderByRelevanceFieldEnum | psr_data_historicalOrderByRelevanceFieldEnum[]
     sort: SortOrder
     search: string
   }
 
-  export type psr_data_tempCountOrderByAggregateInput = {
+  export type psr_data_historicalCountOrderByAggregateInput = {
     psr_id?: SortOrder
     document_no?: SortOrder
     document_date?: SortOrder
@@ -10522,28 +13926,13 @@ export namespace Prisma {
     retailing?: SortOrder
   }
 
-  export type psr_data_tempAvgOrderByAggregateInput = {
+  export type psr_data_historicalAvgOrderByAggregateInput = {
     psr_id?: SortOrder
     p_code?: SortOrder
     retailing?: SortOrder
   }
 
-  export type psr_data_tempMaxOrderByAggregateInput = {
-    psr_id?: SortOrder
-    document_no?: SortOrder
-    document_date?: SortOrder
-    subbrandform?: SortOrder
-    customer_name?: SortOrder
-    customer_code?: SortOrder
-    p_code?: SortOrder
-    customer_type?: SortOrder
-    category?: SortOrder
-    brand?: SortOrder
-    brandform?: SortOrder
-    retailing?: SortOrder
-  }
-
-  export type psr_data_tempMinOrderByAggregateInput = {
+  export type psr_data_historicalMaxOrderByAggregateInput = {
     psr_id?: SortOrder
     document_no?: SortOrder
     document_date?: SortOrder
@@ -10558,20 +13947,209 @@ export namespace Prisma {
     retailing?: SortOrder
   }
 
-  export type psr_data_tempSumOrderByAggregateInput = {
+  export type psr_data_historicalMinOrderByAggregateInput = {
+    psr_id?: SortOrder
+    document_no?: SortOrder
+    document_date?: SortOrder
+    subbrandform?: SortOrder
+    customer_name?: SortOrder
+    customer_code?: SortOrder
+    p_code?: SortOrder
+    customer_type?: SortOrder
+    category?: SortOrder
+    brand?: SortOrder
+    brandform?: SortOrder
+    retailing?: SortOrder
+  }
+
+  export type psr_data_historicalSumOrderByAggregateInput = {
     psr_id?: SortOrder
     p_code?: SortOrder
     retailing?: SortOrder
   }
 
-  export type Store_mappingListRelationFilter = {
-    every?: store_mappingWhereInput
-    some?: store_mappingWhereInput
-    none?: store_mappingWhereInput
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type store_mappingOrderByRelationAggregateInput = {
-    _count?: SortOrder
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
+  export type psr_finalized_tempOrderByRelevanceInput = {
+    fields: psr_finalized_tempOrderByRelevanceFieldEnum | psr_finalized_tempOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type psr_finalized_tempCountOrderByAggregateInput = {
+    id?: SortOrder
+    document_date?: SortOrder
+    customer_code?: SortOrder
+    branch?: SortOrder
+    ZM?: SortOrder
+    RSM?: SortOrder
+    ASM?: SortOrder
+    TSI?: SortOrder
+    category?: SortOrder
+    brand?: SortOrder
+    brandform?: SortOrder
+    subbrandform?: SortOrder
+    base_channel?: SortOrder
+    short_channel?: SortOrder
+    channel_desc?: SortOrder
+    retailing?: SortOrder
+  }
+
+  export type psr_finalized_tempAvgOrderByAggregateInput = {
+    id?: SortOrder
+    retailing?: SortOrder
+  }
+
+  export type psr_finalized_tempMaxOrderByAggregateInput = {
+    id?: SortOrder
+    document_date?: SortOrder
+    customer_code?: SortOrder
+    branch?: SortOrder
+    ZM?: SortOrder
+    RSM?: SortOrder
+    ASM?: SortOrder
+    TSI?: SortOrder
+    category?: SortOrder
+    brand?: SortOrder
+    brandform?: SortOrder
+    subbrandform?: SortOrder
+    base_channel?: SortOrder
+    short_channel?: SortOrder
+    channel_desc?: SortOrder
+    retailing?: SortOrder
+  }
+
+  export type psr_finalized_tempMinOrderByAggregateInput = {
+    id?: SortOrder
+    document_date?: SortOrder
+    customer_code?: SortOrder
+    branch?: SortOrder
+    ZM?: SortOrder
+    RSM?: SortOrder
+    ASM?: SortOrder
+    TSI?: SortOrder
+    category?: SortOrder
+    brand?: SortOrder
+    brandform?: SortOrder
+    subbrandform?: SortOrder
+    base_channel?: SortOrder
+    short_channel?: SortOrder
+    channel_desc?: SortOrder
+    retailing?: SortOrder
+  }
+
+  export type psr_finalized_tempSumOrderByAggregateInput = {
+    id?: SortOrder
+    retailing?: SortOrder
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | null
+    notIn?: string[] | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    search?: string
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type psr_data_finalizedOrderByRelevanceInput = {
+    fields: psr_data_finalizedOrderByRelevanceFieldEnum | psr_data_finalizedOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type psr_data_finalizedCountOrderByAggregateInput = {
+    id?: SortOrder
+    document_date?: SortOrder
+    customer_code?: SortOrder
+    branch?: SortOrder
+    ZM?: SortOrder
+    RSM?: SortOrder
+    ASM?: SortOrder
+    TSI?: SortOrder
+    category?: SortOrder
+    brand?: SortOrder
+    brandform?: SortOrder
+    subbrandform?: SortOrder
+    base_channel?: SortOrder
+    short_channel?: SortOrder
+    channel_desc?: SortOrder
+    retailing?: SortOrder
+  }
+
+  export type psr_data_finalizedAvgOrderByAggregateInput = {
+    id?: SortOrder
+    retailing?: SortOrder
+  }
+
+  export type psr_data_finalizedMaxOrderByAggregateInput = {
+    id?: SortOrder
+    document_date?: SortOrder
+    customer_code?: SortOrder
+    branch?: SortOrder
+    ZM?: SortOrder
+    RSM?: SortOrder
+    ASM?: SortOrder
+    TSI?: SortOrder
+    category?: SortOrder
+    brand?: SortOrder
+    brandform?: SortOrder
+    subbrandform?: SortOrder
+    base_channel?: SortOrder
+    short_channel?: SortOrder
+    channel_desc?: SortOrder
+    retailing?: SortOrder
+  }
+
+  export type psr_data_finalizedMinOrderByAggregateInput = {
+    id?: SortOrder
+    document_date?: SortOrder
+    customer_code?: SortOrder
+    branch?: SortOrder
+    ZM?: SortOrder
+    RSM?: SortOrder
+    ASM?: SortOrder
+    TSI?: SortOrder
+    category?: SortOrder
+    brand?: SortOrder
+    brandform?: SortOrder
+    subbrandform?: SortOrder
+    base_channel?: SortOrder
+    short_channel?: SortOrder
+    channel_desc?: SortOrder
+    retailing?: SortOrder
+  }
+
+  export type psr_data_finalizedSumOrderByAggregateInput = {
+    id?: SortOrder
+    retailing?: SortOrder
   }
 
   export type channel_mappingOrderByRelevanceInput = {
@@ -10586,6 +14164,7 @@ export namespace Prisma {
     base_channel?: SortOrder
     short_channel?: SortOrder
     channel_desc?: SortOrder
+    created_at?: SortOrder
   }
 
   export type channel_mappingAvgOrderByAggregateInput = {
@@ -10598,6 +14177,7 @@ export namespace Prisma {
     base_channel?: SortOrder
     short_channel?: SortOrder
     channel_desc?: SortOrder
+    created_at?: SortOrder
   }
 
   export type channel_mappingMinOrderByAggregateInput = {
@@ -10606,35 +14186,11 @@ export namespace Prisma {
     base_channel?: SortOrder
     short_channel?: SortOrder
     channel_desc?: SortOrder
+    created_at?: SortOrder
   }
 
   export type channel_mappingSumOrderByAggregateInput = {
     channel_id?: SortOrder
-  }
-
-  export type Psr_dataListRelationFilter = {
-    every?: psr_dataWhereInput
-    some?: psr_dataWhereInput
-    none?: psr_dataWhereInput
-  }
-
-  export type Psr_data_tempListRelationFilter = {
-    every?: psr_data_tempWhereInput
-    some?: psr_data_tempWhereInput
-    none?: psr_data_tempWhereInput
-  }
-
-  export type Channel_mappingScalarRelationFilter = {
-    is?: channel_mappingWhereInput
-    isNot?: channel_mappingWhereInput
-  }
-
-  export type psr_dataOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type psr_data_tempOrderByRelationAggregateInput = {
-    _count?: SortOrder
   }
 
   export type store_mappingOrderByRelevanceInput = {
@@ -10655,6 +14211,7 @@ export namespace Prisma {
     RSM?: SortOrder
     ASM?: SortOrder
     TSI?: SortOrder
+    created_at?: SortOrder
   }
 
   export type store_mappingAvgOrderByAggregateInput = {
@@ -10673,6 +14230,7 @@ export namespace Prisma {
     RSM?: SortOrder
     ASM?: SortOrder
     TSI?: SortOrder
+    created_at?: SortOrder
   }
 
   export type store_mappingMinOrderByAggregateInput = {
@@ -10687,6 +14245,7 @@ export namespace Prisma {
     RSM?: SortOrder
     ASM?: SortOrder
     TSI?: SortOrder
+    created_at?: SortOrder
   }
 
   export type store_mappingSumOrderByAggregateInput = {
@@ -10707,6 +14266,7 @@ export namespace Prisma {
     brand?: SortOrder
     brandform?: SortOrder
     subbrandform?: SortOrder
+    created_at?: SortOrder
   }
 
   export type product_mappingAvgOrderByAggregateInput = {
@@ -10722,6 +14282,7 @@ export namespace Prisma {
     brand?: SortOrder
     brandform?: SortOrder
     subbrandform?: SortOrder
+    created_at?: SortOrder
   }
 
   export type product_mappingMinOrderByAggregateInput = {
@@ -10732,6 +14293,7 @@ export namespace Prisma {
     brand?: SortOrder
     brandform?: SortOrder
     subbrandform?: SortOrder
+    created_at?: SortOrder
   }
 
   export type product_mappingSumOrderByAggregateInput = {
@@ -10739,24 +14301,43 @@ export namespace Prisma {
     p_code?: SortOrder
   }
 
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-
   export type BoolFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type mapping_change_flagCountOrderByAggregateInput = {
+    id?: SortOrder
+    changed_at?: SortOrder
+    processed?: SortOrder
+  }
+
+  export type mapping_change_flagAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type mapping_change_flagMaxOrderByAggregateInput = {
+    id?: SortOrder
+    changed_at?: SortOrder
+    processed?: SortOrder
+  }
+
+  export type mapping_change_flagMinOrderByAggregateInput = {
+    id?: SortOrder
+    changed_at?: SortOrder
+    processed?: SortOrder
+  }
+
+  export type mapping_change_flagSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -10785,11 +14366,6 @@ export namespace Prisma {
     every?: PermissionSetWhereInput
     some?: PermissionSetWhereInput
     none?: PermissionSetWhereInput
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
   }
 
   export type PermissionSetOrderByRelationAggregateInput = {
@@ -10871,32 +14447,6 @@ export namespace Prisma {
     resetPasswordOTP?: SortOrder
     verificationOTP?: SortOrder
     otpAttempts?: SortOrder
-  }
-
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | null
-    notIn?: string[] | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    search?: string
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -11023,48 +14573,12 @@ export namespace Prisma {
     _max?: NestedJsonFilter<$PrismaModel>
   }
 
-  export type store_mappingCreateNestedOneWithoutPsr_dataInput = {
-    create?: XOR<store_mappingCreateWithoutPsr_dataInput, store_mappingUncheckedCreateWithoutPsr_dataInput>
-    connectOrCreate?: store_mappingCreateOrConnectWithoutPsr_dataInput
-    connect?: store_mappingWhereUniqueInput
-  }
-
-  export type product_mappingCreateNestedOneWithoutPsr_dataInput = {
-    create?: XOR<product_mappingCreateWithoutPsr_dataInput, product_mappingUncheckedCreateWithoutPsr_dataInput>
-    connectOrCreate?: product_mappingCreateOrConnectWithoutPsr_dataInput
-    connect?: product_mappingWhereUniqueInput
-  }
-
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
-  }
-
-  export type DecimalFieldUpdateOperationsInput = {
-    set?: Decimal | DecimalJsLike | number | string
-    increment?: Decimal | DecimalJsLike | number | string
-    decrement?: Decimal | DecimalJsLike | number | string
-    multiply?: Decimal | DecimalJsLike | number | string
-    divide?: Decimal | DecimalJsLike | number | string
-  }
-
-  export type store_mappingUpdateOneRequiredWithoutPsr_dataNestedInput = {
-    create?: XOR<store_mappingCreateWithoutPsr_dataInput, store_mappingUncheckedCreateWithoutPsr_dataInput>
-    connectOrCreate?: store_mappingCreateOrConnectWithoutPsr_dataInput
-    upsert?: store_mappingUpsertWithoutPsr_dataInput
-    connect?: store_mappingWhereUniqueInput
-    update?: XOR<XOR<store_mappingUpdateToOneWithWhereWithoutPsr_dataInput, store_mappingUpdateWithoutPsr_dataInput>, store_mappingUncheckedUpdateWithoutPsr_dataInput>
-  }
-
-  export type product_mappingUpdateOneRequiredWithoutPsr_dataNestedInput = {
-    create?: XOR<product_mappingCreateWithoutPsr_dataInput, product_mappingUncheckedCreateWithoutPsr_dataInput>
-    connectOrCreate?: product_mappingCreateOrConnectWithoutPsr_dataInput
-    upsert?: product_mappingUpsertWithoutPsr_dataInput
-    connect?: product_mappingWhereUniqueInput
-    update?: XOR<XOR<product_mappingUpdateToOneWithWhereWithoutPsr_dataInput, product_mappingUpdateWithoutPsr_dataInput>, product_mappingUncheckedUpdateWithoutPsr_dataInput>
   }
 
   export type IntFieldUpdateOperationsInput = {
@@ -11075,256 +14589,20 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type store_mappingCreateNestedOneWithoutPsr_data_tempInput = {
-    create?: XOR<store_mappingCreateWithoutPsr_data_tempInput, store_mappingUncheckedCreateWithoutPsr_data_tempInput>
-    connectOrCreate?: store_mappingCreateOrConnectWithoutPsr_data_tempInput
-    connect?: store_mappingWhereUniqueInput
+  export type DecimalFieldUpdateOperationsInput = {
+    set?: Decimal | DecimalJsLike | number | string
+    increment?: Decimal | DecimalJsLike | number | string
+    decrement?: Decimal | DecimalJsLike | number | string
+    multiply?: Decimal | DecimalJsLike | number | string
+    divide?: Decimal | DecimalJsLike | number | string
   }
 
-  export type product_mappingCreateNestedOneWithoutPsr_data_tempInput = {
-    create?: XOR<product_mappingCreateWithoutPsr_data_tempInput, product_mappingUncheckedCreateWithoutPsr_data_tempInput>
-    connectOrCreate?: product_mappingCreateOrConnectWithoutPsr_data_tempInput
-    connect?: product_mappingWhereUniqueInput
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
-  export type store_mappingUpdateOneRequiredWithoutPsr_data_tempNestedInput = {
-    create?: XOR<store_mappingCreateWithoutPsr_data_tempInput, store_mappingUncheckedCreateWithoutPsr_data_tempInput>
-    connectOrCreate?: store_mappingCreateOrConnectWithoutPsr_data_tempInput
-    upsert?: store_mappingUpsertWithoutPsr_data_tempInput
-    connect?: store_mappingWhereUniqueInput
-    update?: XOR<XOR<store_mappingUpdateToOneWithWhereWithoutPsr_data_tempInput, store_mappingUpdateWithoutPsr_data_tempInput>, store_mappingUncheckedUpdateWithoutPsr_data_tempInput>
-  }
-
-  export type product_mappingUpdateOneRequiredWithoutPsr_data_tempNestedInput = {
-    create?: XOR<product_mappingCreateWithoutPsr_data_tempInput, product_mappingUncheckedCreateWithoutPsr_data_tempInput>
-    connectOrCreate?: product_mappingCreateOrConnectWithoutPsr_data_tempInput
-    upsert?: product_mappingUpsertWithoutPsr_data_tempInput
-    connect?: product_mappingWhereUniqueInput
-    update?: XOR<XOR<product_mappingUpdateToOneWithWhereWithoutPsr_data_tempInput, product_mappingUpdateWithoutPsr_data_tempInput>, product_mappingUncheckedUpdateWithoutPsr_data_tempInput>
-  }
-
-  export type store_mappingCreateNestedManyWithoutChannel_mappingInput = {
-    create?: XOR<store_mappingCreateWithoutChannel_mappingInput, store_mappingUncheckedCreateWithoutChannel_mappingInput> | store_mappingCreateWithoutChannel_mappingInput[] | store_mappingUncheckedCreateWithoutChannel_mappingInput[]
-    connectOrCreate?: store_mappingCreateOrConnectWithoutChannel_mappingInput | store_mappingCreateOrConnectWithoutChannel_mappingInput[]
-    createMany?: store_mappingCreateManyChannel_mappingInputEnvelope
-    connect?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
-  }
-
-  export type store_mappingUncheckedCreateNestedManyWithoutChannel_mappingInput = {
-    create?: XOR<store_mappingCreateWithoutChannel_mappingInput, store_mappingUncheckedCreateWithoutChannel_mappingInput> | store_mappingCreateWithoutChannel_mappingInput[] | store_mappingUncheckedCreateWithoutChannel_mappingInput[]
-    connectOrCreate?: store_mappingCreateOrConnectWithoutChannel_mappingInput | store_mappingCreateOrConnectWithoutChannel_mappingInput[]
-    createMany?: store_mappingCreateManyChannel_mappingInputEnvelope
-    connect?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
-  }
-
-  export type store_mappingUpdateManyWithoutChannel_mappingNestedInput = {
-    create?: XOR<store_mappingCreateWithoutChannel_mappingInput, store_mappingUncheckedCreateWithoutChannel_mappingInput> | store_mappingCreateWithoutChannel_mappingInput[] | store_mappingUncheckedCreateWithoutChannel_mappingInput[]
-    connectOrCreate?: store_mappingCreateOrConnectWithoutChannel_mappingInput | store_mappingCreateOrConnectWithoutChannel_mappingInput[]
-    upsert?: store_mappingUpsertWithWhereUniqueWithoutChannel_mappingInput | store_mappingUpsertWithWhereUniqueWithoutChannel_mappingInput[]
-    createMany?: store_mappingCreateManyChannel_mappingInputEnvelope
-    set?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
-    disconnect?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
-    delete?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
-    connect?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
-    update?: store_mappingUpdateWithWhereUniqueWithoutChannel_mappingInput | store_mappingUpdateWithWhereUniqueWithoutChannel_mappingInput[]
-    updateMany?: store_mappingUpdateManyWithWhereWithoutChannel_mappingInput | store_mappingUpdateManyWithWhereWithoutChannel_mappingInput[]
-    deleteMany?: store_mappingScalarWhereInput | store_mappingScalarWhereInput[]
-  }
-
-  export type store_mappingUncheckedUpdateManyWithoutChannel_mappingNestedInput = {
-    create?: XOR<store_mappingCreateWithoutChannel_mappingInput, store_mappingUncheckedCreateWithoutChannel_mappingInput> | store_mappingCreateWithoutChannel_mappingInput[] | store_mappingUncheckedCreateWithoutChannel_mappingInput[]
-    connectOrCreate?: store_mappingCreateOrConnectWithoutChannel_mappingInput | store_mappingCreateOrConnectWithoutChannel_mappingInput[]
-    upsert?: store_mappingUpsertWithWhereUniqueWithoutChannel_mappingInput | store_mappingUpsertWithWhereUniqueWithoutChannel_mappingInput[]
-    createMany?: store_mappingCreateManyChannel_mappingInputEnvelope
-    set?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
-    disconnect?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
-    delete?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
-    connect?: store_mappingWhereUniqueInput | store_mappingWhereUniqueInput[]
-    update?: store_mappingUpdateWithWhereUniqueWithoutChannel_mappingInput | store_mappingUpdateWithWhereUniqueWithoutChannel_mappingInput[]
-    updateMany?: store_mappingUpdateManyWithWhereWithoutChannel_mappingInput | store_mappingUpdateManyWithWhereWithoutChannel_mappingInput[]
-    deleteMany?: store_mappingScalarWhereInput | store_mappingScalarWhereInput[]
-  }
-
-  export type psr_dataCreateNestedManyWithoutStore_mappingInput = {
-    create?: XOR<psr_dataCreateWithoutStore_mappingInput, psr_dataUncheckedCreateWithoutStore_mappingInput> | psr_dataCreateWithoutStore_mappingInput[] | psr_dataUncheckedCreateWithoutStore_mappingInput[]
-    connectOrCreate?: psr_dataCreateOrConnectWithoutStore_mappingInput | psr_dataCreateOrConnectWithoutStore_mappingInput[]
-    createMany?: psr_dataCreateManyStore_mappingInputEnvelope
-    connect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-  }
-
-  export type psr_data_tempCreateNestedManyWithoutStore_mappingInput = {
-    create?: XOR<psr_data_tempCreateWithoutStore_mappingInput, psr_data_tempUncheckedCreateWithoutStore_mappingInput> | psr_data_tempCreateWithoutStore_mappingInput[] | psr_data_tempUncheckedCreateWithoutStore_mappingInput[]
-    connectOrCreate?: psr_data_tempCreateOrConnectWithoutStore_mappingInput | psr_data_tempCreateOrConnectWithoutStore_mappingInput[]
-    createMany?: psr_data_tempCreateManyStore_mappingInputEnvelope
-    connect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-  }
-
-  export type channel_mappingCreateNestedOneWithoutStore_mappingInput = {
-    create?: XOR<channel_mappingCreateWithoutStore_mappingInput, channel_mappingUncheckedCreateWithoutStore_mappingInput>
-    connectOrCreate?: channel_mappingCreateOrConnectWithoutStore_mappingInput
-    connect?: channel_mappingWhereUniqueInput
-  }
-
-  export type psr_dataUncheckedCreateNestedManyWithoutStore_mappingInput = {
-    create?: XOR<psr_dataCreateWithoutStore_mappingInput, psr_dataUncheckedCreateWithoutStore_mappingInput> | psr_dataCreateWithoutStore_mappingInput[] | psr_dataUncheckedCreateWithoutStore_mappingInput[]
-    connectOrCreate?: psr_dataCreateOrConnectWithoutStore_mappingInput | psr_dataCreateOrConnectWithoutStore_mappingInput[]
-    createMany?: psr_dataCreateManyStore_mappingInputEnvelope
-    connect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-  }
-
-  export type psr_data_tempUncheckedCreateNestedManyWithoutStore_mappingInput = {
-    create?: XOR<psr_data_tempCreateWithoutStore_mappingInput, psr_data_tempUncheckedCreateWithoutStore_mappingInput> | psr_data_tempCreateWithoutStore_mappingInput[] | psr_data_tempUncheckedCreateWithoutStore_mappingInput[]
-    connectOrCreate?: psr_data_tempCreateOrConnectWithoutStore_mappingInput | psr_data_tempCreateOrConnectWithoutStore_mappingInput[]
-    createMany?: psr_data_tempCreateManyStore_mappingInputEnvelope
-    connect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-  }
-
-  export type psr_dataUpdateManyWithoutStore_mappingNestedInput = {
-    create?: XOR<psr_dataCreateWithoutStore_mappingInput, psr_dataUncheckedCreateWithoutStore_mappingInput> | psr_dataCreateWithoutStore_mappingInput[] | psr_dataUncheckedCreateWithoutStore_mappingInput[]
-    connectOrCreate?: psr_dataCreateOrConnectWithoutStore_mappingInput | psr_dataCreateOrConnectWithoutStore_mappingInput[]
-    upsert?: psr_dataUpsertWithWhereUniqueWithoutStore_mappingInput | psr_dataUpsertWithWhereUniqueWithoutStore_mappingInput[]
-    createMany?: psr_dataCreateManyStore_mappingInputEnvelope
-    set?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-    disconnect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-    delete?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-    connect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-    update?: psr_dataUpdateWithWhereUniqueWithoutStore_mappingInput | psr_dataUpdateWithWhereUniqueWithoutStore_mappingInput[]
-    updateMany?: psr_dataUpdateManyWithWhereWithoutStore_mappingInput | psr_dataUpdateManyWithWhereWithoutStore_mappingInput[]
-    deleteMany?: psr_dataScalarWhereInput | psr_dataScalarWhereInput[]
-  }
-
-  export type psr_data_tempUpdateManyWithoutStore_mappingNestedInput = {
-    create?: XOR<psr_data_tempCreateWithoutStore_mappingInput, psr_data_tempUncheckedCreateWithoutStore_mappingInput> | psr_data_tempCreateWithoutStore_mappingInput[] | psr_data_tempUncheckedCreateWithoutStore_mappingInput[]
-    connectOrCreate?: psr_data_tempCreateOrConnectWithoutStore_mappingInput | psr_data_tempCreateOrConnectWithoutStore_mappingInput[]
-    upsert?: psr_data_tempUpsertWithWhereUniqueWithoutStore_mappingInput | psr_data_tempUpsertWithWhereUniqueWithoutStore_mappingInput[]
-    createMany?: psr_data_tempCreateManyStore_mappingInputEnvelope
-    set?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-    disconnect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-    delete?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-    connect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-    update?: psr_data_tempUpdateWithWhereUniqueWithoutStore_mappingInput | psr_data_tempUpdateWithWhereUniqueWithoutStore_mappingInput[]
-    updateMany?: psr_data_tempUpdateManyWithWhereWithoutStore_mappingInput | psr_data_tempUpdateManyWithWhereWithoutStore_mappingInput[]
-    deleteMany?: psr_data_tempScalarWhereInput | psr_data_tempScalarWhereInput[]
-  }
-
-  export type channel_mappingUpdateOneRequiredWithoutStore_mappingNestedInput = {
-    create?: XOR<channel_mappingCreateWithoutStore_mappingInput, channel_mappingUncheckedCreateWithoutStore_mappingInput>
-    connectOrCreate?: channel_mappingCreateOrConnectWithoutStore_mappingInput
-    upsert?: channel_mappingUpsertWithoutStore_mappingInput
-    connect?: channel_mappingWhereUniqueInput
-    update?: XOR<XOR<channel_mappingUpdateToOneWithWhereWithoutStore_mappingInput, channel_mappingUpdateWithoutStore_mappingInput>, channel_mappingUncheckedUpdateWithoutStore_mappingInput>
-  }
-
-  export type psr_dataUncheckedUpdateManyWithoutStore_mappingNestedInput = {
-    create?: XOR<psr_dataCreateWithoutStore_mappingInput, psr_dataUncheckedCreateWithoutStore_mappingInput> | psr_dataCreateWithoutStore_mappingInput[] | psr_dataUncheckedCreateWithoutStore_mappingInput[]
-    connectOrCreate?: psr_dataCreateOrConnectWithoutStore_mappingInput | psr_dataCreateOrConnectWithoutStore_mappingInput[]
-    upsert?: psr_dataUpsertWithWhereUniqueWithoutStore_mappingInput | psr_dataUpsertWithWhereUniqueWithoutStore_mappingInput[]
-    createMany?: psr_dataCreateManyStore_mappingInputEnvelope
-    set?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-    disconnect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-    delete?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-    connect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-    update?: psr_dataUpdateWithWhereUniqueWithoutStore_mappingInput | psr_dataUpdateWithWhereUniqueWithoutStore_mappingInput[]
-    updateMany?: psr_dataUpdateManyWithWhereWithoutStore_mappingInput | psr_dataUpdateManyWithWhereWithoutStore_mappingInput[]
-    deleteMany?: psr_dataScalarWhereInput | psr_dataScalarWhereInput[]
-  }
-
-  export type psr_data_tempUncheckedUpdateManyWithoutStore_mappingNestedInput = {
-    create?: XOR<psr_data_tempCreateWithoutStore_mappingInput, psr_data_tempUncheckedCreateWithoutStore_mappingInput> | psr_data_tempCreateWithoutStore_mappingInput[] | psr_data_tempUncheckedCreateWithoutStore_mappingInput[]
-    connectOrCreate?: psr_data_tempCreateOrConnectWithoutStore_mappingInput | psr_data_tempCreateOrConnectWithoutStore_mappingInput[]
-    upsert?: psr_data_tempUpsertWithWhereUniqueWithoutStore_mappingInput | psr_data_tempUpsertWithWhereUniqueWithoutStore_mappingInput[]
-    createMany?: psr_data_tempCreateManyStore_mappingInputEnvelope
-    set?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-    disconnect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-    delete?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-    connect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-    update?: psr_data_tempUpdateWithWhereUniqueWithoutStore_mappingInput | psr_data_tempUpdateWithWhereUniqueWithoutStore_mappingInput[]
-    updateMany?: psr_data_tempUpdateManyWithWhereWithoutStore_mappingInput | psr_data_tempUpdateManyWithWhereWithoutStore_mappingInput[]
-    deleteMany?: psr_data_tempScalarWhereInput | psr_data_tempScalarWhereInput[]
-  }
-
-  export type psr_dataCreateNestedManyWithoutProduct_mappingInput = {
-    create?: XOR<psr_dataCreateWithoutProduct_mappingInput, psr_dataUncheckedCreateWithoutProduct_mappingInput> | psr_dataCreateWithoutProduct_mappingInput[] | psr_dataUncheckedCreateWithoutProduct_mappingInput[]
-    connectOrCreate?: psr_dataCreateOrConnectWithoutProduct_mappingInput | psr_dataCreateOrConnectWithoutProduct_mappingInput[]
-    createMany?: psr_dataCreateManyProduct_mappingInputEnvelope
-    connect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-  }
-
-  export type psr_data_tempCreateNestedManyWithoutProduct_mappingInput = {
-    create?: XOR<psr_data_tempCreateWithoutProduct_mappingInput, psr_data_tempUncheckedCreateWithoutProduct_mappingInput> | psr_data_tempCreateWithoutProduct_mappingInput[] | psr_data_tempUncheckedCreateWithoutProduct_mappingInput[]
-    connectOrCreate?: psr_data_tempCreateOrConnectWithoutProduct_mappingInput | psr_data_tempCreateOrConnectWithoutProduct_mappingInput[]
-    createMany?: psr_data_tempCreateManyProduct_mappingInputEnvelope
-    connect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-  }
-
-  export type psr_dataUncheckedCreateNestedManyWithoutProduct_mappingInput = {
-    create?: XOR<psr_dataCreateWithoutProduct_mappingInput, psr_dataUncheckedCreateWithoutProduct_mappingInput> | psr_dataCreateWithoutProduct_mappingInput[] | psr_dataUncheckedCreateWithoutProduct_mappingInput[]
-    connectOrCreate?: psr_dataCreateOrConnectWithoutProduct_mappingInput | psr_dataCreateOrConnectWithoutProduct_mappingInput[]
-    createMany?: psr_dataCreateManyProduct_mappingInputEnvelope
-    connect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-  }
-
-  export type psr_data_tempUncheckedCreateNestedManyWithoutProduct_mappingInput = {
-    create?: XOR<psr_data_tempCreateWithoutProduct_mappingInput, psr_data_tempUncheckedCreateWithoutProduct_mappingInput> | psr_data_tempCreateWithoutProduct_mappingInput[] | psr_data_tempUncheckedCreateWithoutProduct_mappingInput[]
-    connectOrCreate?: psr_data_tempCreateOrConnectWithoutProduct_mappingInput | psr_data_tempCreateOrConnectWithoutProduct_mappingInput[]
-    createMany?: psr_data_tempCreateManyProduct_mappingInputEnvelope
-    connect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-  }
-
-  export type psr_dataUpdateManyWithoutProduct_mappingNestedInput = {
-    create?: XOR<psr_dataCreateWithoutProduct_mappingInput, psr_dataUncheckedCreateWithoutProduct_mappingInput> | psr_dataCreateWithoutProduct_mappingInput[] | psr_dataUncheckedCreateWithoutProduct_mappingInput[]
-    connectOrCreate?: psr_dataCreateOrConnectWithoutProduct_mappingInput | psr_dataCreateOrConnectWithoutProduct_mappingInput[]
-    upsert?: psr_dataUpsertWithWhereUniqueWithoutProduct_mappingInput | psr_dataUpsertWithWhereUniqueWithoutProduct_mappingInput[]
-    createMany?: psr_dataCreateManyProduct_mappingInputEnvelope
-    set?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-    disconnect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-    delete?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-    connect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-    update?: psr_dataUpdateWithWhereUniqueWithoutProduct_mappingInput | psr_dataUpdateWithWhereUniqueWithoutProduct_mappingInput[]
-    updateMany?: psr_dataUpdateManyWithWhereWithoutProduct_mappingInput | psr_dataUpdateManyWithWhereWithoutProduct_mappingInput[]
-    deleteMany?: psr_dataScalarWhereInput | psr_dataScalarWhereInput[]
-  }
-
-  export type psr_data_tempUpdateManyWithoutProduct_mappingNestedInput = {
-    create?: XOR<psr_data_tempCreateWithoutProduct_mappingInput, psr_data_tempUncheckedCreateWithoutProduct_mappingInput> | psr_data_tempCreateWithoutProduct_mappingInput[] | psr_data_tempUncheckedCreateWithoutProduct_mappingInput[]
-    connectOrCreate?: psr_data_tempCreateOrConnectWithoutProduct_mappingInput | psr_data_tempCreateOrConnectWithoutProduct_mappingInput[]
-    upsert?: psr_data_tempUpsertWithWhereUniqueWithoutProduct_mappingInput | psr_data_tempUpsertWithWhereUniqueWithoutProduct_mappingInput[]
-    createMany?: psr_data_tempCreateManyProduct_mappingInputEnvelope
-    set?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-    disconnect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-    delete?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-    connect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-    update?: psr_data_tempUpdateWithWhereUniqueWithoutProduct_mappingInput | psr_data_tempUpdateWithWhereUniqueWithoutProduct_mappingInput[]
-    updateMany?: psr_data_tempUpdateManyWithWhereWithoutProduct_mappingInput | psr_data_tempUpdateManyWithWhereWithoutProduct_mappingInput[]
-    deleteMany?: psr_data_tempScalarWhereInput | psr_data_tempScalarWhereInput[]
-  }
-
-  export type psr_dataUncheckedUpdateManyWithoutProduct_mappingNestedInput = {
-    create?: XOR<psr_dataCreateWithoutProduct_mappingInput, psr_dataUncheckedCreateWithoutProduct_mappingInput> | psr_dataCreateWithoutProduct_mappingInput[] | psr_dataUncheckedCreateWithoutProduct_mappingInput[]
-    connectOrCreate?: psr_dataCreateOrConnectWithoutProduct_mappingInput | psr_dataCreateOrConnectWithoutProduct_mappingInput[]
-    upsert?: psr_dataUpsertWithWhereUniqueWithoutProduct_mappingInput | psr_dataUpsertWithWhereUniqueWithoutProduct_mappingInput[]
-    createMany?: psr_dataCreateManyProduct_mappingInputEnvelope
-    set?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-    disconnect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-    delete?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-    connect?: psr_dataWhereUniqueInput | psr_dataWhereUniqueInput[]
-    update?: psr_dataUpdateWithWhereUniqueWithoutProduct_mappingInput | psr_dataUpdateWithWhereUniqueWithoutProduct_mappingInput[]
-    updateMany?: psr_dataUpdateManyWithWhereWithoutProduct_mappingInput | psr_dataUpdateManyWithWhereWithoutProduct_mappingInput[]
-    deleteMany?: psr_dataScalarWhereInput | psr_dataScalarWhereInput[]
-  }
-
-  export type psr_data_tempUncheckedUpdateManyWithoutProduct_mappingNestedInput = {
-    create?: XOR<psr_data_tempCreateWithoutProduct_mappingInput, psr_data_tempUncheckedCreateWithoutProduct_mappingInput> | psr_data_tempCreateWithoutProduct_mappingInput[] | psr_data_tempUncheckedCreateWithoutProduct_mappingInput[]
-    connectOrCreate?: psr_data_tempCreateOrConnectWithoutProduct_mappingInput | psr_data_tempCreateOrConnectWithoutProduct_mappingInput[]
-    upsert?: psr_data_tempUpsertWithWhereUniqueWithoutProduct_mappingInput | psr_data_tempUpsertWithWhereUniqueWithoutProduct_mappingInput[]
-    createMany?: psr_data_tempCreateManyProduct_mappingInputEnvelope
-    set?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-    disconnect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-    delete?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-    connect?: psr_data_tempWhereUniqueInput | psr_data_tempWhereUniqueInput[]
-    update?: psr_data_tempUpdateWithWhereUniqueWithoutProduct_mappingInput | psr_data_tempUpdateWithWhereUniqueWithoutProduct_mappingInput[]
-    updateMany?: psr_data_tempUpdateManyWithWhereWithoutProduct_mappingInput | psr_data_tempUpdateManyWithWhereWithoutProduct_mappingInput[]
-    deleteMany?: psr_data_tempScalarWhereInput | psr_data_tempScalarWhereInput[]
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
   }
 
   export type PermissionSetCreateNestedManyWithoutUserInput = {
@@ -11339,14 +14617,6 @@ export namespace Prisma {
     connectOrCreate?: PermissionSetCreateOrConnectWithoutUserInput | PermissionSetCreateOrConnectWithoutUserInput[]
     createMany?: PermissionSetCreateManyUserInputEnvelope
     connect?: PermissionSetWhereUniqueInput | PermissionSetWhereUniqueInput[]
-  }
-
-  export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type NullableIntFieldUpdateOperationsInput = {
@@ -11541,33 +14811,6 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | null
-    notIn?: number[] | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
-    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
-    in?: Date[] | string[] | null
-    notIn?: Date[] | string[] | null
-    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
-    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
-  }
-
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel> | null
     in?: string[] | null
@@ -11586,12 +14829,39 @@ export namespace Prisma {
     _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | null
+    notIn?: number[] | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
     equals?: boolean | BooleanFieldRefInput<$PrismaModel>
     not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedBoolFilter<$PrismaModel>
     _max?: NestedBoolFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | null
+    notIn?: Date[] | string[] | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
   }
 
   export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -11656,636 +14926,6 @@ export namespace Prisma {
     gt?: InputJsonValue
     gte?: InputJsonValue
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type store_mappingCreateWithoutPsr_dataInput = {
-    Old_Store_Code: string
-    New_Store_Code: string
-    customer_name: string
-    Branch: string
-    DSE_Code: string
-    ZM: string
-    RSM: string
-    ASM: string
-    TSI: string
-    psr_data_temp?: psr_data_tempCreateNestedManyWithoutStore_mappingInput
-    channel_mapping: channel_mappingCreateNestedOneWithoutStore_mappingInput
-  }
-
-  export type store_mappingUncheckedCreateWithoutPsr_dataInput = {
-    Id?: number
-    Old_Store_Code: string
-    New_Store_Code: string
-    customer_name: string
-    customer_type: string
-    Branch: string
-    DSE_Code: string
-    ZM: string
-    RSM: string
-    ASM: string
-    TSI: string
-    psr_data_temp?: psr_data_tempUncheckedCreateNestedManyWithoutStore_mappingInput
-  }
-
-  export type store_mappingCreateOrConnectWithoutPsr_dataInput = {
-    where: store_mappingWhereUniqueInput
-    create: XOR<store_mappingCreateWithoutPsr_dataInput, store_mappingUncheckedCreateWithoutPsr_dataInput>
-  }
-
-  export type product_mappingCreateWithoutPsr_dataInput = {
-    p_code: number
-    desc_short: string
-    category: string
-    brand: string
-    brandform: string
-    subbrandform: string
-    psr_data_temp?: psr_data_tempCreateNestedManyWithoutProduct_mappingInput
-  }
-
-  export type product_mappingUncheckedCreateWithoutPsr_dataInput = {
-    Id?: number
-    p_code: number
-    desc_short: string
-    category: string
-    brand: string
-    brandform: string
-    subbrandform: string
-    psr_data_temp?: psr_data_tempUncheckedCreateNestedManyWithoutProduct_mappingInput
-  }
-
-  export type product_mappingCreateOrConnectWithoutPsr_dataInput = {
-    where: product_mappingWhereUniqueInput
-    create: XOR<product_mappingCreateWithoutPsr_dataInput, product_mappingUncheckedCreateWithoutPsr_dataInput>
-  }
-
-  export type store_mappingUpsertWithoutPsr_dataInput = {
-    update: XOR<store_mappingUpdateWithoutPsr_dataInput, store_mappingUncheckedUpdateWithoutPsr_dataInput>
-    create: XOR<store_mappingCreateWithoutPsr_dataInput, store_mappingUncheckedCreateWithoutPsr_dataInput>
-    where?: store_mappingWhereInput
-  }
-
-  export type store_mappingUpdateToOneWithWhereWithoutPsr_dataInput = {
-    where?: store_mappingWhereInput
-    data: XOR<store_mappingUpdateWithoutPsr_dataInput, store_mappingUncheckedUpdateWithoutPsr_dataInput>
-  }
-
-  export type store_mappingUpdateWithoutPsr_dataInput = {
-    Old_Store_Code?: StringFieldUpdateOperationsInput | string
-    New_Store_Code?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    Branch?: StringFieldUpdateOperationsInput | string
-    DSE_Code?: StringFieldUpdateOperationsInput | string
-    ZM?: StringFieldUpdateOperationsInput | string
-    RSM?: StringFieldUpdateOperationsInput | string
-    ASM?: StringFieldUpdateOperationsInput | string
-    TSI?: StringFieldUpdateOperationsInput | string
-    psr_data_temp?: psr_data_tempUpdateManyWithoutStore_mappingNestedInput
-    channel_mapping?: channel_mappingUpdateOneRequiredWithoutStore_mappingNestedInput
-  }
-
-  export type store_mappingUncheckedUpdateWithoutPsr_dataInput = {
-    Id?: IntFieldUpdateOperationsInput | number
-    Old_Store_Code?: StringFieldUpdateOperationsInput | string
-    New_Store_Code?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    customer_type?: StringFieldUpdateOperationsInput | string
-    Branch?: StringFieldUpdateOperationsInput | string
-    DSE_Code?: StringFieldUpdateOperationsInput | string
-    ZM?: StringFieldUpdateOperationsInput | string
-    RSM?: StringFieldUpdateOperationsInput | string
-    ASM?: StringFieldUpdateOperationsInput | string
-    TSI?: StringFieldUpdateOperationsInput | string
-    psr_data_temp?: psr_data_tempUncheckedUpdateManyWithoutStore_mappingNestedInput
-  }
-
-  export type product_mappingUpsertWithoutPsr_dataInput = {
-    update: XOR<product_mappingUpdateWithoutPsr_dataInput, product_mappingUncheckedUpdateWithoutPsr_dataInput>
-    create: XOR<product_mappingCreateWithoutPsr_dataInput, product_mappingUncheckedCreateWithoutPsr_dataInput>
-    where?: product_mappingWhereInput
-  }
-
-  export type product_mappingUpdateToOneWithWhereWithoutPsr_dataInput = {
-    where?: product_mappingWhereInput
-    data: XOR<product_mappingUpdateWithoutPsr_dataInput, product_mappingUncheckedUpdateWithoutPsr_dataInput>
-  }
-
-  export type product_mappingUpdateWithoutPsr_dataInput = {
-    p_code?: IntFieldUpdateOperationsInput | number
-    desc_short?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    psr_data_temp?: psr_data_tempUpdateManyWithoutProduct_mappingNestedInput
-  }
-
-  export type product_mappingUncheckedUpdateWithoutPsr_dataInput = {
-    Id?: IntFieldUpdateOperationsInput | number
-    p_code?: IntFieldUpdateOperationsInput | number
-    desc_short?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    psr_data_temp?: psr_data_tempUncheckedUpdateManyWithoutProduct_mappingNestedInput
-  }
-
-  export type store_mappingCreateWithoutPsr_data_tempInput = {
-    Old_Store_Code: string
-    New_Store_Code: string
-    customer_name: string
-    Branch: string
-    DSE_Code: string
-    ZM: string
-    RSM: string
-    ASM: string
-    TSI: string
-    psr_data?: psr_dataCreateNestedManyWithoutStore_mappingInput
-    channel_mapping: channel_mappingCreateNestedOneWithoutStore_mappingInput
-  }
-
-  export type store_mappingUncheckedCreateWithoutPsr_data_tempInput = {
-    Id?: number
-    Old_Store_Code: string
-    New_Store_Code: string
-    customer_name: string
-    customer_type: string
-    Branch: string
-    DSE_Code: string
-    ZM: string
-    RSM: string
-    ASM: string
-    TSI: string
-    psr_data?: psr_dataUncheckedCreateNestedManyWithoutStore_mappingInput
-  }
-
-  export type store_mappingCreateOrConnectWithoutPsr_data_tempInput = {
-    where: store_mappingWhereUniqueInput
-    create: XOR<store_mappingCreateWithoutPsr_data_tempInput, store_mappingUncheckedCreateWithoutPsr_data_tempInput>
-  }
-
-  export type product_mappingCreateWithoutPsr_data_tempInput = {
-    p_code: number
-    desc_short: string
-    category: string
-    brand: string
-    brandform: string
-    subbrandform: string
-    psr_data?: psr_dataCreateNestedManyWithoutProduct_mappingInput
-  }
-
-  export type product_mappingUncheckedCreateWithoutPsr_data_tempInput = {
-    Id?: number
-    p_code: number
-    desc_short: string
-    category: string
-    brand: string
-    brandform: string
-    subbrandform: string
-    psr_data?: psr_dataUncheckedCreateNestedManyWithoutProduct_mappingInput
-  }
-
-  export type product_mappingCreateOrConnectWithoutPsr_data_tempInput = {
-    where: product_mappingWhereUniqueInput
-    create: XOR<product_mappingCreateWithoutPsr_data_tempInput, product_mappingUncheckedCreateWithoutPsr_data_tempInput>
-  }
-
-  export type store_mappingUpsertWithoutPsr_data_tempInput = {
-    update: XOR<store_mappingUpdateWithoutPsr_data_tempInput, store_mappingUncheckedUpdateWithoutPsr_data_tempInput>
-    create: XOR<store_mappingCreateWithoutPsr_data_tempInput, store_mappingUncheckedCreateWithoutPsr_data_tempInput>
-    where?: store_mappingWhereInput
-  }
-
-  export type store_mappingUpdateToOneWithWhereWithoutPsr_data_tempInput = {
-    where?: store_mappingWhereInput
-    data: XOR<store_mappingUpdateWithoutPsr_data_tempInput, store_mappingUncheckedUpdateWithoutPsr_data_tempInput>
-  }
-
-  export type store_mappingUpdateWithoutPsr_data_tempInput = {
-    Old_Store_Code?: StringFieldUpdateOperationsInput | string
-    New_Store_Code?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    Branch?: StringFieldUpdateOperationsInput | string
-    DSE_Code?: StringFieldUpdateOperationsInput | string
-    ZM?: StringFieldUpdateOperationsInput | string
-    RSM?: StringFieldUpdateOperationsInput | string
-    ASM?: StringFieldUpdateOperationsInput | string
-    TSI?: StringFieldUpdateOperationsInput | string
-    psr_data?: psr_dataUpdateManyWithoutStore_mappingNestedInput
-    channel_mapping?: channel_mappingUpdateOneRequiredWithoutStore_mappingNestedInput
-  }
-
-  export type store_mappingUncheckedUpdateWithoutPsr_data_tempInput = {
-    Id?: IntFieldUpdateOperationsInput | number
-    Old_Store_Code?: StringFieldUpdateOperationsInput | string
-    New_Store_Code?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    customer_type?: StringFieldUpdateOperationsInput | string
-    Branch?: StringFieldUpdateOperationsInput | string
-    DSE_Code?: StringFieldUpdateOperationsInput | string
-    ZM?: StringFieldUpdateOperationsInput | string
-    RSM?: StringFieldUpdateOperationsInput | string
-    ASM?: StringFieldUpdateOperationsInput | string
-    TSI?: StringFieldUpdateOperationsInput | string
-    psr_data?: psr_dataUncheckedUpdateManyWithoutStore_mappingNestedInput
-  }
-
-  export type product_mappingUpsertWithoutPsr_data_tempInput = {
-    update: XOR<product_mappingUpdateWithoutPsr_data_tempInput, product_mappingUncheckedUpdateWithoutPsr_data_tempInput>
-    create: XOR<product_mappingCreateWithoutPsr_data_tempInput, product_mappingUncheckedCreateWithoutPsr_data_tempInput>
-    where?: product_mappingWhereInput
-  }
-
-  export type product_mappingUpdateToOneWithWhereWithoutPsr_data_tempInput = {
-    where?: product_mappingWhereInput
-    data: XOR<product_mappingUpdateWithoutPsr_data_tempInput, product_mappingUncheckedUpdateWithoutPsr_data_tempInput>
-  }
-
-  export type product_mappingUpdateWithoutPsr_data_tempInput = {
-    p_code?: IntFieldUpdateOperationsInput | number
-    desc_short?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    psr_data?: psr_dataUpdateManyWithoutProduct_mappingNestedInput
-  }
-
-  export type product_mappingUncheckedUpdateWithoutPsr_data_tempInput = {
-    Id?: IntFieldUpdateOperationsInput | number
-    p_code?: IntFieldUpdateOperationsInput | number
-    desc_short?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    psr_data?: psr_dataUncheckedUpdateManyWithoutProduct_mappingNestedInput
-  }
-
-  export type store_mappingCreateWithoutChannel_mappingInput = {
-    Old_Store_Code: string
-    New_Store_Code: string
-    customer_name: string
-    Branch: string
-    DSE_Code: string
-    ZM: string
-    RSM: string
-    ASM: string
-    TSI: string
-    psr_data?: psr_dataCreateNestedManyWithoutStore_mappingInput
-    psr_data_temp?: psr_data_tempCreateNestedManyWithoutStore_mappingInput
-  }
-
-  export type store_mappingUncheckedCreateWithoutChannel_mappingInput = {
-    Id?: number
-    Old_Store_Code: string
-    New_Store_Code: string
-    customer_name: string
-    Branch: string
-    DSE_Code: string
-    ZM: string
-    RSM: string
-    ASM: string
-    TSI: string
-    psr_data?: psr_dataUncheckedCreateNestedManyWithoutStore_mappingInput
-    psr_data_temp?: psr_data_tempUncheckedCreateNestedManyWithoutStore_mappingInput
-  }
-
-  export type store_mappingCreateOrConnectWithoutChannel_mappingInput = {
-    where: store_mappingWhereUniqueInput
-    create: XOR<store_mappingCreateWithoutChannel_mappingInput, store_mappingUncheckedCreateWithoutChannel_mappingInput>
-  }
-
-  export type store_mappingCreateManyChannel_mappingInputEnvelope = {
-    data: store_mappingCreateManyChannel_mappingInput | store_mappingCreateManyChannel_mappingInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type store_mappingUpsertWithWhereUniqueWithoutChannel_mappingInput = {
-    where: store_mappingWhereUniqueInput
-    update: XOR<store_mappingUpdateWithoutChannel_mappingInput, store_mappingUncheckedUpdateWithoutChannel_mappingInput>
-    create: XOR<store_mappingCreateWithoutChannel_mappingInput, store_mappingUncheckedCreateWithoutChannel_mappingInput>
-  }
-
-  export type store_mappingUpdateWithWhereUniqueWithoutChannel_mappingInput = {
-    where: store_mappingWhereUniqueInput
-    data: XOR<store_mappingUpdateWithoutChannel_mappingInput, store_mappingUncheckedUpdateWithoutChannel_mappingInput>
-  }
-
-  export type store_mappingUpdateManyWithWhereWithoutChannel_mappingInput = {
-    where: store_mappingScalarWhereInput
-    data: XOR<store_mappingUpdateManyMutationInput, store_mappingUncheckedUpdateManyWithoutChannel_mappingInput>
-  }
-
-  export type store_mappingScalarWhereInput = {
-    AND?: store_mappingScalarWhereInput | store_mappingScalarWhereInput[]
-    OR?: store_mappingScalarWhereInput[]
-    NOT?: store_mappingScalarWhereInput | store_mappingScalarWhereInput[]
-    Id?: IntFilter<"store_mapping"> | number
-    Old_Store_Code?: StringFilter<"store_mapping"> | string
-    New_Store_Code?: StringFilter<"store_mapping"> | string
-    customer_name?: StringFilter<"store_mapping"> | string
-    customer_type?: StringFilter<"store_mapping"> | string
-    Branch?: StringFilter<"store_mapping"> | string
-    DSE_Code?: StringFilter<"store_mapping"> | string
-    ZM?: StringFilter<"store_mapping"> | string
-    RSM?: StringFilter<"store_mapping"> | string
-    ASM?: StringFilter<"store_mapping"> | string
-    TSI?: StringFilter<"store_mapping"> | string
-  }
-
-  export type psr_dataCreateWithoutStore_mappingInput = {
-    document_no: string
-    document_date: Date | string
-    subbrandform: string
-    customer_name: string
-    customer_type: string
-    category: string
-    brand: string
-    brandform: string
-    retailing: Decimal | DecimalJsLike | number | string
-    product_mapping: product_mappingCreateNestedOneWithoutPsr_dataInput
-  }
-
-  export type psr_dataUncheckedCreateWithoutStore_mappingInput = {
-    psr_id?: number
-    document_no: string
-    document_date: Date | string
-    subbrandform: string
-    customer_name: string
-    p_code: number
-    customer_type: string
-    category: string
-    brand: string
-    brandform: string
-    retailing: Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_dataCreateOrConnectWithoutStore_mappingInput = {
-    where: psr_dataWhereUniqueInput
-    create: XOR<psr_dataCreateWithoutStore_mappingInput, psr_dataUncheckedCreateWithoutStore_mappingInput>
-  }
-
-  export type psr_dataCreateManyStore_mappingInputEnvelope = {
-    data: psr_dataCreateManyStore_mappingInput | psr_dataCreateManyStore_mappingInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type psr_data_tempCreateWithoutStore_mappingInput = {
-    document_no: string
-    document_date: Date | string
-    subbrandform: string
-    customer_name: string
-    customer_type: string
-    category: string
-    brand: string
-    brandform: string
-    retailing: Decimal | DecimalJsLike | number | string
-    product_mapping: product_mappingCreateNestedOneWithoutPsr_data_tempInput
-  }
-
-  export type psr_data_tempUncheckedCreateWithoutStore_mappingInput = {
-    psr_id?: number
-    document_no: string
-    document_date: Date | string
-    subbrandform: string
-    customer_name: string
-    p_code: number
-    customer_type: string
-    category: string
-    brand: string
-    brandform: string
-    retailing: Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_data_tempCreateOrConnectWithoutStore_mappingInput = {
-    where: psr_data_tempWhereUniqueInput
-    create: XOR<psr_data_tempCreateWithoutStore_mappingInput, psr_data_tempUncheckedCreateWithoutStore_mappingInput>
-  }
-
-  export type psr_data_tempCreateManyStore_mappingInputEnvelope = {
-    data: psr_data_tempCreateManyStore_mappingInput | psr_data_tempCreateManyStore_mappingInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type channel_mappingCreateWithoutStore_mappingInput = {
-    customer_type: string
-    base_channel: string
-    short_channel: string
-    channel_desc: string
-  }
-
-  export type channel_mappingUncheckedCreateWithoutStore_mappingInput = {
-    channel_id?: number
-    customer_type: string
-    base_channel: string
-    short_channel: string
-    channel_desc: string
-  }
-
-  export type channel_mappingCreateOrConnectWithoutStore_mappingInput = {
-    where: channel_mappingWhereUniqueInput
-    create: XOR<channel_mappingCreateWithoutStore_mappingInput, channel_mappingUncheckedCreateWithoutStore_mappingInput>
-  }
-
-  export type psr_dataUpsertWithWhereUniqueWithoutStore_mappingInput = {
-    where: psr_dataWhereUniqueInput
-    update: XOR<psr_dataUpdateWithoutStore_mappingInput, psr_dataUncheckedUpdateWithoutStore_mappingInput>
-    create: XOR<psr_dataCreateWithoutStore_mappingInput, psr_dataUncheckedCreateWithoutStore_mappingInput>
-  }
-
-  export type psr_dataUpdateWithWhereUniqueWithoutStore_mappingInput = {
-    where: psr_dataWhereUniqueInput
-    data: XOR<psr_dataUpdateWithoutStore_mappingInput, psr_dataUncheckedUpdateWithoutStore_mappingInput>
-  }
-
-  export type psr_dataUpdateManyWithWhereWithoutStore_mappingInput = {
-    where: psr_dataScalarWhereInput
-    data: XOR<psr_dataUpdateManyMutationInput, psr_dataUncheckedUpdateManyWithoutStore_mappingInput>
-  }
-
-  export type psr_dataScalarWhereInput = {
-    AND?: psr_dataScalarWhereInput | psr_dataScalarWhereInput[]
-    OR?: psr_dataScalarWhereInput[]
-    NOT?: psr_dataScalarWhereInput | psr_dataScalarWhereInput[]
-    psr_id?: IntFilter<"psr_data"> | number
-    document_no?: StringFilter<"psr_data"> | string
-    document_date?: DateTimeFilter<"psr_data"> | Date | string
-    subbrandform?: StringFilter<"psr_data"> | string
-    customer_name?: StringFilter<"psr_data"> | string
-    customer_code?: StringFilter<"psr_data"> | string
-    p_code?: IntFilter<"psr_data"> | number
-    customer_type?: StringFilter<"psr_data"> | string
-    category?: StringFilter<"psr_data"> | string
-    brand?: StringFilter<"psr_data"> | string
-    brandform?: StringFilter<"psr_data"> | string
-    retailing?: DecimalFilter<"psr_data"> | Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_data_tempUpsertWithWhereUniqueWithoutStore_mappingInput = {
-    where: psr_data_tempWhereUniqueInput
-    update: XOR<psr_data_tempUpdateWithoutStore_mappingInput, psr_data_tempUncheckedUpdateWithoutStore_mappingInput>
-    create: XOR<psr_data_tempCreateWithoutStore_mappingInput, psr_data_tempUncheckedCreateWithoutStore_mappingInput>
-  }
-
-  export type psr_data_tempUpdateWithWhereUniqueWithoutStore_mappingInput = {
-    where: psr_data_tempWhereUniqueInput
-    data: XOR<psr_data_tempUpdateWithoutStore_mappingInput, psr_data_tempUncheckedUpdateWithoutStore_mappingInput>
-  }
-
-  export type psr_data_tempUpdateManyWithWhereWithoutStore_mappingInput = {
-    where: psr_data_tempScalarWhereInput
-    data: XOR<psr_data_tempUpdateManyMutationInput, psr_data_tempUncheckedUpdateManyWithoutStore_mappingInput>
-  }
-
-  export type psr_data_tempScalarWhereInput = {
-    AND?: psr_data_tempScalarWhereInput | psr_data_tempScalarWhereInput[]
-    OR?: psr_data_tempScalarWhereInput[]
-    NOT?: psr_data_tempScalarWhereInput | psr_data_tempScalarWhereInput[]
-    psr_id?: IntFilter<"psr_data_temp"> | number
-    document_no?: StringFilter<"psr_data_temp"> | string
-    document_date?: DateTimeFilter<"psr_data_temp"> | Date | string
-    subbrandform?: StringFilter<"psr_data_temp"> | string
-    customer_name?: StringFilter<"psr_data_temp"> | string
-    customer_code?: StringFilter<"psr_data_temp"> | string
-    p_code?: IntFilter<"psr_data_temp"> | number
-    customer_type?: StringFilter<"psr_data_temp"> | string
-    category?: StringFilter<"psr_data_temp"> | string
-    brand?: StringFilter<"psr_data_temp"> | string
-    brandform?: StringFilter<"psr_data_temp"> | string
-    retailing?: DecimalFilter<"psr_data_temp"> | Decimal | DecimalJsLike | number | string
-  }
-
-  export type channel_mappingUpsertWithoutStore_mappingInput = {
-    update: XOR<channel_mappingUpdateWithoutStore_mappingInput, channel_mappingUncheckedUpdateWithoutStore_mappingInput>
-    create: XOR<channel_mappingCreateWithoutStore_mappingInput, channel_mappingUncheckedCreateWithoutStore_mappingInput>
-    where?: channel_mappingWhereInput
-  }
-
-  export type channel_mappingUpdateToOneWithWhereWithoutStore_mappingInput = {
-    where?: channel_mappingWhereInput
-    data: XOR<channel_mappingUpdateWithoutStore_mappingInput, channel_mappingUncheckedUpdateWithoutStore_mappingInput>
-  }
-
-  export type channel_mappingUpdateWithoutStore_mappingInput = {
-    customer_type?: StringFieldUpdateOperationsInput | string
-    base_channel?: StringFieldUpdateOperationsInput | string
-    short_channel?: StringFieldUpdateOperationsInput | string
-    channel_desc?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type channel_mappingUncheckedUpdateWithoutStore_mappingInput = {
-    channel_id?: IntFieldUpdateOperationsInput | number
-    customer_type?: StringFieldUpdateOperationsInput | string
-    base_channel?: StringFieldUpdateOperationsInput | string
-    short_channel?: StringFieldUpdateOperationsInput | string
-    channel_desc?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type psr_dataCreateWithoutProduct_mappingInput = {
-    document_no: string
-    document_date: Date | string
-    subbrandform: string
-    customer_name: string
-    customer_type: string
-    category: string
-    brand: string
-    brandform: string
-    retailing: Decimal | DecimalJsLike | number | string
-    store_mapping: store_mappingCreateNestedOneWithoutPsr_dataInput
-  }
-
-  export type psr_dataUncheckedCreateWithoutProduct_mappingInput = {
-    psr_id?: number
-    document_no: string
-    document_date: Date | string
-    subbrandform: string
-    customer_name: string
-    customer_code: string
-    customer_type: string
-    category: string
-    brand: string
-    brandform: string
-    retailing: Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_dataCreateOrConnectWithoutProduct_mappingInput = {
-    where: psr_dataWhereUniqueInput
-    create: XOR<psr_dataCreateWithoutProduct_mappingInput, psr_dataUncheckedCreateWithoutProduct_mappingInput>
-  }
-
-  export type psr_dataCreateManyProduct_mappingInputEnvelope = {
-    data: psr_dataCreateManyProduct_mappingInput | psr_dataCreateManyProduct_mappingInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type psr_data_tempCreateWithoutProduct_mappingInput = {
-    document_no: string
-    document_date: Date | string
-    subbrandform: string
-    customer_name: string
-    customer_type: string
-    category: string
-    brand: string
-    brandform: string
-    retailing: Decimal | DecimalJsLike | number | string
-    store_mapping: store_mappingCreateNestedOneWithoutPsr_data_tempInput
-  }
-
-  export type psr_data_tempUncheckedCreateWithoutProduct_mappingInput = {
-    psr_id?: number
-    document_no: string
-    document_date: Date | string
-    subbrandform: string
-    customer_name: string
-    customer_code: string
-    customer_type: string
-    category: string
-    brand: string
-    brandform: string
-    retailing: Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_data_tempCreateOrConnectWithoutProduct_mappingInput = {
-    where: psr_data_tempWhereUniqueInput
-    create: XOR<psr_data_tempCreateWithoutProduct_mappingInput, psr_data_tempUncheckedCreateWithoutProduct_mappingInput>
-  }
-
-  export type psr_data_tempCreateManyProduct_mappingInputEnvelope = {
-    data: psr_data_tempCreateManyProduct_mappingInput | psr_data_tempCreateManyProduct_mappingInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type psr_dataUpsertWithWhereUniqueWithoutProduct_mappingInput = {
-    where: psr_dataWhereUniqueInput
-    update: XOR<psr_dataUpdateWithoutProduct_mappingInput, psr_dataUncheckedUpdateWithoutProduct_mappingInput>
-    create: XOR<psr_dataCreateWithoutProduct_mappingInput, psr_dataUncheckedCreateWithoutProduct_mappingInput>
-  }
-
-  export type psr_dataUpdateWithWhereUniqueWithoutProduct_mappingInput = {
-    where: psr_dataWhereUniqueInput
-    data: XOR<psr_dataUpdateWithoutProduct_mappingInput, psr_dataUncheckedUpdateWithoutProduct_mappingInput>
-  }
-
-  export type psr_dataUpdateManyWithWhereWithoutProduct_mappingInput = {
-    where: psr_dataScalarWhereInput
-    data: XOR<psr_dataUpdateManyMutationInput, psr_dataUncheckedUpdateManyWithoutProduct_mappingInput>
-  }
-
-  export type psr_data_tempUpsertWithWhereUniqueWithoutProduct_mappingInput = {
-    where: psr_data_tempWhereUniqueInput
-    update: XOR<psr_data_tempUpdateWithoutProduct_mappingInput, psr_data_tempUncheckedUpdateWithoutProduct_mappingInput>
-    create: XOR<psr_data_tempCreateWithoutProduct_mappingInput, psr_data_tempUncheckedCreateWithoutProduct_mappingInput>
-  }
-
-  export type psr_data_tempUpdateWithWhereUniqueWithoutProduct_mappingInput = {
-    where: psr_data_tempWhereUniqueInput
-    data: XOR<psr_data_tempUpdateWithoutProduct_mappingInput, psr_data_tempUncheckedUpdateWithoutProduct_mappingInput>
-  }
-
-  export type psr_data_tempUpdateManyWithWhereWithoutProduct_mappingInput = {
-    where: psr_data_tempScalarWhereInput
-    data: XOR<psr_data_tempUpdateManyMutationInput, psr_data_tempUncheckedUpdateManyWithoutProduct_mappingInput>
   }
 
   export type PermissionSetCreateWithoutUserInput = {
@@ -12423,281 +15063,6 @@ export namespace Prisma {
     otpAttempts?: NullableIntFieldUpdateOperationsInput | number | null
     lastOTPAttemptAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     otpCooldownUntil?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-  }
-
-  export type store_mappingCreateManyChannel_mappingInput = {
-    Id?: number
-    Old_Store_Code: string
-    New_Store_Code: string
-    customer_name: string
-    Branch: string
-    DSE_Code: string
-    ZM: string
-    RSM: string
-    ASM: string
-    TSI: string
-  }
-
-  export type store_mappingUpdateWithoutChannel_mappingInput = {
-    Old_Store_Code?: StringFieldUpdateOperationsInput | string
-    New_Store_Code?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    Branch?: StringFieldUpdateOperationsInput | string
-    DSE_Code?: StringFieldUpdateOperationsInput | string
-    ZM?: StringFieldUpdateOperationsInput | string
-    RSM?: StringFieldUpdateOperationsInput | string
-    ASM?: StringFieldUpdateOperationsInput | string
-    TSI?: StringFieldUpdateOperationsInput | string
-    psr_data?: psr_dataUpdateManyWithoutStore_mappingNestedInput
-    psr_data_temp?: psr_data_tempUpdateManyWithoutStore_mappingNestedInput
-  }
-
-  export type store_mappingUncheckedUpdateWithoutChannel_mappingInput = {
-    Id?: IntFieldUpdateOperationsInput | number
-    Old_Store_Code?: StringFieldUpdateOperationsInput | string
-    New_Store_Code?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    Branch?: StringFieldUpdateOperationsInput | string
-    DSE_Code?: StringFieldUpdateOperationsInput | string
-    ZM?: StringFieldUpdateOperationsInput | string
-    RSM?: StringFieldUpdateOperationsInput | string
-    ASM?: StringFieldUpdateOperationsInput | string
-    TSI?: StringFieldUpdateOperationsInput | string
-    psr_data?: psr_dataUncheckedUpdateManyWithoutStore_mappingNestedInput
-    psr_data_temp?: psr_data_tempUncheckedUpdateManyWithoutStore_mappingNestedInput
-  }
-
-  export type store_mappingUncheckedUpdateManyWithoutChannel_mappingInput = {
-    Id?: IntFieldUpdateOperationsInput | number
-    Old_Store_Code?: StringFieldUpdateOperationsInput | string
-    New_Store_Code?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    Branch?: StringFieldUpdateOperationsInput | string
-    DSE_Code?: StringFieldUpdateOperationsInput | string
-    ZM?: StringFieldUpdateOperationsInput | string
-    RSM?: StringFieldUpdateOperationsInput | string
-    ASM?: StringFieldUpdateOperationsInput | string
-    TSI?: StringFieldUpdateOperationsInput | string
-  }
-
-  export type psr_dataCreateManyStore_mappingInput = {
-    psr_id?: number
-    document_no: string
-    document_date: Date | string
-    subbrandform: string
-    customer_name: string
-    p_code: number
-    customer_type: string
-    category: string
-    brand: string
-    brandform: string
-    retailing: Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_data_tempCreateManyStore_mappingInput = {
-    psr_id?: number
-    document_no: string
-    document_date: Date | string
-    subbrandform: string
-    customer_name: string
-    p_code: number
-    customer_type: string
-    category: string
-    brand: string
-    brandform: string
-    retailing: Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_dataUpdateWithoutStore_mappingInput = {
-    document_no?: StringFieldUpdateOperationsInput | string
-    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    customer_type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    product_mapping?: product_mappingUpdateOneRequiredWithoutPsr_dataNestedInput
-  }
-
-  export type psr_dataUncheckedUpdateWithoutStore_mappingInput = {
-    psr_id?: IntFieldUpdateOperationsInput | number
-    document_no?: StringFieldUpdateOperationsInput | string
-    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    p_code?: IntFieldUpdateOperationsInput | number
-    customer_type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_dataUncheckedUpdateManyWithoutStore_mappingInput = {
-    psr_id?: IntFieldUpdateOperationsInput | number
-    document_no?: StringFieldUpdateOperationsInput | string
-    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    p_code?: IntFieldUpdateOperationsInput | number
-    customer_type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_data_tempUpdateWithoutStore_mappingInput = {
-    document_no?: StringFieldUpdateOperationsInput | string
-    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    customer_type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    product_mapping?: product_mappingUpdateOneRequiredWithoutPsr_data_tempNestedInput
-  }
-
-  export type psr_data_tempUncheckedUpdateWithoutStore_mappingInput = {
-    psr_id?: IntFieldUpdateOperationsInput | number
-    document_no?: StringFieldUpdateOperationsInput | string
-    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    p_code?: IntFieldUpdateOperationsInput | number
-    customer_type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_data_tempUncheckedUpdateManyWithoutStore_mappingInput = {
-    psr_id?: IntFieldUpdateOperationsInput | number
-    document_no?: StringFieldUpdateOperationsInput | string
-    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    p_code?: IntFieldUpdateOperationsInput | number
-    customer_type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_dataCreateManyProduct_mappingInput = {
-    psr_id?: number
-    document_no: string
-    document_date: Date | string
-    subbrandform: string
-    customer_name: string
-    customer_code: string
-    customer_type: string
-    category: string
-    brand: string
-    brandform: string
-    retailing: Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_data_tempCreateManyProduct_mappingInput = {
-    psr_id?: number
-    document_no: string
-    document_date: Date | string
-    subbrandform: string
-    customer_name: string
-    customer_code: string
-    customer_type: string
-    category: string
-    brand: string
-    brandform: string
-    retailing: Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_dataUpdateWithoutProduct_mappingInput = {
-    document_no?: StringFieldUpdateOperationsInput | string
-    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    customer_type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    store_mapping?: store_mappingUpdateOneRequiredWithoutPsr_dataNestedInput
-  }
-
-  export type psr_dataUncheckedUpdateWithoutProduct_mappingInput = {
-    psr_id?: IntFieldUpdateOperationsInput | number
-    document_no?: StringFieldUpdateOperationsInput | string
-    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    customer_code?: StringFieldUpdateOperationsInput | string
-    customer_type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_dataUncheckedUpdateManyWithoutProduct_mappingInput = {
-    psr_id?: IntFieldUpdateOperationsInput | number
-    document_no?: StringFieldUpdateOperationsInput | string
-    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    customer_code?: StringFieldUpdateOperationsInput | string
-    customer_type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_data_tempUpdateWithoutProduct_mappingInput = {
-    document_no?: StringFieldUpdateOperationsInput | string
-    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    customer_type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-    store_mapping?: store_mappingUpdateOneRequiredWithoutPsr_data_tempNestedInput
-  }
-
-  export type psr_data_tempUncheckedUpdateWithoutProduct_mappingInput = {
-    psr_id?: IntFieldUpdateOperationsInput | number
-    document_no?: StringFieldUpdateOperationsInput | string
-    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    customer_code?: StringFieldUpdateOperationsInput | string
-    customer_type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
-  }
-
-  export type psr_data_tempUncheckedUpdateManyWithoutProduct_mappingInput = {
-    psr_id?: IntFieldUpdateOperationsInput | number
-    document_no?: StringFieldUpdateOperationsInput | string
-    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
-    subbrandform?: StringFieldUpdateOperationsInput | string
-    customer_name?: StringFieldUpdateOperationsInput | string
-    customer_code?: StringFieldUpdateOperationsInput | string
-    customer_type?: StringFieldUpdateOperationsInput | string
-    category?: StringFieldUpdateOperationsInput | string
-    brand?: StringFieldUpdateOperationsInput | string
-    brandform?: StringFieldUpdateOperationsInput | string
-    retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type PermissionSetCreateManyUserInput = {

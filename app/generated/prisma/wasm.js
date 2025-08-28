@@ -120,21 +120,6 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.Psr_dataScalarFieldEnum = {
-  psr_id: 'psr_id',
-  document_no: 'document_no',
-  document_date: 'document_date',
-  subbrandform: 'subbrandform',
-  customer_name: 'customer_name',
-  customer_code: 'customer_code',
-  p_code: 'p_code',
-  customer_type: 'customer_type',
-  category: 'category',
-  brand: 'brand',
-  brandform: 'brandform',
-  retailing: 'retailing'
-};
-
 exports.Prisma.Psr_data_tempScalarFieldEnum = {
   psr_id: 'psr_id',
   document_no: 'document_no',
@@ -150,12 +135,66 @@ exports.Prisma.Psr_data_tempScalarFieldEnum = {
   retailing: 'retailing'
 };
 
+exports.Prisma.Psr_data_historicalScalarFieldEnum = {
+  psr_id: 'psr_id',
+  document_no: 'document_no',
+  document_date: 'document_date',
+  subbrandform: 'subbrandform',
+  customer_name: 'customer_name',
+  customer_code: 'customer_code',
+  p_code: 'p_code',
+  customer_type: 'customer_type',
+  category: 'category',
+  brand: 'brand',
+  brandform: 'brandform',
+  retailing: 'retailing'
+};
+
+exports.Prisma.Psr_finalized_tempScalarFieldEnum = {
+  id: 'id',
+  document_date: 'document_date',
+  customer_code: 'customer_code',
+  branch: 'branch',
+  ZM: 'ZM',
+  RSM: 'RSM',
+  ASM: 'ASM',
+  TSI: 'TSI',
+  category: 'category',
+  brand: 'brand',
+  brandform: 'brandform',
+  subbrandform: 'subbrandform',
+  base_channel: 'base_channel',
+  short_channel: 'short_channel',
+  channel_desc: 'channel_desc',
+  retailing: 'retailing'
+};
+
+exports.Prisma.Psr_data_finalizedScalarFieldEnum = {
+  id: 'id',
+  document_date: 'document_date',
+  customer_code: 'customer_code',
+  branch: 'branch',
+  ZM: 'ZM',
+  RSM: 'RSM',
+  ASM: 'ASM',
+  TSI: 'TSI',
+  category: 'category',
+  brand: 'brand',
+  brandform: 'brandform',
+  subbrandform: 'subbrandform',
+  base_channel: 'base_channel',
+  short_channel: 'short_channel',
+  channel_desc: 'channel_desc',
+  retailing: 'retailing'
+};
+
 exports.Prisma.Channel_mappingScalarFieldEnum = {
   channel_id: 'channel_id',
   customer_type: 'customer_type',
   base_channel: 'base_channel',
   short_channel: 'short_channel',
-  channel_desc: 'channel_desc'
+  channel_desc: 'channel_desc',
+  created_at: 'created_at'
 };
 
 exports.Prisma.Store_mappingScalarFieldEnum = {
@@ -169,7 +208,8 @@ exports.Prisma.Store_mappingScalarFieldEnum = {
   ZM: 'ZM',
   RSM: 'RSM',
   ASM: 'ASM',
-  TSI: 'TSI'
+  TSI: 'TSI',
+  created_at: 'created_at'
 };
 
 exports.Prisma.Product_mappingScalarFieldEnum = {
@@ -179,7 +219,14 @@ exports.Prisma.Product_mappingScalarFieldEnum = {
   category: 'category',
   brand: 'brand',
   brandform: 'brandform',
-  subbrandform: 'subbrandform'
+  subbrandform: 'subbrandform',
+  created_at: 'created_at'
+};
+
+exports.Prisma.Mapping_change_flagScalarFieldEnum = {
+  id: 'id',
+  changed_at: 'changed_at',
+  processed: 'processed'
 };
 
 exports.Prisma.UserScalarFieldEnum = {
@@ -217,7 +264,7 @@ exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
-exports.Prisma.psr_dataOrderByRelevanceFieldEnum = {
+exports.Prisma.psr_data_tempOrderByRelevanceFieldEnum = {
   document_no: 'document_no',
   subbrandform: 'subbrandform',
   customer_name: 'customer_name',
@@ -228,7 +275,7 @@ exports.Prisma.psr_dataOrderByRelevanceFieldEnum = {
   brandform: 'brandform'
 };
 
-exports.Prisma.psr_data_tempOrderByRelevanceFieldEnum = {
+exports.Prisma.psr_data_historicalOrderByRelevanceFieldEnum = {
   document_no: 'document_no',
   subbrandform: 'subbrandform',
   customer_name: 'customer_name',
@@ -237,6 +284,43 @@ exports.Prisma.psr_data_tempOrderByRelevanceFieldEnum = {
   category: 'category',
   brand: 'brand',
   brandform: 'brandform'
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+
+exports.Prisma.psr_finalized_tempOrderByRelevanceFieldEnum = {
+  customer_code: 'customer_code',
+  branch: 'branch',
+  ZM: 'ZM',
+  RSM: 'RSM',
+  ASM: 'ASM',
+  TSI: 'TSI',
+  category: 'category',
+  brand: 'brand',
+  brandform: 'brandform',
+  subbrandform: 'subbrandform',
+  base_channel: 'base_channel',
+  short_channel: 'short_channel',
+  channel_desc: 'channel_desc'
+};
+
+exports.Prisma.psr_data_finalizedOrderByRelevanceFieldEnum = {
+  customer_code: 'customer_code',
+  branch: 'branch',
+  ZM: 'ZM',
+  RSM: 'RSM',
+  ASM: 'ASM',
+  TSI: 'TSI',
+  category: 'category',
+  brand: 'brand',
+  brandform: 'brandform',
+  subbrandform: 'subbrandform',
+  base_channel: 'base_channel',
+  short_channel: 'short_channel',
+  channel_desc: 'channel_desc'
 };
 
 exports.Prisma.channel_mappingOrderByRelevanceFieldEnum = {
@@ -267,11 +351,6 @@ exports.Prisma.product_mappingOrderByRelevanceFieldEnum = {
   subbrandform: 'subbrandform'
 };
 
-exports.Prisma.NullsOrder = {
-  first: 'first',
-  last: 'last'
-};
-
 exports.Prisma.UserOrderByRelevanceFieldEnum = {
   name: 'name',
   email: 'email',
@@ -298,11 +377,14 @@ exports.Prisma.PermissionSetOrderByRelevanceFieldEnum = {
 
 
 exports.Prisma.ModelName = {
-  psr_data: 'psr_data',
   psr_data_temp: 'psr_data_temp',
+  psr_data_historical: 'psr_data_historical',
+  psr_finalized_temp: 'psr_finalized_temp',
+  psr_data_finalized: 'psr_data_finalized',
   channel_mapping: 'channel_mapping',
   store_mapping: 'store_mapping',
   product_mapping: 'product_mapping',
+  mapping_change_flag: 'mapping_change_flag',
   User: 'User',
   PermissionSet: 'PermissionSet'
 };

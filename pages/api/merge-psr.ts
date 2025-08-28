@@ -2,6 +2,37 @@ import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/utils";
 import { runGenerateFilters } from "@/lib/runGenerateFilters";
 
+// --- batch size can be tuned depending on memory/locks ---
+const BATCH_SIZE = 50000;
+
+async function moveTableData(
+  sourceTable: string,
+  targetTable: string,
+  columns: string[]
+) {
+  let rowsMoved = 0;
+
+  while (true) {
+    const inserted = await prisma.$executeRawUnsafe(`
+      INSERT INTO ${targetTable} (${columns.join(", ")})
+      SELECT ${columns.join(", ")}
+      FROM ${sourceTable}
+      LIMIT ${BATCH_SIZE};
+    `);
+
+    if (inserted === 0) break; // ✅ no more rows
+
+    rowsMoved += inserted;
+
+    await prisma.$executeRawUnsafe(`
+      DELETE FROM ${sourceTable}
+      LIMIT ${BATCH_SIZE};
+    `);
+  }
+
+  return rowsMoved;
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -11,45 +42,64 @@ export default async function handler(
   }
 
   try {
-    await prisma.$transaction([
-      prisma.$executeRawUnsafe(`
-        INSERT INTO psr_data (
-          document_no,
-          document_date,
-          subbrandform,
-          customer_name,
-          customer_code,
-          p_code,
-          customer_type,
-          category,
-          brand,
-          brandform,
-          retailing
-        )
-        SELECT 
-          document_no,
-          document_date,
-          subbrandform,
-          customer_name,
-          customer_code,
-          p_code,
-          customer_type,
-          category,
-          brand,
-          brandform,
-          retailing
-        FROM psr_data_temp;
-      `),
-      prisma.$executeRawUnsafe(`DELETE FROM psr_data_temp`),
-    ]);
+    // 1️⃣ Step 1: Move psr_finalized_temp → psr_data_finalized
+    const finalizedColumns = [
+      "document_date",
+      "customer_code",
+      "branch",
+      "ZM",
+      "RSM",
+      "ASM",
+      "TSI",
+      "category",
+      "brand",
+      "brandform",
+      "subbrandform",
+      "base_channel",
+      "short_channel",
+      "channel_desc",
+      "retailing",
+    ];
 
-    runGenerateFilters();
+    const finalizedMoved = await moveTableData(
+      "psr_finalized_temp",
+      "psr_data_finalized",
+      finalizedColumns
+    );
+
+    // 2️⃣ Step 2: Move psr_data_temp → psr_data_historical
+    const historicalColumns = [
+      "document_no",
+      "document_date",
+      "subbrandform",
+      "customer_name",
+      "customer_code",
+      "p_code",
+      "customer_type",
+      "category",
+      "brand",
+      "brandform",
+      "retailing",
+    ];
+
+    const historicalMoved = await moveTableData(
+      "psr_data_temp",
+      "psr_data_historical",
+      historicalColumns
+    );
+
+    // 3️⃣ Generate filters AFTER finalized merge (not for historical)
+    if (finalizedMoved > 0) {
+      runGenerateFilters();
+    }
 
     return res.status(200).json({
-      message: "✅ PSR temp data merged and filters generated successfully.",
+      message: "✅ Merge completed successfully",
+      finalizedMoved,
+      historicalMoved,
     });
   } catch (error) {
     console.error("❌ Merge error:", error);
-    return res.status(500).json({ error: "Failed to merge PSR data" });
+    return res.status(500).json({ error: "Failed to merge data" });
   }
 }
