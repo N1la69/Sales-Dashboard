@@ -3686,7 +3686,9 @@ const filterValues = {
     "Mathabhanga",
     "SIKKIM_SUBD",
     "Melli-2",
-    "Gosaba"
+    "Gosaba",
+    "Dhulian",
+    "Jamalpur"
   ],
   "zms": [
     "Satish Kumar Singh",
@@ -3828,7 +3830,8 @@ const filterValues = {
     "Biswajit Dey",
     "Ashok Yadav_SM",
     "Sudip Bhadra_ASM",
-    "Satish Singh"
+    "Satish Singh",
+    "Ashok Yadav"
   ],
   "channelDescs": [
     "Aggregator SubD",

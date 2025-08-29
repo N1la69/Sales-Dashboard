@@ -101,6 +101,12 @@ export default async function handler(
             });
           }
           console.log("✅ Channel data inserted.");
+
+          // Flag mapping change
+          await prisma.mapping_change_flag.create({
+            data: { processed: false },
+          });
+
           runGenerateFilters();
         }
         // STORE
@@ -129,6 +135,12 @@ export default async function handler(
             });
           }
           console.log("✅ Store data inserted.");
+
+          // Flag mapping change
+          await prisma.mapping_change_flag.create({
+            data: { processed: false },
+          });
+
           runGenerateFilters();
         }
         // PRODUCT
@@ -153,6 +165,12 @@ export default async function handler(
             });
           }
           console.log("✅ Product data inserted.");
+
+          // Flag mapping change
+          await prisma.mapping_change_flag.create({
+            data: { processed: false },
+          });
+
           runGenerateFilters();
         }
       }
