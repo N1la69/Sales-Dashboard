@@ -255,6 +255,38 @@ exports.Prisma.PermissionSetScalarFieldEnum = {
   permissions: 'permissions'
 };
 
+exports.Prisma.Retailing_summaryScalarFieldEnum = {
+  year: 'year',
+  month: 'month',
+  total_retailing: 'total_retailing'
+};
+
+exports.Prisma.Branch_retailing_summaryScalarFieldEnum = {
+  branch: 'branch',
+  fiscal_year: 'fiscal_year',
+  total_retailing: 'total_retailing'
+};
+
+exports.Prisma.Brand_retailing_summaryScalarFieldEnum = {
+  brand: 'brand',
+  fiscal_year: 'fiscal_year',
+  total_retailing: 'total_retailing'
+};
+
+exports.Prisma.Category_retailing_summaryScalarFieldEnum = {
+  category: 'category',
+  month: 'month',
+  fiscal_year: 'fiscal_year',
+  total_retailing: 'total_retailing'
+};
+
+exports.Prisma.Base_channel_retailing_summaryScalarFieldEnum = {
+  base_channel: 'base_channel',
+  month: 'month',
+  fiscal_year: 'fiscal_year',
+  total_retailing: 'total_retailing'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -375,6 +407,22 @@ exports.Prisma.PermissionSetOrderByRelevanceFieldEnum = {
   page: 'page'
 };
 
+exports.Prisma.branch_retailing_summaryOrderByRelevanceFieldEnum = {
+  branch: 'branch'
+};
+
+exports.Prisma.brand_retailing_summaryOrderByRelevanceFieldEnum = {
+  brand: 'brand'
+};
+
+exports.Prisma.category_retailing_summaryOrderByRelevanceFieldEnum = {
+  category: 'category'
+};
+
+exports.Prisma.base_channel_retailing_summaryOrderByRelevanceFieldEnum = {
+  base_channel: 'base_channel'
+};
+
 
 exports.Prisma.ModelName = {
   psr_data_temp: 'psr_data_temp',
@@ -386,7 +434,12 @@ exports.Prisma.ModelName = {
   product_mapping: 'product_mapping',
   mapping_change_flag: 'mapping_change_flag',
   User: 'User',
-  PermissionSet: 'PermissionSet'
+  PermissionSet: 'PermissionSet',
+  retailing_summary: 'retailing_summary',
+  branch_retailing_summary: 'branch_retailing_summary',
+  brand_retailing_summary: 'brand_retailing_summary',
+  category_retailing_summary: 'category_retailing_summary',
+  base_channel_retailing_summary: 'base_channel_retailing_summary'
 };
 
 /**

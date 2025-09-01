@@ -151,3 +151,45 @@ model PermissionSet {
   @@unique([userId, page])
 }
 
+// SUMMARY SCHEMAS
+model retailing_summary{
+  year Int
+  month Int
+  total_retailing Decimal @db.Decimal(18, 2)
+
+  @@id([year, month])
+}
+
+model branch_retailing_summary {
+  branch          String   @db.VarChar(100)
+  fiscal_year     Int
+  total_retailing Decimal  @db.Decimal(18, 2)
+
+  @@id([branch, fiscal_year])
+}
+
+model brand_retailing_summary {
+  brand          String   @db.VarChar(100)
+  fiscal_year     Int
+  total_retailing Decimal  @db.Decimal(18, 2)
+
+  @@id([brand, fiscal_year])
+}
+
+model category_retailing_summary {
+  category       String   @db.VarChar(255)
+  month          Int
+  fiscal_year    Int
+  total_retailing Decimal @db.Decimal(18, 2)
+
+  @@id([category, month, fiscal_year])
+}
+
+model base_channel_retailing_summary {
+  base_channel       String   @db.VarChar(255)
+  month          Int
+  fiscal_year    Int
+  total_retailing Decimal @db.Decimal(18, 2)
+
+  @@id([base_channel, month, fiscal_year])
+}

@@ -151,3 +151,12 @@ model PermissionSet {
 
   @@unique([userId, page])
 }
+
+// SUMMARY SCHEMAS
+model retailing_summary {
+  year            Int
+  month           Int
+  total_retailing Decimal @db.Decimal(18, 2)
+
+  @@id([year, month])
+}

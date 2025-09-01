@@ -63,6 +63,31 @@ export type User = $Result.DefaultSelection<Prisma.$UserPayload>
  * 
  */
 export type PermissionSet = $Result.DefaultSelection<Prisma.$PermissionSetPayload>
+/**
+ * Model retailing_summary
+ * 
+ */
+export type retailing_summary = $Result.DefaultSelection<Prisma.$retailing_summaryPayload>
+/**
+ * Model branch_retailing_summary
+ * 
+ */
+export type branch_retailing_summary = $Result.DefaultSelection<Prisma.$branch_retailing_summaryPayload>
+/**
+ * Model brand_retailing_summary
+ * 
+ */
+export type brand_retailing_summary = $Result.DefaultSelection<Prisma.$brand_retailing_summaryPayload>
+/**
+ * Model category_retailing_summary
+ * 
+ */
+export type category_retailing_summary = $Result.DefaultSelection<Prisma.$category_retailing_summaryPayload>
+/**
+ * Model base_channel_retailing_summary
+ * 
+ */
+export type base_channel_retailing_summary = $Result.DefaultSelection<Prisma.$base_channel_retailing_summaryPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -281,6 +306,56 @@ export class PrismaClient<
     * ```
     */
   get permissionSet(): Prisma.PermissionSetDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.retailing_summary`: Exposes CRUD operations for the **retailing_summary** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Retailing_summaries
+    * const retailing_summaries = await prisma.retailing_summary.findMany()
+    * ```
+    */
+  get retailing_summary(): Prisma.retailing_summaryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.branch_retailing_summary`: Exposes CRUD operations for the **branch_retailing_summary** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Branch_retailing_summaries
+    * const branch_retailing_summaries = await prisma.branch_retailing_summary.findMany()
+    * ```
+    */
+  get branch_retailing_summary(): Prisma.branch_retailing_summaryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.brand_retailing_summary`: Exposes CRUD operations for the **brand_retailing_summary** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Brand_retailing_summaries
+    * const brand_retailing_summaries = await prisma.brand_retailing_summary.findMany()
+    * ```
+    */
+  get brand_retailing_summary(): Prisma.brand_retailing_summaryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.category_retailing_summary`: Exposes CRUD operations for the **category_retailing_summary** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Category_retailing_summaries
+    * const category_retailing_summaries = await prisma.category_retailing_summary.findMany()
+    * ```
+    */
+  get category_retailing_summary(): Prisma.category_retailing_summaryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.base_channel_retailing_summary`: Exposes CRUD operations for the **base_channel_retailing_summary** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Base_channel_retailing_summaries
+    * const base_channel_retailing_summaries = await prisma.base_channel_retailing_summary.findMany()
+    * ```
+    */
+  get base_channel_retailing_summary(): Prisma.base_channel_retailing_summaryDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -730,7 +805,12 @@ export namespace Prisma {
     product_mapping: 'product_mapping',
     mapping_change_flag: 'mapping_change_flag',
     User: 'User',
-    PermissionSet: 'PermissionSet'
+    PermissionSet: 'PermissionSet',
+    retailing_summary: 'retailing_summary',
+    branch_retailing_summary: 'branch_retailing_summary',
+    brand_retailing_summary: 'brand_retailing_summary',
+    category_retailing_summary: 'category_retailing_summary',
+    base_channel_retailing_summary: 'base_channel_retailing_summary'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -749,7 +829,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "psr_data_temp" | "psr_data_historical" | "psr_finalized_temp" | "psr_data_finalized" | "channel_mapping" | "store_mapping" | "product_mapping" | "mapping_change_flag" | "user" | "permissionSet"
+      modelProps: "psr_data_temp" | "psr_data_historical" | "psr_finalized_temp" | "psr_data_finalized" | "channel_mapping" | "store_mapping" | "product_mapping" | "mapping_change_flag" | "user" | "permissionSet" | "retailing_summary" | "branch_retailing_summary" | "brand_retailing_summary" | "category_retailing_summary" | "base_channel_retailing_summary"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1413,6 +1493,336 @@ export namespace Prisma {
           }
         }
       }
+      retailing_summary: {
+        payload: Prisma.$retailing_summaryPayload<ExtArgs>
+        fields: Prisma.retailing_summaryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.retailing_summaryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$retailing_summaryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.retailing_summaryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$retailing_summaryPayload>
+          }
+          findFirst: {
+            args: Prisma.retailing_summaryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$retailing_summaryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.retailing_summaryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$retailing_summaryPayload>
+          }
+          findMany: {
+            args: Prisma.retailing_summaryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$retailing_summaryPayload>[]
+          }
+          create: {
+            args: Prisma.retailing_summaryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$retailing_summaryPayload>
+          }
+          createMany: {
+            args: Prisma.retailing_summaryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.retailing_summaryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$retailing_summaryPayload>
+          }
+          update: {
+            args: Prisma.retailing_summaryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$retailing_summaryPayload>
+          }
+          deleteMany: {
+            args: Prisma.retailing_summaryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.retailing_summaryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.retailing_summaryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$retailing_summaryPayload>
+          }
+          aggregate: {
+            args: Prisma.Retailing_summaryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateRetailing_summary>
+          }
+          groupBy: {
+            args: Prisma.retailing_summaryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Retailing_summaryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.retailing_summaryCountArgs<ExtArgs>
+            result: $Utils.Optional<Retailing_summaryCountAggregateOutputType> | number
+          }
+        }
+      }
+      branch_retailing_summary: {
+        payload: Prisma.$branch_retailing_summaryPayload<ExtArgs>
+        fields: Prisma.branch_retailing_summaryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.branch_retailing_summaryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$branch_retailing_summaryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.branch_retailing_summaryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$branch_retailing_summaryPayload>
+          }
+          findFirst: {
+            args: Prisma.branch_retailing_summaryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$branch_retailing_summaryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.branch_retailing_summaryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$branch_retailing_summaryPayload>
+          }
+          findMany: {
+            args: Prisma.branch_retailing_summaryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$branch_retailing_summaryPayload>[]
+          }
+          create: {
+            args: Prisma.branch_retailing_summaryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$branch_retailing_summaryPayload>
+          }
+          createMany: {
+            args: Prisma.branch_retailing_summaryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.branch_retailing_summaryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$branch_retailing_summaryPayload>
+          }
+          update: {
+            args: Prisma.branch_retailing_summaryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$branch_retailing_summaryPayload>
+          }
+          deleteMany: {
+            args: Prisma.branch_retailing_summaryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.branch_retailing_summaryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.branch_retailing_summaryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$branch_retailing_summaryPayload>
+          }
+          aggregate: {
+            args: Prisma.Branch_retailing_summaryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBranch_retailing_summary>
+          }
+          groupBy: {
+            args: Prisma.branch_retailing_summaryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Branch_retailing_summaryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.branch_retailing_summaryCountArgs<ExtArgs>
+            result: $Utils.Optional<Branch_retailing_summaryCountAggregateOutputType> | number
+          }
+        }
+      }
+      brand_retailing_summary: {
+        payload: Prisma.$brand_retailing_summaryPayload<ExtArgs>
+        fields: Prisma.brand_retailing_summaryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.brand_retailing_summaryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$brand_retailing_summaryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.brand_retailing_summaryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$brand_retailing_summaryPayload>
+          }
+          findFirst: {
+            args: Prisma.brand_retailing_summaryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$brand_retailing_summaryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.brand_retailing_summaryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$brand_retailing_summaryPayload>
+          }
+          findMany: {
+            args: Prisma.brand_retailing_summaryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$brand_retailing_summaryPayload>[]
+          }
+          create: {
+            args: Prisma.brand_retailing_summaryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$brand_retailing_summaryPayload>
+          }
+          createMany: {
+            args: Prisma.brand_retailing_summaryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.brand_retailing_summaryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$brand_retailing_summaryPayload>
+          }
+          update: {
+            args: Prisma.brand_retailing_summaryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$brand_retailing_summaryPayload>
+          }
+          deleteMany: {
+            args: Prisma.brand_retailing_summaryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.brand_retailing_summaryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.brand_retailing_summaryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$brand_retailing_summaryPayload>
+          }
+          aggregate: {
+            args: Prisma.Brand_retailing_summaryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBrand_retailing_summary>
+          }
+          groupBy: {
+            args: Prisma.brand_retailing_summaryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Brand_retailing_summaryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.brand_retailing_summaryCountArgs<ExtArgs>
+            result: $Utils.Optional<Brand_retailing_summaryCountAggregateOutputType> | number
+          }
+        }
+      }
+      category_retailing_summary: {
+        payload: Prisma.$category_retailing_summaryPayload<ExtArgs>
+        fields: Prisma.category_retailing_summaryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.category_retailing_summaryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_retailing_summaryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.category_retailing_summaryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_retailing_summaryPayload>
+          }
+          findFirst: {
+            args: Prisma.category_retailing_summaryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_retailing_summaryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.category_retailing_summaryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_retailing_summaryPayload>
+          }
+          findMany: {
+            args: Prisma.category_retailing_summaryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_retailing_summaryPayload>[]
+          }
+          create: {
+            args: Prisma.category_retailing_summaryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_retailing_summaryPayload>
+          }
+          createMany: {
+            args: Prisma.category_retailing_summaryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.category_retailing_summaryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_retailing_summaryPayload>
+          }
+          update: {
+            args: Prisma.category_retailing_summaryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_retailing_summaryPayload>
+          }
+          deleteMany: {
+            args: Prisma.category_retailing_summaryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.category_retailing_summaryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.category_retailing_summaryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$category_retailing_summaryPayload>
+          }
+          aggregate: {
+            args: Prisma.Category_retailing_summaryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCategory_retailing_summary>
+          }
+          groupBy: {
+            args: Prisma.category_retailing_summaryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Category_retailing_summaryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.category_retailing_summaryCountArgs<ExtArgs>
+            result: $Utils.Optional<Category_retailing_summaryCountAggregateOutputType> | number
+          }
+        }
+      }
+      base_channel_retailing_summary: {
+        payload: Prisma.$base_channel_retailing_summaryPayload<ExtArgs>
+        fields: Prisma.base_channel_retailing_summaryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.base_channel_retailing_summaryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$base_channel_retailing_summaryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.base_channel_retailing_summaryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$base_channel_retailing_summaryPayload>
+          }
+          findFirst: {
+            args: Prisma.base_channel_retailing_summaryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$base_channel_retailing_summaryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.base_channel_retailing_summaryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$base_channel_retailing_summaryPayload>
+          }
+          findMany: {
+            args: Prisma.base_channel_retailing_summaryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$base_channel_retailing_summaryPayload>[]
+          }
+          create: {
+            args: Prisma.base_channel_retailing_summaryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$base_channel_retailing_summaryPayload>
+          }
+          createMany: {
+            args: Prisma.base_channel_retailing_summaryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.base_channel_retailing_summaryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$base_channel_retailing_summaryPayload>
+          }
+          update: {
+            args: Prisma.base_channel_retailing_summaryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$base_channel_retailing_summaryPayload>
+          }
+          deleteMany: {
+            args: Prisma.base_channel_retailing_summaryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.base_channel_retailing_summaryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.base_channel_retailing_summaryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$base_channel_retailing_summaryPayload>
+          }
+          aggregate: {
+            args: Prisma.Base_channel_retailing_summaryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateBase_channel_retailing_summary>
+          }
+          groupBy: {
+            args: Prisma.base_channel_retailing_summaryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Base_channel_retailing_summaryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.base_channel_retailing_summaryCountArgs<ExtArgs>
+            result: $Utils.Optional<Base_channel_retailing_summaryCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -1515,6 +1925,11 @@ export namespace Prisma {
     mapping_change_flag?: mapping_change_flagOmit
     user?: UserOmit
     permissionSet?: PermissionSetOmit
+    retailing_summary?: retailing_summaryOmit
+    branch_retailing_summary?: branch_retailing_summaryOmit
+    brand_retailing_summary?: brand_retailing_summaryOmit
+    category_retailing_summary?: category_retailing_summaryOmit
+    base_channel_retailing_summary?: base_channel_retailing_summaryOmit
   }
 
   /* Types for Logging */
@@ -11551,6 +11966,4530 @@ export namespace Prisma {
 
 
   /**
+   * Model retailing_summary
+   */
+
+  export type AggregateRetailing_summary = {
+    _count: Retailing_summaryCountAggregateOutputType | null
+    _avg: Retailing_summaryAvgAggregateOutputType | null
+    _sum: Retailing_summarySumAggregateOutputType | null
+    _min: Retailing_summaryMinAggregateOutputType | null
+    _max: Retailing_summaryMaxAggregateOutputType | null
+  }
+
+  export type Retailing_summaryAvgAggregateOutputType = {
+    year: number | null
+    month: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Retailing_summarySumAggregateOutputType = {
+    year: number | null
+    month: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Retailing_summaryMinAggregateOutputType = {
+    year: number | null
+    month: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Retailing_summaryMaxAggregateOutputType = {
+    year: number | null
+    month: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Retailing_summaryCountAggregateOutputType = {
+    year: number
+    month: number
+    total_retailing: number
+    _all: number
+  }
+
+
+  export type Retailing_summaryAvgAggregateInputType = {
+    year?: true
+    month?: true
+    total_retailing?: true
+  }
+
+  export type Retailing_summarySumAggregateInputType = {
+    year?: true
+    month?: true
+    total_retailing?: true
+  }
+
+  export type Retailing_summaryMinAggregateInputType = {
+    year?: true
+    month?: true
+    total_retailing?: true
+  }
+
+  export type Retailing_summaryMaxAggregateInputType = {
+    year?: true
+    month?: true
+    total_retailing?: true
+  }
+
+  export type Retailing_summaryCountAggregateInputType = {
+    year?: true
+    month?: true
+    total_retailing?: true
+    _all?: true
+  }
+
+  export type Retailing_summaryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which retailing_summary to aggregate.
+     */
+    where?: retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of retailing_summaries to fetch.
+     */
+    orderBy?: retailing_summaryOrderByWithRelationInput | retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` retailing_summaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned retailing_summaries
+    **/
+    _count?: true | Retailing_summaryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Retailing_summaryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Retailing_summarySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Retailing_summaryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Retailing_summaryMaxAggregateInputType
+  }
+
+  export type GetRetailing_summaryAggregateType<T extends Retailing_summaryAggregateArgs> = {
+        [P in keyof T & keyof AggregateRetailing_summary]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateRetailing_summary[P]>
+      : GetScalarType<T[P], AggregateRetailing_summary[P]>
+  }
+
+
+
+
+  export type retailing_summaryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: retailing_summaryWhereInput
+    orderBy?: retailing_summaryOrderByWithAggregationInput | retailing_summaryOrderByWithAggregationInput[]
+    by: Retailing_summaryScalarFieldEnum[] | Retailing_summaryScalarFieldEnum
+    having?: retailing_summaryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Retailing_summaryCountAggregateInputType | true
+    _avg?: Retailing_summaryAvgAggregateInputType
+    _sum?: Retailing_summarySumAggregateInputType
+    _min?: Retailing_summaryMinAggregateInputType
+    _max?: Retailing_summaryMaxAggregateInputType
+  }
+
+  export type Retailing_summaryGroupByOutputType = {
+    year: number
+    month: number
+    total_retailing: Decimal
+    _count: Retailing_summaryCountAggregateOutputType | null
+    _avg: Retailing_summaryAvgAggregateOutputType | null
+    _sum: Retailing_summarySumAggregateOutputType | null
+    _min: Retailing_summaryMinAggregateOutputType | null
+    _max: Retailing_summaryMaxAggregateOutputType | null
+  }
+
+  type GetRetailing_summaryGroupByPayload<T extends retailing_summaryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Retailing_summaryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Retailing_summaryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Retailing_summaryGroupByOutputType[P]>
+            : GetScalarType<T[P], Retailing_summaryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type retailing_summarySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    year?: boolean
+    month?: boolean
+    total_retailing?: boolean
+  }, ExtArgs["result"]["retailing_summary"]>
+
+
+
+  export type retailing_summarySelectScalar = {
+    year?: boolean
+    month?: boolean
+    total_retailing?: boolean
+  }
+
+  export type retailing_summaryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"year" | "month" | "total_retailing", ExtArgs["result"]["retailing_summary"]>
+
+  export type $retailing_summaryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "retailing_summary"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      year: number
+      month: number
+      total_retailing: Prisma.Decimal
+    }, ExtArgs["result"]["retailing_summary"]>
+    composites: {}
+  }
+
+  type retailing_summaryGetPayload<S extends boolean | null | undefined | retailing_summaryDefaultArgs> = $Result.GetResult<Prisma.$retailing_summaryPayload, S>
+
+  type retailing_summaryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<retailing_summaryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Retailing_summaryCountAggregateInputType | true
+    }
+
+  export interface retailing_summaryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['retailing_summary'], meta: { name: 'retailing_summary' } }
+    /**
+     * Find zero or one Retailing_summary that matches the filter.
+     * @param {retailing_summaryFindUniqueArgs} args - Arguments to find a Retailing_summary
+     * @example
+     * // Get one Retailing_summary
+     * const retailing_summary = await prisma.retailing_summary.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends retailing_summaryFindUniqueArgs>(args: SelectSubset<T, retailing_summaryFindUniqueArgs<ExtArgs>>): Prisma__retailing_summaryClient<$Result.GetResult<Prisma.$retailing_summaryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Retailing_summary that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {retailing_summaryFindUniqueOrThrowArgs} args - Arguments to find a Retailing_summary
+     * @example
+     * // Get one Retailing_summary
+     * const retailing_summary = await prisma.retailing_summary.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends retailing_summaryFindUniqueOrThrowArgs>(args: SelectSubset<T, retailing_summaryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__retailing_summaryClient<$Result.GetResult<Prisma.$retailing_summaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Retailing_summary that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {retailing_summaryFindFirstArgs} args - Arguments to find a Retailing_summary
+     * @example
+     * // Get one Retailing_summary
+     * const retailing_summary = await prisma.retailing_summary.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends retailing_summaryFindFirstArgs>(args?: SelectSubset<T, retailing_summaryFindFirstArgs<ExtArgs>>): Prisma__retailing_summaryClient<$Result.GetResult<Prisma.$retailing_summaryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Retailing_summary that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {retailing_summaryFindFirstOrThrowArgs} args - Arguments to find a Retailing_summary
+     * @example
+     * // Get one Retailing_summary
+     * const retailing_summary = await prisma.retailing_summary.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends retailing_summaryFindFirstOrThrowArgs>(args?: SelectSubset<T, retailing_summaryFindFirstOrThrowArgs<ExtArgs>>): Prisma__retailing_summaryClient<$Result.GetResult<Prisma.$retailing_summaryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Retailing_summaries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {retailing_summaryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Retailing_summaries
+     * const retailing_summaries = await prisma.retailing_summary.findMany()
+     * 
+     * // Get first 10 Retailing_summaries
+     * const retailing_summaries = await prisma.retailing_summary.findMany({ take: 10 })
+     * 
+     * // Only select the `year`
+     * const retailing_summaryWithYearOnly = await prisma.retailing_summary.findMany({ select: { year: true } })
+     * 
+     */
+    findMany<T extends retailing_summaryFindManyArgs>(args?: SelectSubset<T, retailing_summaryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$retailing_summaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Retailing_summary.
+     * @param {retailing_summaryCreateArgs} args - Arguments to create a Retailing_summary.
+     * @example
+     * // Create one Retailing_summary
+     * const Retailing_summary = await prisma.retailing_summary.create({
+     *   data: {
+     *     // ... data to create a Retailing_summary
+     *   }
+     * })
+     * 
+     */
+    create<T extends retailing_summaryCreateArgs>(args: SelectSubset<T, retailing_summaryCreateArgs<ExtArgs>>): Prisma__retailing_summaryClient<$Result.GetResult<Prisma.$retailing_summaryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Retailing_summaries.
+     * @param {retailing_summaryCreateManyArgs} args - Arguments to create many Retailing_summaries.
+     * @example
+     * // Create many Retailing_summaries
+     * const retailing_summary = await prisma.retailing_summary.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends retailing_summaryCreateManyArgs>(args?: SelectSubset<T, retailing_summaryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Retailing_summary.
+     * @param {retailing_summaryDeleteArgs} args - Arguments to delete one Retailing_summary.
+     * @example
+     * // Delete one Retailing_summary
+     * const Retailing_summary = await prisma.retailing_summary.delete({
+     *   where: {
+     *     // ... filter to delete one Retailing_summary
+     *   }
+     * })
+     * 
+     */
+    delete<T extends retailing_summaryDeleteArgs>(args: SelectSubset<T, retailing_summaryDeleteArgs<ExtArgs>>): Prisma__retailing_summaryClient<$Result.GetResult<Prisma.$retailing_summaryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Retailing_summary.
+     * @param {retailing_summaryUpdateArgs} args - Arguments to update one Retailing_summary.
+     * @example
+     * // Update one Retailing_summary
+     * const retailing_summary = await prisma.retailing_summary.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends retailing_summaryUpdateArgs>(args: SelectSubset<T, retailing_summaryUpdateArgs<ExtArgs>>): Prisma__retailing_summaryClient<$Result.GetResult<Prisma.$retailing_summaryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Retailing_summaries.
+     * @param {retailing_summaryDeleteManyArgs} args - Arguments to filter Retailing_summaries to delete.
+     * @example
+     * // Delete a few Retailing_summaries
+     * const { count } = await prisma.retailing_summary.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends retailing_summaryDeleteManyArgs>(args?: SelectSubset<T, retailing_summaryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Retailing_summaries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {retailing_summaryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Retailing_summaries
+     * const retailing_summary = await prisma.retailing_summary.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends retailing_summaryUpdateManyArgs>(args: SelectSubset<T, retailing_summaryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Retailing_summary.
+     * @param {retailing_summaryUpsertArgs} args - Arguments to update or create a Retailing_summary.
+     * @example
+     * // Update or create a Retailing_summary
+     * const retailing_summary = await prisma.retailing_summary.upsert({
+     *   create: {
+     *     // ... data to create a Retailing_summary
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Retailing_summary we want to update
+     *   }
+     * })
+     */
+    upsert<T extends retailing_summaryUpsertArgs>(args: SelectSubset<T, retailing_summaryUpsertArgs<ExtArgs>>): Prisma__retailing_summaryClient<$Result.GetResult<Prisma.$retailing_summaryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Retailing_summaries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {retailing_summaryCountArgs} args - Arguments to filter Retailing_summaries to count.
+     * @example
+     * // Count the number of Retailing_summaries
+     * const count = await prisma.retailing_summary.count({
+     *   where: {
+     *     // ... the filter for the Retailing_summaries we want to count
+     *   }
+     * })
+    **/
+    count<T extends retailing_summaryCountArgs>(
+      args?: Subset<T, retailing_summaryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Retailing_summaryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Retailing_summary.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Retailing_summaryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Retailing_summaryAggregateArgs>(args: Subset<T, Retailing_summaryAggregateArgs>): Prisma.PrismaPromise<GetRetailing_summaryAggregateType<T>>
+
+    /**
+     * Group by Retailing_summary.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {retailing_summaryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends retailing_summaryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: retailing_summaryGroupByArgs['orderBy'] }
+        : { orderBy?: retailing_summaryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, retailing_summaryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetRetailing_summaryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the retailing_summary model
+   */
+  readonly fields: retailing_summaryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for retailing_summary.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__retailing_summaryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the retailing_summary model
+   */
+  interface retailing_summaryFieldRefs {
+    readonly year: FieldRef<"retailing_summary", 'Int'>
+    readonly month: FieldRef<"retailing_summary", 'Int'>
+    readonly total_retailing: FieldRef<"retailing_summary", 'Decimal'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * retailing_summary findUnique
+   */
+  export type retailing_summaryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the retailing_summary
+     */
+    select?: retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the retailing_summary
+     */
+    omit?: retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which retailing_summary to fetch.
+     */
+    where: retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * retailing_summary findUniqueOrThrow
+   */
+  export type retailing_summaryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the retailing_summary
+     */
+    select?: retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the retailing_summary
+     */
+    omit?: retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which retailing_summary to fetch.
+     */
+    where: retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * retailing_summary findFirst
+   */
+  export type retailing_summaryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the retailing_summary
+     */
+    select?: retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the retailing_summary
+     */
+    omit?: retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which retailing_summary to fetch.
+     */
+    where?: retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of retailing_summaries to fetch.
+     */
+    orderBy?: retailing_summaryOrderByWithRelationInput | retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for retailing_summaries.
+     */
+    cursor?: retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` retailing_summaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of retailing_summaries.
+     */
+    distinct?: Retailing_summaryScalarFieldEnum | Retailing_summaryScalarFieldEnum[]
+  }
+
+  /**
+   * retailing_summary findFirstOrThrow
+   */
+  export type retailing_summaryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the retailing_summary
+     */
+    select?: retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the retailing_summary
+     */
+    omit?: retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which retailing_summary to fetch.
+     */
+    where?: retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of retailing_summaries to fetch.
+     */
+    orderBy?: retailing_summaryOrderByWithRelationInput | retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for retailing_summaries.
+     */
+    cursor?: retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` retailing_summaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of retailing_summaries.
+     */
+    distinct?: Retailing_summaryScalarFieldEnum | Retailing_summaryScalarFieldEnum[]
+  }
+
+  /**
+   * retailing_summary findMany
+   */
+  export type retailing_summaryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the retailing_summary
+     */
+    select?: retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the retailing_summary
+     */
+    omit?: retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which retailing_summaries to fetch.
+     */
+    where?: retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of retailing_summaries to fetch.
+     */
+    orderBy?: retailing_summaryOrderByWithRelationInput | retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing retailing_summaries.
+     */
+    cursor?: retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` retailing_summaries.
+     */
+    skip?: number
+    distinct?: Retailing_summaryScalarFieldEnum | Retailing_summaryScalarFieldEnum[]
+  }
+
+  /**
+   * retailing_summary create
+   */
+  export type retailing_summaryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the retailing_summary
+     */
+    select?: retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the retailing_summary
+     */
+    omit?: retailing_summaryOmit<ExtArgs> | null
+    /**
+     * The data needed to create a retailing_summary.
+     */
+    data: XOR<retailing_summaryCreateInput, retailing_summaryUncheckedCreateInput>
+  }
+
+  /**
+   * retailing_summary createMany
+   */
+  export type retailing_summaryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many retailing_summaries.
+     */
+    data: retailing_summaryCreateManyInput | retailing_summaryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * retailing_summary update
+   */
+  export type retailing_summaryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the retailing_summary
+     */
+    select?: retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the retailing_summary
+     */
+    omit?: retailing_summaryOmit<ExtArgs> | null
+    /**
+     * The data needed to update a retailing_summary.
+     */
+    data: XOR<retailing_summaryUpdateInput, retailing_summaryUncheckedUpdateInput>
+    /**
+     * Choose, which retailing_summary to update.
+     */
+    where: retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * retailing_summary updateMany
+   */
+  export type retailing_summaryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update retailing_summaries.
+     */
+    data: XOR<retailing_summaryUpdateManyMutationInput, retailing_summaryUncheckedUpdateManyInput>
+    /**
+     * Filter which retailing_summaries to update
+     */
+    where?: retailing_summaryWhereInput
+    /**
+     * Limit how many retailing_summaries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * retailing_summary upsert
+   */
+  export type retailing_summaryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the retailing_summary
+     */
+    select?: retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the retailing_summary
+     */
+    omit?: retailing_summaryOmit<ExtArgs> | null
+    /**
+     * The filter to search for the retailing_summary to update in case it exists.
+     */
+    where: retailing_summaryWhereUniqueInput
+    /**
+     * In case the retailing_summary found by the `where` argument doesn't exist, create a new retailing_summary with this data.
+     */
+    create: XOR<retailing_summaryCreateInput, retailing_summaryUncheckedCreateInput>
+    /**
+     * In case the retailing_summary was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<retailing_summaryUpdateInput, retailing_summaryUncheckedUpdateInput>
+  }
+
+  /**
+   * retailing_summary delete
+   */
+  export type retailing_summaryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the retailing_summary
+     */
+    select?: retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the retailing_summary
+     */
+    omit?: retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter which retailing_summary to delete.
+     */
+    where: retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * retailing_summary deleteMany
+   */
+  export type retailing_summaryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which retailing_summaries to delete
+     */
+    where?: retailing_summaryWhereInput
+    /**
+     * Limit how many retailing_summaries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * retailing_summary without action
+   */
+  export type retailing_summaryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the retailing_summary
+     */
+    select?: retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the retailing_summary
+     */
+    omit?: retailing_summaryOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model branch_retailing_summary
+   */
+
+  export type AggregateBranch_retailing_summary = {
+    _count: Branch_retailing_summaryCountAggregateOutputType | null
+    _avg: Branch_retailing_summaryAvgAggregateOutputType | null
+    _sum: Branch_retailing_summarySumAggregateOutputType | null
+    _min: Branch_retailing_summaryMinAggregateOutputType | null
+    _max: Branch_retailing_summaryMaxAggregateOutputType | null
+  }
+
+  export type Branch_retailing_summaryAvgAggregateOutputType = {
+    fiscal_year: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Branch_retailing_summarySumAggregateOutputType = {
+    fiscal_year: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Branch_retailing_summaryMinAggregateOutputType = {
+    branch: string | null
+    fiscal_year: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Branch_retailing_summaryMaxAggregateOutputType = {
+    branch: string | null
+    fiscal_year: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Branch_retailing_summaryCountAggregateOutputType = {
+    branch: number
+    fiscal_year: number
+    total_retailing: number
+    _all: number
+  }
+
+
+  export type Branch_retailing_summaryAvgAggregateInputType = {
+    fiscal_year?: true
+    total_retailing?: true
+  }
+
+  export type Branch_retailing_summarySumAggregateInputType = {
+    fiscal_year?: true
+    total_retailing?: true
+  }
+
+  export type Branch_retailing_summaryMinAggregateInputType = {
+    branch?: true
+    fiscal_year?: true
+    total_retailing?: true
+  }
+
+  export type Branch_retailing_summaryMaxAggregateInputType = {
+    branch?: true
+    fiscal_year?: true
+    total_retailing?: true
+  }
+
+  export type Branch_retailing_summaryCountAggregateInputType = {
+    branch?: true
+    fiscal_year?: true
+    total_retailing?: true
+    _all?: true
+  }
+
+  export type Branch_retailing_summaryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which branch_retailing_summary to aggregate.
+     */
+    where?: branch_retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of branch_retailing_summaries to fetch.
+     */
+    orderBy?: branch_retailing_summaryOrderByWithRelationInput | branch_retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: branch_retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` branch_retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` branch_retailing_summaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned branch_retailing_summaries
+    **/
+    _count?: true | Branch_retailing_summaryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Branch_retailing_summaryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Branch_retailing_summarySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Branch_retailing_summaryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Branch_retailing_summaryMaxAggregateInputType
+  }
+
+  export type GetBranch_retailing_summaryAggregateType<T extends Branch_retailing_summaryAggregateArgs> = {
+        [P in keyof T & keyof AggregateBranch_retailing_summary]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBranch_retailing_summary[P]>
+      : GetScalarType<T[P], AggregateBranch_retailing_summary[P]>
+  }
+
+
+
+
+  export type branch_retailing_summaryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: branch_retailing_summaryWhereInput
+    orderBy?: branch_retailing_summaryOrderByWithAggregationInput | branch_retailing_summaryOrderByWithAggregationInput[]
+    by: Branch_retailing_summaryScalarFieldEnum[] | Branch_retailing_summaryScalarFieldEnum
+    having?: branch_retailing_summaryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Branch_retailing_summaryCountAggregateInputType | true
+    _avg?: Branch_retailing_summaryAvgAggregateInputType
+    _sum?: Branch_retailing_summarySumAggregateInputType
+    _min?: Branch_retailing_summaryMinAggregateInputType
+    _max?: Branch_retailing_summaryMaxAggregateInputType
+  }
+
+  export type Branch_retailing_summaryGroupByOutputType = {
+    branch: string
+    fiscal_year: number
+    total_retailing: Decimal
+    _count: Branch_retailing_summaryCountAggregateOutputType | null
+    _avg: Branch_retailing_summaryAvgAggregateOutputType | null
+    _sum: Branch_retailing_summarySumAggregateOutputType | null
+    _min: Branch_retailing_summaryMinAggregateOutputType | null
+    _max: Branch_retailing_summaryMaxAggregateOutputType | null
+  }
+
+  type GetBranch_retailing_summaryGroupByPayload<T extends branch_retailing_summaryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Branch_retailing_summaryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Branch_retailing_summaryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Branch_retailing_summaryGroupByOutputType[P]>
+            : GetScalarType<T[P], Branch_retailing_summaryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type branch_retailing_summarySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    branch?: boolean
+    fiscal_year?: boolean
+    total_retailing?: boolean
+  }, ExtArgs["result"]["branch_retailing_summary"]>
+
+
+
+  export type branch_retailing_summarySelectScalar = {
+    branch?: boolean
+    fiscal_year?: boolean
+    total_retailing?: boolean
+  }
+
+  export type branch_retailing_summaryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"branch" | "fiscal_year" | "total_retailing", ExtArgs["result"]["branch_retailing_summary"]>
+
+  export type $branch_retailing_summaryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "branch_retailing_summary"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      branch: string
+      fiscal_year: number
+      total_retailing: Prisma.Decimal
+    }, ExtArgs["result"]["branch_retailing_summary"]>
+    composites: {}
+  }
+
+  type branch_retailing_summaryGetPayload<S extends boolean | null | undefined | branch_retailing_summaryDefaultArgs> = $Result.GetResult<Prisma.$branch_retailing_summaryPayload, S>
+
+  type branch_retailing_summaryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<branch_retailing_summaryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Branch_retailing_summaryCountAggregateInputType | true
+    }
+
+  export interface branch_retailing_summaryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['branch_retailing_summary'], meta: { name: 'branch_retailing_summary' } }
+    /**
+     * Find zero or one Branch_retailing_summary that matches the filter.
+     * @param {branch_retailing_summaryFindUniqueArgs} args - Arguments to find a Branch_retailing_summary
+     * @example
+     * // Get one Branch_retailing_summary
+     * const branch_retailing_summary = await prisma.branch_retailing_summary.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends branch_retailing_summaryFindUniqueArgs>(args: SelectSubset<T, branch_retailing_summaryFindUniqueArgs<ExtArgs>>): Prisma__branch_retailing_summaryClient<$Result.GetResult<Prisma.$branch_retailing_summaryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Branch_retailing_summary that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {branch_retailing_summaryFindUniqueOrThrowArgs} args - Arguments to find a Branch_retailing_summary
+     * @example
+     * // Get one Branch_retailing_summary
+     * const branch_retailing_summary = await prisma.branch_retailing_summary.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends branch_retailing_summaryFindUniqueOrThrowArgs>(args: SelectSubset<T, branch_retailing_summaryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__branch_retailing_summaryClient<$Result.GetResult<Prisma.$branch_retailing_summaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Branch_retailing_summary that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {branch_retailing_summaryFindFirstArgs} args - Arguments to find a Branch_retailing_summary
+     * @example
+     * // Get one Branch_retailing_summary
+     * const branch_retailing_summary = await prisma.branch_retailing_summary.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends branch_retailing_summaryFindFirstArgs>(args?: SelectSubset<T, branch_retailing_summaryFindFirstArgs<ExtArgs>>): Prisma__branch_retailing_summaryClient<$Result.GetResult<Prisma.$branch_retailing_summaryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Branch_retailing_summary that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {branch_retailing_summaryFindFirstOrThrowArgs} args - Arguments to find a Branch_retailing_summary
+     * @example
+     * // Get one Branch_retailing_summary
+     * const branch_retailing_summary = await prisma.branch_retailing_summary.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends branch_retailing_summaryFindFirstOrThrowArgs>(args?: SelectSubset<T, branch_retailing_summaryFindFirstOrThrowArgs<ExtArgs>>): Prisma__branch_retailing_summaryClient<$Result.GetResult<Prisma.$branch_retailing_summaryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Branch_retailing_summaries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {branch_retailing_summaryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Branch_retailing_summaries
+     * const branch_retailing_summaries = await prisma.branch_retailing_summary.findMany()
+     * 
+     * // Get first 10 Branch_retailing_summaries
+     * const branch_retailing_summaries = await prisma.branch_retailing_summary.findMany({ take: 10 })
+     * 
+     * // Only select the `branch`
+     * const branch_retailing_summaryWithBranchOnly = await prisma.branch_retailing_summary.findMany({ select: { branch: true } })
+     * 
+     */
+    findMany<T extends branch_retailing_summaryFindManyArgs>(args?: SelectSubset<T, branch_retailing_summaryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$branch_retailing_summaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Branch_retailing_summary.
+     * @param {branch_retailing_summaryCreateArgs} args - Arguments to create a Branch_retailing_summary.
+     * @example
+     * // Create one Branch_retailing_summary
+     * const Branch_retailing_summary = await prisma.branch_retailing_summary.create({
+     *   data: {
+     *     // ... data to create a Branch_retailing_summary
+     *   }
+     * })
+     * 
+     */
+    create<T extends branch_retailing_summaryCreateArgs>(args: SelectSubset<T, branch_retailing_summaryCreateArgs<ExtArgs>>): Prisma__branch_retailing_summaryClient<$Result.GetResult<Prisma.$branch_retailing_summaryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Branch_retailing_summaries.
+     * @param {branch_retailing_summaryCreateManyArgs} args - Arguments to create many Branch_retailing_summaries.
+     * @example
+     * // Create many Branch_retailing_summaries
+     * const branch_retailing_summary = await prisma.branch_retailing_summary.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends branch_retailing_summaryCreateManyArgs>(args?: SelectSubset<T, branch_retailing_summaryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Branch_retailing_summary.
+     * @param {branch_retailing_summaryDeleteArgs} args - Arguments to delete one Branch_retailing_summary.
+     * @example
+     * // Delete one Branch_retailing_summary
+     * const Branch_retailing_summary = await prisma.branch_retailing_summary.delete({
+     *   where: {
+     *     // ... filter to delete one Branch_retailing_summary
+     *   }
+     * })
+     * 
+     */
+    delete<T extends branch_retailing_summaryDeleteArgs>(args: SelectSubset<T, branch_retailing_summaryDeleteArgs<ExtArgs>>): Prisma__branch_retailing_summaryClient<$Result.GetResult<Prisma.$branch_retailing_summaryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Branch_retailing_summary.
+     * @param {branch_retailing_summaryUpdateArgs} args - Arguments to update one Branch_retailing_summary.
+     * @example
+     * // Update one Branch_retailing_summary
+     * const branch_retailing_summary = await prisma.branch_retailing_summary.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends branch_retailing_summaryUpdateArgs>(args: SelectSubset<T, branch_retailing_summaryUpdateArgs<ExtArgs>>): Prisma__branch_retailing_summaryClient<$Result.GetResult<Prisma.$branch_retailing_summaryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Branch_retailing_summaries.
+     * @param {branch_retailing_summaryDeleteManyArgs} args - Arguments to filter Branch_retailing_summaries to delete.
+     * @example
+     * // Delete a few Branch_retailing_summaries
+     * const { count } = await prisma.branch_retailing_summary.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends branch_retailing_summaryDeleteManyArgs>(args?: SelectSubset<T, branch_retailing_summaryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Branch_retailing_summaries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {branch_retailing_summaryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Branch_retailing_summaries
+     * const branch_retailing_summary = await prisma.branch_retailing_summary.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends branch_retailing_summaryUpdateManyArgs>(args: SelectSubset<T, branch_retailing_summaryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Branch_retailing_summary.
+     * @param {branch_retailing_summaryUpsertArgs} args - Arguments to update or create a Branch_retailing_summary.
+     * @example
+     * // Update or create a Branch_retailing_summary
+     * const branch_retailing_summary = await prisma.branch_retailing_summary.upsert({
+     *   create: {
+     *     // ... data to create a Branch_retailing_summary
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Branch_retailing_summary we want to update
+     *   }
+     * })
+     */
+    upsert<T extends branch_retailing_summaryUpsertArgs>(args: SelectSubset<T, branch_retailing_summaryUpsertArgs<ExtArgs>>): Prisma__branch_retailing_summaryClient<$Result.GetResult<Prisma.$branch_retailing_summaryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Branch_retailing_summaries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {branch_retailing_summaryCountArgs} args - Arguments to filter Branch_retailing_summaries to count.
+     * @example
+     * // Count the number of Branch_retailing_summaries
+     * const count = await prisma.branch_retailing_summary.count({
+     *   where: {
+     *     // ... the filter for the Branch_retailing_summaries we want to count
+     *   }
+     * })
+    **/
+    count<T extends branch_retailing_summaryCountArgs>(
+      args?: Subset<T, branch_retailing_summaryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Branch_retailing_summaryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Branch_retailing_summary.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Branch_retailing_summaryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Branch_retailing_summaryAggregateArgs>(args: Subset<T, Branch_retailing_summaryAggregateArgs>): Prisma.PrismaPromise<GetBranch_retailing_summaryAggregateType<T>>
+
+    /**
+     * Group by Branch_retailing_summary.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {branch_retailing_summaryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends branch_retailing_summaryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: branch_retailing_summaryGroupByArgs['orderBy'] }
+        : { orderBy?: branch_retailing_summaryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, branch_retailing_summaryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBranch_retailing_summaryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the branch_retailing_summary model
+   */
+  readonly fields: branch_retailing_summaryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for branch_retailing_summary.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__branch_retailing_summaryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the branch_retailing_summary model
+   */
+  interface branch_retailing_summaryFieldRefs {
+    readonly branch: FieldRef<"branch_retailing_summary", 'String'>
+    readonly fiscal_year: FieldRef<"branch_retailing_summary", 'Int'>
+    readonly total_retailing: FieldRef<"branch_retailing_summary", 'Decimal'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * branch_retailing_summary findUnique
+   */
+  export type branch_retailing_summaryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the branch_retailing_summary
+     */
+    select?: branch_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the branch_retailing_summary
+     */
+    omit?: branch_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which branch_retailing_summary to fetch.
+     */
+    where: branch_retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * branch_retailing_summary findUniqueOrThrow
+   */
+  export type branch_retailing_summaryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the branch_retailing_summary
+     */
+    select?: branch_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the branch_retailing_summary
+     */
+    omit?: branch_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which branch_retailing_summary to fetch.
+     */
+    where: branch_retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * branch_retailing_summary findFirst
+   */
+  export type branch_retailing_summaryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the branch_retailing_summary
+     */
+    select?: branch_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the branch_retailing_summary
+     */
+    omit?: branch_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which branch_retailing_summary to fetch.
+     */
+    where?: branch_retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of branch_retailing_summaries to fetch.
+     */
+    orderBy?: branch_retailing_summaryOrderByWithRelationInput | branch_retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for branch_retailing_summaries.
+     */
+    cursor?: branch_retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` branch_retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` branch_retailing_summaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of branch_retailing_summaries.
+     */
+    distinct?: Branch_retailing_summaryScalarFieldEnum | Branch_retailing_summaryScalarFieldEnum[]
+  }
+
+  /**
+   * branch_retailing_summary findFirstOrThrow
+   */
+  export type branch_retailing_summaryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the branch_retailing_summary
+     */
+    select?: branch_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the branch_retailing_summary
+     */
+    omit?: branch_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which branch_retailing_summary to fetch.
+     */
+    where?: branch_retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of branch_retailing_summaries to fetch.
+     */
+    orderBy?: branch_retailing_summaryOrderByWithRelationInput | branch_retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for branch_retailing_summaries.
+     */
+    cursor?: branch_retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` branch_retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` branch_retailing_summaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of branch_retailing_summaries.
+     */
+    distinct?: Branch_retailing_summaryScalarFieldEnum | Branch_retailing_summaryScalarFieldEnum[]
+  }
+
+  /**
+   * branch_retailing_summary findMany
+   */
+  export type branch_retailing_summaryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the branch_retailing_summary
+     */
+    select?: branch_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the branch_retailing_summary
+     */
+    omit?: branch_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which branch_retailing_summaries to fetch.
+     */
+    where?: branch_retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of branch_retailing_summaries to fetch.
+     */
+    orderBy?: branch_retailing_summaryOrderByWithRelationInput | branch_retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing branch_retailing_summaries.
+     */
+    cursor?: branch_retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` branch_retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` branch_retailing_summaries.
+     */
+    skip?: number
+    distinct?: Branch_retailing_summaryScalarFieldEnum | Branch_retailing_summaryScalarFieldEnum[]
+  }
+
+  /**
+   * branch_retailing_summary create
+   */
+  export type branch_retailing_summaryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the branch_retailing_summary
+     */
+    select?: branch_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the branch_retailing_summary
+     */
+    omit?: branch_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * The data needed to create a branch_retailing_summary.
+     */
+    data: XOR<branch_retailing_summaryCreateInput, branch_retailing_summaryUncheckedCreateInput>
+  }
+
+  /**
+   * branch_retailing_summary createMany
+   */
+  export type branch_retailing_summaryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many branch_retailing_summaries.
+     */
+    data: branch_retailing_summaryCreateManyInput | branch_retailing_summaryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * branch_retailing_summary update
+   */
+  export type branch_retailing_summaryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the branch_retailing_summary
+     */
+    select?: branch_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the branch_retailing_summary
+     */
+    omit?: branch_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * The data needed to update a branch_retailing_summary.
+     */
+    data: XOR<branch_retailing_summaryUpdateInput, branch_retailing_summaryUncheckedUpdateInput>
+    /**
+     * Choose, which branch_retailing_summary to update.
+     */
+    where: branch_retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * branch_retailing_summary updateMany
+   */
+  export type branch_retailing_summaryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update branch_retailing_summaries.
+     */
+    data: XOR<branch_retailing_summaryUpdateManyMutationInput, branch_retailing_summaryUncheckedUpdateManyInput>
+    /**
+     * Filter which branch_retailing_summaries to update
+     */
+    where?: branch_retailing_summaryWhereInput
+    /**
+     * Limit how many branch_retailing_summaries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * branch_retailing_summary upsert
+   */
+  export type branch_retailing_summaryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the branch_retailing_summary
+     */
+    select?: branch_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the branch_retailing_summary
+     */
+    omit?: branch_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * The filter to search for the branch_retailing_summary to update in case it exists.
+     */
+    where: branch_retailing_summaryWhereUniqueInput
+    /**
+     * In case the branch_retailing_summary found by the `where` argument doesn't exist, create a new branch_retailing_summary with this data.
+     */
+    create: XOR<branch_retailing_summaryCreateInput, branch_retailing_summaryUncheckedCreateInput>
+    /**
+     * In case the branch_retailing_summary was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<branch_retailing_summaryUpdateInput, branch_retailing_summaryUncheckedUpdateInput>
+  }
+
+  /**
+   * branch_retailing_summary delete
+   */
+  export type branch_retailing_summaryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the branch_retailing_summary
+     */
+    select?: branch_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the branch_retailing_summary
+     */
+    omit?: branch_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter which branch_retailing_summary to delete.
+     */
+    where: branch_retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * branch_retailing_summary deleteMany
+   */
+  export type branch_retailing_summaryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which branch_retailing_summaries to delete
+     */
+    where?: branch_retailing_summaryWhereInput
+    /**
+     * Limit how many branch_retailing_summaries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * branch_retailing_summary without action
+   */
+  export type branch_retailing_summaryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the branch_retailing_summary
+     */
+    select?: branch_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the branch_retailing_summary
+     */
+    omit?: branch_retailing_summaryOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model brand_retailing_summary
+   */
+
+  export type AggregateBrand_retailing_summary = {
+    _count: Brand_retailing_summaryCountAggregateOutputType | null
+    _avg: Brand_retailing_summaryAvgAggregateOutputType | null
+    _sum: Brand_retailing_summarySumAggregateOutputType | null
+    _min: Brand_retailing_summaryMinAggregateOutputType | null
+    _max: Brand_retailing_summaryMaxAggregateOutputType | null
+  }
+
+  export type Brand_retailing_summaryAvgAggregateOutputType = {
+    fiscal_year: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Brand_retailing_summarySumAggregateOutputType = {
+    fiscal_year: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Brand_retailing_summaryMinAggregateOutputType = {
+    brand: string | null
+    fiscal_year: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Brand_retailing_summaryMaxAggregateOutputType = {
+    brand: string | null
+    fiscal_year: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Brand_retailing_summaryCountAggregateOutputType = {
+    brand: number
+    fiscal_year: number
+    total_retailing: number
+    _all: number
+  }
+
+
+  export type Brand_retailing_summaryAvgAggregateInputType = {
+    fiscal_year?: true
+    total_retailing?: true
+  }
+
+  export type Brand_retailing_summarySumAggregateInputType = {
+    fiscal_year?: true
+    total_retailing?: true
+  }
+
+  export type Brand_retailing_summaryMinAggregateInputType = {
+    brand?: true
+    fiscal_year?: true
+    total_retailing?: true
+  }
+
+  export type Brand_retailing_summaryMaxAggregateInputType = {
+    brand?: true
+    fiscal_year?: true
+    total_retailing?: true
+  }
+
+  export type Brand_retailing_summaryCountAggregateInputType = {
+    brand?: true
+    fiscal_year?: true
+    total_retailing?: true
+    _all?: true
+  }
+
+  export type Brand_retailing_summaryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which brand_retailing_summary to aggregate.
+     */
+    where?: brand_retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of brand_retailing_summaries to fetch.
+     */
+    orderBy?: brand_retailing_summaryOrderByWithRelationInput | brand_retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: brand_retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` brand_retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` brand_retailing_summaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned brand_retailing_summaries
+    **/
+    _count?: true | Brand_retailing_summaryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Brand_retailing_summaryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Brand_retailing_summarySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Brand_retailing_summaryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Brand_retailing_summaryMaxAggregateInputType
+  }
+
+  export type GetBrand_retailing_summaryAggregateType<T extends Brand_retailing_summaryAggregateArgs> = {
+        [P in keyof T & keyof AggregateBrand_retailing_summary]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBrand_retailing_summary[P]>
+      : GetScalarType<T[P], AggregateBrand_retailing_summary[P]>
+  }
+
+
+
+
+  export type brand_retailing_summaryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: brand_retailing_summaryWhereInput
+    orderBy?: brand_retailing_summaryOrderByWithAggregationInput | brand_retailing_summaryOrderByWithAggregationInput[]
+    by: Brand_retailing_summaryScalarFieldEnum[] | Brand_retailing_summaryScalarFieldEnum
+    having?: brand_retailing_summaryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Brand_retailing_summaryCountAggregateInputType | true
+    _avg?: Brand_retailing_summaryAvgAggregateInputType
+    _sum?: Brand_retailing_summarySumAggregateInputType
+    _min?: Brand_retailing_summaryMinAggregateInputType
+    _max?: Brand_retailing_summaryMaxAggregateInputType
+  }
+
+  export type Brand_retailing_summaryGroupByOutputType = {
+    brand: string
+    fiscal_year: number
+    total_retailing: Decimal
+    _count: Brand_retailing_summaryCountAggregateOutputType | null
+    _avg: Brand_retailing_summaryAvgAggregateOutputType | null
+    _sum: Brand_retailing_summarySumAggregateOutputType | null
+    _min: Brand_retailing_summaryMinAggregateOutputType | null
+    _max: Brand_retailing_summaryMaxAggregateOutputType | null
+  }
+
+  type GetBrand_retailing_summaryGroupByPayload<T extends brand_retailing_summaryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Brand_retailing_summaryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Brand_retailing_summaryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Brand_retailing_summaryGroupByOutputType[P]>
+            : GetScalarType<T[P], Brand_retailing_summaryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type brand_retailing_summarySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    brand?: boolean
+    fiscal_year?: boolean
+    total_retailing?: boolean
+  }, ExtArgs["result"]["brand_retailing_summary"]>
+
+
+
+  export type brand_retailing_summarySelectScalar = {
+    brand?: boolean
+    fiscal_year?: boolean
+    total_retailing?: boolean
+  }
+
+  export type brand_retailing_summaryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"brand" | "fiscal_year" | "total_retailing", ExtArgs["result"]["brand_retailing_summary"]>
+
+  export type $brand_retailing_summaryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "brand_retailing_summary"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      brand: string
+      fiscal_year: number
+      total_retailing: Prisma.Decimal
+    }, ExtArgs["result"]["brand_retailing_summary"]>
+    composites: {}
+  }
+
+  type brand_retailing_summaryGetPayload<S extends boolean | null | undefined | brand_retailing_summaryDefaultArgs> = $Result.GetResult<Prisma.$brand_retailing_summaryPayload, S>
+
+  type brand_retailing_summaryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<brand_retailing_summaryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Brand_retailing_summaryCountAggregateInputType | true
+    }
+
+  export interface brand_retailing_summaryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['brand_retailing_summary'], meta: { name: 'brand_retailing_summary' } }
+    /**
+     * Find zero or one Brand_retailing_summary that matches the filter.
+     * @param {brand_retailing_summaryFindUniqueArgs} args - Arguments to find a Brand_retailing_summary
+     * @example
+     * // Get one Brand_retailing_summary
+     * const brand_retailing_summary = await prisma.brand_retailing_summary.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends brand_retailing_summaryFindUniqueArgs>(args: SelectSubset<T, brand_retailing_summaryFindUniqueArgs<ExtArgs>>): Prisma__brand_retailing_summaryClient<$Result.GetResult<Prisma.$brand_retailing_summaryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Brand_retailing_summary that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {brand_retailing_summaryFindUniqueOrThrowArgs} args - Arguments to find a Brand_retailing_summary
+     * @example
+     * // Get one Brand_retailing_summary
+     * const brand_retailing_summary = await prisma.brand_retailing_summary.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends brand_retailing_summaryFindUniqueOrThrowArgs>(args: SelectSubset<T, brand_retailing_summaryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__brand_retailing_summaryClient<$Result.GetResult<Prisma.$brand_retailing_summaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Brand_retailing_summary that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {brand_retailing_summaryFindFirstArgs} args - Arguments to find a Brand_retailing_summary
+     * @example
+     * // Get one Brand_retailing_summary
+     * const brand_retailing_summary = await prisma.brand_retailing_summary.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends brand_retailing_summaryFindFirstArgs>(args?: SelectSubset<T, brand_retailing_summaryFindFirstArgs<ExtArgs>>): Prisma__brand_retailing_summaryClient<$Result.GetResult<Prisma.$brand_retailing_summaryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Brand_retailing_summary that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {brand_retailing_summaryFindFirstOrThrowArgs} args - Arguments to find a Brand_retailing_summary
+     * @example
+     * // Get one Brand_retailing_summary
+     * const brand_retailing_summary = await prisma.brand_retailing_summary.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends brand_retailing_summaryFindFirstOrThrowArgs>(args?: SelectSubset<T, brand_retailing_summaryFindFirstOrThrowArgs<ExtArgs>>): Prisma__brand_retailing_summaryClient<$Result.GetResult<Prisma.$brand_retailing_summaryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Brand_retailing_summaries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {brand_retailing_summaryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Brand_retailing_summaries
+     * const brand_retailing_summaries = await prisma.brand_retailing_summary.findMany()
+     * 
+     * // Get first 10 Brand_retailing_summaries
+     * const brand_retailing_summaries = await prisma.brand_retailing_summary.findMany({ take: 10 })
+     * 
+     * // Only select the `brand`
+     * const brand_retailing_summaryWithBrandOnly = await prisma.brand_retailing_summary.findMany({ select: { brand: true } })
+     * 
+     */
+    findMany<T extends brand_retailing_summaryFindManyArgs>(args?: SelectSubset<T, brand_retailing_summaryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$brand_retailing_summaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Brand_retailing_summary.
+     * @param {brand_retailing_summaryCreateArgs} args - Arguments to create a Brand_retailing_summary.
+     * @example
+     * // Create one Brand_retailing_summary
+     * const Brand_retailing_summary = await prisma.brand_retailing_summary.create({
+     *   data: {
+     *     // ... data to create a Brand_retailing_summary
+     *   }
+     * })
+     * 
+     */
+    create<T extends brand_retailing_summaryCreateArgs>(args: SelectSubset<T, brand_retailing_summaryCreateArgs<ExtArgs>>): Prisma__brand_retailing_summaryClient<$Result.GetResult<Prisma.$brand_retailing_summaryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Brand_retailing_summaries.
+     * @param {brand_retailing_summaryCreateManyArgs} args - Arguments to create many Brand_retailing_summaries.
+     * @example
+     * // Create many Brand_retailing_summaries
+     * const brand_retailing_summary = await prisma.brand_retailing_summary.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends brand_retailing_summaryCreateManyArgs>(args?: SelectSubset<T, brand_retailing_summaryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Brand_retailing_summary.
+     * @param {brand_retailing_summaryDeleteArgs} args - Arguments to delete one Brand_retailing_summary.
+     * @example
+     * // Delete one Brand_retailing_summary
+     * const Brand_retailing_summary = await prisma.brand_retailing_summary.delete({
+     *   where: {
+     *     // ... filter to delete one Brand_retailing_summary
+     *   }
+     * })
+     * 
+     */
+    delete<T extends brand_retailing_summaryDeleteArgs>(args: SelectSubset<T, brand_retailing_summaryDeleteArgs<ExtArgs>>): Prisma__brand_retailing_summaryClient<$Result.GetResult<Prisma.$brand_retailing_summaryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Brand_retailing_summary.
+     * @param {brand_retailing_summaryUpdateArgs} args - Arguments to update one Brand_retailing_summary.
+     * @example
+     * // Update one Brand_retailing_summary
+     * const brand_retailing_summary = await prisma.brand_retailing_summary.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends brand_retailing_summaryUpdateArgs>(args: SelectSubset<T, brand_retailing_summaryUpdateArgs<ExtArgs>>): Prisma__brand_retailing_summaryClient<$Result.GetResult<Prisma.$brand_retailing_summaryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Brand_retailing_summaries.
+     * @param {brand_retailing_summaryDeleteManyArgs} args - Arguments to filter Brand_retailing_summaries to delete.
+     * @example
+     * // Delete a few Brand_retailing_summaries
+     * const { count } = await prisma.brand_retailing_summary.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends brand_retailing_summaryDeleteManyArgs>(args?: SelectSubset<T, brand_retailing_summaryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Brand_retailing_summaries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {brand_retailing_summaryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Brand_retailing_summaries
+     * const brand_retailing_summary = await prisma.brand_retailing_summary.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends brand_retailing_summaryUpdateManyArgs>(args: SelectSubset<T, brand_retailing_summaryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Brand_retailing_summary.
+     * @param {brand_retailing_summaryUpsertArgs} args - Arguments to update or create a Brand_retailing_summary.
+     * @example
+     * // Update or create a Brand_retailing_summary
+     * const brand_retailing_summary = await prisma.brand_retailing_summary.upsert({
+     *   create: {
+     *     // ... data to create a Brand_retailing_summary
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Brand_retailing_summary we want to update
+     *   }
+     * })
+     */
+    upsert<T extends brand_retailing_summaryUpsertArgs>(args: SelectSubset<T, brand_retailing_summaryUpsertArgs<ExtArgs>>): Prisma__brand_retailing_summaryClient<$Result.GetResult<Prisma.$brand_retailing_summaryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Brand_retailing_summaries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {brand_retailing_summaryCountArgs} args - Arguments to filter Brand_retailing_summaries to count.
+     * @example
+     * // Count the number of Brand_retailing_summaries
+     * const count = await prisma.brand_retailing_summary.count({
+     *   where: {
+     *     // ... the filter for the Brand_retailing_summaries we want to count
+     *   }
+     * })
+    **/
+    count<T extends brand_retailing_summaryCountArgs>(
+      args?: Subset<T, brand_retailing_summaryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Brand_retailing_summaryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Brand_retailing_summary.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Brand_retailing_summaryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Brand_retailing_summaryAggregateArgs>(args: Subset<T, Brand_retailing_summaryAggregateArgs>): Prisma.PrismaPromise<GetBrand_retailing_summaryAggregateType<T>>
+
+    /**
+     * Group by Brand_retailing_summary.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {brand_retailing_summaryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends brand_retailing_summaryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: brand_retailing_summaryGroupByArgs['orderBy'] }
+        : { orderBy?: brand_retailing_summaryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, brand_retailing_summaryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBrand_retailing_summaryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the brand_retailing_summary model
+   */
+  readonly fields: brand_retailing_summaryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for brand_retailing_summary.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__brand_retailing_summaryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the brand_retailing_summary model
+   */
+  interface brand_retailing_summaryFieldRefs {
+    readonly brand: FieldRef<"brand_retailing_summary", 'String'>
+    readonly fiscal_year: FieldRef<"brand_retailing_summary", 'Int'>
+    readonly total_retailing: FieldRef<"brand_retailing_summary", 'Decimal'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * brand_retailing_summary findUnique
+   */
+  export type brand_retailing_summaryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the brand_retailing_summary
+     */
+    select?: brand_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the brand_retailing_summary
+     */
+    omit?: brand_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which brand_retailing_summary to fetch.
+     */
+    where: brand_retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * brand_retailing_summary findUniqueOrThrow
+   */
+  export type brand_retailing_summaryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the brand_retailing_summary
+     */
+    select?: brand_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the brand_retailing_summary
+     */
+    omit?: brand_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which brand_retailing_summary to fetch.
+     */
+    where: brand_retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * brand_retailing_summary findFirst
+   */
+  export type brand_retailing_summaryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the brand_retailing_summary
+     */
+    select?: brand_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the brand_retailing_summary
+     */
+    omit?: brand_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which brand_retailing_summary to fetch.
+     */
+    where?: brand_retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of brand_retailing_summaries to fetch.
+     */
+    orderBy?: brand_retailing_summaryOrderByWithRelationInput | brand_retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for brand_retailing_summaries.
+     */
+    cursor?: brand_retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` brand_retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` brand_retailing_summaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of brand_retailing_summaries.
+     */
+    distinct?: Brand_retailing_summaryScalarFieldEnum | Brand_retailing_summaryScalarFieldEnum[]
+  }
+
+  /**
+   * brand_retailing_summary findFirstOrThrow
+   */
+  export type brand_retailing_summaryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the brand_retailing_summary
+     */
+    select?: brand_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the brand_retailing_summary
+     */
+    omit?: brand_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which brand_retailing_summary to fetch.
+     */
+    where?: brand_retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of brand_retailing_summaries to fetch.
+     */
+    orderBy?: brand_retailing_summaryOrderByWithRelationInput | brand_retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for brand_retailing_summaries.
+     */
+    cursor?: brand_retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` brand_retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` brand_retailing_summaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of brand_retailing_summaries.
+     */
+    distinct?: Brand_retailing_summaryScalarFieldEnum | Brand_retailing_summaryScalarFieldEnum[]
+  }
+
+  /**
+   * brand_retailing_summary findMany
+   */
+  export type brand_retailing_summaryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the brand_retailing_summary
+     */
+    select?: brand_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the brand_retailing_summary
+     */
+    omit?: brand_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which brand_retailing_summaries to fetch.
+     */
+    where?: brand_retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of brand_retailing_summaries to fetch.
+     */
+    orderBy?: brand_retailing_summaryOrderByWithRelationInput | brand_retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing brand_retailing_summaries.
+     */
+    cursor?: brand_retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` brand_retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` brand_retailing_summaries.
+     */
+    skip?: number
+    distinct?: Brand_retailing_summaryScalarFieldEnum | Brand_retailing_summaryScalarFieldEnum[]
+  }
+
+  /**
+   * brand_retailing_summary create
+   */
+  export type brand_retailing_summaryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the brand_retailing_summary
+     */
+    select?: brand_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the brand_retailing_summary
+     */
+    omit?: brand_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * The data needed to create a brand_retailing_summary.
+     */
+    data: XOR<brand_retailing_summaryCreateInput, brand_retailing_summaryUncheckedCreateInput>
+  }
+
+  /**
+   * brand_retailing_summary createMany
+   */
+  export type brand_retailing_summaryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many brand_retailing_summaries.
+     */
+    data: brand_retailing_summaryCreateManyInput | brand_retailing_summaryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * brand_retailing_summary update
+   */
+  export type brand_retailing_summaryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the brand_retailing_summary
+     */
+    select?: brand_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the brand_retailing_summary
+     */
+    omit?: brand_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * The data needed to update a brand_retailing_summary.
+     */
+    data: XOR<brand_retailing_summaryUpdateInput, brand_retailing_summaryUncheckedUpdateInput>
+    /**
+     * Choose, which brand_retailing_summary to update.
+     */
+    where: brand_retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * brand_retailing_summary updateMany
+   */
+  export type brand_retailing_summaryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update brand_retailing_summaries.
+     */
+    data: XOR<brand_retailing_summaryUpdateManyMutationInput, brand_retailing_summaryUncheckedUpdateManyInput>
+    /**
+     * Filter which brand_retailing_summaries to update
+     */
+    where?: brand_retailing_summaryWhereInput
+    /**
+     * Limit how many brand_retailing_summaries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * brand_retailing_summary upsert
+   */
+  export type brand_retailing_summaryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the brand_retailing_summary
+     */
+    select?: brand_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the brand_retailing_summary
+     */
+    omit?: brand_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * The filter to search for the brand_retailing_summary to update in case it exists.
+     */
+    where: brand_retailing_summaryWhereUniqueInput
+    /**
+     * In case the brand_retailing_summary found by the `where` argument doesn't exist, create a new brand_retailing_summary with this data.
+     */
+    create: XOR<brand_retailing_summaryCreateInput, brand_retailing_summaryUncheckedCreateInput>
+    /**
+     * In case the brand_retailing_summary was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<brand_retailing_summaryUpdateInput, brand_retailing_summaryUncheckedUpdateInput>
+  }
+
+  /**
+   * brand_retailing_summary delete
+   */
+  export type brand_retailing_summaryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the brand_retailing_summary
+     */
+    select?: brand_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the brand_retailing_summary
+     */
+    omit?: brand_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter which brand_retailing_summary to delete.
+     */
+    where: brand_retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * brand_retailing_summary deleteMany
+   */
+  export type brand_retailing_summaryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which brand_retailing_summaries to delete
+     */
+    where?: brand_retailing_summaryWhereInput
+    /**
+     * Limit how many brand_retailing_summaries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * brand_retailing_summary without action
+   */
+  export type brand_retailing_summaryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the brand_retailing_summary
+     */
+    select?: brand_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the brand_retailing_summary
+     */
+    omit?: brand_retailing_summaryOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model category_retailing_summary
+   */
+
+  export type AggregateCategory_retailing_summary = {
+    _count: Category_retailing_summaryCountAggregateOutputType | null
+    _avg: Category_retailing_summaryAvgAggregateOutputType | null
+    _sum: Category_retailing_summarySumAggregateOutputType | null
+    _min: Category_retailing_summaryMinAggregateOutputType | null
+    _max: Category_retailing_summaryMaxAggregateOutputType | null
+  }
+
+  export type Category_retailing_summaryAvgAggregateOutputType = {
+    month: number | null
+    fiscal_year: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Category_retailing_summarySumAggregateOutputType = {
+    month: number | null
+    fiscal_year: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Category_retailing_summaryMinAggregateOutputType = {
+    category: string | null
+    month: number | null
+    fiscal_year: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Category_retailing_summaryMaxAggregateOutputType = {
+    category: string | null
+    month: number | null
+    fiscal_year: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Category_retailing_summaryCountAggregateOutputType = {
+    category: number
+    month: number
+    fiscal_year: number
+    total_retailing: number
+    _all: number
+  }
+
+
+  export type Category_retailing_summaryAvgAggregateInputType = {
+    month?: true
+    fiscal_year?: true
+    total_retailing?: true
+  }
+
+  export type Category_retailing_summarySumAggregateInputType = {
+    month?: true
+    fiscal_year?: true
+    total_retailing?: true
+  }
+
+  export type Category_retailing_summaryMinAggregateInputType = {
+    category?: true
+    month?: true
+    fiscal_year?: true
+    total_retailing?: true
+  }
+
+  export type Category_retailing_summaryMaxAggregateInputType = {
+    category?: true
+    month?: true
+    fiscal_year?: true
+    total_retailing?: true
+  }
+
+  export type Category_retailing_summaryCountAggregateInputType = {
+    category?: true
+    month?: true
+    fiscal_year?: true
+    total_retailing?: true
+    _all?: true
+  }
+
+  export type Category_retailing_summaryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which category_retailing_summary to aggregate.
+     */
+    where?: category_retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of category_retailing_summaries to fetch.
+     */
+    orderBy?: category_retailing_summaryOrderByWithRelationInput | category_retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: category_retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` category_retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` category_retailing_summaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned category_retailing_summaries
+    **/
+    _count?: true | Category_retailing_summaryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Category_retailing_summaryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Category_retailing_summarySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Category_retailing_summaryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Category_retailing_summaryMaxAggregateInputType
+  }
+
+  export type GetCategory_retailing_summaryAggregateType<T extends Category_retailing_summaryAggregateArgs> = {
+        [P in keyof T & keyof AggregateCategory_retailing_summary]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCategory_retailing_summary[P]>
+      : GetScalarType<T[P], AggregateCategory_retailing_summary[P]>
+  }
+
+
+
+
+  export type category_retailing_summaryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: category_retailing_summaryWhereInput
+    orderBy?: category_retailing_summaryOrderByWithAggregationInput | category_retailing_summaryOrderByWithAggregationInput[]
+    by: Category_retailing_summaryScalarFieldEnum[] | Category_retailing_summaryScalarFieldEnum
+    having?: category_retailing_summaryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Category_retailing_summaryCountAggregateInputType | true
+    _avg?: Category_retailing_summaryAvgAggregateInputType
+    _sum?: Category_retailing_summarySumAggregateInputType
+    _min?: Category_retailing_summaryMinAggregateInputType
+    _max?: Category_retailing_summaryMaxAggregateInputType
+  }
+
+  export type Category_retailing_summaryGroupByOutputType = {
+    category: string
+    month: number
+    fiscal_year: number
+    total_retailing: Decimal
+    _count: Category_retailing_summaryCountAggregateOutputType | null
+    _avg: Category_retailing_summaryAvgAggregateOutputType | null
+    _sum: Category_retailing_summarySumAggregateOutputType | null
+    _min: Category_retailing_summaryMinAggregateOutputType | null
+    _max: Category_retailing_summaryMaxAggregateOutputType | null
+  }
+
+  type GetCategory_retailing_summaryGroupByPayload<T extends category_retailing_summaryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Category_retailing_summaryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Category_retailing_summaryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Category_retailing_summaryGroupByOutputType[P]>
+            : GetScalarType<T[P], Category_retailing_summaryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type category_retailing_summarySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    category?: boolean
+    month?: boolean
+    fiscal_year?: boolean
+    total_retailing?: boolean
+  }, ExtArgs["result"]["category_retailing_summary"]>
+
+
+
+  export type category_retailing_summarySelectScalar = {
+    category?: boolean
+    month?: boolean
+    fiscal_year?: boolean
+    total_retailing?: boolean
+  }
+
+  export type category_retailing_summaryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"category" | "month" | "fiscal_year" | "total_retailing", ExtArgs["result"]["category_retailing_summary"]>
+
+  export type $category_retailing_summaryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "category_retailing_summary"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      category: string
+      month: number
+      fiscal_year: number
+      total_retailing: Prisma.Decimal
+    }, ExtArgs["result"]["category_retailing_summary"]>
+    composites: {}
+  }
+
+  type category_retailing_summaryGetPayload<S extends boolean | null | undefined | category_retailing_summaryDefaultArgs> = $Result.GetResult<Prisma.$category_retailing_summaryPayload, S>
+
+  type category_retailing_summaryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<category_retailing_summaryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Category_retailing_summaryCountAggregateInputType | true
+    }
+
+  export interface category_retailing_summaryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['category_retailing_summary'], meta: { name: 'category_retailing_summary' } }
+    /**
+     * Find zero or one Category_retailing_summary that matches the filter.
+     * @param {category_retailing_summaryFindUniqueArgs} args - Arguments to find a Category_retailing_summary
+     * @example
+     * // Get one Category_retailing_summary
+     * const category_retailing_summary = await prisma.category_retailing_summary.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends category_retailing_summaryFindUniqueArgs>(args: SelectSubset<T, category_retailing_summaryFindUniqueArgs<ExtArgs>>): Prisma__category_retailing_summaryClient<$Result.GetResult<Prisma.$category_retailing_summaryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Category_retailing_summary that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {category_retailing_summaryFindUniqueOrThrowArgs} args - Arguments to find a Category_retailing_summary
+     * @example
+     * // Get one Category_retailing_summary
+     * const category_retailing_summary = await prisma.category_retailing_summary.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends category_retailing_summaryFindUniqueOrThrowArgs>(args: SelectSubset<T, category_retailing_summaryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__category_retailing_summaryClient<$Result.GetResult<Prisma.$category_retailing_summaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Category_retailing_summary that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {category_retailing_summaryFindFirstArgs} args - Arguments to find a Category_retailing_summary
+     * @example
+     * // Get one Category_retailing_summary
+     * const category_retailing_summary = await prisma.category_retailing_summary.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends category_retailing_summaryFindFirstArgs>(args?: SelectSubset<T, category_retailing_summaryFindFirstArgs<ExtArgs>>): Prisma__category_retailing_summaryClient<$Result.GetResult<Prisma.$category_retailing_summaryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Category_retailing_summary that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {category_retailing_summaryFindFirstOrThrowArgs} args - Arguments to find a Category_retailing_summary
+     * @example
+     * // Get one Category_retailing_summary
+     * const category_retailing_summary = await prisma.category_retailing_summary.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends category_retailing_summaryFindFirstOrThrowArgs>(args?: SelectSubset<T, category_retailing_summaryFindFirstOrThrowArgs<ExtArgs>>): Prisma__category_retailing_summaryClient<$Result.GetResult<Prisma.$category_retailing_summaryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Category_retailing_summaries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {category_retailing_summaryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Category_retailing_summaries
+     * const category_retailing_summaries = await prisma.category_retailing_summary.findMany()
+     * 
+     * // Get first 10 Category_retailing_summaries
+     * const category_retailing_summaries = await prisma.category_retailing_summary.findMany({ take: 10 })
+     * 
+     * // Only select the `category`
+     * const category_retailing_summaryWithCategoryOnly = await prisma.category_retailing_summary.findMany({ select: { category: true } })
+     * 
+     */
+    findMany<T extends category_retailing_summaryFindManyArgs>(args?: SelectSubset<T, category_retailing_summaryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$category_retailing_summaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Category_retailing_summary.
+     * @param {category_retailing_summaryCreateArgs} args - Arguments to create a Category_retailing_summary.
+     * @example
+     * // Create one Category_retailing_summary
+     * const Category_retailing_summary = await prisma.category_retailing_summary.create({
+     *   data: {
+     *     // ... data to create a Category_retailing_summary
+     *   }
+     * })
+     * 
+     */
+    create<T extends category_retailing_summaryCreateArgs>(args: SelectSubset<T, category_retailing_summaryCreateArgs<ExtArgs>>): Prisma__category_retailing_summaryClient<$Result.GetResult<Prisma.$category_retailing_summaryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Category_retailing_summaries.
+     * @param {category_retailing_summaryCreateManyArgs} args - Arguments to create many Category_retailing_summaries.
+     * @example
+     * // Create many Category_retailing_summaries
+     * const category_retailing_summary = await prisma.category_retailing_summary.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends category_retailing_summaryCreateManyArgs>(args?: SelectSubset<T, category_retailing_summaryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Category_retailing_summary.
+     * @param {category_retailing_summaryDeleteArgs} args - Arguments to delete one Category_retailing_summary.
+     * @example
+     * // Delete one Category_retailing_summary
+     * const Category_retailing_summary = await prisma.category_retailing_summary.delete({
+     *   where: {
+     *     // ... filter to delete one Category_retailing_summary
+     *   }
+     * })
+     * 
+     */
+    delete<T extends category_retailing_summaryDeleteArgs>(args: SelectSubset<T, category_retailing_summaryDeleteArgs<ExtArgs>>): Prisma__category_retailing_summaryClient<$Result.GetResult<Prisma.$category_retailing_summaryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Category_retailing_summary.
+     * @param {category_retailing_summaryUpdateArgs} args - Arguments to update one Category_retailing_summary.
+     * @example
+     * // Update one Category_retailing_summary
+     * const category_retailing_summary = await prisma.category_retailing_summary.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends category_retailing_summaryUpdateArgs>(args: SelectSubset<T, category_retailing_summaryUpdateArgs<ExtArgs>>): Prisma__category_retailing_summaryClient<$Result.GetResult<Prisma.$category_retailing_summaryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Category_retailing_summaries.
+     * @param {category_retailing_summaryDeleteManyArgs} args - Arguments to filter Category_retailing_summaries to delete.
+     * @example
+     * // Delete a few Category_retailing_summaries
+     * const { count } = await prisma.category_retailing_summary.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends category_retailing_summaryDeleteManyArgs>(args?: SelectSubset<T, category_retailing_summaryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Category_retailing_summaries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {category_retailing_summaryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Category_retailing_summaries
+     * const category_retailing_summary = await prisma.category_retailing_summary.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends category_retailing_summaryUpdateManyArgs>(args: SelectSubset<T, category_retailing_summaryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Category_retailing_summary.
+     * @param {category_retailing_summaryUpsertArgs} args - Arguments to update or create a Category_retailing_summary.
+     * @example
+     * // Update or create a Category_retailing_summary
+     * const category_retailing_summary = await prisma.category_retailing_summary.upsert({
+     *   create: {
+     *     // ... data to create a Category_retailing_summary
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Category_retailing_summary we want to update
+     *   }
+     * })
+     */
+    upsert<T extends category_retailing_summaryUpsertArgs>(args: SelectSubset<T, category_retailing_summaryUpsertArgs<ExtArgs>>): Prisma__category_retailing_summaryClient<$Result.GetResult<Prisma.$category_retailing_summaryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Category_retailing_summaries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {category_retailing_summaryCountArgs} args - Arguments to filter Category_retailing_summaries to count.
+     * @example
+     * // Count the number of Category_retailing_summaries
+     * const count = await prisma.category_retailing_summary.count({
+     *   where: {
+     *     // ... the filter for the Category_retailing_summaries we want to count
+     *   }
+     * })
+    **/
+    count<T extends category_retailing_summaryCountArgs>(
+      args?: Subset<T, category_retailing_summaryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Category_retailing_summaryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Category_retailing_summary.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Category_retailing_summaryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Category_retailing_summaryAggregateArgs>(args: Subset<T, Category_retailing_summaryAggregateArgs>): Prisma.PrismaPromise<GetCategory_retailing_summaryAggregateType<T>>
+
+    /**
+     * Group by Category_retailing_summary.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {category_retailing_summaryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends category_retailing_summaryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: category_retailing_summaryGroupByArgs['orderBy'] }
+        : { orderBy?: category_retailing_summaryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, category_retailing_summaryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCategory_retailing_summaryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the category_retailing_summary model
+   */
+  readonly fields: category_retailing_summaryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for category_retailing_summary.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__category_retailing_summaryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the category_retailing_summary model
+   */
+  interface category_retailing_summaryFieldRefs {
+    readonly category: FieldRef<"category_retailing_summary", 'String'>
+    readonly month: FieldRef<"category_retailing_summary", 'Int'>
+    readonly fiscal_year: FieldRef<"category_retailing_summary", 'Int'>
+    readonly total_retailing: FieldRef<"category_retailing_summary", 'Decimal'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * category_retailing_summary findUnique
+   */
+  export type category_retailing_summaryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the category_retailing_summary
+     */
+    select?: category_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the category_retailing_summary
+     */
+    omit?: category_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which category_retailing_summary to fetch.
+     */
+    where: category_retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * category_retailing_summary findUniqueOrThrow
+   */
+  export type category_retailing_summaryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the category_retailing_summary
+     */
+    select?: category_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the category_retailing_summary
+     */
+    omit?: category_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which category_retailing_summary to fetch.
+     */
+    where: category_retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * category_retailing_summary findFirst
+   */
+  export type category_retailing_summaryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the category_retailing_summary
+     */
+    select?: category_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the category_retailing_summary
+     */
+    omit?: category_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which category_retailing_summary to fetch.
+     */
+    where?: category_retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of category_retailing_summaries to fetch.
+     */
+    orderBy?: category_retailing_summaryOrderByWithRelationInput | category_retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for category_retailing_summaries.
+     */
+    cursor?: category_retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` category_retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` category_retailing_summaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of category_retailing_summaries.
+     */
+    distinct?: Category_retailing_summaryScalarFieldEnum | Category_retailing_summaryScalarFieldEnum[]
+  }
+
+  /**
+   * category_retailing_summary findFirstOrThrow
+   */
+  export type category_retailing_summaryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the category_retailing_summary
+     */
+    select?: category_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the category_retailing_summary
+     */
+    omit?: category_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which category_retailing_summary to fetch.
+     */
+    where?: category_retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of category_retailing_summaries to fetch.
+     */
+    orderBy?: category_retailing_summaryOrderByWithRelationInput | category_retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for category_retailing_summaries.
+     */
+    cursor?: category_retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` category_retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` category_retailing_summaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of category_retailing_summaries.
+     */
+    distinct?: Category_retailing_summaryScalarFieldEnum | Category_retailing_summaryScalarFieldEnum[]
+  }
+
+  /**
+   * category_retailing_summary findMany
+   */
+  export type category_retailing_summaryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the category_retailing_summary
+     */
+    select?: category_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the category_retailing_summary
+     */
+    omit?: category_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which category_retailing_summaries to fetch.
+     */
+    where?: category_retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of category_retailing_summaries to fetch.
+     */
+    orderBy?: category_retailing_summaryOrderByWithRelationInput | category_retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing category_retailing_summaries.
+     */
+    cursor?: category_retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` category_retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` category_retailing_summaries.
+     */
+    skip?: number
+    distinct?: Category_retailing_summaryScalarFieldEnum | Category_retailing_summaryScalarFieldEnum[]
+  }
+
+  /**
+   * category_retailing_summary create
+   */
+  export type category_retailing_summaryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the category_retailing_summary
+     */
+    select?: category_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the category_retailing_summary
+     */
+    omit?: category_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * The data needed to create a category_retailing_summary.
+     */
+    data: XOR<category_retailing_summaryCreateInput, category_retailing_summaryUncheckedCreateInput>
+  }
+
+  /**
+   * category_retailing_summary createMany
+   */
+  export type category_retailing_summaryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many category_retailing_summaries.
+     */
+    data: category_retailing_summaryCreateManyInput | category_retailing_summaryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * category_retailing_summary update
+   */
+  export type category_retailing_summaryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the category_retailing_summary
+     */
+    select?: category_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the category_retailing_summary
+     */
+    omit?: category_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * The data needed to update a category_retailing_summary.
+     */
+    data: XOR<category_retailing_summaryUpdateInput, category_retailing_summaryUncheckedUpdateInput>
+    /**
+     * Choose, which category_retailing_summary to update.
+     */
+    where: category_retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * category_retailing_summary updateMany
+   */
+  export type category_retailing_summaryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update category_retailing_summaries.
+     */
+    data: XOR<category_retailing_summaryUpdateManyMutationInput, category_retailing_summaryUncheckedUpdateManyInput>
+    /**
+     * Filter which category_retailing_summaries to update
+     */
+    where?: category_retailing_summaryWhereInput
+    /**
+     * Limit how many category_retailing_summaries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * category_retailing_summary upsert
+   */
+  export type category_retailing_summaryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the category_retailing_summary
+     */
+    select?: category_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the category_retailing_summary
+     */
+    omit?: category_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * The filter to search for the category_retailing_summary to update in case it exists.
+     */
+    where: category_retailing_summaryWhereUniqueInput
+    /**
+     * In case the category_retailing_summary found by the `where` argument doesn't exist, create a new category_retailing_summary with this data.
+     */
+    create: XOR<category_retailing_summaryCreateInput, category_retailing_summaryUncheckedCreateInput>
+    /**
+     * In case the category_retailing_summary was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<category_retailing_summaryUpdateInput, category_retailing_summaryUncheckedUpdateInput>
+  }
+
+  /**
+   * category_retailing_summary delete
+   */
+  export type category_retailing_summaryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the category_retailing_summary
+     */
+    select?: category_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the category_retailing_summary
+     */
+    omit?: category_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter which category_retailing_summary to delete.
+     */
+    where: category_retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * category_retailing_summary deleteMany
+   */
+  export type category_retailing_summaryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which category_retailing_summaries to delete
+     */
+    where?: category_retailing_summaryWhereInput
+    /**
+     * Limit how many category_retailing_summaries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * category_retailing_summary without action
+   */
+  export type category_retailing_summaryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the category_retailing_summary
+     */
+    select?: category_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the category_retailing_summary
+     */
+    omit?: category_retailing_summaryOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model base_channel_retailing_summary
+   */
+
+  export type AggregateBase_channel_retailing_summary = {
+    _count: Base_channel_retailing_summaryCountAggregateOutputType | null
+    _avg: Base_channel_retailing_summaryAvgAggregateOutputType | null
+    _sum: Base_channel_retailing_summarySumAggregateOutputType | null
+    _min: Base_channel_retailing_summaryMinAggregateOutputType | null
+    _max: Base_channel_retailing_summaryMaxAggregateOutputType | null
+  }
+
+  export type Base_channel_retailing_summaryAvgAggregateOutputType = {
+    month: number | null
+    fiscal_year: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Base_channel_retailing_summarySumAggregateOutputType = {
+    month: number | null
+    fiscal_year: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Base_channel_retailing_summaryMinAggregateOutputType = {
+    base_channel: string | null
+    month: number | null
+    fiscal_year: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Base_channel_retailing_summaryMaxAggregateOutputType = {
+    base_channel: string | null
+    month: number | null
+    fiscal_year: number | null
+    total_retailing: Decimal | null
+  }
+
+  export type Base_channel_retailing_summaryCountAggregateOutputType = {
+    base_channel: number
+    month: number
+    fiscal_year: number
+    total_retailing: number
+    _all: number
+  }
+
+
+  export type Base_channel_retailing_summaryAvgAggregateInputType = {
+    month?: true
+    fiscal_year?: true
+    total_retailing?: true
+  }
+
+  export type Base_channel_retailing_summarySumAggregateInputType = {
+    month?: true
+    fiscal_year?: true
+    total_retailing?: true
+  }
+
+  export type Base_channel_retailing_summaryMinAggregateInputType = {
+    base_channel?: true
+    month?: true
+    fiscal_year?: true
+    total_retailing?: true
+  }
+
+  export type Base_channel_retailing_summaryMaxAggregateInputType = {
+    base_channel?: true
+    month?: true
+    fiscal_year?: true
+    total_retailing?: true
+  }
+
+  export type Base_channel_retailing_summaryCountAggregateInputType = {
+    base_channel?: true
+    month?: true
+    fiscal_year?: true
+    total_retailing?: true
+    _all?: true
+  }
+
+  export type Base_channel_retailing_summaryAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which base_channel_retailing_summary to aggregate.
+     */
+    where?: base_channel_retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of base_channel_retailing_summaries to fetch.
+     */
+    orderBy?: base_channel_retailing_summaryOrderByWithRelationInput | base_channel_retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: base_channel_retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` base_channel_retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` base_channel_retailing_summaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned base_channel_retailing_summaries
+    **/
+    _count?: true | Base_channel_retailing_summaryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Base_channel_retailing_summaryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Base_channel_retailing_summarySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Base_channel_retailing_summaryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Base_channel_retailing_summaryMaxAggregateInputType
+  }
+
+  export type GetBase_channel_retailing_summaryAggregateType<T extends Base_channel_retailing_summaryAggregateArgs> = {
+        [P in keyof T & keyof AggregateBase_channel_retailing_summary]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateBase_channel_retailing_summary[P]>
+      : GetScalarType<T[P], AggregateBase_channel_retailing_summary[P]>
+  }
+
+
+
+
+  export type base_channel_retailing_summaryGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: base_channel_retailing_summaryWhereInput
+    orderBy?: base_channel_retailing_summaryOrderByWithAggregationInput | base_channel_retailing_summaryOrderByWithAggregationInput[]
+    by: Base_channel_retailing_summaryScalarFieldEnum[] | Base_channel_retailing_summaryScalarFieldEnum
+    having?: base_channel_retailing_summaryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Base_channel_retailing_summaryCountAggregateInputType | true
+    _avg?: Base_channel_retailing_summaryAvgAggregateInputType
+    _sum?: Base_channel_retailing_summarySumAggregateInputType
+    _min?: Base_channel_retailing_summaryMinAggregateInputType
+    _max?: Base_channel_retailing_summaryMaxAggregateInputType
+  }
+
+  export type Base_channel_retailing_summaryGroupByOutputType = {
+    base_channel: string
+    month: number
+    fiscal_year: number
+    total_retailing: Decimal
+    _count: Base_channel_retailing_summaryCountAggregateOutputType | null
+    _avg: Base_channel_retailing_summaryAvgAggregateOutputType | null
+    _sum: Base_channel_retailing_summarySumAggregateOutputType | null
+    _min: Base_channel_retailing_summaryMinAggregateOutputType | null
+    _max: Base_channel_retailing_summaryMaxAggregateOutputType | null
+  }
+
+  type GetBase_channel_retailing_summaryGroupByPayload<T extends base_channel_retailing_summaryGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Base_channel_retailing_summaryGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Base_channel_retailing_summaryGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Base_channel_retailing_summaryGroupByOutputType[P]>
+            : GetScalarType<T[P], Base_channel_retailing_summaryGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type base_channel_retailing_summarySelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    base_channel?: boolean
+    month?: boolean
+    fiscal_year?: boolean
+    total_retailing?: boolean
+  }, ExtArgs["result"]["base_channel_retailing_summary"]>
+
+
+
+  export type base_channel_retailing_summarySelectScalar = {
+    base_channel?: boolean
+    month?: boolean
+    fiscal_year?: boolean
+    total_retailing?: boolean
+  }
+
+  export type base_channel_retailing_summaryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"base_channel" | "month" | "fiscal_year" | "total_retailing", ExtArgs["result"]["base_channel_retailing_summary"]>
+
+  export type $base_channel_retailing_summaryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "base_channel_retailing_summary"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      base_channel: string
+      month: number
+      fiscal_year: number
+      total_retailing: Prisma.Decimal
+    }, ExtArgs["result"]["base_channel_retailing_summary"]>
+    composites: {}
+  }
+
+  type base_channel_retailing_summaryGetPayload<S extends boolean | null | undefined | base_channel_retailing_summaryDefaultArgs> = $Result.GetResult<Prisma.$base_channel_retailing_summaryPayload, S>
+
+  type base_channel_retailing_summaryCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<base_channel_retailing_summaryFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Base_channel_retailing_summaryCountAggregateInputType | true
+    }
+
+  export interface base_channel_retailing_summaryDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['base_channel_retailing_summary'], meta: { name: 'base_channel_retailing_summary' } }
+    /**
+     * Find zero or one Base_channel_retailing_summary that matches the filter.
+     * @param {base_channel_retailing_summaryFindUniqueArgs} args - Arguments to find a Base_channel_retailing_summary
+     * @example
+     * // Get one Base_channel_retailing_summary
+     * const base_channel_retailing_summary = await prisma.base_channel_retailing_summary.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends base_channel_retailing_summaryFindUniqueArgs>(args: SelectSubset<T, base_channel_retailing_summaryFindUniqueArgs<ExtArgs>>): Prisma__base_channel_retailing_summaryClient<$Result.GetResult<Prisma.$base_channel_retailing_summaryPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Base_channel_retailing_summary that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {base_channel_retailing_summaryFindUniqueOrThrowArgs} args - Arguments to find a Base_channel_retailing_summary
+     * @example
+     * // Get one Base_channel_retailing_summary
+     * const base_channel_retailing_summary = await prisma.base_channel_retailing_summary.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends base_channel_retailing_summaryFindUniqueOrThrowArgs>(args: SelectSubset<T, base_channel_retailing_summaryFindUniqueOrThrowArgs<ExtArgs>>): Prisma__base_channel_retailing_summaryClient<$Result.GetResult<Prisma.$base_channel_retailing_summaryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Base_channel_retailing_summary that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {base_channel_retailing_summaryFindFirstArgs} args - Arguments to find a Base_channel_retailing_summary
+     * @example
+     * // Get one Base_channel_retailing_summary
+     * const base_channel_retailing_summary = await prisma.base_channel_retailing_summary.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends base_channel_retailing_summaryFindFirstArgs>(args?: SelectSubset<T, base_channel_retailing_summaryFindFirstArgs<ExtArgs>>): Prisma__base_channel_retailing_summaryClient<$Result.GetResult<Prisma.$base_channel_retailing_summaryPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Base_channel_retailing_summary that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {base_channel_retailing_summaryFindFirstOrThrowArgs} args - Arguments to find a Base_channel_retailing_summary
+     * @example
+     * // Get one Base_channel_retailing_summary
+     * const base_channel_retailing_summary = await prisma.base_channel_retailing_summary.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends base_channel_retailing_summaryFindFirstOrThrowArgs>(args?: SelectSubset<T, base_channel_retailing_summaryFindFirstOrThrowArgs<ExtArgs>>): Prisma__base_channel_retailing_summaryClient<$Result.GetResult<Prisma.$base_channel_retailing_summaryPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Base_channel_retailing_summaries that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {base_channel_retailing_summaryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Base_channel_retailing_summaries
+     * const base_channel_retailing_summaries = await prisma.base_channel_retailing_summary.findMany()
+     * 
+     * // Get first 10 Base_channel_retailing_summaries
+     * const base_channel_retailing_summaries = await prisma.base_channel_retailing_summary.findMany({ take: 10 })
+     * 
+     * // Only select the `base_channel`
+     * const base_channel_retailing_summaryWithBase_channelOnly = await prisma.base_channel_retailing_summary.findMany({ select: { base_channel: true } })
+     * 
+     */
+    findMany<T extends base_channel_retailing_summaryFindManyArgs>(args?: SelectSubset<T, base_channel_retailing_summaryFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$base_channel_retailing_summaryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Base_channel_retailing_summary.
+     * @param {base_channel_retailing_summaryCreateArgs} args - Arguments to create a Base_channel_retailing_summary.
+     * @example
+     * // Create one Base_channel_retailing_summary
+     * const Base_channel_retailing_summary = await prisma.base_channel_retailing_summary.create({
+     *   data: {
+     *     // ... data to create a Base_channel_retailing_summary
+     *   }
+     * })
+     * 
+     */
+    create<T extends base_channel_retailing_summaryCreateArgs>(args: SelectSubset<T, base_channel_retailing_summaryCreateArgs<ExtArgs>>): Prisma__base_channel_retailing_summaryClient<$Result.GetResult<Prisma.$base_channel_retailing_summaryPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Base_channel_retailing_summaries.
+     * @param {base_channel_retailing_summaryCreateManyArgs} args - Arguments to create many Base_channel_retailing_summaries.
+     * @example
+     * // Create many Base_channel_retailing_summaries
+     * const base_channel_retailing_summary = await prisma.base_channel_retailing_summary.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends base_channel_retailing_summaryCreateManyArgs>(args?: SelectSubset<T, base_channel_retailing_summaryCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Base_channel_retailing_summary.
+     * @param {base_channel_retailing_summaryDeleteArgs} args - Arguments to delete one Base_channel_retailing_summary.
+     * @example
+     * // Delete one Base_channel_retailing_summary
+     * const Base_channel_retailing_summary = await prisma.base_channel_retailing_summary.delete({
+     *   where: {
+     *     // ... filter to delete one Base_channel_retailing_summary
+     *   }
+     * })
+     * 
+     */
+    delete<T extends base_channel_retailing_summaryDeleteArgs>(args: SelectSubset<T, base_channel_retailing_summaryDeleteArgs<ExtArgs>>): Prisma__base_channel_retailing_summaryClient<$Result.GetResult<Prisma.$base_channel_retailing_summaryPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Base_channel_retailing_summary.
+     * @param {base_channel_retailing_summaryUpdateArgs} args - Arguments to update one Base_channel_retailing_summary.
+     * @example
+     * // Update one Base_channel_retailing_summary
+     * const base_channel_retailing_summary = await prisma.base_channel_retailing_summary.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends base_channel_retailing_summaryUpdateArgs>(args: SelectSubset<T, base_channel_retailing_summaryUpdateArgs<ExtArgs>>): Prisma__base_channel_retailing_summaryClient<$Result.GetResult<Prisma.$base_channel_retailing_summaryPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Base_channel_retailing_summaries.
+     * @param {base_channel_retailing_summaryDeleteManyArgs} args - Arguments to filter Base_channel_retailing_summaries to delete.
+     * @example
+     * // Delete a few Base_channel_retailing_summaries
+     * const { count } = await prisma.base_channel_retailing_summary.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends base_channel_retailing_summaryDeleteManyArgs>(args?: SelectSubset<T, base_channel_retailing_summaryDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Base_channel_retailing_summaries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {base_channel_retailing_summaryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Base_channel_retailing_summaries
+     * const base_channel_retailing_summary = await prisma.base_channel_retailing_summary.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends base_channel_retailing_summaryUpdateManyArgs>(args: SelectSubset<T, base_channel_retailing_summaryUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Base_channel_retailing_summary.
+     * @param {base_channel_retailing_summaryUpsertArgs} args - Arguments to update or create a Base_channel_retailing_summary.
+     * @example
+     * // Update or create a Base_channel_retailing_summary
+     * const base_channel_retailing_summary = await prisma.base_channel_retailing_summary.upsert({
+     *   create: {
+     *     // ... data to create a Base_channel_retailing_summary
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Base_channel_retailing_summary we want to update
+     *   }
+     * })
+     */
+    upsert<T extends base_channel_retailing_summaryUpsertArgs>(args: SelectSubset<T, base_channel_retailing_summaryUpsertArgs<ExtArgs>>): Prisma__base_channel_retailing_summaryClient<$Result.GetResult<Prisma.$base_channel_retailing_summaryPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Base_channel_retailing_summaries.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {base_channel_retailing_summaryCountArgs} args - Arguments to filter Base_channel_retailing_summaries to count.
+     * @example
+     * // Count the number of Base_channel_retailing_summaries
+     * const count = await prisma.base_channel_retailing_summary.count({
+     *   where: {
+     *     // ... the filter for the Base_channel_retailing_summaries we want to count
+     *   }
+     * })
+    **/
+    count<T extends base_channel_retailing_summaryCountArgs>(
+      args?: Subset<T, base_channel_retailing_summaryCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Base_channel_retailing_summaryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Base_channel_retailing_summary.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Base_channel_retailing_summaryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Base_channel_retailing_summaryAggregateArgs>(args: Subset<T, Base_channel_retailing_summaryAggregateArgs>): Prisma.PrismaPromise<GetBase_channel_retailing_summaryAggregateType<T>>
+
+    /**
+     * Group by Base_channel_retailing_summary.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {base_channel_retailing_summaryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends base_channel_retailing_summaryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: base_channel_retailing_summaryGroupByArgs['orderBy'] }
+        : { orderBy?: base_channel_retailing_summaryGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, base_channel_retailing_summaryGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetBase_channel_retailing_summaryGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the base_channel_retailing_summary model
+   */
+  readonly fields: base_channel_retailing_summaryFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for base_channel_retailing_summary.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__base_channel_retailing_summaryClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the base_channel_retailing_summary model
+   */
+  interface base_channel_retailing_summaryFieldRefs {
+    readonly base_channel: FieldRef<"base_channel_retailing_summary", 'String'>
+    readonly month: FieldRef<"base_channel_retailing_summary", 'Int'>
+    readonly fiscal_year: FieldRef<"base_channel_retailing_summary", 'Int'>
+    readonly total_retailing: FieldRef<"base_channel_retailing_summary", 'Decimal'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * base_channel_retailing_summary findUnique
+   */
+  export type base_channel_retailing_summaryFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the base_channel_retailing_summary
+     */
+    select?: base_channel_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the base_channel_retailing_summary
+     */
+    omit?: base_channel_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which base_channel_retailing_summary to fetch.
+     */
+    where: base_channel_retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * base_channel_retailing_summary findUniqueOrThrow
+   */
+  export type base_channel_retailing_summaryFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the base_channel_retailing_summary
+     */
+    select?: base_channel_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the base_channel_retailing_summary
+     */
+    omit?: base_channel_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which base_channel_retailing_summary to fetch.
+     */
+    where: base_channel_retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * base_channel_retailing_summary findFirst
+   */
+  export type base_channel_retailing_summaryFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the base_channel_retailing_summary
+     */
+    select?: base_channel_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the base_channel_retailing_summary
+     */
+    omit?: base_channel_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which base_channel_retailing_summary to fetch.
+     */
+    where?: base_channel_retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of base_channel_retailing_summaries to fetch.
+     */
+    orderBy?: base_channel_retailing_summaryOrderByWithRelationInput | base_channel_retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for base_channel_retailing_summaries.
+     */
+    cursor?: base_channel_retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` base_channel_retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` base_channel_retailing_summaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of base_channel_retailing_summaries.
+     */
+    distinct?: Base_channel_retailing_summaryScalarFieldEnum | Base_channel_retailing_summaryScalarFieldEnum[]
+  }
+
+  /**
+   * base_channel_retailing_summary findFirstOrThrow
+   */
+  export type base_channel_retailing_summaryFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the base_channel_retailing_summary
+     */
+    select?: base_channel_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the base_channel_retailing_summary
+     */
+    omit?: base_channel_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which base_channel_retailing_summary to fetch.
+     */
+    where?: base_channel_retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of base_channel_retailing_summaries to fetch.
+     */
+    orderBy?: base_channel_retailing_summaryOrderByWithRelationInput | base_channel_retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for base_channel_retailing_summaries.
+     */
+    cursor?: base_channel_retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` base_channel_retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` base_channel_retailing_summaries.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of base_channel_retailing_summaries.
+     */
+    distinct?: Base_channel_retailing_summaryScalarFieldEnum | Base_channel_retailing_summaryScalarFieldEnum[]
+  }
+
+  /**
+   * base_channel_retailing_summary findMany
+   */
+  export type base_channel_retailing_summaryFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the base_channel_retailing_summary
+     */
+    select?: base_channel_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the base_channel_retailing_summary
+     */
+    omit?: base_channel_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter, which base_channel_retailing_summaries to fetch.
+     */
+    where?: base_channel_retailing_summaryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of base_channel_retailing_summaries to fetch.
+     */
+    orderBy?: base_channel_retailing_summaryOrderByWithRelationInput | base_channel_retailing_summaryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing base_channel_retailing_summaries.
+     */
+    cursor?: base_channel_retailing_summaryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` base_channel_retailing_summaries from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` base_channel_retailing_summaries.
+     */
+    skip?: number
+    distinct?: Base_channel_retailing_summaryScalarFieldEnum | Base_channel_retailing_summaryScalarFieldEnum[]
+  }
+
+  /**
+   * base_channel_retailing_summary create
+   */
+  export type base_channel_retailing_summaryCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the base_channel_retailing_summary
+     */
+    select?: base_channel_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the base_channel_retailing_summary
+     */
+    omit?: base_channel_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * The data needed to create a base_channel_retailing_summary.
+     */
+    data: XOR<base_channel_retailing_summaryCreateInput, base_channel_retailing_summaryUncheckedCreateInput>
+  }
+
+  /**
+   * base_channel_retailing_summary createMany
+   */
+  export type base_channel_retailing_summaryCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many base_channel_retailing_summaries.
+     */
+    data: base_channel_retailing_summaryCreateManyInput | base_channel_retailing_summaryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * base_channel_retailing_summary update
+   */
+  export type base_channel_retailing_summaryUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the base_channel_retailing_summary
+     */
+    select?: base_channel_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the base_channel_retailing_summary
+     */
+    omit?: base_channel_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * The data needed to update a base_channel_retailing_summary.
+     */
+    data: XOR<base_channel_retailing_summaryUpdateInput, base_channel_retailing_summaryUncheckedUpdateInput>
+    /**
+     * Choose, which base_channel_retailing_summary to update.
+     */
+    where: base_channel_retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * base_channel_retailing_summary updateMany
+   */
+  export type base_channel_retailing_summaryUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update base_channel_retailing_summaries.
+     */
+    data: XOR<base_channel_retailing_summaryUpdateManyMutationInput, base_channel_retailing_summaryUncheckedUpdateManyInput>
+    /**
+     * Filter which base_channel_retailing_summaries to update
+     */
+    where?: base_channel_retailing_summaryWhereInput
+    /**
+     * Limit how many base_channel_retailing_summaries to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * base_channel_retailing_summary upsert
+   */
+  export type base_channel_retailing_summaryUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the base_channel_retailing_summary
+     */
+    select?: base_channel_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the base_channel_retailing_summary
+     */
+    omit?: base_channel_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * The filter to search for the base_channel_retailing_summary to update in case it exists.
+     */
+    where: base_channel_retailing_summaryWhereUniqueInput
+    /**
+     * In case the base_channel_retailing_summary found by the `where` argument doesn't exist, create a new base_channel_retailing_summary with this data.
+     */
+    create: XOR<base_channel_retailing_summaryCreateInput, base_channel_retailing_summaryUncheckedCreateInput>
+    /**
+     * In case the base_channel_retailing_summary was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<base_channel_retailing_summaryUpdateInput, base_channel_retailing_summaryUncheckedUpdateInput>
+  }
+
+  /**
+   * base_channel_retailing_summary delete
+   */
+  export type base_channel_retailing_summaryDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the base_channel_retailing_summary
+     */
+    select?: base_channel_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the base_channel_retailing_summary
+     */
+    omit?: base_channel_retailing_summaryOmit<ExtArgs> | null
+    /**
+     * Filter which base_channel_retailing_summary to delete.
+     */
+    where: base_channel_retailing_summaryWhereUniqueInput
+  }
+
+  /**
+   * base_channel_retailing_summary deleteMany
+   */
+  export type base_channel_retailing_summaryDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which base_channel_retailing_summaries to delete
+     */
+    where?: base_channel_retailing_summaryWhereInput
+    /**
+     * Limit how many base_channel_retailing_summaries to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * base_channel_retailing_summary without action
+   */
+  export type base_channel_retailing_summaryDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the base_channel_retailing_summary
+     */
+    select?: base_channel_retailing_summarySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the base_channel_retailing_summary
+     */
+    omit?: base_channel_retailing_summaryOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -11729,6 +16668,53 @@ export namespace Prisma {
   export type PermissionSetScalarFieldEnum = (typeof PermissionSetScalarFieldEnum)[keyof typeof PermissionSetScalarFieldEnum]
 
 
+  export const Retailing_summaryScalarFieldEnum: {
+    year: 'year',
+    month: 'month',
+    total_retailing: 'total_retailing'
+  };
+
+  export type Retailing_summaryScalarFieldEnum = (typeof Retailing_summaryScalarFieldEnum)[keyof typeof Retailing_summaryScalarFieldEnum]
+
+
+  export const Branch_retailing_summaryScalarFieldEnum: {
+    branch: 'branch',
+    fiscal_year: 'fiscal_year',
+    total_retailing: 'total_retailing'
+  };
+
+  export type Branch_retailing_summaryScalarFieldEnum = (typeof Branch_retailing_summaryScalarFieldEnum)[keyof typeof Branch_retailing_summaryScalarFieldEnum]
+
+
+  export const Brand_retailing_summaryScalarFieldEnum: {
+    brand: 'brand',
+    fiscal_year: 'fiscal_year',
+    total_retailing: 'total_retailing'
+  };
+
+  export type Brand_retailing_summaryScalarFieldEnum = (typeof Brand_retailing_summaryScalarFieldEnum)[keyof typeof Brand_retailing_summaryScalarFieldEnum]
+
+
+  export const Category_retailing_summaryScalarFieldEnum: {
+    category: 'category',
+    month: 'month',
+    fiscal_year: 'fiscal_year',
+    total_retailing: 'total_retailing'
+  };
+
+  export type Category_retailing_summaryScalarFieldEnum = (typeof Category_retailing_summaryScalarFieldEnum)[keyof typeof Category_retailing_summaryScalarFieldEnum]
+
+
+  export const Base_channel_retailing_summaryScalarFieldEnum: {
+    base_channel: 'base_channel',
+    month: 'month',
+    fiscal_year: 'fiscal_year',
+    total_retailing: 'total_retailing'
+  };
+
+  export type Base_channel_retailing_summaryScalarFieldEnum = (typeof Base_channel_retailing_summaryScalarFieldEnum)[keyof typeof Base_channel_retailing_summaryScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -11889,6 +16875,34 @@ export namespace Prisma {
   };
 
   export type PermissionSetOrderByRelevanceFieldEnum = (typeof PermissionSetOrderByRelevanceFieldEnum)[keyof typeof PermissionSetOrderByRelevanceFieldEnum]
+
+
+  export const branch_retailing_summaryOrderByRelevanceFieldEnum: {
+    branch: 'branch'
+  };
+
+  export type branch_retailing_summaryOrderByRelevanceFieldEnum = (typeof branch_retailing_summaryOrderByRelevanceFieldEnum)[keyof typeof branch_retailing_summaryOrderByRelevanceFieldEnum]
+
+
+  export const brand_retailing_summaryOrderByRelevanceFieldEnum: {
+    brand: 'brand'
+  };
+
+  export type brand_retailing_summaryOrderByRelevanceFieldEnum = (typeof brand_retailing_summaryOrderByRelevanceFieldEnum)[keyof typeof brand_retailing_summaryOrderByRelevanceFieldEnum]
+
+
+  export const category_retailing_summaryOrderByRelevanceFieldEnum: {
+    category: 'category'
+  };
+
+  export type category_retailing_summaryOrderByRelevanceFieldEnum = (typeof category_retailing_summaryOrderByRelevanceFieldEnum)[keyof typeof category_retailing_summaryOrderByRelevanceFieldEnum]
+
+
+  export const base_channel_retailing_summaryOrderByRelevanceFieldEnum: {
+    base_channel: 'base_channel'
+  };
+
+  export type base_channel_retailing_summaryOrderByRelevanceFieldEnum = (typeof base_channel_retailing_summaryOrderByRelevanceFieldEnum)[keyof typeof base_channel_retailing_summaryOrderByRelevanceFieldEnum]
 
 
   /**
@@ -12784,6 +17798,245 @@ export namespace Prisma {
     userId?: IntWithAggregatesFilter<"PermissionSet"> | number
     page?: StringWithAggregatesFilter<"PermissionSet"> | string
     permissions?: JsonWithAggregatesFilter<"PermissionSet">
+  }
+
+  export type retailing_summaryWhereInput = {
+    AND?: retailing_summaryWhereInput | retailing_summaryWhereInput[]
+    OR?: retailing_summaryWhereInput[]
+    NOT?: retailing_summaryWhereInput | retailing_summaryWhereInput[]
+    year?: IntFilter<"retailing_summary"> | number
+    month?: IntFilter<"retailing_summary"> | number
+    total_retailing?: DecimalFilter<"retailing_summary"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type retailing_summaryOrderByWithRelationInput = {
+    year?: SortOrder
+    month?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type retailing_summaryWhereUniqueInput = Prisma.AtLeast<{
+    year_month?: retailing_summaryYearMonthCompoundUniqueInput
+    AND?: retailing_summaryWhereInput | retailing_summaryWhereInput[]
+    OR?: retailing_summaryWhereInput[]
+    NOT?: retailing_summaryWhereInput | retailing_summaryWhereInput[]
+    year?: IntFilter<"retailing_summary"> | number
+    month?: IntFilter<"retailing_summary"> | number
+    total_retailing?: DecimalFilter<"retailing_summary"> | Decimal | DecimalJsLike | number | string
+  }, "year_month">
+
+  export type retailing_summaryOrderByWithAggregationInput = {
+    year?: SortOrder
+    month?: SortOrder
+    total_retailing?: SortOrder
+    _count?: retailing_summaryCountOrderByAggregateInput
+    _avg?: retailing_summaryAvgOrderByAggregateInput
+    _max?: retailing_summaryMaxOrderByAggregateInput
+    _min?: retailing_summaryMinOrderByAggregateInput
+    _sum?: retailing_summarySumOrderByAggregateInput
+  }
+
+  export type retailing_summaryScalarWhereWithAggregatesInput = {
+    AND?: retailing_summaryScalarWhereWithAggregatesInput | retailing_summaryScalarWhereWithAggregatesInput[]
+    OR?: retailing_summaryScalarWhereWithAggregatesInput[]
+    NOT?: retailing_summaryScalarWhereWithAggregatesInput | retailing_summaryScalarWhereWithAggregatesInput[]
+    year?: IntWithAggregatesFilter<"retailing_summary"> | number
+    month?: IntWithAggregatesFilter<"retailing_summary"> | number
+    total_retailing?: DecimalWithAggregatesFilter<"retailing_summary"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type branch_retailing_summaryWhereInput = {
+    AND?: branch_retailing_summaryWhereInput | branch_retailing_summaryWhereInput[]
+    OR?: branch_retailing_summaryWhereInput[]
+    NOT?: branch_retailing_summaryWhereInput | branch_retailing_summaryWhereInput[]
+    branch?: StringFilter<"branch_retailing_summary"> | string
+    fiscal_year?: IntFilter<"branch_retailing_summary"> | number
+    total_retailing?: DecimalFilter<"branch_retailing_summary"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type branch_retailing_summaryOrderByWithRelationInput = {
+    branch?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+    _relevance?: branch_retailing_summaryOrderByRelevanceInput
+  }
+
+  export type branch_retailing_summaryWhereUniqueInput = Prisma.AtLeast<{
+    branch_fiscal_year?: branch_retailing_summaryBranchFiscal_yearCompoundUniqueInput
+    AND?: branch_retailing_summaryWhereInput | branch_retailing_summaryWhereInput[]
+    OR?: branch_retailing_summaryWhereInput[]
+    NOT?: branch_retailing_summaryWhereInput | branch_retailing_summaryWhereInput[]
+    branch?: StringFilter<"branch_retailing_summary"> | string
+    fiscal_year?: IntFilter<"branch_retailing_summary"> | number
+    total_retailing?: DecimalFilter<"branch_retailing_summary"> | Decimal | DecimalJsLike | number | string
+  }, "branch_fiscal_year">
+
+  export type branch_retailing_summaryOrderByWithAggregationInput = {
+    branch?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+    _count?: branch_retailing_summaryCountOrderByAggregateInput
+    _avg?: branch_retailing_summaryAvgOrderByAggregateInput
+    _max?: branch_retailing_summaryMaxOrderByAggregateInput
+    _min?: branch_retailing_summaryMinOrderByAggregateInput
+    _sum?: branch_retailing_summarySumOrderByAggregateInput
+  }
+
+  export type branch_retailing_summaryScalarWhereWithAggregatesInput = {
+    AND?: branch_retailing_summaryScalarWhereWithAggregatesInput | branch_retailing_summaryScalarWhereWithAggregatesInput[]
+    OR?: branch_retailing_summaryScalarWhereWithAggregatesInput[]
+    NOT?: branch_retailing_summaryScalarWhereWithAggregatesInput | branch_retailing_summaryScalarWhereWithAggregatesInput[]
+    branch?: StringWithAggregatesFilter<"branch_retailing_summary"> | string
+    fiscal_year?: IntWithAggregatesFilter<"branch_retailing_summary"> | number
+    total_retailing?: DecimalWithAggregatesFilter<"branch_retailing_summary"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type brand_retailing_summaryWhereInput = {
+    AND?: brand_retailing_summaryWhereInput | brand_retailing_summaryWhereInput[]
+    OR?: brand_retailing_summaryWhereInput[]
+    NOT?: brand_retailing_summaryWhereInput | brand_retailing_summaryWhereInput[]
+    brand?: StringFilter<"brand_retailing_summary"> | string
+    fiscal_year?: IntFilter<"brand_retailing_summary"> | number
+    total_retailing?: DecimalFilter<"brand_retailing_summary"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type brand_retailing_summaryOrderByWithRelationInput = {
+    brand?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+    _relevance?: brand_retailing_summaryOrderByRelevanceInput
+  }
+
+  export type brand_retailing_summaryWhereUniqueInput = Prisma.AtLeast<{
+    brand_fiscal_year?: brand_retailing_summaryBrandFiscal_yearCompoundUniqueInput
+    AND?: brand_retailing_summaryWhereInput | brand_retailing_summaryWhereInput[]
+    OR?: brand_retailing_summaryWhereInput[]
+    NOT?: brand_retailing_summaryWhereInput | brand_retailing_summaryWhereInput[]
+    brand?: StringFilter<"brand_retailing_summary"> | string
+    fiscal_year?: IntFilter<"brand_retailing_summary"> | number
+    total_retailing?: DecimalFilter<"brand_retailing_summary"> | Decimal | DecimalJsLike | number | string
+  }, "brand_fiscal_year">
+
+  export type brand_retailing_summaryOrderByWithAggregationInput = {
+    brand?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+    _count?: brand_retailing_summaryCountOrderByAggregateInput
+    _avg?: brand_retailing_summaryAvgOrderByAggregateInput
+    _max?: brand_retailing_summaryMaxOrderByAggregateInput
+    _min?: brand_retailing_summaryMinOrderByAggregateInput
+    _sum?: brand_retailing_summarySumOrderByAggregateInput
+  }
+
+  export type brand_retailing_summaryScalarWhereWithAggregatesInput = {
+    AND?: brand_retailing_summaryScalarWhereWithAggregatesInput | brand_retailing_summaryScalarWhereWithAggregatesInput[]
+    OR?: brand_retailing_summaryScalarWhereWithAggregatesInput[]
+    NOT?: brand_retailing_summaryScalarWhereWithAggregatesInput | brand_retailing_summaryScalarWhereWithAggregatesInput[]
+    brand?: StringWithAggregatesFilter<"brand_retailing_summary"> | string
+    fiscal_year?: IntWithAggregatesFilter<"brand_retailing_summary"> | number
+    total_retailing?: DecimalWithAggregatesFilter<"brand_retailing_summary"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type category_retailing_summaryWhereInput = {
+    AND?: category_retailing_summaryWhereInput | category_retailing_summaryWhereInput[]
+    OR?: category_retailing_summaryWhereInput[]
+    NOT?: category_retailing_summaryWhereInput | category_retailing_summaryWhereInput[]
+    category?: StringFilter<"category_retailing_summary"> | string
+    month?: IntFilter<"category_retailing_summary"> | number
+    fiscal_year?: IntFilter<"category_retailing_summary"> | number
+    total_retailing?: DecimalFilter<"category_retailing_summary"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type category_retailing_summaryOrderByWithRelationInput = {
+    category?: SortOrder
+    month?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+    _relevance?: category_retailing_summaryOrderByRelevanceInput
+  }
+
+  export type category_retailing_summaryWhereUniqueInput = Prisma.AtLeast<{
+    category_month_fiscal_year?: category_retailing_summaryCategoryMonthFiscal_yearCompoundUniqueInput
+    AND?: category_retailing_summaryWhereInput | category_retailing_summaryWhereInput[]
+    OR?: category_retailing_summaryWhereInput[]
+    NOT?: category_retailing_summaryWhereInput | category_retailing_summaryWhereInput[]
+    category?: StringFilter<"category_retailing_summary"> | string
+    month?: IntFilter<"category_retailing_summary"> | number
+    fiscal_year?: IntFilter<"category_retailing_summary"> | number
+    total_retailing?: DecimalFilter<"category_retailing_summary"> | Decimal | DecimalJsLike | number | string
+  }, "category_month_fiscal_year">
+
+  export type category_retailing_summaryOrderByWithAggregationInput = {
+    category?: SortOrder
+    month?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+    _count?: category_retailing_summaryCountOrderByAggregateInput
+    _avg?: category_retailing_summaryAvgOrderByAggregateInput
+    _max?: category_retailing_summaryMaxOrderByAggregateInput
+    _min?: category_retailing_summaryMinOrderByAggregateInput
+    _sum?: category_retailing_summarySumOrderByAggregateInput
+  }
+
+  export type category_retailing_summaryScalarWhereWithAggregatesInput = {
+    AND?: category_retailing_summaryScalarWhereWithAggregatesInput | category_retailing_summaryScalarWhereWithAggregatesInput[]
+    OR?: category_retailing_summaryScalarWhereWithAggregatesInput[]
+    NOT?: category_retailing_summaryScalarWhereWithAggregatesInput | category_retailing_summaryScalarWhereWithAggregatesInput[]
+    category?: StringWithAggregatesFilter<"category_retailing_summary"> | string
+    month?: IntWithAggregatesFilter<"category_retailing_summary"> | number
+    fiscal_year?: IntWithAggregatesFilter<"category_retailing_summary"> | number
+    total_retailing?: DecimalWithAggregatesFilter<"category_retailing_summary"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type base_channel_retailing_summaryWhereInput = {
+    AND?: base_channel_retailing_summaryWhereInput | base_channel_retailing_summaryWhereInput[]
+    OR?: base_channel_retailing_summaryWhereInput[]
+    NOT?: base_channel_retailing_summaryWhereInput | base_channel_retailing_summaryWhereInput[]
+    base_channel?: StringFilter<"base_channel_retailing_summary"> | string
+    month?: IntFilter<"base_channel_retailing_summary"> | number
+    fiscal_year?: IntFilter<"base_channel_retailing_summary"> | number
+    total_retailing?: DecimalFilter<"base_channel_retailing_summary"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type base_channel_retailing_summaryOrderByWithRelationInput = {
+    base_channel?: SortOrder
+    month?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+    _relevance?: base_channel_retailing_summaryOrderByRelevanceInput
+  }
+
+  export type base_channel_retailing_summaryWhereUniqueInput = Prisma.AtLeast<{
+    base_channel_month_fiscal_year?: base_channel_retailing_summaryBase_channelMonthFiscal_yearCompoundUniqueInput
+    AND?: base_channel_retailing_summaryWhereInput | base_channel_retailing_summaryWhereInput[]
+    OR?: base_channel_retailing_summaryWhereInput[]
+    NOT?: base_channel_retailing_summaryWhereInput | base_channel_retailing_summaryWhereInput[]
+    base_channel?: StringFilter<"base_channel_retailing_summary"> | string
+    month?: IntFilter<"base_channel_retailing_summary"> | number
+    fiscal_year?: IntFilter<"base_channel_retailing_summary"> | number
+    total_retailing?: DecimalFilter<"base_channel_retailing_summary"> | Decimal | DecimalJsLike | number | string
+  }, "base_channel_month_fiscal_year">
+
+  export type base_channel_retailing_summaryOrderByWithAggregationInput = {
+    base_channel?: SortOrder
+    month?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+    _count?: base_channel_retailing_summaryCountOrderByAggregateInput
+    _avg?: base_channel_retailing_summaryAvgOrderByAggregateInput
+    _max?: base_channel_retailing_summaryMaxOrderByAggregateInput
+    _min?: base_channel_retailing_summaryMinOrderByAggregateInput
+    _sum?: base_channel_retailing_summarySumOrderByAggregateInput
+  }
+
+  export type base_channel_retailing_summaryScalarWhereWithAggregatesInput = {
+    AND?: base_channel_retailing_summaryScalarWhereWithAggregatesInput | base_channel_retailing_summaryScalarWhereWithAggregatesInput[]
+    OR?: base_channel_retailing_summaryScalarWhereWithAggregatesInput[]
+    NOT?: base_channel_retailing_summaryScalarWhereWithAggregatesInput | base_channel_retailing_summaryScalarWhereWithAggregatesInput[]
+    base_channel?: StringWithAggregatesFilter<"base_channel_retailing_summary"> | string
+    month?: IntWithAggregatesFilter<"base_channel_retailing_summary"> | number
+    fiscal_year?: IntWithAggregatesFilter<"base_channel_retailing_summary"> | number
+    total_retailing?: DecimalWithAggregatesFilter<"base_channel_retailing_summary"> | Decimal | DecimalJsLike | number | string
   }
 
   export type psr_data_tempCreateInput = {
@@ -13704,6 +18957,230 @@ export namespace Prisma {
     permissions?: JsonNullValueInput | InputJsonValue
   }
 
+  export type retailing_summaryCreateInput = {
+    year: number
+    month: number
+    total_retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type retailing_summaryUncheckedCreateInput = {
+    year: number
+    month: number
+    total_retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type retailing_summaryUpdateInput = {
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type retailing_summaryUncheckedUpdateInput = {
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type retailing_summaryCreateManyInput = {
+    year: number
+    month: number
+    total_retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type retailing_summaryUpdateManyMutationInput = {
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type retailing_summaryUncheckedUpdateManyInput = {
+    year?: IntFieldUpdateOperationsInput | number
+    month?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type branch_retailing_summaryCreateInput = {
+    branch: string
+    fiscal_year: number
+    total_retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type branch_retailing_summaryUncheckedCreateInput = {
+    branch: string
+    fiscal_year: number
+    total_retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type branch_retailing_summaryUpdateInput = {
+    branch?: StringFieldUpdateOperationsInput | string
+    fiscal_year?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type branch_retailing_summaryUncheckedUpdateInput = {
+    branch?: StringFieldUpdateOperationsInput | string
+    fiscal_year?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type branch_retailing_summaryCreateManyInput = {
+    branch: string
+    fiscal_year: number
+    total_retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type branch_retailing_summaryUpdateManyMutationInput = {
+    branch?: StringFieldUpdateOperationsInput | string
+    fiscal_year?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type branch_retailing_summaryUncheckedUpdateManyInput = {
+    branch?: StringFieldUpdateOperationsInput | string
+    fiscal_year?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type brand_retailing_summaryCreateInput = {
+    brand: string
+    fiscal_year: number
+    total_retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type brand_retailing_summaryUncheckedCreateInput = {
+    brand: string
+    fiscal_year: number
+    total_retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type brand_retailing_summaryUpdateInput = {
+    brand?: StringFieldUpdateOperationsInput | string
+    fiscal_year?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type brand_retailing_summaryUncheckedUpdateInput = {
+    brand?: StringFieldUpdateOperationsInput | string
+    fiscal_year?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type brand_retailing_summaryCreateManyInput = {
+    brand: string
+    fiscal_year: number
+    total_retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type brand_retailing_summaryUpdateManyMutationInput = {
+    brand?: StringFieldUpdateOperationsInput | string
+    fiscal_year?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type brand_retailing_summaryUncheckedUpdateManyInput = {
+    brand?: StringFieldUpdateOperationsInput | string
+    fiscal_year?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type category_retailing_summaryCreateInput = {
+    category: string
+    month: number
+    fiscal_year: number
+    total_retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type category_retailing_summaryUncheckedCreateInput = {
+    category: string
+    month: number
+    fiscal_year: number
+    total_retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type category_retailing_summaryUpdateInput = {
+    category?: StringFieldUpdateOperationsInput | string
+    month?: IntFieldUpdateOperationsInput | number
+    fiscal_year?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type category_retailing_summaryUncheckedUpdateInput = {
+    category?: StringFieldUpdateOperationsInput | string
+    month?: IntFieldUpdateOperationsInput | number
+    fiscal_year?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type category_retailing_summaryCreateManyInput = {
+    category: string
+    month: number
+    fiscal_year: number
+    total_retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type category_retailing_summaryUpdateManyMutationInput = {
+    category?: StringFieldUpdateOperationsInput | string
+    month?: IntFieldUpdateOperationsInput | number
+    fiscal_year?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type category_retailing_summaryUncheckedUpdateManyInput = {
+    category?: StringFieldUpdateOperationsInput | string
+    month?: IntFieldUpdateOperationsInput | number
+    fiscal_year?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type base_channel_retailing_summaryCreateInput = {
+    base_channel: string
+    month: number
+    fiscal_year: number
+    total_retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type base_channel_retailing_summaryUncheckedCreateInput = {
+    base_channel: string
+    month: number
+    fiscal_year: number
+    total_retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type base_channel_retailing_summaryUpdateInput = {
+    base_channel?: StringFieldUpdateOperationsInput | string
+    month?: IntFieldUpdateOperationsInput | number
+    fiscal_year?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type base_channel_retailing_summaryUncheckedUpdateInput = {
+    base_channel?: StringFieldUpdateOperationsInput | string
+    month?: IntFieldUpdateOperationsInput | number
+    fiscal_year?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type base_channel_retailing_summaryCreateManyInput = {
+    base_channel: string
+    month: number
+    fiscal_year: number
+    total_retailing: Decimal | DecimalJsLike | number | string
+  }
+
+  export type base_channel_retailing_summaryUpdateManyMutationInput = {
+    base_channel?: StringFieldUpdateOperationsInput | string
+    month?: IntFieldUpdateOperationsInput | number
+    fiscal_year?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type base_channel_retailing_summaryUncheckedUpdateManyInput = {
+    base_channel?: StringFieldUpdateOperationsInput | string
+    month?: IntFieldUpdateOperationsInput | number
+    fiscal_year?: IntFieldUpdateOperationsInput | number
+    total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
   export type IntFilter<$PrismaModel = never> = {
     equals?: number | IntFieldRefInput<$PrismaModel>
     in?: number[]
@@ -14545,6 +20022,209 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedJsonFilter<$PrismaModel>
     _max?: NestedJsonFilter<$PrismaModel>
+  }
+
+  export type retailing_summaryYearMonthCompoundUniqueInput = {
+    year: number
+    month: number
+  }
+
+  export type retailing_summaryCountOrderByAggregateInput = {
+    year?: SortOrder
+    month?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type retailing_summaryAvgOrderByAggregateInput = {
+    year?: SortOrder
+    month?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type retailing_summaryMaxOrderByAggregateInput = {
+    year?: SortOrder
+    month?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type retailing_summaryMinOrderByAggregateInput = {
+    year?: SortOrder
+    month?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type retailing_summarySumOrderByAggregateInput = {
+    year?: SortOrder
+    month?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type branch_retailing_summaryOrderByRelevanceInput = {
+    fields: branch_retailing_summaryOrderByRelevanceFieldEnum | branch_retailing_summaryOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type branch_retailing_summaryBranchFiscal_yearCompoundUniqueInput = {
+    branch: string
+    fiscal_year: number
+  }
+
+  export type branch_retailing_summaryCountOrderByAggregateInput = {
+    branch?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type branch_retailing_summaryAvgOrderByAggregateInput = {
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type branch_retailing_summaryMaxOrderByAggregateInput = {
+    branch?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type branch_retailing_summaryMinOrderByAggregateInput = {
+    branch?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type branch_retailing_summarySumOrderByAggregateInput = {
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type brand_retailing_summaryOrderByRelevanceInput = {
+    fields: brand_retailing_summaryOrderByRelevanceFieldEnum | brand_retailing_summaryOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type brand_retailing_summaryBrandFiscal_yearCompoundUniqueInput = {
+    brand: string
+    fiscal_year: number
+  }
+
+  export type brand_retailing_summaryCountOrderByAggregateInput = {
+    brand?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type brand_retailing_summaryAvgOrderByAggregateInput = {
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type brand_retailing_summaryMaxOrderByAggregateInput = {
+    brand?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type brand_retailing_summaryMinOrderByAggregateInput = {
+    brand?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type brand_retailing_summarySumOrderByAggregateInput = {
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type category_retailing_summaryOrderByRelevanceInput = {
+    fields: category_retailing_summaryOrderByRelevanceFieldEnum | category_retailing_summaryOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type category_retailing_summaryCategoryMonthFiscal_yearCompoundUniqueInput = {
+    category: string
+    month: number
+    fiscal_year: number
+  }
+
+  export type category_retailing_summaryCountOrderByAggregateInput = {
+    category?: SortOrder
+    month?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type category_retailing_summaryAvgOrderByAggregateInput = {
+    month?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type category_retailing_summaryMaxOrderByAggregateInput = {
+    category?: SortOrder
+    month?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type category_retailing_summaryMinOrderByAggregateInput = {
+    category?: SortOrder
+    month?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type category_retailing_summarySumOrderByAggregateInput = {
+    month?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type base_channel_retailing_summaryOrderByRelevanceInput = {
+    fields: base_channel_retailing_summaryOrderByRelevanceFieldEnum | base_channel_retailing_summaryOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type base_channel_retailing_summaryBase_channelMonthFiscal_yearCompoundUniqueInput = {
+    base_channel: string
+    month: number
+    fiscal_year: number
+  }
+
+  export type base_channel_retailing_summaryCountOrderByAggregateInput = {
+    base_channel?: SortOrder
+    month?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type base_channel_retailing_summaryAvgOrderByAggregateInput = {
+    month?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type base_channel_retailing_summaryMaxOrderByAggregateInput = {
+    base_channel?: SortOrder
+    month?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type base_channel_retailing_summaryMinOrderByAggregateInput = {
+    base_channel?: SortOrder
+    month?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
+  }
+
+  export type base_channel_retailing_summarySumOrderByAggregateInput = {
+    month?: SortOrder
+    fiscal_year?: SortOrder
+    total_retailing?: SortOrder
   }
 
   export type StringFieldUpdateOperationsInput = {
