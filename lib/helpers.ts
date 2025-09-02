@@ -1625,9 +1625,7 @@ export async function getTopStoresQuery({
   brand,
   startDate,
   endDate,
-  page,
-  pageSize,
-  countOnly = false,
+  countOnly = false, // pagination removed
 }: TopStoresQueryParams): Promise<{ query: string; values: any[] }> {
   const tables = resolveTables(source);
 
@@ -1707,7 +1705,6 @@ export async function getTopStoresQuery({
       (table) => `
         SELECT
           p.customer_code,
-          MAX(p.customer_name) AS store_name,
           p.branch AS branch_name,
           SUM(p.retailing) AS total_retailing
         FROM ${table} p
@@ -1722,12 +1719,11 @@ export async function getTopStoresQuery({
     WITH ranked_stores AS (
       SELECT
         customer_code,
-        store_name,
         branch_name,
         SUM(total_retailing) AS total_retailing,
         ROUND(SUM(total_retailing) / ?, 2) AS avg_retailing
       FROM (${subQueries}) combined
-      GROUP BY customer_code, store_name, branch_name
+      GROUP BY customer_code, branch_name
       ORDER BY avg_retailing DESC
       LIMIT 100
     )
@@ -1754,21 +1750,17 @@ export async function getTopStoresQuery({
     };
   }
 
-  const paginatedQuery = `
-    ${topStoresCTE}
-    SELECT
-      customer_code AS store_code,
-      store_name,
-      branch_name,
-      avg_retailing AS average_retailing
-    FROM ranked_stores
-    ORDER BY avg_retailing DESC
-    LIMIT ?
-    OFFSET ?
-  `;
-
+  // --- Final: Always return top 100 (no pagination) ---
   return {
-    query: paginatedQuery,
-    values: [...allValues, pageSize, page * pageSize],
+    query: `
+      ${topStoresCTE}
+      SELECT
+        customer_code AS store_code,
+        branch_name,
+        avg_retailing AS average_retailing
+      FROM ranked_stores
+      ORDER BY avg_retailing DESC
+    `,
+    values: allValues,
   };
 }

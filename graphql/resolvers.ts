@@ -178,6 +178,7 @@ export const resolvers = {
       }
     ) => {
       try {
+        // 1. Get main data
         const { query, values } = await getTopStoresQuery({
           source,
           months,
@@ -194,8 +195,28 @@ export const resolvers = {
           pageSize,
         });
 
-        const stores = await prisma.$queryRawUnsafe(query, ...values);
+        const stores: any[] = await prisma.$queryRawUnsafe(query, ...values);
 
+        // 2. Enrich with store names
+        const storeCodes = stores.map((s) => s.store_code);
+        let nameMap: Record<string, string> = {};
+
+        if (storeCodes.length > 0) {
+          const mappings = await prisma.store_mapping.findMany({
+            where: { Old_Store_Code: { in: storeCodes } },
+            select: { Old_Store_Code: true, customer_name: true },
+          });
+          nameMap = Object.fromEntries(
+            mappings.map((m) => [m.Old_Store_Code, m.customer_name])
+          );
+        }
+
+        const enrichedStores = stores.map((s) => ({
+          ...s,
+          store_name: nameMap[s.store_code] ?? null,
+        }));
+
+        // 3. Count query
         const { query: countQuery, values: countValues } =
           await getTopStoresQuery({
             source,
@@ -214,7 +235,7 @@ export const resolvers = {
             countOnly: true,
           });
 
-        const countResult: any = await prisma.$queryRawUnsafe(
+        const countResult: any[] = await prisma.$queryRawUnsafe(
           countQuery,
           ...countValues
         );
@@ -222,7 +243,7 @@ export const resolvers = {
 
         return {
           totalCount,
-          stores,
+          stores: enrichedStores,
         };
       } catch (error) {
         console.error("Error fetching top stores:", error);

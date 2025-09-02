@@ -25,7 +25,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import filterValues from "@/constants/filterValues";
-import { format } from "date-fns";
+import { format, set } from "date-fns";
 import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
@@ -76,48 +76,6 @@ const GET_TOP_STORES = gql`
   }
 `;
 
-const GET_DOWNLOAD_TOP_STORES = gql`
-  query DownloadTopStores(
-    $source: String!
-    $months: Int!
-    $zm: String
-    $rsm: String
-    $asm: String
-    $category: String
-    $branch: String
-    $baseChannel: String
-    $brand: String
-    $startDate: String
-    $endDate: String
-  ) {
-    downloadTopStores(
-      source: $source
-      months: $months
-      zm: $zm
-      rsm: $rsm
-      asm: $asm
-      category: $category
-      branch: $branch
-      baseChannel: $baseChannel
-      brand: $brand
-      startDate: $startDate
-      endDate: $endDate
-    ) {
-      store_code
-      store_name
-      branch_name
-      average_retailing
-    }
-  }
-`;
-
-// ================= Reusable Styles =================
-const selectFilterTriggerStyles =
-  "rounded-xl cursor-pointer border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 py-2.5 px-4 text-indigo-700 dark:text-indigo-200 placeholder:text-indigo-400 dark:placeholder:text-indigo-500 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 transition-all";
-
-const selectFilterContentStyles =
-  "bg-white dark:bg-zinc-900 border border-indigo-200 dark:border-indigo-700 text-indigo-800 dark:text-indigo-200";
-
 // ================= Component =================
 const RankingPage = () => {
   const [dataSource, setDataSource] = useState<"combined" | "main" | "temp">(
@@ -126,6 +84,7 @@ const RankingPage = () => {
 
   const [topStores, setTopStores] = useState<any[]>([]);
   const [downloadData, setDownloadData] = useState<any[]>([]);
+  const [downloadLoading, setDownloadLoading] = useState(false);
   const [months, setMonths] = useState(3);
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
   const startDate = dateRange?.from;
@@ -164,95 +123,72 @@ const RankingPage = () => {
     fetchPolicy: "network-only",
   });
 
-  const [fetchDownloadData, { loading: downloadLoading }] = useLazyQuery(
-    GET_DOWNLOAD_TOP_STORES,
-    {
-      fetchPolicy: "network-only",
-      onCompleted: async (data) => {
-        const rows = data.downloadTopStores;
+  const handleExcelDownload = async () => {
+    try {
+      setDownloadLoading(true);
 
-        if (!rows || rows.length === 0) {
-          alert("No data available to download");
-          return;
+      const rows = data?.topStores?.stores || downloadData;
+      if (!rows || rows.length === 0) {
+        alert("No data available to download");
+        return;
+      }
+
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet("Top Stores");
+      worksheet.columns = [
+        { header: "Store Code", key: "store_code", width: 20 },
+        { header: "Store Name", key: "store_name", width: 30 },
+        { header: "Branch Name", key: "branch_name", width: 30 },
+        { header: "Average Retailing", key: "average_retailing", width: 20 },
+      ];
+      // Add rows
+      rows.forEach(
+        (row: {
+          store_code: string;
+          store_name: string;
+          branch_name: string;
+          average_retailing: number;
+        }) => {
+          worksheet.addRow(row);
         }
+      );
+      // Style header row
+      const headerRow = worksheet.getRow(1);
+      headerRow.eachCell((cell) => {
+        cell.fill = {
+          type: "pattern",
+          pattern: "solid",
+          fgColor: { argb: "FFFFCC00" }, // Yellow fill
+        };
+        cell.alignment = { vertical: "middle", horizontal: "center" };
+        cell.font = { bold: true };
+        cell.border = {
+          top: { style: "thin" },
+          left: { style: "thin" },
+          bottom: { style: "thin" },
+          right: { style: "thin" },
+        };
+      });
 
-        const workbook = new ExcelJS.Workbook();
-        const worksheet = workbook.addWorksheet("Top Stores");
-
-        worksheet.columns = [
-          { header: "Store Code", key: "store_code", width: 20 },
-          { header: "Store Name", key: "store_name", width: 30 },
-          { header: "Branch Name", key: "branch_name", width: 30 },
-          { header: "Average Retailing", key: "average_retailing", width: 20 },
-        ];
-
-        // Add rows
-        rows.forEach(
-          (row: {
-            store_code: string;
-            store_name: string;
-            branch_name: string;
-            average_retailing: number;
-          }) => {
-            worksheet.addRow(row);
-          }
-        );
-
-        // Style header row
-        const headerRow = worksheet.getRow(1);
-        headerRow.eachCell((cell) => {
-          cell.fill = {
-            type: "pattern",
-            pattern: "solid",
-            fgColor: { argb: "FFFFCC00" }, // Yellow fill
-          };
+      // Center align all data cells
+      worksheet.eachRow({ includeEmpty: false }, (row) => {
+        row.eachCell((cell) => {
           cell.alignment = { vertical: "middle", horizontal: "center" };
-          cell.font = { bold: true };
-          cell.border = {
-            top: { style: "thin" },
-            left: { style: "thin" },
-            bottom: { style: "thin" },
-            right: { style: "thin" },
-          };
         });
+      });
 
-        // Center align all data cells
-        worksheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
-          row.eachCell((cell) => {
-            cell.alignment = { vertical: "middle", horizontal: "center" };
-          });
-        });
-
-        const buffer = await workbook.xlsx.writeBuffer();
-        const blob = new Blob([buffer], {
-          type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        });
-        saveAs(blob, "top_stores.xlsx");
-      },
-
-      onError: (err) => {
-        console.error("Download error:", err);
-        alert("Error downloading data");
-      },
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], {
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      });
+      saveAs(blob, "top_stores.xlsx");
+    } catch (error: any) {
+      console.error("Error downloading Excel file:", error);
+      alert("Failed to download Excel file. Please try again.");
+      return;
+    } finally {
+      setDownloadLoading(false);
     }
-  );
-
-  const handleExcelDownload = () => {
-    fetchDownloadData({
-      variables: {
-        source: dataSource,
-        months,
-        zm,
-        rsm,
-        asm,
-        category,
-        branch,
-        brand,
-        baseChannel,
-        startDate,
-        endDate,
-      },
-    });
   };
 
   const handleNext = () => {
