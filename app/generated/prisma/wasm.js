@@ -223,6 +223,24 @@ exports.Prisma.Product_mappingScalarFieldEnum = {
   created_at: 'created_at'
 };
 
+exports.Prisma.Gp_dataScalarFieldEnum = {
+  gp_id: 'gp_id',
+  document_date: 'document_date',
+  retailer_code: 'retailer_code',
+  retailer_name: 'retailer_name',
+  p3m_gp: 'p3m_gp',
+  p1m_gp: 'p1m_gp'
+};
+
+exports.Prisma.Gp_data_tempScalarFieldEnum = {
+  gp_id: 'gp_id',
+  document_date: 'document_date',
+  retailer_code: 'retailer_code',
+  retailer_name: 'retailer_name',
+  p3m_gp: 'p3m_gp',
+  p1m_gp: 'p1m_gp'
+};
+
 exports.Prisma.Mapping_change_flagScalarFieldEnum = {
   id: 'id',
   changed_at: 'changed_at',
@@ -383,6 +401,16 @@ exports.Prisma.product_mappingOrderByRelevanceFieldEnum = {
   subbrandform: 'subbrandform'
 };
 
+exports.Prisma.gp_dataOrderByRelevanceFieldEnum = {
+  retailer_code: 'retailer_code',
+  retailer_name: 'retailer_name'
+};
+
+exports.Prisma.gp_data_tempOrderByRelevanceFieldEnum = {
+  retailer_code: 'retailer_code',
+  retailer_name: 'retailer_name'
+};
+
 exports.Prisma.UserOrderByRelevanceFieldEnum = {
   name: 'name',
   email: 'email',
@@ -432,6 +460,8 @@ exports.Prisma.ModelName = {
   channel_mapping: 'channel_mapping',
   store_mapping: 'store_mapping',
   product_mapping: 'product_mapping',
+  gp_data: 'gp_data',
+  gp_data_temp: 'gp_data_temp',
   mapping_change_flag: 'mapping_change_flag',
   User: 'User',
   PermissionSet: 'PermissionSet',

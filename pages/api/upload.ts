@@ -256,6 +256,82 @@ export default async function handler(
         console.log(
           `✅ PSR upload complete. Total rows inserted: ${totalInserted}`
         );
+      }
+
+      // GP Upload: use stream reader
+      else if (type === "gp") {
+        if (action === "overwrite") {
+          console.log("🧹 Clearing gp_data_temp before upload...");
+          await prisma.$executeRaw`TRUNCATE TABLE gp_data_temp`;
+          console.log("✅ gp_data_temp cleared.");
+        }
+
+        const streamWorkbook = new ExcelJS.stream.xlsx.WorkbookReader(
+          filepath,
+          {
+            entries: "emit",
+            sharedStrings: "cache",
+            worksheets: "emit",
+          }
+        );
+
+        const chunkSize = 5000;
+        let buffer: any[] = [];
+        let totalInserted = 0;
+
+        console.log("📖 Streaming GP data...");
+        for await (const worksheet of streamWorkbook) {
+          let isFirstRow = true;
+          for await (const row of worksheet) {
+            if (isFirstRow) {
+              isFirstRow = false;
+              continue;
+            }
+
+            const values = row.values as any[];
+            buffer.push({
+              document_date: parseExcelDate(values[1]),
+              retailer_code: values[2]?.toString() || "",
+              retailer_name: values[3]?.toString() || "",
+              p3m_gp: Number(values[4]) || 0,
+              p1m_gp: Number(values[5]) || 0,
+            });
+
+            if (buffer.length === chunkSize) {
+              console.log(
+                `📦 Inserting GP chunk. Total so far: ${
+                  totalInserted + chunkSize
+                }`
+              );
+              try {
+                await prisma.gp_data_temp.createMany({ data: buffer });
+                totalInserted += buffer.length;
+                buffer = [];
+              } catch (error: any) {
+                console.error(
+                  "Insert failed:",
+                  error.meta?.column_name,
+                  error.meta?.value
+                );
+                throw error;
+              }
+
+              global.gc?.(); // optional
+            }
+          }
+        }
+
+        if (buffer.length) {
+          console.log(
+            `📦 Inserting final GP chunk. Remaining rows: ${buffer.length}`
+          );
+          await prisma.gp_data_temp.createMany({ data: buffer });
+          totalInserted += buffer.length;
+        }
+
+        console.log(
+          `✅ GP upload complete. Total rows inserted: ${totalInserted}`
+        );
       } else {
         console.warn("⚠️ Invalid upload type:", type);
         return res.status(400).json({ error: "Invalid upload type" });

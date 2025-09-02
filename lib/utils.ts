@@ -6,15 +6,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-declare global {
-  var prisma: PrismaClient | undefined;
-}
-
-const prisma =
-  global.prisma ||
-  new PrismaClient({
-    log: ["error", "warn"],
-  });
-if (process.env.NODE_ENV !== "production") global.prisma = prisma;
+const prisma = new PrismaClient({
+  log: ["error", "warn"],
+});
 
 export default prisma;

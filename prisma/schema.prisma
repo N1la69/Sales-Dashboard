@@ -112,6 +112,24 @@ model product_mapping {
   created_at   DateTime @default(now())
 }
 
+model gp_data {
+  gp_id Int @id @default(autoincrement())
+  document_date DateTime
+  retailer_code String   @db.VarChar(45)
+  retailer_name String   @db.VarChar(120)
+  p3m_gp Int
+  p1m_gp Int
+}
+
+model gp_data_temp {
+  gp_id Int @id @default(autoincrement())
+  document_date DateTime
+  retailer_code String   @db.VarChar(45)
+  retailer_name String   @db.VarChar(120)
+  p3m_gp Int
+  p1m_gp Int
+}
+
 model mapping_change_flag {
   id         Int      @id @default(autoincrement())
   changed_at DateTime @default(now())

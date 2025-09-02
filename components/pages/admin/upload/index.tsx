@@ -10,17 +10,21 @@ const UploadPage = () => {
   const [channelFile, setChannelFile] = useState<File | null>(null);
   const [storeFile, setStoreFile] = useState<File | null>(null);
   const [psrFile, setPsrFile] = useState<File | null>(null);
+  const [gpFile, setGpFile] = useState<File | null>(null);
   const [productFile, setProductFile] = useState<File | null>(null);
   const [psrAction, setPsrAction] = useState<"append" | "overwrite">(
     "overwrite"
   );
+  const [gpAction, setGpAction] = useState<"append" | "overwrite">("overwrite");
   const [loadingType, setLoadingType] = useState<
     | ""
     | "psr"
+    | "gp"
     | "channel"
     | "store"
     | "product"
-    | "merge"
+    | "merge-psr"
+    | "merge-gp"
     | "clear"
     | "transform"
   >("");
@@ -34,7 +38,7 @@ const UploadPage = () => {
 
   const uploadFile = async (
     file: File,
-    type: "psr" | "channel" | "store" | "product",
+    type: "psr" | "channel" | "store" | "product" | "gp",
     action: "append" | "overwrite" = "overwrite"
   ) => {
     if (!file) {
@@ -96,7 +100,7 @@ const UploadPage = () => {
   };
 
   const handleMergePsrData = async () => {
-    setLoadingType("merge");
+    setLoadingType("merge-psr");
     resetMessages();
 
     try {
@@ -113,6 +117,29 @@ const UploadPage = () => {
       setSuccess(resData.message);
     } catch (err: any) {
       setError(err.message || "An error occurred while merging data.");
+    } finally {
+      setLoadingType("");
+    }
+  };
+
+  const handleMergeGpData = async () => {
+    setLoadingType("merge-gp");
+    resetMessages();
+
+    try {
+      const response = await fetch("/api/merge-gp", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        const resData = await response.json();
+        throw new Error(resData.error || "Failed to merge GP data");
+      }
+
+      const resData = await response.json();
+      setSuccess(resData.message);
+    } catch (error: any) {
+      setError(error.message || "An error occurred while merging data.");
     } finally {
       setLoadingType("");
     }
@@ -143,11 +170,40 @@ const UploadPage = () => {
     }
   };
 
+  const handleClearGpTemp = async () => {
+    setLoadingType("clear");
+    resetMessages();
+
+    try {
+      const response = await fetch("/api/clear-gp-temp", {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        const resData = await response.json();
+        throw new Error(resData.error || "Failed to clear GP temp data.");
+      }
+
+      const resData = await response.json();
+      setSuccess(resData.message);
+    } catch (error: any) {
+      setError(
+        error.message || "An error occurred while clearing GP temp data."
+      );
+    } finally {
+      setLoadingType("");
+    }
+  };
+
   return (
     <div className="pt-3 px-4 sm:px-6 md:px-10 z-20 dark:text-blue-100">
       <h1 className="text-center text-2xl sm:text-3xl font-bold">
         Upload Analytics Data Here
       </h1>
+
+      {/* Status Messages */}
+      {success && <p className="text-green-500 text-center mt-4">{success}</p>}
+      {error && <p className="text-red-500 text-center mt-4">{error}</p>}
 
       {/* PSR Data Upload */}
       <Card className="mt-6 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
@@ -216,14 +272,97 @@ const UploadPage = () => {
 
             <Button
               onClick={handleMergePsrData}
-              disabled={loadingType === "merge"}
+              disabled={loadingType === "merge-psr"}
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
-              {loadingType === "merge" ? "Merging..." : "Merge to Main Data"}
+              {loadingType === "merge-psr"
+                ? "Merging..."
+                : "Merge to Main Data"}
             </Button>
 
             <Button
               onClick={handleClearPsrTemp}
+              disabled={loadingType === "clear"}
+              variant="destructive"
+            >
+              {loadingType === "clear" ? "Clearing..." : "Clear Temp Data"}
+            </Button>
+
+            <Button
+              variant="outline"
+              className="border border-gray-200 text-gray-900 dark:text-gray-100 hover:border-indigo"
+            >
+              Download Template
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* GP Data Upload */}
+      <Card className="mt-6 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
+        <CardHeader>
+          <CardTitle className="text-lg font-semibold dark:text-blue-100">
+            Upload GP Data
+          </CardTitle>
+        </CardHeader>
+
+        <CardContent className="space-y-5">
+          <Input
+            type="file"
+            accept=".xlsx"
+            onChange={(e) => {
+              if (e.target.files) {
+                setGpFile(e.target.files[0]);
+                resetMessages();
+              }
+            }}
+            className="cursor-pointer border border-blue-200 dark:border-blue-700 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/20 file:text-blue-700 dark:file:text-blue-200 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/30"
+          />
+
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant={gpAction === "overwrite" ? "default" : "outline"}
+              onClick={() => setGpAction("overwrite")}
+              className={`${
+                gpAction === "overwrite"
+                  ? "bg-indigo text-white hover:bg-indigo-hover"
+                  : "border border-gray-200 text-gray-900 dark:text-gray-100 hover:border-indigo"
+              }`}
+            >
+              Overwrite
+            </Button>
+            <Button
+              variant={gpAction === "append" ? "default" : "outline"}
+              onClick={() => setGpAction("append")}
+              className={`${
+                gpAction === "append"
+                  ? "bg-indigo text-white hover:bg-indigo-hover"
+                  : "border border-gray-200 text-gray-900 dark:text-gray-100 hover:border-indigo"
+              }`}
+            >
+              Append
+            </Button>
+          </div>
+
+          <div className="flex flex-wrap gap-3 mt-3">
+            <Button
+              onClick={() => gpFile && uploadFile(gpFile, "gp", gpAction)}
+              disabled={loadingType === "gp"}
+              className="bg-indigo text-white hover:bg-indigo-hover"
+            >
+              {loadingType === "gp" ? "Uploading..." : "Upload"}
+            </Button>
+
+            <Button
+              onClick={handleMergeGpData}
+              disabled={loadingType === "merge-gp"}
+              className="bg-indigo text-white hover:bg-indigo-hover"
+            >
+              {loadingType === "merge-gp" ? "Merging..." : "Merge to Main Data"}
+            </Button>
+
+            <Button
+              onClick={handleClearGpTemp}
               disabled={loadingType === "clear"}
               variant="destructive"
             >
@@ -353,10 +492,6 @@ const UploadPage = () => {
           </div>
         </CardContent>
       </Card>
-
-      {/* Status Messages */}
-      {success && <p className="text-green-500 text-center mt-4">{success}</p>}
-      {error && <p className="text-red-500 text-center mt-4">{error}</p>}
     </div>
   );
 };

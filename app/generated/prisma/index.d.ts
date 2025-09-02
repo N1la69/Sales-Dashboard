@@ -49,6 +49,16 @@ export type store_mapping = $Result.DefaultSelection<Prisma.$store_mappingPayloa
  */
 export type product_mapping = $Result.DefaultSelection<Prisma.$product_mappingPayload>
 /**
+ * Model gp_data
+ * 
+ */
+export type gp_data = $Result.DefaultSelection<Prisma.$gp_dataPayload>
+/**
+ * Model gp_data_temp
+ * 
+ */
+export type gp_data_temp = $Result.DefaultSelection<Prisma.$gp_data_tempPayload>
+/**
  * Model mapping_change_flag
  * 
  */
@@ -276,6 +286,26 @@ export class PrismaClient<
     * ```
     */
   get product_mapping(): Prisma.product_mappingDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.gp_data`: Exposes CRUD operations for the **gp_data** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Gp_data
+    * const gp_data = await prisma.gp_data.findMany()
+    * ```
+    */
+  get gp_data(): Prisma.gp_dataDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.gp_data_temp`: Exposes CRUD operations for the **gp_data_temp** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Gp_data_temps
+    * const gp_data_temps = await prisma.gp_data_temp.findMany()
+    * ```
+    */
+  get gp_data_temp(): Prisma.gp_data_tempDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.mapping_change_flag`: Exposes CRUD operations for the **mapping_change_flag** model.
@@ -803,6 +833,8 @@ export namespace Prisma {
     channel_mapping: 'channel_mapping',
     store_mapping: 'store_mapping',
     product_mapping: 'product_mapping',
+    gp_data: 'gp_data',
+    gp_data_temp: 'gp_data_temp',
     mapping_change_flag: 'mapping_change_flag',
     User: 'User',
     PermissionSet: 'PermissionSet',
@@ -829,7 +861,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "psr_data_temp" | "psr_data_historical" | "psr_finalized_temp" | "psr_data_finalized" | "channel_mapping" | "store_mapping" | "product_mapping" | "mapping_change_flag" | "user" | "permissionSet" | "retailing_summary" | "branch_retailing_summary" | "brand_retailing_summary" | "category_retailing_summary" | "base_channel_retailing_summary"
+      modelProps: "psr_data_temp" | "psr_data_historical" | "psr_finalized_temp" | "psr_data_finalized" | "channel_mapping" | "store_mapping" | "product_mapping" | "gp_data" | "gp_data_temp" | "mapping_change_flag" | "user" | "permissionSet" | "retailing_summary" | "branch_retailing_summary" | "brand_retailing_summary" | "category_retailing_summary" | "base_channel_retailing_summary"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1292,6 +1324,138 @@ export namespace Prisma {
           count: {
             args: Prisma.product_mappingCountArgs<ExtArgs>
             result: $Utils.Optional<Product_mappingCountAggregateOutputType> | number
+          }
+        }
+      }
+      gp_data: {
+        payload: Prisma.$gp_dataPayload<ExtArgs>
+        fields: Prisma.gp_dataFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.gp_dataFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$gp_dataPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.gp_dataFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$gp_dataPayload>
+          }
+          findFirst: {
+            args: Prisma.gp_dataFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$gp_dataPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.gp_dataFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$gp_dataPayload>
+          }
+          findMany: {
+            args: Prisma.gp_dataFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$gp_dataPayload>[]
+          }
+          create: {
+            args: Prisma.gp_dataCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$gp_dataPayload>
+          }
+          createMany: {
+            args: Prisma.gp_dataCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.gp_dataDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$gp_dataPayload>
+          }
+          update: {
+            args: Prisma.gp_dataUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$gp_dataPayload>
+          }
+          deleteMany: {
+            args: Prisma.gp_dataDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.gp_dataUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.gp_dataUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$gp_dataPayload>
+          }
+          aggregate: {
+            args: Prisma.Gp_dataAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGp_data>
+          }
+          groupBy: {
+            args: Prisma.gp_dataGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Gp_dataGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.gp_dataCountArgs<ExtArgs>
+            result: $Utils.Optional<Gp_dataCountAggregateOutputType> | number
+          }
+        }
+      }
+      gp_data_temp: {
+        payload: Prisma.$gp_data_tempPayload<ExtArgs>
+        fields: Prisma.gp_data_tempFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.gp_data_tempFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$gp_data_tempPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.gp_data_tempFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$gp_data_tempPayload>
+          }
+          findFirst: {
+            args: Prisma.gp_data_tempFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$gp_data_tempPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.gp_data_tempFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$gp_data_tempPayload>
+          }
+          findMany: {
+            args: Prisma.gp_data_tempFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$gp_data_tempPayload>[]
+          }
+          create: {
+            args: Prisma.gp_data_tempCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$gp_data_tempPayload>
+          }
+          createMany: {
+            args: Prisma.gp_data_tempCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.gp_data_tempDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$gp_data_tempPayload>
+          }
+          update: {
+            args: Prisma.gp_data_tempUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$gp_data_tempPayload>
+          }
+          deleteMany: {
+            args: Prisma.gp_data_tempDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.gp_data_tempUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.gp_data_tempUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$gp_data_tempPayload>
+          }
+          aggregate: {
+            args: Prisma.Gp_data_tempAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateGp_data_temp>
+          }
+          groupBy: {
+            args: Prisma.gp_data_tempGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Gp_data_tempGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.gp_data_tempCountArgs<ExtArgs>
+            result: $Utils.Optional<Gp_data_tempCountAggregateOutputType> | number
           }
         }
       }
@@ -1922,6 +2086,8 @@ export namespace Prisma {
     channel_mapping?: channel_mappingOmit
     store_mapping?: store_mappingOmit
     product_mapping?: product_mappingOmit
+    gp_data?: gp_dataOmit
+    gp_data_temp?: gp_data_tempOmit
     mapping_change_flag?: mapping_change_flagOmit
     user?: UserOmit
     permissionSet?: PermissionSetOmit
@@ -8994,6 +9160,1876 @@ export namespace Prisma {
      * Omit specific fields from the product_mapping
      */
     omit?: product_mappingOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model gp_data
+   */
+
+  export type AggregateGp_data = {
+    _count: Gp_dataCountAggregateOutputType | null
+    _avg: Gp_dataAvgAggregateOutputType | null
+    _sum: Gp_dataSumAggregateOutputType | null
+    _min: Gp_dataMinAggregateOutputType | null
+    _max: Gp_dataMaxAggregateOutputType | null
+  }
+
+  export type Gp_dataAvgAggregateOutputType = {
+    gp_id: number | null
+    p3m_gp: number | null
+    p1m_gp: number | null
+  }
+
+  export type Gp_dataSumAggregateOutputType = {
+    gp_id: number | null
+    p3m_gp: number | null
+    p1m_gp: number | null
+  }
+
+  export type Gp_dataMinAggregateOutputType = {
+    gp_id: number | null
+    document_date: Date | null
+    retailer_code: string | null
+    retailer_name: string | null
+    p3m_gp: number | null
+    p1m_gp: number | null
+  }
+
+  export type Gp_dataMaxAggregateOutputType = {
+    gp_id: number | null
+    document_date: Date | null
+    retailer_code: string | null
+    retailer_name: string | null
+    p3m_gp: number | null
+    p1m_gp: number | null
+  }
+
+  export type Gp_dataCountAggregateOutputType = {
+    gp_id: number
+    document_date: number
+    retailer_code: number
+    retailer_name: number
+    p3m_gp: number
+    p1m_gp: number
+    _all: number
+  }
+
+
+  export type Gp_dataAvgAggregateInputType = {
+    gp_id?: true
+    p3m_gp?: true
+    p1m_gp?: true
+  }
+
+  export type Gp_dataSumAggregateInputType = {
+    gp_id?: true
+    p3m_gp?: true
+    p1m_gp?: true
+  }
+
+  export type Gp_dataMinAggregateInputType = {
+    gp_id?: true
+    document_date?: true
+    retailer_code?: true
+    retailer_name?: true
+    p3m_gp?: true
+    p1m_gp?: true
+  }
+
+  export type Gp_dataMaxAggregateInputType = {
+    gp_id?: true
+    document_date?: true
+    retailer_code?: true
+    retailer_name?: true
+    p3m_gp?: true
+    p1m_gp?: true
+  }
+
+  export type Gp_dataCountAggregateInputType = {
+    gp_id?: true
+    document_date?: true
+    retailer_code?: true
+    retailer_name?: true
+    p3m_gp?: true
+    p1m_gp?: true
+    _all?: true
+  }
+
+  export type Gp_dataAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which gp_data to aggregate.
+     */
+    where?: gp_dataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of gp_data to fetch.
+     */
+    orderBy?: gp_dataOrderByWithRelationInput | gp_dataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: gp_dataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` gp_data from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` gp_data.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned gp_data
+    **/
+    _count?: true | Gp_dataCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Gp_dataAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Gp_dataSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Gp_dataMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Gp_dataMaxAggregateInputType
+  }
+
+  export type GetGp_dataAggregateType<T extends Gp_dataAggregateArgs> = {
+        [P in keyof T & keyof AggregateGp_data]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGp_data[P]>
+      : GetScalarType<T[P], AggregateGp_data[P]>
+  }
+
+
+
+
+  export type gp_dataGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: gp_dataWhereInput
+    orderBy?: gp_dataOrderByWithAggregationInput | gp_dataOrderByWithAggregationInput[]
+    by: Gp_dataScalarFieldEnum[] | Gp_dataScalarFieldEnum
+    having?: gp_dataScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Gp_dataCountAggregateInputType | true
+    _avg?: Gp_dataAvgAggregateInputType
+    _sum?: Gp_dataSumAggregateInputType
+    _min?: Gp_dataMinAggregateInputType
+    _max?: Gp_dataMaxAggregateInputType
+  }
+
+  export type Gp_dataGroupByOutputType = {
+    gp_id: number
+    document_date: Date
+    retailer_code: string
+    retailer_name: string
+    p3m_gp: number
+    p1m_gp: number
+    _count: Gp_dataCountAggregateOutputType | null
+    _avg: Gp_dataAvgAggregateOutputType | null
+    _sum: Gp_dataSumAggregateOutputType | null
+    _min: Gp_dataMinAggregateOutputType | null
+    _max: Gp_dataMaxAggregateOutputType | null
+  }
+
+  type GetGp_dataGroupByPayload<T extends gp_dataGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Gp_dataGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Gp_dataGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Gp_dataGroupByOutputType[P]>
+            : GetScalarType<T[P], Gp_dataGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type gp_dataSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    gp_id?: boolean
+    document_date?: boolean
+    retailer_code?: boolean
+    retailer_name?: boolean
+    p3m_gp?: boolean
+    p1m_gp?: boolean
+  }, ExtArgs["result"]["gp_data"]>
+
+
+
+  export type gp_dataSelectScalar = {
+    gp_id?: boolean
+    document_date?: boolean
+    retailer_code?: boolean
+    retailer_name?: boolean
+    p3m_gp?: boolean
+    p1m_gp?: boolean
+  }
+
+  export type gp_dataOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"gp_id" | "document_date" | "retailer_code" | "retailer_name" | "p3m_gp" | "p1m_gp", ExtArgs["result"]["gp_data"]>
+
+  export type $gp_dataPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "gp_data"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      gp_id: number
+      document_date: Date
+      retailer_code: string
+      retailer_name: string
+      p3m_gp: number
+      p1m_gp: number
+    }, ExtArgs["result"]["gp_data"]>
+    composites: {}
+  }
+
+  type gp_dataGetPayload<S extends boolean | null | undefined | gp_dataDefaultArgs> = $Result.GetResult<Prisma.$gp_dataPayload, S>
+
+  type gp_dataCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<gp_dataFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Gp_dataCountAggregateInputType | true
+    }
+
+  export interface gp_dataDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['gp_data'], meta: { name: 'gp_data' } }
+    /**
+     * Find zero or one Gp_data that matches the filter.
+     * @param {gp_dataFindUniqueArgs} args - Arguments to find a Gp_data
+     * @example
+     * // Get one Gp_data
+     * const gp_data = await prisma.gp_data.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends gp_dataFindUniqueArgs>(args: SelectSubset<T, gp_dataFindUniqueArgs<ExtArgs>>): Prisma__gp_dataClient<$Result.GetResult<Prisma.$gp_dataPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Gp_data that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {gp_dataFindUniqueOrThrowArgs} args - Arguments to find a Gp_data
+     * @example
+     * // Get one Gp_data
+     * const gp_data = await prisma.gp_data.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends gp_dataFindUniqueOrThrowArgs>(args: SelectSubset<T, gp_dataFindUniqueOrThrowArgs<ExtArgs>>): Prisma__gp_dataClient<$Result.GetResult<Prisma.$gp_dataPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Gp_data that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {gp_dataFindFirstArgs} args - Arguments to find a Gp_data
+     * @example
+     * // Get one Gp_data
+     * const gp_data = await prisma.gp_data.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends gp_dataFindFirstArgs>(args?: SelectSubset<T, gp_dataFindFirstArgs<ExtArgs>>): Prisma__gp_dataClient<$Result.GetResult<Prisma.$gp_dataPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Gp_data that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {gp_dataFindFirstOrThrowArgs} args - Arguments to find a Gp_data
+     * @example
+     * // Get one Gp_data
+     * const gp_data = await prisma.gp_data.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends gp_dataFindFirstOrThrowArgs>(args?: SelectSubset<T, gp_dataFindFirstOrThrowArgs<ExtArgs>>): Prisma__gp_dataClient<$Result.GetResult<Prisma.$gp_dataPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Gp_data that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {gp_dataFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Gp_data
+     * const gp_data = await prisma.gp_data.findMany()
+     * 
+     * // Get first 10 Gp_data
+     * const gp_data = await prisma.gp_data.findMany({ take: 10 })
+     * 
+     * // Only select the `gp_id`
+     * const gp_dataWithGp_idOnly = await prisma.gp_data.findMany({ select: { gp_id: true } })
+     * 
+     */
+    findMany<T extends gp_dataFindManyArgs>(args?: SelectSubset<T, gp_dataFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$gp_dataPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Gp_data.
+     * @param {gp_dataCreateArgs} args - Arguments to create a Gp_data.
+     * @example
+     * // Create one Gp_data
+     * const Gp_data = await prisma.gp_data.create({
+     *   data: {
+     *     // ... data to create a Gp_data
+     *   }
+     * })
+     * 
+     */
+    create<T extends gp_dataCreateArgs>(args: SelectSubset<T, gp_dataCreateArgs<ExtArgs>>): Prisma__gp_dataClient<$Result.GetResult<Prisma.$gp_dataPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Gp_data.
+     * @param {gp_dataCreateManyArgs} args - Arguments to create many Gp_data.
+     * @example
+     * // Create many Gp_data
+     * const gp_data = await prisma.gp_data.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends gp_dataCreateManyArgs>(args?: SelectSubset<T, gp_dataCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Gp_data.
+     * @param {gp_dataDeleteArgs} args - Arguments to delete one Gp_data.
+     * @example
+     * // Delete one Gp_data
+     * const Gp_data = await prisma.gp_data.delete({
+     *   where: {
+     *     // ... filter to delete one Gp_data
+     *   }
+     * })
+     * 
+     */
+    delete<T extends gp_dataDeleteArgs>(args: SelectSubset<T, gp_dataDeleteArgs<ExtArgs>>): Prisma__gp_dataClient<$Result.GetResult<Prisma.$gp_dataPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Gp_data.
+     * @param {gp_dataUpdateArgs} args - Arguments to update one Gp_data.
+     * @example
+     * // Update one Gp_data
+     * const gp_data = await prisma.gp_data.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends gp_dataUpdateArgs>(args: SelectSubset<T, gp_dataUpdateArgs<ExtArgs>>): Prisma__gp_dataClient<$Result.GetResult<Prisma.$gp_dataPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Gp_data.
+     * @param {gp_dataDeleteManyArgs} args - Arguments to filter Gp_data to delete.
+     * @example
+     * // Delete a few Gp_data
+     * const { count } = await prisma.gp_data.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends gp_dataDeleteManyArgs>(args?: SelectSubset<T, gp_dataDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Gp_data.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {gp_dataUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Gp_data
+     * const gp_data = await prisma.gp_data.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends gp_dataUpdateManyArgs>(args: SelectSubset<T, gp_dataUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Gp_data.
+     * @param {gp_dataUpsertArgs} args - Arguments to update or create a Gp_data.
+     * @example
+     * // Update or create a Gp_data
+     * const gp_data = await prisma.gp_data.upsert({
+     *   create: {
+     *     // ... data to create a Gp_data
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Gp_data we want to update
+     *   }
+     * })
+     */
+    upsert<T extends gp_dataUpsertArgs>(args: SelectSubset<T, gp_dataUpsertArgs<ExtArgs>>): Prisma__gp_dataClient<$Result.GetResult<Prisma.$gp_dataPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Gp_data.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {gp_dataCountArgs} args - Arguments to filter Gp_data to count.
+     * @example
+     * // Count the number of Gp_data
+     * const count = await prisma.gp_data.count({
+     *   where: {
+     *     // ... the filter for the Gp_data we want to count
+     *   }
+     * })
+    **/
+    count<T extends gp_dataCountArgs>(
+      args?: Subset<T, gp_dataCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Gp_dataCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Gp_data.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Gp_dataAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Gp_dataAggregateArgs>(args: Subset<T, Gp_dataAggregateArgs>): Prisma.PrismaPromise<GetGp_dataAggregateType<T>>
+
+    /**
+     * Group by Gp_data.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {gp_dataGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends gp_dataGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: gp_dataGroupByArgs['orderBy'] }
+        : { orderBy?: gp_dataGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, gp_dataGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGp_dataGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the gp_data model
+   */
+  readonly fields: gp_dataFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for gp_data.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__gp_dataClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the gp_data model
+   */
+  interface gp_dataFieldRefs {
+    readonly gp_id: FieldRef<"gp_data", 'Int'>
+    readonly document_date: FieldRef<"gp_data", 'DateTime'>
+    readonly retailer_code: FieldRef<"gp_data", 'String'>
+    readonly retailer_name: FieldRef<"gp_data", 'String'>
+    readonly p3m_gp: FieldRef<"gp_data", 'Int'>
+    readonly p1m_gp: FieldRef<"gp_data", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * gp_data findUnique
+   */
+  export type gp_dataFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data
+     */
+    select?: gp_dataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data
+     */
+    omit?: gp_dataOmit<ExtArgs> | null
+    /**
+     * Filter, which gp_data to fetch.
+     */
+    where: gp_dataWhereUniqueInput
+  }
+
+  /**
+   * gp_data findUniqueOrThrow
+   */
+  export type gp_dataFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data
+     */
+    select?: gp_dataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data
+     */
+    omit?: gp_dataOmit<ExtArgs> | null
+    /**
+     * Filter, which gp_data to fetch.
+     */
+    where: gp_dataWhereUniqueInput
+  }
+
+  /**
+   * gp_data findFirst
+   */
+  export type gp_dataFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data
+     */
+    select?: gp_dataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data
+     */
+    omit?: gp_dataOmit<ExtArgs> | null
+    /**
+     * Filter, which gp_data to fetch.
+     */
+    where?: gp_dataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of gp_data to fetch.
+     */
+    orderBy?: gp_dataOrderByWithRelationInput | gp_dataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for gp_data.
+     */
+    cursor?: gp_dataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` gp_data from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` gp_data.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of gp_data.
+     */
+    distinct?: Gp_dataScalarFieldEnum | Gp_dataScalarFieldEnum[]
+  }
+
+  /**
+   * gp_data findFirstOrThrow
+   */
+  export type gp_dataFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data
+     */
+    select?: gp_dataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data
+     */
+    omit?: gp_dataOmit<ExtArgs> | null
+    /**
+     * Filter, which gp_data to fetch.
+     */
+    where?: gp_dataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of gp_data to fetch.
+     */
+    orderBy?: gp_dataOrderByWithRelationInput | gp_dataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for gp_data.
+     */
+    cursor?: gp_dataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` gp_data from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` gp_data.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of gp_data.
+     */
+    distinct?: Gp_dataScalarFieldEnum | Gp_dataScalarFieldEnum[]
+  }
+
+  /**
+   * gp_data findMany
+   */
+  export type gp_dataFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data
+     */
+    select?: gp_dataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data
+     */
+    omit?: gp_dataOmit<ExtArgs> | null
+    /**
+     * Filter, which gp_data to fetch.
+     */
+    where?: gp_dataWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of gp_data to fetch.
+     */
+    orderBy?: gp_dataOrderByWithRelationInput | gp_dataOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing gp_data.
+     */
+    cursor?: gp_dataWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` gp_data from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` gp_data.
+     */
+    skip?: number
+    distinct?: Gp_dataScalarFieldEnum | Gp_dataScalarFieldEnum[]
+  }
+
+  /**
+   * gp_data create
+   */
+  export type gp_dataCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data
+     */
+    select?: gp_dataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data
+     */
+    omit?: gp_dataOmit<ExtArgs> | null
+    /**
+     * The data needed to create a gp_data.
+     */
+    data: XOR<gp_dataCreateInput, gp_dataUncheckedCreateInput>
+  }
+
+  /**
+   * gp_data createMany
+   */
+  export type gp_dataCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many gp_data.
+     */
+    data: gp_dataCreateManyInput | gp_dataCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * gp_data update
+   */
+  export type gp_dataUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data
+     */
+    select?: gp_dataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data
+     */
+    omit?: gp_dataOmit<ExtArgs> | null
+    /**
+     * The data needed to update a gp_data.
+     */
+    data: XOR<gp_dataUpdateInput, gp_dataUncheckedUpdateInput>
+    /**
+     * Choose, which gp_data to update.
+     */
+    where: gp_dataWhereUniqueInput
+  }
+
+  /**
+   * gp_data updateMany
+   */
+  export type gp_dataUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update gp_data.
+     */
+    data: XOR<gp_dataUpdateManyMutationInput, gp_dataUncheckedUpdateManyInput>
+    /**
+     * Filter which gp_data to update
+     */
+    where?: gp_dataWhereInput
+    /**
+     * Limit how many gp_data to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * gp_data upsert
+   */
+  export type gp_dataUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data
+     */
+    select?: gp_dataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data
+     */
+    omit?: gp_dataOmit<ExtArgs> | null
+    /**
+     * The filter to search for the gp_data to update in case it exists.
+     */
+    where: gp_dataWhereUniqueInput
+    /**
+     * In case the gp_data found by the `where` argument doesn't exist, create a new gp_data with this data.
+     */
+    create: XOR<gp_dataCreateInput, gp_dataUncheckedCreateInput>
+    /**
+     * In case the gp_data was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<gp_dataUpdateInput, gp_dataUncheckedUpdateInput>
+  }
+
+  /**
+   * gp_data delete
+   */
+  export type gp_dataDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data
+     */
+    select?: gp_dataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data
+     */
+    omit?: gp_dataOmit<ExtArgs> | null
+    /**
+     * Filter which gp_data to delete.
+     */
+    where: gp_dataWhereUniqueInput
+  }
+
+  /**
+   * gp_data deleteMany
+   */
+  export type gp_dataDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which gp_data to delete
+     */
+    where?: gp_dataWhereInput
+    /**
+     * Limit how many gp_data to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * gp_data without action
+   */
+  export type gp_dataDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data
+     */
+    select?: gp_dataSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data
+     */
+    omit?: gp_dataOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model gp_data_temp
+   */
+
+  export type AggregateGp_data_temp = {
+    _count: Gp_data_tempCountAggregateOutputType | null
+    _avg: Gp_data_tempAvgAggregateOutputType | null
+    _sum: Gp_data_tempSumAggregateOutputType | null
+    _min: Gp_data_tempMinAggregateOutputType | null
+    _max: Gp_data_tempMaxAggregateOutputType | null
+  }
+
+  export type Gp_data_tempAvgAggregateOutputType = {
+    gp_id: number | null
+    p3m_gp: number | null
+    p1m_gp: number | null
+  }
+
+  export type Gp_data_tempSumAggregateOutputType = {
+    gp_id: number | null
+    p3m_gp: number | null
+    p1m_gp: number | null
+  }
+
+  export type Gp_data_tempMinAggregateOutputType = {
+    gp_id: number | null
+    document_date: Date | null
+    retailer_code: string | null
+    retailer_name: string | null
+    p3m_gp: number | null
+    p1m_gp: number | null
+  }
+
+  export type Gp_data_tempMaxAggregateOutputType = {
+    gp_id: number | null
+    document_date: Date | null
+    retailer_code: string | null
+    retailer_name: string | null
+    p3m_gp: number | null
+    p1m_gp: number | null
+  }
+
+  export type Gp_data_tempCountAggregateOutputType = {
+    gp_id: number
+    document_date: number
+    retailer_code: number
+    retailer_name: number
+    p3m_gp: number
+    p1m_gp: number
+    _all: number
+  }
+
+
+  export type Gp_data_tempAvgAggregateInputType = {
+    gp_id?: true
+    p3m_gp?: true
+    p1m_gp?: true
+  }
+
+  export type Gp_data_tempSumAggregateInputType = {
+    gp_id?: true
+    p3m_gp?: true
+    p1m_gp?: true
+  }
+
+  export type Gp_data_tempMinAggregateInputType = {
+    gp_id?: true
+    document_date?: true
+    retailer_code?: true
+    retailer_name?: true
+    p3m_gp?: true
+    p1m_gp?: true
+  }
+
+  export type Gp_data_tempMaxAggregateInputType = {
+    gp_id?: true
+    document_date?: true
+    retailer_code?: true
+    retailer_name?: true
+    p3m_gp?: true
+    p1m_gp?: true
+  }
+
+  export type Gp_data_tempCountAggregateInputType = {
+    gp_id?: true
+    document_date?: true
+    retailer_code?: true
+    retailer_name?: true
+    p3m_gp?: true
+    p1m_gp?: true
+    _all?: true
+  }
+
+  export type Gp_data_tempAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which gp_data_temp to aggregate.
+     */
+    where?: gp_data_tempWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of gp_data_temps to fetch.
+     */
+    orderBy?: gp_data_tempOrderByWithRelationInput | gp_data_tempOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: gp_data_tempWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` gp_data_temps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` gp_data_temps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned gp_data_temps
+    **/
+    _count?: true | Gp_data_tempCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Gp_data_tempAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Gp_data_tempSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Gp_data_tempMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Gp_data_tempMaxAggregateInputType
+  }
+
+  export type GetGp_data_tempAggregateType<T extends Gp_data_tempAggregateArgs> = {
+        [P in keyof T & keyof AggregateGp_data_temp]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateGp_data_temp[P]>
+      : GetScalarType<T[P], AggregateGp_data_temp[P]>
+  }
+
+
+
+
+  export type gp_data_tempGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: gp_data_tempWhereInput
+    orderBy?: gp_data_tempOrderByWithAggregationInput | gp_data_tempOrderByWithAggregationInput[]
+    by: Gp_data_tempScalarFieldEnum[] | Gp_data_tempScalarFieldEnum
+    having?: gp_data_tempScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Gp_data_tempCountAggregateInputType | true
+    _avg?: Gp_data_tempAvgAggregateInputType
+    _sum?: Gp_data_tempSumAggregateInputType
+    _min?: Gp_data_tempMinAggregateInputType
+    _max?: Gp_data_tempMaxAggregateInputType
+  }
+
+  export type Gp_data_tempGroupByOutputType = {
+    gp_id: number
+    document_date: Date
+    retailer_code: string
+    retailer_name: string
+    p3m_gp: number
+    p1m_gp: number
+    _count: Gp_data_tempCountAggregateOutputType | null
+    _avg: Gp_data_tempAvgAggregateOutputType | null
+    _sum: Gp_data_tempSumAggregateOutputType | null
+    _min: Gp_data_tempMinAggregateOutputType | null
+    _max: Gp_data_tempMaxAggregateOutputType | null
+  }
+
+  type GetGp_data_tempGroupByPayload<T extends gp_data_tempGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Gp_data_tempGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Gp_data_tempGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Gp_data_tempGroupByOutputType[P]>
+            : GetScalarType<T[P], Gp_data_tempGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type gp_data_tempSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    gp_id?: boolean
+    document_date?: boolean
+    retailer_code?: boolean
+    retailer_name?: boolean
+    p3m_gp?: boolean
+    p1m_gp?: boolean
+  }, ExtArgs["result"]["gp_data_temp"]>
+
+
+
+  export type gp_data_tempSelectScalar = {
+    gp_id?: boolean
+    document_date?: boolean
+    retailer_code?: boolean
+    retailer_name?: boolean
+    p3m_gp?: boolean
+    p1m_gp?: boolean
+  }
+
+  export type gp_data_tempOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"gp_id" | "document_date" | "retailer_code" | "retailer_name" | "p3m_gp" | "p1m_gp", ExtArgs["result"]["gp_data_temp"]>
+
+  export type $gp_data_tempPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "gp_data_temp"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      gp_id: number
+      document_date: Date
+      retailer_code: string
+      retailer_name: string
+      p3m_gp: number
+      p1m_gp: number
+    }, ExtArgs["result"]["gp_data_temp"]>
+    composites: {}
+  }
+
+  type gp_data_tempGetPayload<S extends boolean | null | undefined | gp_data_tempDefaultArgs> = $Result.GetResult<Prisma.$gp_data_tempPayload, S>
+
+  type gp_data_tempCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<gp_data_tempFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Gp_data_tempCountAggregateInputType | true
+    }
+
+  export interface gp_data_tempDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['gp_data_temp'], meta: { name: 'gp_data_temp' } }
+    /**
+     * Find zero or one Gp_data_temp that matches the filter.
+     * @param {gp_data_tempFindUniqueArgs} args - Arguments to find a Gp_data_temp
+     * @example
+     * // Get one Gp_data_temp
+     * const gp_data_temp = await prisma.gp_data_temp.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends gp_data_tempFindUniqueArgs>(args: SelectSubset<T, gp_data_tempFindUniqueArgs<ExtArgs>>): Prisma__gp_data_tempClient<$Result.GetResult<Prisma.$gp_data_tempPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Gp_data_temp that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {gp_data_tempFindUniqueOrThrowArgs} args - Arguments to find a Gp_data_temp
+     * @example
+     * // Get one Gp_data_temp
+     * const gp_data_temp = await prisma.gp_data_temp.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends gp_data_tempFindUniqueOrThrowArgs>(args: SelectSubset<T, gp_data_tempFindUniqueOrThrowArgs<ExtArgs>>): Prisma__gp_data_tempClient<$Result.GetResult<Prisma.$gp_data_tempPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Gp_data_temp that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {gp_data_tempFindFirstArgs} args - Arguments to find a Gp_data_temp
+     * @example
+     * // Get one Gp_data_temp
+     * const gp_data_temp = await prisma.gp_data_temp.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends gp_data_tempFindFirstArgs>(args?: SelectSubset<T, gp_data_tempFindFirstArgs<ExtArgs>>): Prisma__gp_data_tempClient<$Result.GetResult<Prisma.$gp_data_tempPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Gp_data_temp that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {gp_data_tempFindFirstOrThrowArgs} args - Arguments to find a Gp_data_temp
+     * @example
+     * // Get one Gp_data_temp
+     * const gp_data_temp = await prisma.gp_data_temp.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends gp_data_tempFindFirstOrThrowArgs>(args?: SelectSubset<T, gp_data_tempFindFirstOrThrowArgs<ExtArgs>>): Prisma__gp_data_tempClient<$Result.GetResult<Prisma.$gp_data_tempPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Gp_data_temps that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {gp_data_tempFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Gp_data_temps
+     * const gp_data_temps = await prisma.gp_data_temp.findMany()
+     * 
+     * // Get first 10 Gp_data_temps
+     * const gp_data_temps = await prisma.gp_data_temp.findMany({ take: 10 })
+     * 
+     * // Only select the `gp_id`
+     * const gp_data_tempWithGp_idOnly = await prisma.gp_data_temp.findMany({ select: { gp_id: true } })
+     * 
+     */
+    findMany<T extends gp_data_tempFindManyArgs>(args?: SelectSubset<T, gp_data_tempFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$gp_data_tempPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Gp_data_temp.
+     * @param {gp_data_tempCreateArgs} args - Arguments to create a Gp_data_temp.
+     * @example
+     * // Create one Gp_data_temp
+     * const Gp_data_temp = await prisma.gp_data_temp.create({
+     *   data: {
+     *     // ... data to create a Gp_data_temp
+     *   }
+     * })
+     * 
+     */
+    create<T extends gp_data_tempCreateArgs>(args: SelectSubset<T, gp_data_tempCreateArgs<ExtArgs>>): Prisma__gp_data_tempClient<$Result.GetResult<Prisma.$gp_data_tempPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Gp_data_temps.
+     * @param {gp_data_tempCreateManyArgs} args - Arguments to create many Gp_data_temps.
+     * @example
+     * // Create many Gp_data_temps
+     * const gp_data_temp = await prisma.gp_data_temp.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends gp_data_tempCreateManyArgs>(args?: SelectSubset<T, gp_data_tempCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Gp_data_temp.
+     * @param {gp_data_tempDeleteArgs} args - Arguments to delete one Gp_data_temp.
+     * @example
+     * // Delete one Gp_data_temp
+     * const Gp_data_temp = await prisma.gp_data_temp.delete({
+     *   where: {
+     *     // ... filter to delete one Gp_data_temp
+     *   }
+     * })
+     * 
+     */
+    delete<T extends gp_data_tempDeleteArgs>(args: SelectSubset<T, gp_data_tempDeleteArgs<ExtArgs>>): Prisma__gp_data_tempClient<$Result.GetResult<Prisma.$gp_data_tempPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Gp_data_temp.
+     * @param {gp_data_tempUpdateArgs} args - Arguments to update one Gp_data_temp.
+     * @example
+     * // Update one Gp_data_temp
+     * const gp_data_temp = await prisma.gp_data_temp.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends gp_data_tempUpdateArgs>(args: SelectSubset<T, gp_data_tempUpdateArgs<ExtArgs>>): Prisma__gp_data_tempClient<$Result.GetResult<Prisma.$gp_data_tempPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Gp_data_temps.
+     * @param {gp_data_tempDeleteManyArgs} args - Arguments to filter Gp_data_temps to delete.
+     * @example
+     * // Delete a few Gp_data_temps
+     * const { count } = await prisma.gp_data_temp.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends gp_data_tempDeleteManyArgs>(args?: SelectSubset<T, gp_data_tempDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Gp_data_temps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {gp_data_tempUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Gp_data_temps
+     * const gp_data_temp = await prisma.gp_data_temp.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends gp_data_tempUpdateManyArgs>(args: SelectSubset<T, gp_data_tempUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Gp_data_temp.
+     * @param {gp_data_tempUpsertArgs} args - Arguments to update or create a Gp_data_temp.
+     * @example
+     * // Update or create a Gp_data_temp
+     * const gp_data_temp = await prisma.gp_data_temp.upsert({
+     *   create: {
+     *     // ... data to create a Gp_data_temp
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Gp_data_temp we want to update
+     *   }
+     * })
+     */
+    upsert<T extends gp_data_tempUpsertArgs>(args: SelectSubset<T, gp_data_tempUpsertArgs<ExtArgs>>): Prisma__gp_data_tempClient<$Result.GetResult<Prisma.$gp_data_tempPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Gp_data_temps.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {gp_data_tempCountArgs} args - Arguments to filter Gp_data_temps to count.
+     * @example
+     * // Count the number of Gp_data_temps
+     * const count = await prisma.gp_data_temp.count({
+     *   where: {
+     *     // ... the filter for the Gp_data_temps we want to count
+     *   }
+     * })
+    **/
+    count<T extends gp_data_tempCountArgs>(
+      args?: Subset<T, gp_data_tempCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Gp_data_tempCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Gp_data_temp.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Gp_data_tempAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Gp_data_tempAggregateArgs>(args: Subset<T, Gp_data_tempAggregateArgs>): Prisma.PrismaPromise<GetGp_data_tempAggregateType<T>>
+
+    /**
+     * Group by Gp_data_temp.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {gp_data_tempGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends gp_data_tempGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: gp_data_tempGroupByArgs['orderBy'] }
+        : { orderBy?: gp_data_tempGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, gp_data_tempGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetGp_data_tempGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the gp_data_temp model
+   */
+  readonly fields: gp_data_tempFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for gp_data_temp.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__gp_data_tempClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the gp_data_temp model
+   */
+  interface gp_data_tempFieldRefs {
+    readonly gp_id: FieldRef<"gp_data_temp", 'Int'>
+    readonly document_date: FieldRef<"gp_data_temp", 'DateTime'>
+    readonly retailer_code: FieldRef<"gp_data_temp", 'String'>
+    readonly retailer_name: FieldRef<"gp_data_temp", 'String'>
+    readonly p3m_gp: FieldRef<"gp_data_temp", 'Int'>
+    readonly p1m_gp: FieldRef<"gp_data_temp", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * gp_data_temp findUnique
+   */
+  export type gp_data_tempFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data_temp
+     */
+    select?: gp_data_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data_temp
+     */
+    omit?: gp_data_tempOmit<ExtArgs> | null
+    /**
+     * Filter, which gp_data_temp to fetch.
+     */
+    where: gp_data_tempWhereUniqueInput
+  }
+
+  /**
+   * gp_data_temp findUniqueOrThrow
+   */
+  export type gp_data_tempFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data_temp
+     */
+    select?: gp_data_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data_temp
+     */
+    omit?: gp_data_tempOmit<ExtArgs> | null
+    /**
+     * Filter, which gp_data_temp to fetch.
+     */
+    where: gp_data_tempWhereUniqueInput
+  }
+
+  /**
+   * gp_data_temp findFirst
+   */
+  export type gp_data_tempFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data_temp
+     */
+    select?: gp_data_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data_temp
+     */
+    omit?: gp_data_tempOmit<ExtArgs> | null
+    /**
+     * Filter, which gp_data_temp to fetch.
+     */
+    where?: gp_data_tempWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of gp_data_temps to fetch.
+     */
+    orderBy?: gp_data_tempOrderByWithRelationInput | gp_data_tempOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for gp_data_temps.
+     */
+    cursor?: gp_data_tempWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` gp_data_temps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` gp_data_temps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of gp_data_temps.
+     */
+    distinct?: Gp_data_tempScalarFieldEnum | Gp_data_tempScalarFieldEnum[]
+  }
+
+  /**
+   * gp_data_temp findFirstOrThrow
+   */
+  export type gp_data_tempFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data_temp
+     */
+    select?: gp_data_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data_temp
+     */
+    omit?: gp_data_tempOmit<ExtArgs> | null
+    /**
+     * Filter, which gp_data_temp to fetch.
+     */
+    where?: gp_data_tempWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of gp_data_temps to fetch.
+     */
+    orderBy?: gp_data_tempOrderByWithRelationInput | gp_data_tempOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for gp_data_temps.
+     */
+    cursor?: gp_data_tempWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` gp_data_temps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` gp_data_temps.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of gp_data_temps.
+     */
+    distinct?: Gp_data_tempScalarFieldEnum | Gp_data_tempScalarFieldEnum[]
+  }
+
+  /**
+   * gp_data_temp findMany
+   */
+  export type gp_data_tempFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data_temp
+     */
+    select?: gp_data_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data_temp
+     */
+    omit?: gp_data_tempOmit<ExtArgs> | null
+    /**
+     * Filter, which gp_data_temps to fetch.
+     */
+    where?: gp_data_tempWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of gp_data_temps to fetch.
+     */
+    orderBy?: gp_data_tempOrderByWithRelationInput | gp_data_tempOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing gp_data_temps.
+     */
+    cursor?: gp_data_tempWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` gp_data_temps from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` gp_data_temps.
+     */
+    skip?: number
+    distinct?: Gp_data_tempScalarFieldEnum | Gp_data_tempScalarFieldEnum[]
+  }
+
+  /**
+   * gp_data_temp create
+   */
+  export type gp_data_tempCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data_temp
+     */
+    select?: gp_data_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data_temp
+     */
+    omit?: gp_data_tempOmit<ExtArgs> | null
+    /**
+     * The data needed to create a gp_data_temp.
+     */
+    data: XOR<gp_data_tempCreateInput, gp_data_tempUncheckedCreateInput>
+  }
+
+  /**
+   * gp_data_temp createMany
+   */
+  export type gp_data_tempCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many gp_data_temps.
+     */
+    data: gp_data_tempCreateManyInput | gp_data_tempCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * gp_data_temp update
+   */
+  export type gp_data_tempUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data_temp
+     */
+    select?: gp_data_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data_temp
+     */
+    omit?: gp_data_tempOmit<ExtArgs> | null
+    /**
+     * The data needed to update a gp_data_temp.
+     */
+    data: XOR<gp_data_tempUpdateInput, gp_data_tempUncheckedUpdateInput>
+    /**
+     * Choose, which gp_data_temp to update.
+     */
+    where: gp_data_tempWhereUniqueInput
+  }
+
+  /**
+   * gp_data_temp updateMany
+   */
+  export type gp_data_tempUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update gp_data_temps.
+     */
+    data: XOR<gp_data_tempUpdateManyMutationInput, gp_data_tempUncheckedUpdateManyInput>
+    /**
+     * Filter which gp_data_temps to update
+     */
+    where?: gp_data_tempWhereInput
+    /**
+     * Limit how many gp_data_temps to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * gp_data_temp upsert
+   */
+  export type gp_data_tempUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data_temp
+     */
+    select?: gp_data_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data_temp
+     */
+    omit?: gp_data_tempOmit<ExtArgs> | null
+    /**
+     * The filter to search for the gp_data_temp to update in case it exists.
+     */
+    where: gp_data_tempWhereUniqueInput
+    /**
+     * In case the gp_data_temp found by the `where` argument doesn't exist, create a new gp_data_temp with this data.
+     */
+    create: XOR<gp_data_tempCreateInput, gp_data_tempUncheckedCreateInput>
+    /**
+     * In case the gp_data_temp was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<gp_data_tempUpdateInput, gp_data_tempUncheckedUpdateInput>
+  }
+
+  /**
+   * gp_data_temp delete
+   */
+  export type gp_data_tempDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data_temp
+     */
+    select?: gp_data_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data_temp
+     */
+    omit?: gp_data_tempOmit<ExtArgs> | null
+    /**
+     * Filter which gp_data_temp to delete.
+     */
+    where: gp_data_tempWhereUniqueInput
+  }
+
+  /**
+   * gp_data_temp deleteMany
+   */
+  export type gp_data_tempDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which gp_data_temps to delete
+     */
+    where?: gp_data_tempWhereInput
+    /**
+     * Limit how many gp_data_temps to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * gp_data_temp without action
+   */
+  export type gp_data_tempDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the gp_data_temp
+     */
+    select?: gp_data_tempSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the gp_data_temp
+     */
+    omit?: gp_data_tempOmit<ExtArgs> | null
   }
 
 
@@ -16627,6 +18663,30 @@ export namespace Prisma {
   export type Product_mappingScalarFieldEnum = (typeof Product_mappingScalarFieldEnum)[keyof typeof Product_mappingScalarFieldEnum]
 
 
+  export const Gp_dataScalarFieldEnum: {
+    gp_id: 'gp_id',
+    document_date: 'document_date',
+    retailer_code: 'retailer_code',
+    retailer_name: 'retailer_name',
+    p3m_gp: 'p3m_gp',
+    p1m_gp: 'p1m_gp'
+  };
+
+  export type Gp_dataScalarFieldEnum = (typeof Gp_dataScalarFieldEnum)[keyof typeof Gp_dataScalarFieldEnum]
+
+
+  export const Gp_data_tempScalarFieldEnum: {
+    gp_id: 'gp_id',
+    document_date: 'document_date',
+    retailer_code: 'retailer_code',
+    retailer_name: 'retailer_name',
+    p3m_gp: 'p3m_gp',
+    p1m_gp: 'p1m_gp'
+  };
+
+  export type Gp_data_tempScalarFieldEnum = (typeof Gp_data_tempScalarFieldEnum)[keyof typeof Gp_data_tempScalarFieldEnum]
+
+
   export const Mapping_change_flagScalarFieldEnum: {
     id: 'id',
     changed_at: 'changed_at',
@@ -16839,6 +18899,22 @@ export namespace Prisma {
   };
 
   export type product_mappingOrderByRelevanceFieldEnum = (typeof product_mappingOrderByRelevanceFieldEnum)[keyof typeof product_mappingOrderByRelevanceFieldEnum]
+
+
+  export const gp_dataOrderByRelevanceFieldEnum: {
+    retailer_code: 'retailer_code',
+    retailer_name: 'retailer_name'
+  };
+
+  export type gp_dataOrderByRelevanceFieldEnum = (typeof gp_dataOrderByRelevanceFieldEnum)[keyof typeof gp_dataOrderByRelevanceFieldEnum]
+
+
+  export const gp_data_tempOrderByRelevanceFieldEnum: {
+    retailer_code: 'retailer_code',
+    retailer_name: 'retailer_name'
+  };
+
+  export type gp_data_tempOrderByRelevanceFieldEnum = (typeof gp_data_tempOrderByRelevanceFieldEnum)[keyof typeof gp_data_tempOrderByRelevanceFieldEnum]
 
 
   export const UserOrderByRelevanceFieldEnum: {
@@ -17587,6 +19663,126 @@ export namespace Prisma {
     brandform?: StringWithAggregatesFilter<"product_mapping"> | string
     subbrandform?: StringWithAggregatesFilter<"product_mapping"> | string
     created_at?: DateTimeWithAggregatesFilter<"product_mapping"> | Date | string
+  }
+
+  export type gp_dataWhereInput = {
+    AND?: gp_dataWhereInput | gp_dataWhereInput[]
+    OR?: gp_dataWhereInput[]
+    NOT?: gp_dataWhereInput | gp_dataWhereInput[]
+    gp_id?: IntFilter<"gp_data"> | number
+    document_date?: DateTimeFilter<"gp_data"> | Date | string
+    retailer_code?: StringFilter<"gp_data"> | string
+    retailer_name?: StringFilter<"gp_data"> | string
+    p3m_gp?: IntFilter<"gp_data"> | number
+    p1m_gp?: IntFilter<"gp_data"> | number
+  }
+
+  export type gp_dataOrderByWithRelationInput = {
+    gp_id?: SortOrder
+    document_date?: SortOrder
+    retailer_code?: SortOrder
+    retailer_name?: SortOrder
+    p3m_gp?: SortOrder
+    p1m_gp?: SortOrder
+    _relevance?: gp_dataOrderByRelevanceInput
+  }
+
+  export type gp_dataWhereUniqueInput = Prisma.AtLeast<{
+    gp_id?: number
+    AND?: gp_dataWhereInput | gp_dataWhereInput[]
+    OR?: gp_dataWhereInput[]
+    NOT?: gp_dataWhereInput | gp_dataWhereInput[]
+    document_date?: DateTimeFilter<"gp_data"> | Date | string
+    retailer_code?: StringFilter<"gp_data"> | string
+    retailer_name?: StringFilter<"gp_data"> | string
+    p3m_gp?: IntFilter<"gp_data"> | number
+    p1m_gp?: IntFilter<"gp_data"> | number
+  }, "gp_id">
+
+  export type gp_dataOrderByWithAggregationInput = {
+    gp_id?: SortOrder
+    document_date?: SortOrder
+    retailer_code?: SortOrder
+    retailer_name?: SortOrder
+    p3m_gp?: SortOrder
+    p1m_gp?: SortOrder
+    _count?: gp_dataCountOrderByAggregateInput
+    _avg?: gp_dataAvgOrderByAggregateInput
+    _max?: gp_dataMaxOrderByAggregateInput
+    _min?: gp_dataMinOrderByAggregateInput
+    _sum?: gp_dataSumOrderByAggregateInput
+  }
+
+  export type gp_dataScalarWhereWithAggregatesInput = {
+    AND?: gp_dataScalarWhereWithAggregatesInput | gp_dataScalarWhereWithAggregatesInput[]
+    OR?: gp_dataScalarWhereWithAggregatesInput[]
+    NOT?: gp_dataScalarWhereWithAggregatesInput | gp_dataScalarWhereWithAggregatesInput[]
+    gp_id?: IntWithAggregatesFilter<"gp_data"> | number
+    document_date?: DateTimeWithAggregatesFilter<"gp_data"> | Date | string
+    retailer_code?: StringWithAggregatesFilter<"gp_data"> | string
+    retailer_name?: StringWithAggregatesFilter<"gp_data"> | string
+    p3m_gp?: IntWithAggregatesFilter<"gp_data"> | number
+    p1m_gp?: IntWithAggregatesFilter<"gp_data"> | number
+  }
+
+  export type gp_data_tempWhereInput = {
+    AND?: gp_data_tempWhereInput | gp_data_tempWhereInput[]
+    OR?: gp_data_tempWhereInput[]
+    NOT?: gp_data_tempWhereInput | gp_data_tempWhereInput[]
+    gp_id?: IntFilter<"gp_data_temp"> | number
+    document_date?: DateTimeFilter<"gp_data_temp"> | Date | string
+    retailer_code?: StringFilter<"gp_data_temp"> | string
+    retailer_name?: StringFilter<"gp_data_temp"> | string
+    p3m_gp?: IntFilter<"gp_data_temp"> | number
+    p1m_gp?: IntFilter<"gp_data_temp"> | number
+  }
+
+  export type gp_data_tempOrderByWithRelationInput = {
+    gp_id?: SortOrder
+    document_date?: SortOrder
+    retailer_code?: SortOrder
+    retailer_name?: SortOrder
+    p3m_gp?: SortOrder
+    p1m_gp?: SortOrder
+    _relevance?: gp_data_tempOrderByRelevanceInput
+  }
+
+  export type gp_data_tempWhereUniqueInput = Prisma.AtLeast<{
+    gp_id?: number
+    AND?: gp_data_tempWhereInput | gp_data_tempWhereInput[]
+    OR?: gp_data_tempWhereInput[]
+    NOT?: gp_data_tempWhereInput | gp_data_tempWhereInput[]
+    document_date?: DateTimeFilter<"gp_data_temp"> | Date | string
+    retailer_code?: StringFilter<"gp_data_temp"> | string
+    retailer_name?: StringFilter<"gp_data_temp"> | string
+    p3m_gp?: IntFilter<"gp_data_temp"> | number
+    p1m_gp?: IntFilter<"gp_data_temp"> | number
+  }, "gp_id">
+
+  export type gp_data_tempOrderByWithAggregationInput = {
+    gp_id?: SortOrder
+    document_date?: SortOrder
+    retailer_code?: SortOrder
+    retailer_name?: SortOrder
+    p3m_gp?: SortOrder
+    p1m_gp?: SortOrder
+    _count?: gp_data_tempCountOrderByAggregateInput
+    _avg?: gp_data_tempAvgOrderByAggregateInput
+    _max?: gp_data_tempMaxOrderByAggregateInput
+    _min?: gp_data_tempMinOrderByAggregateInput
+    _sum?: gp_data_tempSumOrderByAggregateInput
+  }
+
+  export type gp_data_tempScalarWhereWithAggregatesInput = {
+    AND?: gp_data_tempScalarWhereWithAggregatesInput | gp_data_tempScalarWhereWithAggregatesInput[]
+    OR?: gp_data_tempScalarWhereWithAggregatesInput[]
+    NOT?: gp_data_tempScalarWhereWithAggregatesInput | gp_data_tempScalarWhereWithAggregatesInput[]
+    gp_id?: IntWithAggregatesFilter<"gp_data_temp"> | number
+    document_date?: DateTimeWithAggregatesFilter<"gp_data_temp"> | Date | string
+    retailer_code?: StringWithAggregatesFilter<"gp_data_temp"> | string
+    retailer_name?: StringWithAggregatesFilter<"gp_data_temp"> | string
+    p3m_gp?: IntWithAggregatesFilter<"gp_data_temp"> | number
+    p1m_gp?: IntWithAggregatesFilter<"gp_data_temp"> | number
   }
 
   export type mapping_change_flagWhereInput = {
@@ -18739,6 +20935,126 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type gp_dataCreateInput = {
+    document_date: Date | string
+    retailer_code: string
+    retailer_name: string
+    p3m_gp: number
+    p1m_gp: number
+  }
+
+  export type gp_dataUncheckedCreateInput = {
+    gp_id?: number
+    document_date: Date | string
+    retailer_code: string
+    retailer_name: string
+    p3m_gp: number
+    p1m_gp: number
+  }
+
+  export type gp_dataUpdateInput = {
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    retailer_code?: StringFieldUpdateOperationsInput | string
+    retailer_name?: StringFieldUpdateOperationsInput | string
+    p3m_gp?: IntFieldUpdateOperationsInput | number
+    p1m_gp?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type gp_dataUncheckedUpdateInput = {
+    gp_id?: IntFieldUpdateOperationsInput | number
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    retailer_code?: StringFieldUpdateOperationsInput | string
+    retailer_name?: StringFieldUpdateOperationsInput | string
+    p3m_gp?: IntFieldUpdateOperationsInput | number
+    p1m_gp?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type gp_dataCreateManyInput = {
+    gp_id?: number
+    document_date: Date | string
+    retailer_code: string
+    retailer_name: string
+    p3m_gp: number
+    p1m_gp: number
+  }
+
+  export type gp_dataUpdateManyMutationInput = {
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    retailer_code?: StringFieldUpdateOperationsInput | string
+    retailer_name?: StringFieldUpdateOperationsInput | string
+    p3m_gp?: IntFieldUpdateOperationsInput | number
+    p1m_gp?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type gp_dataUncheckedUpdateManyInput = {
+    gp_id?: IntFieldUpdateOperationsInput | number
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    retailer_code?: StringFieldUpdateOperationsInput | string
+    retailer_name?: StringFieldUpdateOperationsInput | string
+    p3m_gp?: IntFieldUpdateOperationsInput | number
+    p1m_gp?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type gp_data_tempCreateInput = {
+    document_date: Date | string
+    retailer_code: string
+    retailer_name: string
+    p3m_gp: number
+    p1m_gp: number
+  }
+
+  export type gp_data_tempUncheckedCreateInput = {
+    gp_id?: number
+    document_date: Date | string
+    retailer_code: string
+    retailer_name: string
+    p3m_gp: number
+    p1m_gp: number
+  }
+
+  export type gp_data_tempUpdateInput = {
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    retailer_code?: StringFieldUpdateOperationsInput | string
+    retailer_name?: StringFieldUpdateOperationsInput | string
+    p3m_gp?: IntFieldUpdateOperationsInput | number
+    p1m_gp?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type gp_data_tempUncheckedUpdateInput = {
+    gp_id?: IntFieldUpdateOperationsInput | number
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    retailer_code?: StringFieldUpdateOperationsInput | string
+    retailer_name?: StringFieldUpdateOperationsInput | string
+    p3m_gp?: IntFieldUpdateOperationsInput | number
+    p1m_gp?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type gp_data_tempCreateManyInput = {
+    gp_id?: number
+    document_date: Date | string
+    retailer_code: string
+    retailer_name: string
+    p3m_gp: number
+    p1m_gp: number
+  }
+
+  export type gp_data_tempUpdateManyMutationInput = {
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    retailer_code?: StringFieldUpdateOperationsInput | string
+    retailer_name?: StringFieldUpdateOperationsInput | string
+    p3m_gp?: IntFieldUpdateOperationsInput | number
+    p1m_gp?: IntFieldUpdateOperationsInput | number
+  }
+
+  export type gp_data_tempUncheckedUpdateManyInput = {
+    gp_id?: IntFieldUpdateOperationsInput | number
+    document_date?: DateTimeFieldUpdateOperationsInput | Date | string
+    retailer_code?: StringFieldUpdateOperationsInput | string
+    retailer_name?: StringFieldUpdateOperationsInput | string
+    p3m_gp?: IntFieldUpdateOperationsInput | number
+    p1m_gp?: IntFieldUpdateOperationsInput | number
+  }
+
   export type mapping_change_flagCreateInput = {
     changed_at?: Date | string
     processed?: boolean
@@ -19750,6 +22066,96 @@ export namespace Prisma {
   export type product_mappingSumOrderByAggregateInput = {
     Id?: SortOrder
     p_code?: SortOrder
+  }
+
+  export type gp_dataOrderByRelevanceInput = {
+    fields: gp_dataOrderByRelevanceFieldEnum | gp_dataOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type gp_dataCountOrderByAggregateInput = {
+    gp_id?: SortOrder
+    document_date?: SortOrder
+    retailer_code?: SortOrder
+    retailer_name?: SortOrder
+    p3m_gp?: SortOrder
+    p1m_gp?: SortOrder
+  }
+
+  export type gp_dataAvgOrderByAggregateInput = {
+    gp_id?: SortOrder
+    p3m_gp?: SortOrder
+    p1m_gp?: SortOrder
+  }
+
+  export type gp_dataMaxOrderByAggregateInput = {
+    gp_id?: SortOrder
+    document_date?: SortOrder
+    retailer_code?: SortOrder
+    retailer_name?: SortOrder
+    p3m_gp?: SortOrder
+    p1m_gp?: SortOrder
+  }
+
+  export type gp_dataMinOrderByAggregateInput = {
+    gp_id?: SortOrder
+    document_date?: SortOrder
+    retailer_code?: SortOrder
+    retailer_name?: SortOrder
+    p3m_gp?: SortOrder
+    p1m_gp?: SortOrder
+  }
+
+  export type gp_dataSumOrderByAggregateInput = {
+    gp_id?: SortOrder
+    p3m_gp?: SortOrder
+    p1m_gp?: SortOrder
+  }
+
+  export type gp_data_tempOrderByRelevanceInput = {
+    fields: gp_data_tempOrderByRelevanceFieldEnum | gp_data_tempOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type gp_data_tempCountOrderByAggregateInput = {
+    gp_id?: SortOrder
+    document_date?: SortOrder
+    retailer_code?: SortOrder
+    retailer_name?: SortOrder
+    p3m_gp?: SortOrder
+    p1m_gp?: SortOrder
+  }
+
+  export type gp_data_tempAvgOrderByAggregateInput = {
+    gp_id?: SortOrder
+    p3m_gp?: SortOrder
+    p1m_gp?: SortOrder
+  }
+
+  export type gp_data_tempMaxOrderByAggregateInput = {
+    gp_id?: SortOrder
+    document_date?: SortOrder
+    retailer_code?: SortOrder
+    retailer_name?: SortOrder
+    p3m_gp?: SortOrder
+    p1m_gp?: SortOrder
+  }
+
+  export type gp_data_tempMinOrderByAggregateInput = {
+    gp_id?: SortOrder
+    document_date?: SortOrder
+    retailer_code?: SortOrder
+    retailer_name?: SortOrder
+    p3m_gp?: SortOrder
+    p1m_gp?: SortOrder
+  }
+
+  export type gp_data_tempSumOrderByAggregateInput = {
+    gp_id?: SortOrder
+    p3m_gp?: SortOrder
+    p1m_gp?: SortOrder
   }
 
   export type BoolFilter<$PrismaModel = never> = {
