@@ -351,7 +351,15 @@ export async function getStoreRetailingBreakdown(
     dateCondition = { gte: minDate, lte: maxDate };
   }
 
-  const tables = resolveTables(source);
+  let tables: string[] = [];
+
+  if (source === "main") {
+    tables = ["psr_data_historical"];
+  } else if (source === "temp") {
+    tables = ["psr_data_temp"];
+  } else {
+    tables = ["psr_data_historical", "psr_data_temp"];
+  }
 
   let rawResults: { p_code: number; document_date: Date; retailing: number }[] =
     [];
@@ -359,7 +367,7 @@ export async function getStoreRetailingBreakdown(
   // Step 4: Query psr_data only (skip product_mapping join)
   for (const table of tables) {
     const delegate = prisma[
-      table as "psr_data_finalized" | "psr_data_temp"
+      table as "psr_data_historical" | "psr_data_temp"
     ] as any;
 
     const data = await delegate.findMany({
@@ -1154,13 +1162,13 @@ export async function getTopBrandforms(filters: any, source: string) {
 
 // STORE page
 export async function getAllBranches(): Promise<string[]> {
-  const branches = await prisma.psr_data_finalized.findMany({
-    distinct: ["branch"],
-    select: { branch: true },
+  const branches = await prisma.store_mapping.findMany({
+    distinct: ["Branch"],
+    select: { Branch: true },
   });
 
   return branches
-    .map((b) => b.branch)
+    .map((b) => b.Branch)
     .filter((branch): branch is string => branch !== null);
 }
 
@@ -1294,7 +1302,15 @@ export async function getStoreRetailingTrend(
   year?: number[],
   month?: number[]
 ) {
-  const tables = resolveTables(source);
+  let tables: string[] = [];
+
+  if (source === "main") {
+    tables = ["psr_data_historical"];
+  } else if (source === "temp") {
+    tables = ["psr_data_temp"];
+  } else {
+    tables = ["psr_data_historical", "psr_data_temp"];
+  }
 
   const hasYear = year?.length;
   const hasMonth = month?.length;
@@ -1352,7 +1368,15 @@ export async function getStoreStats(
   year?: number[],
   month?: number[]
 ) {
-  const tables = resolveTables(source);
+  let tables: string[] = [];
+
+  if (source === "main") {
+    tables = ["psr_data_historical"];
+  } else if (source === "temp") {
+    tables = ["psr_data_temp"];
+  } else {
+    tables = ["psr_data_historical", "psr_data_temp"];
+  }
 
   const storeMapping = await prisma.store_mapping.findFirst({
     where: { Old_Store_Code: storeCode },
@@ -1486,7 +1510,15 @@ export async function getCategoryRetailing(
   year?: number[],
   month?: number[]
 ) {
-  const tables = resolveTables(source);
+  let tables: string[] = [];
+
+  if (source === "main") {
+    tables = ["psr_data_historical"];
+  } else if (source === "temp") {
+    tables = ["psr_data_temp"];
+  } else {
+    tables = ["psr_data_historical", "psr_data_temp"];
+  }
 
   // Step 1: Preload product_mapping (tiny table vs psr_data)
   const products = await prisma.product_mapping.findMany({
@@ -1512,7 +1544,7 @@ export async function getCategoryRetailing(
 
   for (const table of tables) {
     const delegate = prisma[
-      table as "psr_data_finalized" | "psr_data_temp"
+      table as "psr_data_historical" | "psr_data_temp"
     ] as any;
     const data = await delegate.findMany({
       where: {
