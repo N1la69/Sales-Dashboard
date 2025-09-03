@@ -1524,6 +1524,77 @@ export async function getStoreRetailingTrend(
   }));
 }
 
+export async function getStoreGPTrend(
+  storeCode: string,
+  source: string,
+  year?: number[],
+  month?: number[],
+  gpType: string = "p3m"
+) {
+  let tables: string[] = [];
+
+  if (source === "main") {
+    tables = ["gp_data"];
+  } else if (source === "temp") {
+    tables = ["gp_data_temp"];
+  } else {
+    tables = ["gp_data", "gp_data_temp"];
+  }
+
+  const hasYear = year?.length;
+  const hasMonth = month?.length;
+
+  const filters: string[] = [];
+  if (hasYear) {
+    filters.push(`(
+      CASE WHEN MONTH(document_date) >= 7 THEN YEAR(document_date)+1 ELSE YEAR(document_date) END
+    ) IN (${year.map(() => "?").join(",")})`);
+  }
+  if (hasMonth) {
+    filters.push(`(
+      CASE WHEN MONTH(document_date) >= 7 THEN MONTH(document_date)-6 ELSE MONTH(document_date)+6 END
+    ) IN (${month.map(() => "?").join(",")})`);
+  }
+
+  const filterClause = filters.length ? `AND ${filters.join(" AND ")}` : "";
+
+  const unionQueryParts: string[] = [];
+  const queryParams: any[] = [];
+
+  const gpColumn = gpType === "p1m" ? "p1m_gp" : "p3m_gp";
+
+  for (const table of tables) {
+    unionQueryParts.push(`
+      SELECT 
+        CASE WHEN MONTH(document_date) >= 7 THEN YEAR(document_date)+1 ELSE YEAR(document_date) END AS year,
+        CASE WHEN MONTH(document_date) >= 7 THEN MONTH(document_date)-6 ELSE MONTH(document_date)+6 END AS month,
+        ${gpColumn} AS gp
+      FROM ${table}
+      WHERE retailer_code = ? ${filterClause}
+    `);
+    queryParams.push(storeCode);
+    if (hasYear) queryParams.push(...year);
+    if (hasMonth) queryParams.push(...month);
+  }
+
+  const fullQuery = `
+    SELECT year, month, SUM(gp) AS gp
+    FROM (
+      ${unionQueryParts.join(" UNION ALL ")}
+    ) AS combined
+    GROUP BY year, month
+    ORDER BY year, month
+  `;
+
+  const result = await prisma.$queryRawUnsafe<any[]>(fullQuery, ...queryParams);
+
+  return result.map((r) => ({
+    year: Number(r.year),
+    month: Number(r.month),
+    gp: Number(r.gp), // ✅ alias fixed
+  }));
+}
+
 export async function getStoreStats(
   storeCode: string,
   source: string,
@@ -1663,6 +1734,107 @@ export async function getStoreStats(
     lowestRetailingBrand: lowestBrand
       ? { brand: lowestBrand.brand, retailing: lowestBrand.total }
       : null,
+  };
+}
+
+export async function getStoreGPStats(
+  storeCode: string,
+  source: string,
+  year?: number[],
+  month?: number[],
+  gpType: string = "p3m"
+) {
+  let tables: string[] = [];
+
+  if (source === "main") {
+    tables = ["gp_data"];
+  } else if (source === "temp") {
+    tables = ["gp_data_temp"];
+  } else {
+    tables = ["gp_data", "gp_data_temp"];
+  }
+
+  const gpColumn = gpType === "p1m" ? "p1m_gp" : "p3m_gp";
+
+  const hasYear = year?.length;
+  const hasMonth = month?.length;
+
+  const filters: string[] = [];
+  if (hasYear)
+    filters.push(`(
+      CASE WHEN MONTH(document_date) >= 7 THEN YEAR(document_date)+1 ELSE YEAR(document_date) END
+    ) IN (${year.map(() => "?").join(",")})`);
+  if (hasMonth)
+    filters.push(`(
+      CASE WHEN MONTH(document_date) >= 7 THEN MONTH(document_date)-6 ELSE MONTH(document_date)+6 END
+    ) IN (${month.map(() => "?").join(",")})`);
+
+  const filterClause = filters.length ? `AND ${filters.join(" AND ")}` : "";
+  const queryParams: any[] = [];
+
+  const unionQueryParts = tables.map((table) => {
+    queryParams.push(storeCode);
+    if (hasYear) queryParams.push(...year);
+    if (hasMonth) queryParams.push(...month);
+
+    return `
+      SELECT 
+        CASE WHEN MONTH(document_date) >= 7 THEN YEAR(document_date)+1 ELSE YEAR(document_date) END AS year,
+        CASE WHEN MONTH(document_date) >= 7 THEN MONTH(document_date)-6 ELSE MONTH(document_date)+6 END AS month,
+        ${gpColumn} AS gp
+      FROM ${table}
+      WHERE retailer_code = ? ${filterClause}
+    `;
+  });
+
+  const fullQuery = `
+    SELECT year, month, SUM(gp) AS total
+    FROM (
+      ${unionQueryParts.join(" UNION ALL ")}
+    ) AS combined
+    GROUP BY year, month
+    ORDER BY year, month
+  `;
+
+  const results = await prisma.$queryRawUnsafe<any[]>(
+    fullQuery,
+    ...queryParams
+  );
+
+  if (!results.length) {
+    return {
+      highestGPMonth: null,
+      lowestGPMonth: null,
+      averageGP: 0,
+    };
+  }
+
+  // Process results
+  const parsedResults = results.map((r) => ({
+    year: Number(r.year),
+    month: Number(r.month),
+    gp: Number(r.total),
+  }));
+
+  const highest = parsedResults.reduce(
+    (max, curr) => (!max || curr.gp > max.gp ? curr : max),
+    null as any
+  );
+  const lowest = parsedResults.reduce(
+    (min, curr) => (!min || curr.gp < min.gp ? curr : min),
+    null as any
+  );
+  const average =
+    parsedResults.reduce((sum, r) => sum + r.gp, 0) / parsedResults.length;
+
+  return {
+    highestGPMonth: highest
+      ? { ...highest, monthName: monthNumberToName(highest.month) }
+      : null,
+    lowestGPMonth: lowest
+      ? { ...lowest, monthName: monthNumberToName(lowest.month) }
+      : null,
+    averageGP: Number(average.toFixed(0)),
   };
 }
 

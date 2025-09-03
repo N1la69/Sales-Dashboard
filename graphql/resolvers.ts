@@ -10,6 +10,8 @@ import {
   getRetailingByBaseChannel,
   getRetailingByCategory,
   getStoreDetails,
+  getStoreGPStats,
+  getStoreGPTrend,
   getStoreRetailingBreakdown,
   getStoreRetailingTrend,
   getStoreStats,
@@ -96,6 +98,24 @@ export const resolvers = {
     ) => {
       return await getStoreRetailingTrend(storeCode, source, year, month);
     },
+    storeGPTrend: async (
+      _: any,
+      {
+        storeCode,
+        source,
+        year,
+        month,
+        gpType = "p3m",
+      }: {
+        storeCode: string;
+        source: string;
+        year?: number[];
+        month?: number[];
+        gpType?: string;
+      }
+    ) => {
+      return await getStoreGPTrend(storeCode, source, year, month, gpType);
+    },
     getStoreStats: async (
       _: any,
       {
@@ -111,6 +131,24 @@ export const resolvers = {
       }
     ) => {
       return await getStoreStats(storeCode, source, year, month);
+    },
+    getStoreGPStats: async (
+      _: any,
+      {
+        storeCode,
+        source,
+        year,
+        month,
+        gpType = "p3m",
+      }: {
+        storeCode: string;
+        source: string;
+        year?: number[];
+        month?: number[];
+        gpType?: string;
+      }
+    ) => {
+      return await getStoreGPStats(storeCode, source, year, month, gpType);
     },
     getCategoryRetailing: async (
       _: any,

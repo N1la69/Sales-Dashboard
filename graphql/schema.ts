@@ -126,6 +126,12 @@ export const typeDefs = gql`
     retailing: Float
   }
 
+  type StoreGPTrend {
+    year: Int
+    month: Int
+    gp: Float
+  }
+
   type StoreRetailingStat {
     year: Int
     month: Int
@@ -136,6 +142,19 @@ export const typeDefs = gql`
   type StoreBrandStat {
     brand: String
     retailing: Float
+  }
+
+  type StoreGPStat {
+    year: Int
+    month: Int
+    monthName: String
+    gp: Float
+  }
+
+  type StoreGPStats {
+    highestGPMonth: StoreGPStat
+    lowestGPMonth: StoreGPStat
+    averageGP: Float
   }
 
   type CategoryRetailingStat {
@@ -227,6 +246,13 @@ export const typeDefs = gql`
       year: [Int]
       month: [Int]
     ): [StoreRetailingTrend]
+    storeGPTrend(
+      storeCode: String!
+      source: String
+      year: [Int]
+      month: [Int]
+      gpType: String = "p3m"
+    ): [StoreGPTrend]
     getStoreDetails(storeCode: String!, source: String): StoreDetails
     getLastStoreBills(
       storeCode: String!
@@ -240,6 +266,13 @@ export const typeDefs = gql`
       year: [Int]
       month: [Int]
     ): StoreStats
+    getStoreGPStats(
+      storeCode: String!
+      source: String
+      year: [Int]
+      month: [Int]
+      gpType: String
+    ): StoreGPStats
     getCategoryRetailing(
       storeCode: String!
       source: String

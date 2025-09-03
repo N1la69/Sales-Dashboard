@@ -19,6 +19,8 @@ import {
 import StoreCategoryTable from "@/components/structures/StoreCategoryTable";
 import { filters } from "@/constants/data";
 import { BillTable } from "@/components/structures/BillTable";
+import StoreGPTrendChart from "@/components/visuals/StoreGPTrendChart";
+import { StoreGPStatsCard } from "@/components/structures/StoreGPStatsCard";
 
 // ================= GraphQL Queries =================
 const GET_ALL_BRANCHES = gql`
@@ -51,6 +53,28 @@ const GET_STORE_TREND = gql`
       year
       month
       retailing
+    }
+  }
+`;
+
+const GET_STORE_GP_TREND = gql`
+  query GetStoreGPTrend(
+    $storeCode: String!
+    $source: String
+    $year: [Int]
+    $month: [Int]
+    $gpType: String
+  ) {
+    storeGPTrend(
+      storeCode: $storeCode
+      source: $source
+      year: $year
+      month: $month
+      gpType: $gpType
+    ) {
+      year
+      month
+      gp
     }
   }
 `;
@@ -88,6 +112,38 @@ const GET_ADDITIONAL_STATS = gql`
         brand
         retailing
       }
+    }
+  }
+`;
+
+const GET_GP_STATS = gql`
+  query GetStoreGPStats(
+    $storeCode: String!
+    $source: String
+    $year: [Int]
+    $month: [Int]
+    $gpType: String
+  ) {
+    getStoreGPStats(
+      storeCode: $storeCode
+      source: $source
+      year: $year
+      month: $month
+      gpType: $gpType
+    ) {
+      highestGPMonth {
+        year
+        month
+        monthName
+        gp
+      }
+      lowestGPMonth {
+        year
+        month
+        monthName
+        gp
+      }
+      averageGP
     }
   }
 `;
@@ -156,6 +212,29 @@ const StorePage = () => {
   const [storeName, setStoreName] = useState<string | null>(null);
   const [storeChannel, setStoreChannel] = useState<string | null>(null);
 
+  const [gpType, setGpType] = useState<"p1m" | "p3m">("p3m");
+
+  const handleGpToggle = async () => {
+    const newType = gpType === "p3m" ? "p1m" : "p3m";
+    setGpType(newType);
+
+    await refetchGPStats({
+      storeCode: selectedStore,
+      source: dataSource,
+      year: appliedFilters.year,
+      month: appliedFilters.month,
+      gpType: newType,
+    });
+
+    await refetchGpTrend({
+      storeCode: selectedStore,
+      source: dataSource,
+      year: appliedFilters.year,
+      month: appliedFilters.month,
+      gpType: newType,
+    });
+  };
+
   const [pendingFilters, setPendingFilters] = useState<{
     year: number[];
     month: number[];
@@ -198,6 +277,22 @@ const StorePage = () => {
   });
 
   const {
+    data: gpTrendData,
+    loading: gpTrendLoading,
+    error: gpTrendError,
+    refetch: refetchGpTrend,
+  } = useQuery(GET_STORE_GP_TREND, {
+    variables: {
+      storeCode: selectedStore,
+      source: dataSource,
+      year: appliedFilters.year,
+      month: appliedFilters.month,
+      gpType: "p3m",
+    },
+    skip: !selectedStore,
+  });
+
+  const {
     data: additionalStatsData,
     loading: statsLoading,
     error: statsError,
@@ -208,6 +303,22 @@ const StorePage = () => {
       source: dataSource,
       year: appliedFilters.year,
       month: appliedFilters.month,
+    },
+    skip: !selectedStore,
+  });
+
+  const {
+    data: gpStatsData,
+    loading: gpStatsLoading,
+    error: gpStatsError,
+    refetch: refetchGPStats,
+  } = useQuery(GET_GP_STATS, {
+    variables: {
+      storeCode: selectedStore,
+      source: dataSource,
+      year: appliedFilters.year,
+      month: appliedFilters.month,
+      gpType: "p3m",
     },
     skip: !selectedStore,
   });
@@ -480,7 +591,39 @@ const StorePage = () => {
                     />
                   )}
                 </div>
+
+                <div className="lg:col-span-1">
+                  <h2 className="text-xl font-semibold mb-3">
+                    GP Stats:{" "}
+                    <span
+                      className="text-indigo-700 dark:text-indigo-300 font-semibold cursor-pointer"
+                      onClick={handleGpToggle}
+                    >
+                      {gpType}
+                    </span>
+                  </h2>
+                  <div>
+                    <StoreGPStatsCard
+                      data={gpStatsData?.getStoreGPStats}
+                      loading={gpStatsLoading}
+                      error={gpStatsError}
+                    />
+                  </div>
+                </div>
               </div>
+
+              {gpTrendLoading ? (
+                <Skeleton className="h-60 w-full rounded-xl" />
+              ) : (
+                <div className="py-6 mb-10">
+                  <StoreGPTrendChart
+                    data={gpTrendData?.storeGPTrend}
+                    loading={gpTrendLoading}
+                    error={gpTrendError}
+                    gpType={gpType}
+                  />
+                </div>
+              )}
 
               {/* Bills */}
               <div className="py-3">
