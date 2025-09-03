@@ -190,6 +190,74 @@ export async function buildWhereClauseForRawSQL(
   return { whereClause, params };
 }
 
+export function buildWhereClauseForGP(filters: any = {}) {
+  let whereClause = "";
+  const params: any[] = [];
+
+  const addIn = (values: any[] | undefined, field: string) => {
+    if (values && Array.isArray(values) && values.length) {
+      whereClause += ` AND ${field} IN (${values.map(() => "?").join(",")})`;
+      params.push(...values);
+    }
+  };
+
+  // ---- Store mapping filters (come from store_mapping) ----
+  addIn(filters.ZM, "sm.ZM");
+  addIn(filters.RSM, "sm.RSM");
+  addIn(filters.ASM, "sm.ASM");
+  addIn(filters.TSI, "sm.TSI");
+  addIn(filters.Branch, "sm.Branch");
+
+  // ---- Channel mapping filters (come from channel_mapping) ----
+  addIn(filters.ChannelDesc, "cm.channel_desc");
+  addIn(filters.BaseChannel, "cm.base_channel");
+  addIn(filters.ShortChannel, "cm.short_channel");
+
+  // ---- Fiscal Year (prefer filters.FiscalYear; else filters.Year) ----
+  const fyList =
+    (filters?.FiscalYear && filters.FiscalYear.length
+      ? filters.FiscalYear
+      : null) ?? (filters?.Year && filters.Year.length ? filters.Year : null);
+
+  if (fyList?.length) {
+    whereClause += ` AND (
+      CASE
+        WHEN MONTH(p.document_date) >= 7 THEN YEAR(p.document_date) + 1
+        ELSE YEAR(p.document_date)
+      END
+    ) IN (${fyList.map(() => "?").join(",")})`;
+    params.push(...fyList);
+  }
+
+  // ---- Fiscal Month (1=Jul, ..., 12=Jun). Accept filters.FiscalMonth or filters.Month
+  const fiscalMonths =
+    (filters?.FiscalMonth && filters.FiscalMonth.length
+      ? filters.FiscalMonth
+      : null) ??
+    (filters?.Month && filters.Month.length ? filters.Month : null);
+
+  if (fiscalMonths?.length) {
+    // Compare against fiscal month derived from calendar month
+    whereClause += ` AND (
+      CASE
+        WHEN MONTH(p.document_date) >= 7 THEN MONTH(p.document_date) - 6
+        ELSE MONTH(p.document_date) + 6
+      END
+    ) IN (${fiscalMonths.map(() => "?").join(",")})`;
+    params.push(...fiscalMonths);
+  }
+
+  // ---- Date range (ISO yyyy-mm-dd)
+  if (filters?.StartDate && filters?.EndDate) {
+    whereClause += ` AND p.document_date BETWEEN ? AND ?`;
+    params.push(filters.StartDate, filters.EndDate);
+  }
+
+  // NOTE: Category/Brand/Brandform/Subbrandform intentionally ignored for GP
+
+  return { whereClause, params };
+}
+
 // Drill-down Logic
 export async function getRetailingBreakdown(
   level: string,
@@ -591,26 +659,29 @@ export async function getTotalGP(
   const yearTotals: Record<number, number> = {};
   const gpColumn = gpType === "p1m" ? "p1m_gp" : "p3m_gp";
 
-  let tables: string[] = [];
-  if (source === "main") {
-    tables = ["gp_data"];
-  } else if (source === "temp") {
-    tables = ["gp_data_temp"];
-  } else {
-    tables = ["gp_data", "gp_data_temp"];
-  }
+  // Decide which tables to read
+  const tables =
+    source === "main"
+      ? ["gp_data"]
+      : source === "temp"
+      ? ["gp_data_temp"]
+      : ["gp_data", "gp_data_temp"]; // combined
 
-  const filtersWithFiscalMonth = { ...filters, FiscalMonth: filters?.Month };
   for (const table of tables) {
+    // Core query with joins to expose store/channel fields for WHERE
     let query = `
-      SELECT p.document_date, SUM(p.${gpColumn}) AS total
+      SELECT
+        p.document_date,
+        SUM(p.${gpColumn}) AS total
       FROM ${table} p
+      LEFT JOIN store_mapping sm
+        ON p.retailer_code = sm.Old_Store_Code
+      LEFT JOIN channel_mapping cm
+        ON sm.customer_type = cm.customer_type
       WHERE 1=1
     `;
 
-    const { whereClause, params } = await buildWhereClauseForRawSQL(
-      filtersWithFiscalMonth
-    );
+    const { whereClause, params } = buildWhereClauseForGP(filters || {});
     query += whereClause + ` GROUP BY p.document_date`;
 
     const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
@@ -618,14 +689,13 @@ export async function getTotalGP(
     for (const row of results) {
       const dt = row.document_date ? new Date(row.document_date) : null;
       if (!dt) continue;
-
-      const fy = getFiscalYear(dt); // July–June fiscal year
+      const fy = getFiscalYear(dt); // July–June FY end year
       const subtotal = Number(row.total || 0);
-
       yearTotals[fy] = (yearTotals[fy] || 0) + subtotal;
     }
   }
 
+  // Figure out which FYs to return (same logic as before)
   const explicitFYs =
     (filters?.FiscalYear?.length ? filters.FiscalYear : null) ??
     (filters?.Year?.length ? filters.Year : null) ??
@@ -652,28 +722,20 @@ export async function getTotalGP(
     }
   } else {
     const presentYears = Object.keys(yearTotals)
-      .map((y) => Number(y))
+      .map(Number)
       .sort((a, b) => b - a);
-    if (presentYears.length >= 2) {
-      yearsToReturn = presentYears.slice(0, 2);
-    } else {
-      yearsToReturn = presentYears;
-    }
+    yearsToReturn =
+      presentYears.length >= 2 ? presentYears.slice(0, 2) : presentYears;
   }
 
   const formatFY = (endYear: number) =>
     `${endYear - 1}-${String(endYear).slice(-2)}`;
 
   const breakdown = yearsToReturn
-    .map((y) => ({
-      year: y,
-      label: formatFY(y),
-      value: yearTotals[y] || 0,
-    }))
+    .map((y) => ({ year: y, label: formatFY(y), value: yearTotals[y] || 0 }))
     .filter((item) => (isExplicit ? true : item.value > 0))
     .sort((a, b) => b.year - a.year);
 
-  // ✅ Growth calculation
   let growth: number | null = null;
   if (breakdown.length >= 2) {
     const [curr, prev] = breakdown;
