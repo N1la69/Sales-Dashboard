@@ -20,9 +20,30 @@ export const typeDefs = gql`
     EndDate: String
   }
 
+  input GPFilterInput {
+    Year: [Int]
+    Month: [Int]
+    Branch: [String]
+    ZM: [String]
+    RSM: [String]
+    ASM: [String]
+    TSI: [String]
+    ChannelDesc: [String]
+    BaseChannel: [String]
+    ShortChannel: [String]
+    StartDate: String
+    EndDate: String
+  }
+
   type YearlyRetailing {
     year: Int!
     value: Float!
+  }
+
+  type GPBreakdown {
+    year: Int
+    label: String
+    value: Int
   }
 
   type HierarchyNode {
@@ -43,6 +64,11 @@ export const typeDefs = gql`
 
   type RetailingStats {
     breakdown: [YearlyRetailing!]!
+    growth: Float
+  }
+
+  type GPStats {
+    breakdown: [GPBreakdown!]!
     growth: Float
   }
 
@@ -172,6 +198,11 @@ export const typeDefs = gql`
     ): [StoreHierarchyNode]
 
     retailingStats(filters: FilterInput, source: String): RetailingStats
+    gpStats(
+      filters: GPFilterInput
+      source: String
+      gpType: String = "p3m"
+    ): GPStats
     highestRetailingBranch(filters: FilterInput, source: String): HighestBranch
     highestRetailingBrand(filters: FilterInput, source: String): HighestBrand
     retailingByCategory(

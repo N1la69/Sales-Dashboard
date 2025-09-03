@@ -583,6 +583,106 @@ export async function getTotalRetailing(filters: any, source: string) {
   return { breakdown, growth };
 }
 
+export async function getTotalGP(
+  filters: any,
+  source: string,
+  gpType?: string
+) {
+  const yearTotals: Record<number, number> = {};
+  const gpColumn = gpType === "p1m" ? "p1m_gp" : "p3m_gp";
+
+  let tables: string[] = [];
+  if (source === "main") {
+    tables = ["gp_data"];
+  } else if (source === "temp") {
+    tables = ["gp_data_temp"];
+  } else {
+    tables = ["gp_data", "gp_data_temp"];
+  }
+
+  const filtersWithFiscalMonth = { ...filters, FiscalMonth: filters?.Month };
+  for (const table of tables) {
+    let query = `
+      SELECT p.document_date, SUM(p.${gpColumn}) AS total
+      FROM ${table} p
+      WHERE 1=1
+    `;
+
+    const { whereClause, params } = await buildWhereClauseForRawSQL(
+      filtersWithFiscalMonth
+    );
+    query += whereClause + ` GROUP BY p.document_date`;
+
+    const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
+
+    for (const row of results) {
+      const dt = row.document_date ? new Date(row.document_date) : null;
+      if (!dt) continue;
+
+      const fy = getFiscalYear(dt); // July–June fiscal year
+      const subtotal = Number(row.total || 0);
+
+      yearTotals[fy] = (yearTotals[fy] || 0) + subtotal;
+    }
+  }
+
+  const explicitFYs =
+    (filters?.FiscalYear?.length ? filters.FiscalYear : null) ??
+    (filters?.Year?.length ? filters.Year : null) ??
+    null;
+
+  const isExplicit = Boolean(
+    explicitFYs || (filters?.StartDate && filters?.EndDate)
+  );
+
+  const yearsFromRange = (startISO: string, endISO: string) => {
+    const startFY = getFiscalYear(new Date(startISO));
+    const endFY = getFiscalYear(new Date(endISO));
+    const out: number[] = [];
+    for (let y = startFY; y <= endFY; y++) out.push(y);
+    return out;
+  };
+
+  let yearsToReturn: number[] = [];
+  if (isExplicit) {
+    if (filters?.StartDate && filters?.EndDate) {
+      yearsToReturn = yearsFromRange(filters.StartDate, filters.EndDate);
+    } else if (explicitFYs) {
+      yearsToReturn = explicitFYs.slice();
+    }
+  } else {
+    const presentYears = Object.keys(yearTotals)
+      .map((y) => Number(y))
+      .sort((a, b) => b - a);
+    if (presentYears.length >= 2) {
+      yearsToReturn = presentYears.slice(0, 2);
+    } else {
+      yearsToReturn = presentYears;
+    }
+  }
+
+  const formatFY = (endYear: number) =>
+    `${endYear - 1}-${String(endYear).slice(-2)}`;
+
+  const breakdown = yearsToReturn
+    .map((y) => ({
+      year: y,
+      label: formatFY(y),
+      value: yearTotals[y] || 0,
+    }))
+    .filter((item) => (isExplicit ? true : item.value > 0))
+    .sort((a, b) => b.year - a.year);
+
+  // ✅ Growth calculation
+  let growth: number | null = null;
+  if (breakdown.length >= 2) {
+    const [curr, prev] = breakdown;
+    growth = prev.value > 0 ? (curr.value / prev.value) * 100 : null;
+  }
+
+  return { breakdown, growth };
+}
+
 export async function getHighestRetailingBranch(filters: any, source: string) {
   const branchYearMap: Record<string, Record<number, number>> = {};
 

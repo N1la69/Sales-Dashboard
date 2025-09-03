@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import DateRange from "@/components/structures/DateRange";
 import BaseChannelTable from "@/components/structures/BaseChannelTable";
+import GpCard from "@/components/structures/GpCard";
 
 // ================= GraphQL Queries =================
 const GET_RETAILING_STATS = gql`
@@ -27,6 +28,19 @@ const GET_RETAILING_STATS = gql`
     retailingStats(filters: $filters, source: $source) {
       breakdown {
         year
+        value
+      }
+      growth
+    }
+  }
+`;
+
+const GET_GP_STATS = gql`
+  query GetGPStats($filters: GPFilterInput, $source: String, $gpType: String) {
+    gpStats(filters: $filters, source: $source, gpType: $gpType) {
+      breakdown {
+        year
+        label
         value
       }
       growth
@@ -145,10 +159,36 @@ export default function Dashboard() {
     },
   };
 
+  const gpQueryOptions = {
+    variables: {
+      filters: {
+        ...appliedFilters,
+        ...(appliedDateRange.startDate &&
+          appliedDateRange.endDate && {
+            StartDate: appliedDateRange.startDate.toISOString().split("T")[0],
+            EndDate: appliedDateRange.endDate.toISOString().split("T")[0],
+          }),
+        Category: undefined,
+        Brand: undefined,
+        Brandform: undefined,
+        Subbrandform: undefined,
+      },
+      source: dataSource,
+      gpType: "p3m",
+    },
+  };
+
   const { data, loading, error, refetch } = useQuery(
     GET_RETAILING_STATS,
     queryOptions
   );
+
+  const {
+    data: gpData,
+    loading: gpLoading,
+    error: gpError,
+    refetch: gpRefetch,
+  } = useQuery(GET_GP_STATS, gpQueryOptions);
 
   const {
     data: highestBranchData,
@@ -384,22 +424,48 @@ export default function Dashboard() {
 
       {/* TOP SECTION */}
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-stretch px-0 sm:px-2">
-        <div className="h-full">
-          {loading && (
-            <p className="dark:text-gray-200">Loading Total Retailing...</p>
-          )}
-          {error && (
-            <p className="dark:text-red-400">
-              Error fetching data: {error.message}
-            </p>
-          )}
-          {data && (
-            <StatCard
-              title="Total Retailing (in Lakhs)"
-              breakdown={data.retailingStats.breakdown}
-              growth={data.retailingStats.growth}
-            />
-          )}
+        <div className="h-full flex flex-col justify-between gap-2">
+          <div>
+            {loading && (
+              <p className="dark:text-gray-200">Loading Total Retailing...</p>
+            )}
+            {error && (
+              <p className="dark:text-red-400">
+                Error fetching data: {error.message}
+              </p>
+            )}
+            {data && (
+              <StatCard
+                title="Total Retailing (in Lakhs)"
+                breakdown={data.retailingStats.breakdown}
+                growth={data.retailingStats.growth}
+              />
+            )}
+          </div>
+
+          <div>
+            {gpLoading && (
+              <p className="dark:text-gray-200">Loading Total GP...</p>
+            )}
+            {gpError && (
+              <p className="dark:text-red-400">
+                Error fetching data: {gpError.message}
+              </p>
+            )}
+            {gpData && (
+              <GpCard
+                title="Total Golden Points Achieved"
+                breakdown={gpData?.gpStats?.breakdown}
+                growth={gpData?.gpStats?.growth}
+                onChange={(gpType) =>
+                  gpRefetch({
+                    ...gpQueryOptions.variables,
+                    gpType,
+                  })
+                }
+              />
+            )}
+          </div>
         </div>
 
         <div className="md:col-span-1 lg:col-span-2 flex flex-col sm:flex-row justify-around gap-2">

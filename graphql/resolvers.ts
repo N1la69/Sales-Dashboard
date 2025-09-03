@@ -15,6 +15,7 @@ import {
   getStoreStats,
   getTopBrandforms,
   getTopStoresQuery,
+  getTotalGP,
   getTotalRetailing,
   suggestStores,
 } from "@/lib/helpers";
@@ -46,6 +47,9 @@ export const resolvers = {
     //DASHBOARD
     retailingStats: async (_: any, { filters, source }: any) => {
       return await getTotalRetailing(filters, source);
+    },
+    gpStats: async (_: any, { filters, source, gpType }: any) => {
+      return await getTotalGP(filters, source, gpType);
     },
     highestRetailingBranch: async (_: any, { filters, source }: any) => {
       return await getHighestRetailingBranch(filters, source);
