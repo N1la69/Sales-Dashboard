@@ -112,6 +112,7 @@ const GET_ADDITIONAL_STATS = gql`
         brand
         retailing
       }
+      averageRetailing
     }
   }
 `;

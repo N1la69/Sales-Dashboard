@@ -21,6 +21,7 @@ interface StoreStatsProps {
       brand: string;
       retailing: number;
     } | null;
+    averageRetailing?: number | null;
   } | null;
   loading: boolean;
   error: any;
@@ -52,7 +53,7 @@ export default function StoreStatsCard({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="p-4 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-800 dark:text-indigo-200 shadow-sm">
+      <div className="p-4 rounded-xl border border-green-300 dark:border-green-700 bg-green-50/30 dark:bg-green-950/20 text-green-800 dark:text-green-200 shadow-sm">
         <h3 className="font-semibold mb-1">Highest Retailing Month</h3>
         {data.highestRetailingMonth ? (
           <p>
@@ -65,7 +66,7 @@ export default function StoreStatsCard({
         )}
       </div>
 
-      <div className="p-4 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-800 dark:text-indigo-200 shadow-sm">
+      <div className="p-4 rounded-xl border border-red-300 dark:border-red-700 bg-red-50/30 dark:bg-red-950/20 text-red-800 dark:text-red-200 shadow-sm">
         <h3 className="font-semibold mb-1">Lowest Retailing Month</h3>
         {data.lowestRetailingMonth ? (
           <p>
@@ -79,6 +80,15 @@ export default function StoreStatsCard({
       </div>
 
       <div className="p-4 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-800 dark:text-indigo-200 shadow-sm">
+        <h3 className="font-semibold mb-1">Average Retailing</h3>
+        {data.averageRetailing ? (
+          <p> ₹{data.averageRetailing.toFixed(2)}</p>
+        ) : (
+          <p className="text-gray-500 dark:text-gray-400">No data available</p>
+        )}
+      </div>
+
+      <div className="p-4 rounded-xl border border-green-300 dark:border-green-700 bg-green-50/30 dark:bg-green-950/20 text-green-800 dark:text-green-200 shadow-sm">
         <h3 className="font-semibold mb-1">Highest Retailing Brand</h3>
         {data.highestRetailingBrand ? (
           <p>
@@ -90,7 +100,7 @@ export default function StoreStatsCard({
         )}
       </div>
 
-      <div className="p-4 rounded-xl border border-indigo-300 dark:border-indigo-700 bg-indigo-50/30 dark:bg-indigo-950/20 text-indigo-800 dark:text-indigo-200 shadow-sm">
+      <div className="p-4 rounded-xl border border-red-300 dark:border-red-700 bg-red-50/30 dark:bg-red-950/20 text-red-800 dark:text-red-200 shadow-sm">
         <h3 className="font-semibold mb-1">Lowest Retailing Brand</h3>
         {data.lowestRetailingBrand ? (
           <p>

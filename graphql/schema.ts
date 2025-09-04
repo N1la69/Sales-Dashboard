@@ -167,6 +167,7 @@ export const typeDefs = gql`
     lowestRetailingMonth: StoreRetailingStat
     highestRetailingBrand: StoreBrandStat
     lowestRetailingBrand: StoreBrandStat
+    averageRetailing: Float
   }
 
   type StoreDetails {

@@ -76,7 +76,7 @@ export default function StoreRetailingTrendChart({
     data
       .filter((d) => d.month === month)
       .forEach((d) => {
-        entry[d.year] = Number((d.retailing / 100000).toFixed(2));
+        entry[d.year] = Number(d.retailing);
       });
 
     return entry;
@@ -109,7 +109,7 @@ export default function StoreRetailingTrendChart({
           />
           <YAxis
             label={{
-              value: "Retailing (Lakhs)",
+              value: "Retailing (₹)",
               angle: -90,
               position: "insideLeft",
               fill: "currentColor",

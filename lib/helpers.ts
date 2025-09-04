@@ -1711,6 +1711,13 @@ export async function getStoreStats(
     null as any
   );
 
+  // ✅ Average retailing calculation
+  const averageRetailing =
+    parsedMonthResults.length > 0
+      ? parsedMonthResults.reduce((sum, r) => sum + r.total, 0) /
+        parsedMonthResults.length
+      : null;
+
   return {
     highestRetailingMonth: highestMonth
       ? {
@@ -1734,6 +1741,7 @@ export async function getStoreStats(
     lowestRetailingBrand: lowestBrand
       ? { brand: lowestBrand.brand, retailing: lowestBrand.total }
       : null,
+    averageRetailing,
   };
 }
 
