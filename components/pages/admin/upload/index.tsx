@@ -1,6 +1,6 @@
 "use client";
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import ExcelJS from "exceljs";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -195,6 +195,150 @@ const UploadPage = () => {
     }
   };
 
+  async function downloadTemplate(
+    type: "psr" | "channel" | "store" | "product" | "gp"
+  ) {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet("Template");
+
+    // Define headers & sample rows for each type
+    const templates: Record<string, { headers: string[]; sample: any[] }> = {
+      psr: {
+        headers: [
+          "document_no",
+          "document_date",
+          "subbrandform",
+          "customer_name",
+          "customer_code",
+          "p_code",
+          "customer_type",
+          "category",
+          "brand",
+          "brandform",
+          "retailing",
+        ],
+        sample: [
+          "DOC123",
+          "2025-09-01",
+          "SubBrandX",
+          "Test Store",
+          "CUST001",
+          101,
+          "Retail",
+          "CategoryA",
+          "BrandY",
+          "BrandFormZ",
+          5000.75,
+        ],
+      },
+      channel: {
+        headers: [
+          "customer_type",
+          "base_channel",
+          "short_channel",
+          "channel_desc",
+        ],
+        sample: ["Retail", "Modern Trade", "MT", "Modern Trade Outlets"],
+      },
+      store: {
+        headers: [
+          "Old_Store_Code",
+          "New_Store_Code",
+          "customer_name",
+          "customer_type",
+          "Branch",
+          "DSE_Code",
+          "ZM",
+          "RSM",
+          "ASM",
+          "TSI",
+        ],
+        sample: [
+          "S001",
+          "NS001",
+          "Test Store",
+          "Retail",
+          "Kolkata",
+          "DSE01",
+          "ZM01",
+          "RSM01",
+          "ASM01",
+          "TSI01",
+        ],
+      },
+      product: {
+        headers: [
+          "p_code",
+          "desc_short",
+          "category",
+          "brand",
+          "brandform",
+          "subbrandform",
+        ],
+        sample: [
+          101,
+          "Product Desc",
+          "CategoryA",
+          "BrandY",
+          "FormZ",
+          "SubBrandX",
+        ],
+      },
+      gp: {
+        headers: [
+          "document_date",
+          "retailer_code",
+          "retailer_name",
+          "p3m_gp",
+          "p1m_gp",
+        ],
+        sample: ["2025-09-01", "BGNWS_007", "Store_name", 10, 2],
+      },
+    };
+
+    const { headers, sample } = templates[type];
+
+    // Add header row
+    const headerRow = worksheet.addRow(headers);
+
+    // Style the header row
+    headerRow.eachCell((cell) => {
+      cell.font = { bold: true, color: { argb: "FFFFFFFF" } }; // white text
+      cell.fill = {
+        type: "pattern",
+        pattern: "solid",
+        fgColor: { argb: "4472C4" }, // Excel blue
+      };
+      cell.alignment = { horizontal: "center", vertical: "middle" };
+      cell.border = {
+        top: { style: "thin" },
+        left: { style: "thin" },
+        bottom: { style: "thin" },
+        right: { style: "thin" },
+      };
+    });
+
+    // Add sample row
+    worksheet.addRow(sample);
+
+    // Auto-fit columns
+    worksheet.columns.forEach((col, i) => {
+      col.width =
+        Math.max(headers[i]?.length ?? 10, String(sample[i] ?? "").length) + 5;
+    });
+
+    // Export as blob & trigger download
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: "application/octet-stream" });
+    const url = window.URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${type}_template.xlsx`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
   return (
     <div className="pt-3 px-4 sm:px-6 md:px-10 z-20 dark:text-blue-100">
       <h1 className="text-center text-2xl sm:text-3xl font-bold">
@@ -289,6 +433,7 @@ const UploadPage = () => {
             </Button>
 
             <Button
+              onClick={() => downloadTemplate("psr")}
               variant="outline"
               className="border border-gray-200 text-gray-900 dark:text-gray-100 hover:border-indigo"
             >
@@ -370,6 +515,7 @@ const UploadPage = () => {
             </Button>
 
             <Button
+              onClick={() => downloadTemplate("gp")}
               variant="outline"
               className="border border-gray-200 text-gray-900 dark:text-gray-100 hover:border-indigo"
             >
@@ -409,6 +555,17 @@ const UploadPage = () => {
 
             <Button
               variant="outline"
+              className="border border-indigo-400 dark:border-indigo-600 text-gray-900 dark:text-gray-100 hover:border-indigo"
+              onClick={() =>
+                window.open(`/api/download-mapping?type=channel`, "_blank")
+              }
+            >
+              Download Channel Mapping
+            </Button>
+
+            <Button
+              onClick={() => downloadTemplate("channel")}
+              variant="outline"
               className="border border-gray-200 text-gray-900 dark:text-gray-100 hover:border-indigo"
             >
               Download Template
@@ -447,6 +604,17 @@ const UploadPage = () => {
 
             <Button
               variant="outline"
+              className="border border-indigo-400 dark:border-indigo-600 text-gray-900 dark:text-gray-100 hover:border-indigo"
+              onClick={() =>
+                window.open(`/api/download-mapping?type=store`, "_blank")
+              }
+            >
+              Download Store Mapping
+            </Button>
+
+            <Button
+              onClick={() => downloadTemplate("store")}
+              variant="outline"
               className="border border-gray-200 text-gray-900 dark:text-gray-100 hover:border-indigo"
             >
               Download Template
@@ -484,6 +652,17 @@ const UploadPage = () => {
             </Button>
 
             <Button
+              variant="outline"
+              className="border border-indigo-400 dark:border-indigo-600 text-gray-900 dark:text-gray-100 hover:border-indigo"
+              onClick={() =>
+                window.open(`/api/download-mapping?type=product`, "_blank")
+              }
+            >
+              Download Product Mapping
+            </Button>
+
+            <Button
+              onClick={() => downloadTemplate("product")}
               variant="outline"
               className="border border-gray-200 text-gray-900 dark:text-gray-100 hover:border-indigo"
             >

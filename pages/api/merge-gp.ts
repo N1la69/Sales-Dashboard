@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/utils";
-import { runGenerateFilters } from "@/lib/runGenerateFilters";
 
 // --- batch size can be tuned depending on memory/locks ---
 const BATCH_SIZE = 50000;
