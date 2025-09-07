@@ -1,7 +1,7 @@
 "use client";
 
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const LIGHT_COLORS = [
   "#4f46e5",
@@ -47,23 +47,17 @@ export default function RetailingChannelPie({
   loading,
   error,
 }: RetailingChannelPieProps) {
+  if (loading) return <p>Loading channel data...</p>;
+  if (error) return <p>Error loading channel data: {error.message}</p>;
+  if (!data.length) return <p>No channel data available.</p>;
+
   const allYears = Array.from(
     new Set(data.flatMap((item) => item.breakdown.map((b) => b.year)))
   ).sort((a, b) => b - a);
 
-  const [selectedYear, setSelectedYear] = useState<number | undefined>(
-    undefined
+  const [selectedYear, setSelectedYear] = useState<number>(
+    allYears.length ? allYears[0] : new Date().getFullYear()
   );
-
-  useEffect(() => {
-    if (allYears.length && selectedYear === undefined) {
-      setSelectedYear(allYears[0]);
-    }
-  }, [allYears, selectedYear]);
-
-  if (loading) return <p>Loading channel data...</p>;
-  if (error) return <p>Error loading channel data: {error.message}</p>;
-  if (!data.length) return <p>No channel data available.</p>;
 
   const selectedYearData = data
     .map((item) => {
@@ -82,7 +76,7 @@ export default function RetailingChannelPie({
     value: Math.round((item.value / total) * 100),
   }));
 
-  // 🔑 helper: get label for year
+  // helper: map year to fiscal label
   const getLabel = (year: number) => {
     const entry = data.flatMap((d) => d.breakdown).find((b) => b.year === year);
     return entry?.label ?? `${year - 1}-${String(year).slice(-2)}`;
@@ -124,7 +118,7 @@ export default function RetailingChannelPie({
             >
               {pieData.map((_, index) => (
                 <Cell
-                  key={index}
+                  key={`cell-light-${index}`}
                   fill={LIGHT_COLORS[index % LIGHT_COLORS.length]}
                 />
               ))}
@@ -149,19 +143,12 @@ export default function RetailingChannelPie({
             >
               {pieData.map((_, index) => (
                 <Cell
-                  key={index}
+                  key={`cell-dark-${index}`}
                   fill={DARK_COLORS[index % DARK_COLORS.length]}
                 />
               ))}
             </Pie>
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "#1f2937", // gray-800
-                borderColor: "#374151", // gray-700
-                color: "#f9fafb", // gray-50
-              }}
-              formatter={(value: number) => `${value}%`}
-            />
+            <Tooltip formatter={(value: number) => `${value}%`} />
           </PieChart>
         </ResponsiveContainer>
       </div>

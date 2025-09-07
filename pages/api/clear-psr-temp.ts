@@ -10,12 +10,15 @@ export default async function handler(
   }
 
   try {
-    await prisma.$executeRaw`DELETE FROM psr_data_temp`;
-    return res
-      .status(200)
-      .json({ message: "PSR temp data cleared successfully." });
+    // ✅ Truncate both temp tables
+    await prisma.$executeRawUnsafe(`TRUNCATE TABLE psr_data_temp`);
+    await prisma.$executeRawUnsafe(`TRUNCATE TABLE psr_finalized_temp`);
+
+    return res.status(200).json({
+      message: "PSR temp data and finalized temp data cleared successfully.",
+    });
   } catch (err) {
-    console.error("Error clearing psr_data_temp:", err);
-    return res.status(500).json({ error: "Failed to clear psr_data_temp." });
+    console.error("Error clearing temp tables:", err);
+    return res.status(500).json({ error: "Failed to clear PSR temp tables." });
   }
 }
