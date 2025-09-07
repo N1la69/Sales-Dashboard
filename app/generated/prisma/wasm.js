@@ -188,6 +188,12 @@ exports.Prisma.Psr_data_finalizedScalarFieldEnum = {
   retailing: 'retailing'
 };
 
+exports.Prisma.Psr_change_flagScalarFieldEnum = {
+  id: 'id',
+  changed_at: 'changed_at',
+  processed: 'processed'
+};
+
 exports.Prisma.Channel_mappingScalarFieldEnum = {
   channel_id: 'channel_id',
   customer_type: 'customer_type',
@@ -223,6 +229,12 @@ exports.Prisma.Product_mappingScalarFieldEnum = {
   created_at: 'created_at'
 };
 
+exports.Prisma.Mapping_change_flagScalarFieldEnum = {
+  id: 'id',
+  changed_at: 'changed_at',
+  processed: 'processed'
+};
+
 exports.Prisma.Gp_dataScalarFieldEnum = {
   gp_id: 'gp_id',
   document_date: 'document_date',
@@ -239,12 +251,6 @@ exports.Prisma.Gp_data_tempScalarFieldEnum = {
   retailer_name: 'retailer_name',
   p3m_gp: 'p3m_gp',
   p1m_gp: 'p1m_gp'
-};
-
-exports.Prisma.Mapping_change_flagScalarFieldEnum = {
-  id: 'id',
-  changed_at: 'changed_at',
-  processed: 'processed'
 };
 
 exports.Prisma.UserScalarFieldEnum = {
@@ -303,6 +309,14 @@ exports.Prisma.Base_channel_retailing_summaryScalarFieldEnum = {
   month: 'month',
   fiscal_year: 'fiscal_year',
   total_retailing: 'total_retailing'
+};
+
+exports.Prisma.Procedure_logScalarFieldEnum = {
+  id: 'id',
+  procedure_name: 'procedure_name',
+  start_time: 'start_time',
+  end_time: 'end_time',
+  duration_seconds: 'duration_seconds'
 };
 
 exports.Prisma.SortOrder = {
@@ -451,25 +465,31 @@ exports.Prisma.base_channel_retailing_summaryOrderByRelevanceFieldEnum = {
   base_channel: 'base_channel'
 };
 
+exports.Prisma.procedure_logOrderByRelevanceFieldEnum = {
+  procedure_name: 'procedure_name'
+};
+
 
 exports.Prisma.ModelName = {
   psr_data_temp: 'psr_data_temp',
   psr_data_historical: 'psr_data_historical',
   psr_finalized_temp: 'psr_finalized_temp',
   psr_data_finalized: 'psr_data_finalized',
+  psr_change_flag: 'psr_change_flag',
   channel_mapping: 'channel_mapping',
   store_mapping: 'store_mapping',
   product_mapping: 'product_mapping',
+  mapping_change_flag: 'mapping_change_flag',
   gp_data: 'gp_data',
   gp_data_temp: 'gp_data_temp',
-  mapping_change_flag: 'mapping_change_flag',
   User: 'User',
   PermissionSet: 'PermissionSet',
   retailing_summary: 'retailing_summary',
   branch_retailing_summary: 'branch_retailing_summary',
   brand_retailing_summary: 'brand_retailing_summary',
   category_retailing_summary: 'category_retailing_summary',
-  base_channel_retailing_summary: 'base_channel_retailing_summary'
+  base_channel_retailing_summary: 'base_channel_retailing_summary',
+  procedure_log: 'procedure_log'
 };
 
 /**

@@ -34,6 +34,11 @@ export type psr_finalized_temp = $Result.DefaultSelection<Prisma.$psr_finalized_
  */
 export type psr_data_finalized = $Result.DefaultSelection<Prisma.$psr_data_finalizedPayload>
 /**
+ * Model psr_change_flag
+ * 
+ */
+export type psr_change_flag = $Result.DefaultSelection<Prisma.$psr_change_flagPayload>
+/**
  * Model channel_mapping
  * 
  */
@@ -49,6 +54,11 @@ export type store_mapping = $Result.DefaultSelection<Prisma.$store_mappingPayloa
  */
 export type product_mapping = $Result.DefaultSelection<Prisma.$product_mappingPayload>
 /**
+ * Model mapping_change_flag
+ * 
+ */
+export type mapping_change_flag = $Result.DefaultSelection<Prisma.$mapping_change_flagPayload>
+/**
  * Model gp_data
  * 
  */
@@ -58,11 +68,6 @@ export type gp_data = $Result.DefaultSelection<Prisma.$gp_dataPayload>
  * 
  */
 export type gp_data_temp = $Result.DefaultSelection<Prisma.$gp_data_tempPayload>
-/**
- * Model mapping_change_flag
- * 
- */
-export type mapping_change_flag = $Result.DefaultSelection<Prisma.$mapping_change_flagPayload>
 /**
  * Model User
  * 
@@ -98,6 +103,11 @@ export type category_retailing_summary = $Result.DefaultSelection<Prisma.$catego
  * 
  */
 export type base_channel_retailing_summary = $Result.DefaultSelection<Prisma.$base_channel_retailing_summaryPayload>
+/**
+ * Model procedure_log
+ * 
+ */
+export type procedure_log = $Result.DefaultSelection<Prisma.$procedure_logPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -258,6 +268,16 @@ export class PrismaClient<
   get psr_data_finalized(): Prisma.psr_data_finalizedDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.psr_change_flag`: Exposes CRUD operations for the **psr_change_flag** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Psr_change_flags
+    * const psr_change_flags = await prisma.psr_change_flag.findMany()
+    * ```
+    */
+  get psr_change_flag(): Prisma.psr_change_flagDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.channel_mapping`: Exposes CRUD operations for the **channel_mapping** model.
     * Example usage:
     * ```ts
@@ -288,6 +308,16 @@ export class PrismaClient<
   get product_mapping(): Prisma.product_mappingDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.mapping_change_flag`: Exposes CRUD operations for the **mapping_change_flag** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Mapping_change_flags
+    * const mapping_change_flags = await prisma.mapping_change_flag.findMany()
+    * ```
+    */
+  get mapping_change_flag(): Prisma.mapping_change_flagDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.gp_data`: Exposes CRUD operations for the **gp_data** model.
     * Example usage:
     * ```ts
@@ -306,16 +336,6 @@ export class PrismaClient<
     * ```
     */
   get gp_data_temp(): Prisma.gp_data_tempDelegate<ExtArgs, ClientOptions>;
-
-  /**
-   * `prisma.mapping_change_flag`: Exposes CRUD operations for the **mapping_change_flag** model.
-    * Example usage:
-    * ```ts
-    * // Fetch zero or more Mapping_change_flags
-    * const mapping_change_flags = await prisma.mapping_change_flag.findMany()
-    * ```
-    */
-  get mapping_change_flag(): Prisma.mapping_change_flagDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.user`: Exposes CRUD operations for the **User** model.
@@ -386,6 +406,16 @@ export class PrismaClient<
     * ```
     */
   get base_channel_retailing_summary(): Prisma.base_channel_retailing_summaryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.procedure_log`: Exposes CRUD operations for the **procedure_log** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Procedure_logs
+    * const procedure_logs = await prisma.procedure_log.findMany()
+    * ```
+    */
+  get procedure_log(): Prisma.procedure_logDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -830,19 +860,21 @@ export namespace Prisma {
     psr_data_historical: 'psr_data_historical',
     psr_finalized_temp: 'psr_finalized_temp',
     psr_data_finalized: 'psr_data_finalized',
+    psr_change_flag: 'psr_change_flag',
     channel_mapping: 'channel_mapping',
     store_mapping: 'store_mapping',
     product_mapping: 'product_mapping',
+    mapping_change_flag: 'mapping_change_flag',
     gp_data: 'gp_data',
     gp_data_temp: 'gp_data_temp',
-    mapping_change_flag: 'mapping_change_flag',
     User: 'User',
     PermissionSet: 'PermissionSet',
     retailing_summary: 'retailing_summary',
     branch_retailing_summary: 'branch_retailing_summary',
     brand_retailing_summary: 'brand_retailing_summary',
     category_retailing_summary: 'category_retailing_summary',
-    base_channel_retailing_summary: 'base_channel_retailing_summary'
+    base_channel_retailing_summary: 'base_channel_retailing_summary',
+    procedure_log: 'procedure_log'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -861,7 +893,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "psr_data_temp" | "psr_data_historical" | "psr_finalized_temp" | "psr_data_finalized" | "channel_mapping" | "store_mapping" | "product_mapping" | "gp_data" | "gp_data_temp" | "mapping_change_flag" | "user" | "permissionSet" | "retailing_summary" | "branch_retailing_summary" | "brand_retailing_summary" | "category_retailing_summary" | "base_channel_retailing_summary"
+      modelProps: "psr_data_temp" | "psr_data_historical" | "psr_finalized_temp" | "psr_data_finalized" | "psr_change_flag" | "channel_mapping" | "store_mapping" | "product_mapping" | "mapping_change_flag" | "gp_data" | "gp_data_temp" | "user" | "permissionSet" | "retailing_summary" | "branch_retailing_summary" | "brand_retailing_summary" | "category_retailing_summary" | "base_channel_retailing_summary" | "procedure_log"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1129,6 +1161,72 @@ export namespace Prisma {
           }
         }
       }
+      psr_change_flag: {
+        payload: Prisma.$psr_change_flagPayload<ExtArgs>
+        fields: Prisma.psr_change_flagFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.psr_change_flagFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_change_flagPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.psr_change_flagFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_change_flagPayload>
+          }
+          findFirst: {
+            args: Prisma.psr_change_flagFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_change_flagPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.psr_change_flagFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_change_flagPayload>
+          }
+          findMany: {
+            args: Prisma.psr_change_flagFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_change_flagPayload>[]
+          }
+          create: {
+            args: Prisma.psr_change_flagCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_change_flagPayload>
+          }
+          createMany: {
+            args: Prisma.psr_change_flagCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.psr_change_flagDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_change_flagPayload>
+          }
+          update: {
+            args: Prisma.psr_change_flagUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_change_flagPayload>
+          }
+          deleteMany: {
+            args: Prisma.psr_change_flagDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.psr_change_flagUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.psr_change_flagUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$psr_change_flagPayload>
+          }
+          aggregate: {
+            args: Prisma.Psr_change_flagAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePsr_change_flag>
+          }
+          groupBy: {
+            args: Prisma.psr_change_flagGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Psr_change_flagGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.psr_change_flagCountArgs<ExtArgs>
+            result: $Utils.Optional<Psr_change_flagCountAggregateOutputType> | number
+          }
+        }
+      }
       channel_mapping: {
         payload: Prisma.$channel_mappingPayload<ExtArgs>
         fields: Prisma.channel_mappingFieldRefs
@@ -1327,6 +1425,72 @@ export namespace Prisma {
           }
         }
       }
+      mapping_change_flag: {
+        payload: Prisma.$mapping_change_flagPayload<ExtArgs>
+        fields: Prisma.mapping_change_flagFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.mapping_change_flagFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.mapping_change_flagFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>
+          }
+          findFirst: {
+            args: Prisma.mapping_change_flagFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.mapping_change_flagFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>
+          }
+          findMany: {
+            args: Prisma.mapping_change_flagFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>[]
+          }
+          create: {
+            args: Prisma.mapping_change_flagCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>
+          }
+          createMany: {
+            args: Prisma.mapping_change_flagCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.mapping_change_flagDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>
+          }
+          update: {
+            args: Prisma.mapping_change_flagUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>
+          }
+          deleteMany: {
+            args: Prisma.mapping_change_flagDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.mapping_change_flagUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.mapping_change_flagUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>
+          }
+          aggregate: {
+            args: Prisma.Mapping_change_flagAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMapping_change_flag>
+          }
+          groupBy: {
+            args: Prisma.mapping_change_flagGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Mapping_change_flagGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.mapping_change_flagCountArgs<ExtArgs>
+            result: $Utils.Optional<Mapping_change_flagCountAggregateOutputType> | number
+          }
+        }
+      }
       gp_data: {
         payload: Prisma.$gp_dataPayload<ExtArgs>
         fields: Prisma.gp_dataFieldRefs
@@ -1456,72 +1620,6 @@ export namespace Prisma {
           count: {
             args: Prisma.gp_data_tempCountArgs<ExtArgs>
             result: $Utils.Optional<Gp_data_tempCountAggregateOutputType> | number
-          }
-        }
-      }
-      mapping_change_flag: {
-        payload: Prisma.$mapping_change_flagPayload<ExtArgs>
-        fields: Prisma.mapping_change_flagFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.mapping_change_flagFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.mapping_change_flagFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>
-          }
-          findFirst: {
-            args: Prisma.mapping_change_flagFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.mapping_change_flagFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>
-          }
-          findMany: {
-            args: Prisma.mapping_change_flagFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>[]
-          }
-          create: {
-            args: Prisma.mapping_change_flagCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>
-          }
-          createMany: {
-            args: Prisma.mapping_change_flagCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          delete: {
-            args: Prisma.mapping_change_flagDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>
-          }
-          update: {
-            args: Prisma.mapping_change_flagUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>
-          }
-          deleteMany: {
-            args: Prisma.mapping_change_flagDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.mapping_change_flagUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          upsert: {
-            args: Prisma.mapping_change_flagUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$mapping_change_flagPayload>
-          }
-          aggregate: {
-            args: Prisma.Mapping_change_flagAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateMapping_change_flag>
-          }
-          groupBy: {
-            args: Prisma.mapping_change_flagGroupByArgs<ExtArgs>
-            result: $Utils.Optional<Mapping_change_flagGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.mapping_change_flagCountArgs<ExtArgs>
-            result: $Utils.Optional<Mapping_change_flagCountAggregateOutputType> | number
           }
         }
       }
@@ -1987,6 +2085,72 @@ export namespace Prisma {
           }
         }
       }
+      procedure_log: {
+        payload: Prisma.$procedure_logPayload<ExtArgs>
+        fields: Prisma.procedure_logFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.procedure_logFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$procedure_logPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.procedure_logFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$procedure_logPayload>
+          }
+          findFirst: {
+            args: Prisma.procedure_logFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$procedure_logPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.procedure_logFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$procedure_logPayload>
+          }
+          findMany: {
+            args: Prisma.procedure_logFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$procedure_logPayload>[]
+          }
+          create: {
+            args: Prisma.procedure_logCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$procedure_logPayload>
+          }
+          createMany: {
+            args: Prisma.procedure_logCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          delete: {
+            args: Prisma.procedure_logDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$procedure_logPayload>
+          }
+          update: {
+            args: Prisma.procedure_logUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$procedure_logPayload>
+          }
+          deleteMany: {
+            args: Prisma.procedure_logDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.procedure_logUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.procedure_logUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$procedure_logPayload>
+          }
+          aggregate: {
+            args: Prisma.Procedure_logAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProcedure_log>
+          }
+          groupBy: {
+            args: Prisma.procedure_logGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Procedure_logGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.procedure_logCountArgs<ExtArgs>
+            result: $Utils.Optional<Procedure_logCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2083,12 +2247,13 @@ export namespace Prisma {
     psr_data_historical?: psr_data_historicalOmit
     psr_finalized_temp?: psr_finalized_tempOmit
     psr_data_finalized?: psr_data_finalizedOmit
+    psr_change_flag?: psr_change_flagOmit
     channel_mapping?: channel_mappingOmit
     store_mapping?: store_mappingOmit
     product_mapping?: product_mappingOmit
+    mapping_change_flag?: mapping_change_flagOmit
     gp_data?: gp_dataOmit
     gp_data_temp?: gp_data_tempOmit
-    mapping_change_flag?: mapping_change_flagOmit
     user?: UserOmit
     permissionSet?: PermissionSetOmit
     retailing_summary?: retailing_summaryOmit
@@ -2096,6 +2261,7 @@ export namespace Prisma {
     brand_retailing_summary?: brand_retailing_summaryOmit
     category_retailing_summary?: category_retailing_summaryOmit
     base_channel_retailing_summary?: base_channel_retailing_summaryOmit
+    procedure_log?: procedure_logOmit
   }
 
   /* Types for Logging */
@@ -6291,6 +6457,900 @@ export namespace Prisma {
 
 
   /**
+   * Model psr_change_flag
+   */
+
+  export type AggregatePsr_change_flag = {
+    _count: Psr_change_flagCountAggregateOutputType | null
+    _avg: Psr_change_flagAvgAggregateOutputType | null
+    _sum: Psr_change_flagSumAggregateOutputType | null
+    _min: Psr_change_flagMinAggregateOutputType | null
+    _max: Psr_change_flagMaxAggregateOutputType | null
+  }
+
+  export type Psr_change_flagAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type Psr_change_flagSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type Psr_change_flagMinAggregateOutputType = {
+    id: number | null
+    changed_at: Date | null
+    processed: boolean | null
+  }
+
+  export type Psr_change_flagMaxAggregateOutputType = {
+    id: number | null
+    changed_at: Date | null
+    processed: boolean | null
+  }
+
+  export type Psr_change_flagCountAggregateOutputType = {
+    id: number
+    changed_at: number
+    processed: number
+    _all: number
+  }
+
+
+  export type Psr_change_flagAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type Psr_change_flagSumAggregateInputType = {
+    id?: true
+  }
+
+  export type Psr_change_flagMinAggregateInputType = {
+    id?: true
+    changed_at?: true
+    processed?: true
+  }
+
+  export type Psr_change_flagMaxAggregateInputType = {
+    id?: true
+    changed_at?: true
+    processed?: true
+  }
+
+  export type Psr_change_flagCountAggregateInputType = {
+    id?: true
+    changed_at?: true
+    processed?: true
+    _all?: true
+  }
+
+  export type Psr_change_flagAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which psr_change_flag to aggregate.
+     */
+    where?: psr_change_flagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of psr_change_flags to fetch.
+     */
+    orderBy?: psr_change_flagOrderByWithRelationInput | psr_change_flagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: psr_change_flagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` psr_change_flags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` psr_change_flags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned psr_change_flags
+    **/
+    _count?: true | Psr_change_flagCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Psr_change_flagAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Psr_change_flagSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Psr_change_flagMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Psr_change_flagMaxAggregateInputType
+  }
+
+  export type GetPsr_change_flagAggregateType<T extends Psr_change_flagAggregateArgs> = {
+        [P in keyof T & keyof AggregatePsr_change_flag]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePsr_change_flag[P]>
+      : GetScalarType<T[P], AggregatePsr_change_flag[P]>
+  }
+
+
+
+
+  export type psr_change_flagGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: psr_change_flagWhereInput
+    orderBy?: psr_change_flagOrderByWithAggregationInput | psr_change_flagOrderByWithAggregationInput[]
+    by: Psr_change_flagScalarFieldEnum[] | Psr_change_flagScalarFieldEnum
+    having?: psr_change_flagScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Psr_change_flagCountAggregateInputType | true
+    _avg?: Psr_change_flagAvgAggregateInputType
+    _sum?: Psr_change_flagSumAggregateInputType
+    _min?: Psr_change_flagMinAggregateInputType
+    _max?: Psr_change_flagMaxAggregateInputType
+  }
+
+  export type Psr_change_flagGroupByOutputType = {
+    id: number
+    changed_at: Date
+    processed: boolean
+    _count: Psr_change_flagCountAggregateOutputType | null
+    _avg: Psr_change_flagAvgAggregateOutputType | null
+    _sum: Psr_change_flagSumAggregateOutputType | null
+    _min: Psr_change_flagMinAggregateOutputType | null
+    _max: Psr_change_flagMaxAggregateOutputType | null
+  }
+
+  type GetPsr_change_flagGroupByPayload<T extends psr_change_flagGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Psr_change_flagGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Psr_change_flagGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Psr_change_flagGroupByOutputType[P]>
+            : GetScalarType<T[P], Psr_change_flagGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type psr_change_flagSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    changed_at?: boolean
+    processed?: boolean
+  }, ExtArgs["result"]["psr_change_flag"]>
+
+
+
+  export type psr_change_flagSelectScalar = {
+    id?: boolean
+    changed_at?: boolean
+    processed?: boolean
+  }
+
+  export type psr_change_flagOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "changed_at" | "processed", ExtArgs["result"]["psr_change_flag"]>
+
+  export type $psr_change_flagPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "psr_change_flag"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      changed_at: Date
+      processed: boolean
+    }, ExtArgs["result"]["psr_change_flag"]>
+    composites: {}
+  }
+
+  type psr_change_flagGetPayload<S extends boolean | null | undefined | psr_change_flagDefaultArgs> = $Result.GetResult<Prisma.$psr_change_flagPayload, S>
+
+  type psr_change_flagCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<psr_change_flagFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Psr_change_flagCountAggregateInputType | true
+    }
+
+  export interface psr_change_flagDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['psr_change_flag'], meta: { name: 'psr_change_flag' } }
+    /**
+     * Find zero or one Psr_change_flag that matches the filter.
+     * @param {psr_change_flagFindUniqueArgs} args - Arguments to find a Psr_change_flag
+     * @example
+     * // Get one Psr_change_flag
+     * const psr_change_flag = await prisma.psr_change_flag.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends psr_change_flagFindUniqueArgs>(args: SelectSubset<T, psr_change_flagFindUniqueArgs<ExtArgs>>): Prisma__psr_change_flagClient<$Result.GetResult<Prisma.$psr_change_flagPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Psr_change_flag that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {psr_change_flagFindUniqueOrThrowArgs} args - Arguments to find a Psr_change_flag
+     * @example
+     * // Get one Psr_change_flag
+     * const psr_change_flag = await prisma.psr_change_flag.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends psr_change_flagFindUniqueOrThrowArgs>(args: SelectSubset<T, psr_change_flagFindUniqueOrThrowArgs<ExtArgs>>): Prisma__psr_change_flagClient<$Result.GetResult<Prisma.$psr_change_flagPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Psr_change_flag that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_change_flagFindFirstArgs} args - Arguments to find a Psr_change_flag
+     * @example
+     * // Get one Psr_change_flag
+     * const psr_change_flag = await prisma.psr_change_flag.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends psr_change_flagFindFirstArgs>(args?: SelectSubset<T, psr_change_flagFindFirstArgs<ExtArgs>>): Prisma__psr_change_flagClient<$Result.GetResult<Prisma.$psr_change_flagPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Psr_change_flag that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_change_flagFindFirstOrThrowArgs} args - Arguments to find a Psr_change_flag
+     * @example
+     * // Get one Psr_change_flag
+     * const psr_change_flag = await prisma.psr_change_flag.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends psr_change_flagFindFirstOrThrowArgs>(args?: SelectSubset<T, psr_change_flagFindFirstOrThrowArgs<ExtArgs>>): Prisma__psr_change_flagClient<$Result.GetResult<Prisma.$psr_change_flagPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Psr_change_flags that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_change_flagFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Psr_change_flags
+     * const psr_change_flags = await prisma.psr_change_flag.findMany()
+     * 
+     * // Get first 10 Psr_change_flags
+     * const psr_change_flags = await prisma.psr_change_flag.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const psr_change_flagWithIdOnly = await prisma.psr_change_flag.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends psr_change_flagFindManyArgs>(args?: SelectSubset<T, psr_change_flagFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$psr_change_flagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Psr_change_flag.
+     * @param {psr_change_flagCreateArgs} args - Arguments to create a Psr_change_flag.
+     * @example
+     * // Create one Psr_change_flag
+     * const Psr_change_flag = await prisma.psr_change_flag.create({
+     *   data: {
+     *     // ... data to create a Psr_change_flag
+     *   }
+     * })
+     * 
+     */
+    create<T extends psr_change_flagCreateArgs>(args: SelectSubset<T, psr_change_flagCreateArgs<ExtArgs>>): Prisma__psr_change_flagClient<$Result.GetResult<Prisma.$psr_change_flagPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Psr_change_flags.
+     * @param {psr_change_flagCreateManyArgs} args - Arguments to create many Psr_change_flags.
+     * @example
+     * // Create many Psr_change_flags
+     * const psr_change_flag = await prisma.psr_change_flag.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends psr_change_flagCreateManyArgs>(args?: SelectSubset<T, psr_change_flagCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Psr_change_flag.
+     * @param {psr_change_flagDeleteArgs} args - Arguments to delete one Psr_change_flag.
+     * @example
+     * // Delete one Psr_change_flag
+     * const Psr_change_flag = await prisma.psr_change_flag.delete({
+     *   where: {
+     *     // ... filter to delete one Psr_change_flag
+     *   }
+     * })
+     * 
+     */
+    delete<T extends psr_change_flagDeleteArgs>(args: SelectSubset<T, psr_change_flagDeleteArgs<ExtArgs>>): Prisma__psr_change_flagClient<$Result.GetResult<Prisma.$psr_change_flagPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Psr_change_flag.
+     * @param {psr_change_flagUpdateArgs} args - Arguments to update one Psr_change_flag.
+     * @example
+     * // Update one Psr_change_flag
+     * const psr_change_flag = await prisma.psr_change_flag.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends psr_change_flagUpdateArgs>(args: SelectSubset<T, psr_change_flagUpdateArgs<ExtArgs>>): Prisma__psr_change_flagClient<$Result.GetResult<Prisma.$psr_change_flagPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Psr_change_flags.
+     * @param {psr_change_flagDeleteManyArgs} args - Arguments to filter Psr_change_flags to delete.
+     * @example
+     * // Delete a few Psr_change_flags
+     * const { count } = await prisma.psr_change_flag.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends psr_change_flagDeleteManyArgs>(args?: SelectSubset<T, psr_change_flagDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Psr_change_flags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_change_flagUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Psr_change_flags
+     * const psr_change_flag = await prisma.psr_change_flag.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends psr_change_flagUpdateManyArgs>(args: SelectSubset<T, psr_change_flagUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Psr_change_flag.
+     * @param {psr_change_flagUpsertArgs} args - Arguments to update or create a Psr_change_flag.
+     * @example
+     * // Update or create a Psr_change_flag
+     * const psr_change_flag = await prisma.psr_change_flag.upsert({
+     *   create: {
+     *     // ... data to create a Psr_change_flag
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Psr_change_flag we want to update
+     *   }
+     * })
+     */
+    upsert<T extends psr_change_flagUpsertArgs>(args: SelectSubset<T, psr_change_flagUpsertArgs<ExtArgs>>): Prisma__psr_change_flagClient<$Result.GetResult<Prisma.$psr_change_flagPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Psr_change_flags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_change_flagCountArgs} args - Arguments to filter Psr_change_flags to count.
+     * @example
+     * // Count the number of Psr_change_flags
+     * const count = await prisma.psr_change_flag.count({
+     *   where: {
+     *     // ... the filter for the Psr_change_flags we want to count
+     *   }
+     * })
+    **/
+    count<T extends psr_change_flagCountArgs>(
+      args?: Subset<T, psr_change_flagCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Psr_change_flagCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Psr_change_flag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Psr_change_flagAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Psr_change_flagAggregateArgs>(args: Subset<T, Psr_change_flagAggregateArgs>): Prisma.PrismaPromise<GetPsr_change_flagAggregateType<T>>
+
+    /**
+     * Group by Psr_change_flag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {psr_change_flagGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends psr_change_flagGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: psr_change_flagGroupByArgs['orderBy'] }
+        : { orderBy?: psr_change_flagGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, psr_change_flagGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPsr_change_flagGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the psr_change_flag model
+   */
+  readonly fields: psr_change_flagFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for psr_change_flag.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__psr_change_flagClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the psr_change_flag model
+   */
+  interface psr_change_flagFieldRefs {
+    readonly id: FieldRef<"psr_change_flag", 'Int'>
+    readonly changed_at: FieldRef<"psr_change_flag", 'DateTime'>
+    readonly processed: FieldRef<"psr_change_flag", 'Boolean'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * psr_change_flag findUnique
+   */
+  export type psr_change_flagFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_change_flag
+     */
+    select?: psr_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_change_flag
+     */
+    omit?: psr_change_flagOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_change_flag to fetch.
+     */
+    where: psr_change_flagWhereUniqueInput
+  }
+
+  /**
+   * psr_change_flag findUniqueOrThrow
+   */
+  export type psr_change_flagFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_change_flag
+     */
+    select?: psr_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_change_flag
+     */
+    omit?: psr_change_flagOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_change_flag to fetch.
+     */
+    where: psr_change_flagWhereUniqueInput
+  }
+
+  /**
+   * psr_change_flag findFirst
+   */
+  export type psr_change_flagFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_change_flag
+     */
+    select?: psr_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_change_flag
+     */
+    omit?: psr_change_flagOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_change_flag to fetch.
+     */
+    where?: psr_change_flagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of psr_change_flags to fetch.
+     */
+    orderBy?: psr_change_flagOrderByWithRelationInput | psr_change_flagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for psr_change_flags.
+     */
+    cursor?: psr_change_flagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` psr_change_flags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` psr_change_flags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of psr_change_flags.
+     */
+    distinct?: Psr_change_flagScalarFieldEnum | Psr_change_flagScalarFieldEnum[]
+  }
+
+  /**
+   * psr_change_flag findFirstOrThrow
+   */
+  export type psr_change_flagFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_change_flag
+     */
+    select?: psr_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_change_flag
+     */
+    omit?: psr_change_flagOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_change_flag to fetch.
+     */
+    where?: psr_change_flagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of psr_change_flags to fetch.
+     */
+    orderBy?: psr_change_flagOrderByWithRelationInput | psr_change_flagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for psr_change_flags.
+     */
+    cursor?: psr_change_flagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` psr_change_flags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` psr_change_flags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of psr_change_flags.
+     */
+    distinct?: Psr_change_flagScalarFieldEnum | Psr_change_flagScalarFieldEnum[]
+  }
+
+  /**
+   * psr_change_flag findMany
+   */
+  export type psr_change_flagFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_change_flag
+     */
+    select?: psr_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_change_flag
+     */
+    omit?: psr_change_flagOmit<ExtArgs> | null
+    /**
+     * Filter, which psr_change_flags to fetch.
+     */
+    where?: psr_change_flagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of psr_change_flags to fetch.
+     */
+    orderBy?: psr_change_flagOrderByWithRelationInput | psr_change_flagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing psr_change_flags.
+     */
+    cursor?: psr_change_flagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` psr_change_flags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` psr_change_flags.
+     */
+    skip?: number
+    distinct?: Psr_change_flagScalarFieldEnum | Psr_change_flagScalarFieldEnum[]
+  }
+
+  /**
+   * psr_change_flag create
+   */
+  export type psr_change_flagCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_change_flag
+     */
+    select?: psr_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_change_flag
+     */
+    omit?: psr_change_flagOmit<ExtArgs> | null
+    /**
+     * The data needed to create a psr_change_flag.
+     */
+    data?: XOR<psr_change_flagCreateInput, psr_change_flagUncheckedCreateInput>
+  }
+
+  /**
+   * psr_change_flag createMany
+   */
+  export type psr_change_flagCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many psr_change_flags.
+     */
+    data: psr_change_flagCreateManyInput | psr_change_flagCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * psr_change_flag update
+   */
+  export type psr_change_flagUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_change_flag
+     */
+    select?: psr_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_change_flag
+     */
+    omit?: psr_change_flagOmit<ExtArgs> | null
+    /**
+     * The data needed to update a psr_change_flag.
+     */
+    data: XOR<psr_change_flagUpdateInput, psr_change_flagUncheckedUpdateInput>
+    /**
+     * Choose, which psr_change_flag to update.
+     */
+    where: psr_change_flagWhereUniqueInput
+  }
+
+  /**
+   * psr_change_flag updateMany
+   */
+  export type psr_change_flagUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update psr_change_flags.
+     */
+    data: XOR<psr_change_flagUpdateManyMutationInput, psr_change_flagUncheckedUpdateManyInput>
+    /**
+     * Filter which psr_change_flags to update
+     */
+    where?: psr_change_flagWhereInput
+    /**
+     * Limit how many psr_change_flags to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * psr_change_flag upsert
+   */
+  export type psr_change_flagUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_change_flag
+     */
+    select?: psr_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_change_flag
+     */
+    omit?: psr_change_flagOmit<ExtArgs> | null
+    /**
+     * The filter to search for the psr_change_flag to update in case it exists.
+     */
+    where: psr_change_flagWhereUniqueInput
+    /**
+     * In case the psr_change_flag found by the `where` argument doesn't exist, create a new psr_change_flag with this data.
+     */
+    create: XOR<psr_change_flagCreateInput, psr_change_flagUncheckedCreateInput>
+    /**
+     * In case the psr_change_flag was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<psr_change_flagUpdateInput, psr_change_flagUncheckedUpdateInput>
+  }
+
+  /**
+   * psr_change_flag delete
+   */
+  export type psr_change_flagDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_change_flag
+     */
+    select?: psr_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_change_flag
+     */
+    omit?: psr_change_flagOmit<ExtArgs> | null
+    /**
+     * Filter which psr_change_flag to delete.
+     */
+    where: psr_change_flagWhereUniqueInput
+  }
+
+  /**
+   * psr_change_flag deleteMany
+   */
+  export type psr_change_flagDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which psr_change_flags to delete
+     */
+    where?: psr_change_flagWhereInput
+    /**
+     * Limit how many psr_change_flags to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * psr_change_flag without action
+   */
+  export type psr_change_flagDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the psr_change_flag
+     */
+    select?: psr_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the psr_change_flag
+     */
+    omit?: psr_change_flagOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model channel_mapping
    */
 
@@ -9164,6 +10224,900 @@ export namespace Prisma {
 
 
   /**
+   * Model mapping_change_flag
+   */
+
+  export type AggregateMapping_change_flag = {
+    _count: Mapping_change_flagCountAggregateOutputType | null
+    _avg: Mapping_change_flagAvgAggregateOutputType | null
+    _sum: Mapping_change_flagSumAggregateOutputType | null
+    _min: Mapping_change_flagMinAggregateOutputType | null
+    _max: Mapping_change_flagMaxAggregateOutputType | null
+  }
+
+  export type Mapping_change_flagAvgAggregateOutputType = {
+    id: number | null
+  }
+
+  export type Mapping_change_flagSumAggregateOutputType = {
+    id: number | null
+  }
+
+  export type Mapping_change_flagMinAggregateOutputType = {
+    id: number | null
+    changed_at: Date | null
+    processed: boolean | null
+  }
+
+  export type Mapping_change_flagMaxAggregateOutputType = {
+    id: number | null
+    changed_at: Date | null
+    processed: boolean | null
+  }
+
+  export type Mapping_change_flagCountAggregateOutputType = {
+    id: number
+    changed_at: number
+    processed: number
+    _all: number
+  }
+
+
+  export type Mapping_change_flagAvgAggregateInputType = {
+    id?: true
+  }
+
+  export type Mapping_change_flagSumAggregateInputType = {
+    id?: true
+  }
+
+  export type Mapping_change_flagMinAggregateInputType = {
+    id?: true
+    changed_at?: true
+    processed?: true
+  }
+
+  export type Mapping_change_flagMaxAggregateInputType = {
+    id?: true
+    changed_at?: true
+    processed?: true
+  }
+
+  export type Mapping_change_flagCountAggregateInputType = {
+    id?: true
+    changed_at?: true
+    processed?: true
+    _all?: true
+  }
+
+  export type Mapping_change_flagAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which mapping_change_flag to aggregate.
+     */
+    where?: mapping_change_flagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mapping_change_flags to fetch.
+     */
+    orderBy?: mapping_change_flagOrderByWithRelationInput | mapping_change_flagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: mapping_change_flagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mapping_change_flags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mapping_change_flags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned mapping_change_flags
+    **/
+    _count?: true | Mapping_change_flagCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Mapping_change_flagAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Mapping_change_flagSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Mapping_change_flagMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Mapping_change_flagMaxAggregateInputType
+  }
+
+  export type GetMapping_change_flagAggregateType<T extends Mapping_change_flagAggregateArgs> = {
+        [P in keyof T & keyof AggregateMapping_change_flag]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMapping_change_flag[P]>
+      : GetScalarType<T[P], AggregateMapping_change_flag[P]>
+  }
+
+
+
+
+  export type mapping_change_flagGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mapping_change_flagWhereInput
+    orderBy?: mapping_change_flagOrderByWithAggregationInput | mapping_change_flagOrderByWithAggregationInput[]
+    by: Mapping_change_flagScalarFieldEnum[] | Mapping_change_flagScalarFieldEnum
+    having?: mapping_change_flagScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Mapping_change_flagCountAggregateInputType | true
+    _avg?: Mapping_change_flagAvgAggregateInputType
+    _sum?: Mapping_change_flagSumAggregateInputType
+    _min?: Mapping_change_flagMinAggregateInputType
+    _max?: Mapping_change_flagMaxAggregateInputType
+  }
+
+  export type Mapping_change_flagGroupByOutputType = {
+    id: number
+    changed_at: Date
+    processed: boolean
+    _count: Mapping_change_flagCountAggregateOutputType | null
+    _avg: Mapping_change_flagAvgAggregateOutputType | null
+    _sum: Mapping_change_flagSumAggregateOutputType | null
+    _min: Mapping_change_flagMinAggregateOutputType | null
+    _max: Mapping_change_flagMaxAggregateOutputType | null
+  }
+
+  type GetMapping_change_flagGroupByPayload<T extends mapping_change_flagGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Mapping_change_flagGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Mapping_change_flagGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Mapping_change_flagGroupByOutputType[P]>
+            : GetScalarType<T[P], Mapping_change_flagGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type mapping_change_flagSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    changed_at?: boolean
+    processed?: boolean
+  }, ExtArgs["result"]["mapping_change_flag"]>
+
+
+
+  export type mapping_change_flagSelectScalar = {
+    id?: boolean
+    changed_at?: boolean
+    processed?: boolean
+  }
+
+  export type mapping_change_flagOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "changed_at" | "processed", ExtArgs["result"]["mapping_change_flag"]>
+
+  export type $mapping_change_flagPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "mapping_change_flag"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      changed_at: Date
+      processed: boolean
+    }, ExtArgs["result"]["mapping_change_flag"]>
+    composites: {}
+  }
+
+  type mapping_change_flagGetPayload<S extends boolean | null | undefined | mapping_change_flagDefaultArgs> = $Result.GetResult<Prisma.$mapping_change_flagPayload, S>
+
+  type mapping_change_flagCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<mapping_change_flagFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Mapping_change_flagCountAggregateInputType | true
+    }
+
+  export interface mapping_change_flagDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['mapping_change_flag'], meta: { name: 'mapping_change_flag' } }
+    /**
+     * Find zero or one Mapping_change_flag that matches the filter.
+     * @param {mapping_change_flagFindUniqueArgs} args - Arguments to find a Mapping_change_flag
+     * @example
+     * // Get one Mapping_change_flag
+     * const mapping_change_flag = await prisma.mapping_change_flag.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends mapping_change_flagFindUniqueArgs>(args: SelectSubset<T, mapping_change_flagFindUniqueArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Mapping_change_flag that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {mapping_change_flagFindUniqueOrThrowArgs} args - Arguments to find a Mapping_change_flag
+     * @example
+     * // Get one Mapping_change_flag
+     * const mapping_change_flag = await prisma.mapping_change_flag.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends mapping_change_flagFindUniqueOrThrowArgs>(args: SelectSubset<T, mapping_change_flagFindUniqueOrThrowArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mapping_change_flag that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mapping_change_flagFindFirstArgs} args - Arguments to find a Mapping_change_flag
+     * @example
+     * // Get one Mapping_change_flag
+     * const mapping_change_flag = await prisma.mapping_change_flag.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends mapping_change_flagFindFirstArgs>(args?: SelectSubset<T, mapping_change_flagFindFirstArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mapping_change_flag that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mapping_change_flagFindFirstOrThrowArgs} args - Arguments to find a Mapping_change_flag
+     * @example
+     * // Get one Mapping_change_flag
+     * const mapping_change_flag = await prisma.mapping_change_flag.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends mapping_change_flagFindFirstOrThrowArgs>(args?: SelectSubset<T, mapping_change_flagFindFirstOrThrowArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Mapping_change_flags that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mapping_change_flagFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Mapping_change_flags
+     * const mapping_change_flags = await prisma.mapping_change_flag.findMany()
+     * 
+     * // Get first 10 Mapping_change_flags
+     * const mapping_change_flags = await prisma.mapping_change_flag.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const mapping_change_flagWithIdOnly = await prisma.mapping_change_flag.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends mapping_change_flagFindManyArgs>(args?: SelectSubset<T, mapping_change_flagFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Mapping_change_flag.
+     * @param {mapping_change_flagCreateArgs} args - Arguments to create a Mapping_change_flag.
+     * @example
+     * // Create one Mapping_change_flag
+     * const Mapping_change_flag = await prisma.mapping_change_flag.create({
+     *   data: {
+     *     // ... data to create a Mapping_change_flag
+     *   }
+     * })
+     * 
+     */
+    create<T extends mapping_change_flagCreateArgs>(args: SelectSubset<T, mapping_change_flagCreateArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Mapping_change_flags.
+     * @param {mapping_change_flagCreateManyArgs} args - Arguments to create many Mapping_change_flags.
+     * @example
+     * // Create many Mapping_change_flags
+     * const mapping_change_flag = await prisma.mapping_change_flag.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends mapping_change_flagCreateManyArgs>(args?: SelectSubset<T, mapping_change_flagCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Mapping_change_flag.
+     * @param {mapping_change_flagDeleteArgs} args - Arguments to delete one Mapping_change_flag.
+     * @example
+     * // Delete one Mapping_change_flag
+     * const Mapping_change_flag = await prisma.mapping_change_flag.delete({
+     *   where: {
+     *     // ... filter to delete one Mapping_change_flag
+     *   }
+     * })
+     * 
+     */
+    delete<T extends mapping_change_flagDeleteArgs>(args: SelectSubset<T, mapping_change_flagDeleteArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Mapping_change_flag.
+     * @param {mapping_change_flagUpdateArgs} args - Arguments to update one Mapping_change_flag.
+     * @example
+     * // Update one Mapping_change_flag
+     * const mapping_change_flag = await prisma.mapping_change_flag.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends mapping_change_flagUpdateArgs>(args: SelectSubset<T, mapping_change_flagUpdateArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Mapping_change_flags.
+     * @param {mapping_change_flagDeleteManyArgs} args - Arguments to filter Mapping_change_flags to delete.
+     * @example
+     * // Delete a few Mapping_change_flags
+     * const { count } = await prisma.mapping_change_flag.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends mapping_change_flagDeleteManyArgs>(args?: SelectSubset<T, mapping_change_flagDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mapping_change_flags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mapping_change_flagUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Mapping_change_flags
+     * const mapping_change_flag = await prisma.mapping_change_flag.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends mapping_change_flagUpdateManyArgs>(args: SelectSubset<T, mapping_change_flagUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Mapping_change_flag.
+     * @param {mapping_change_flagUpsertArgs} args - Arguments to update or create a Mapping_change_flag.
+     * @example
+     * // Update or create a Mapping_change_flag
+     * const mapping_change_flag = await prisma.mapping_change_flag.upsert({
+     *   create: {
+     *     // ... data to create a Mapping_change_flag
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Mapping_change_flag we want to update
+     *   }
+     * })
+     */
+    upsert<T extends mapping_change_flagUpsertArgs>(args: SelectSubset<T, mapping_change_flagUpsertArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Mapping_change_flags.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mapping_change_flagCountArgs} args - Arguments to filter Mapping_change_flags to count.
+     * @example
+     * // Count the number of Mapping_change_flags
+     * const count = await prisma.mapping_change_flag.count({
+     *   where: {
+     *     // ... the filter for the Mapping_change_flags we want to count
+     *   }
+     * })
+    **/
+    count<T extends mapping_change_flagCountArgs>(
+      args?: Subset<T, mapping_change_flagCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Mapping_change_flagCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Mapping_change_flag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Mapping_change_flagAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Mapping_change_flagAggregateArgs>(args: Subset<T, Mapping_change_flagAggregateArgs>): Prisma.PrismaPromise<GetMapping_change_flagAggregateType<T>>
+
+    /**
+     * Group by Mapping_change_flag.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mapping_change_flagGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends mapping_change_flagGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: mapping_change_flagGroupByArgs['orderBy'] }
+        : { orderBy?: mapping_change_flagGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, mapping_change_flagGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMapping_change_flagGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the mapping_change_flag model
+   */
+  readonly fields: mapping_change_flagFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for mapping_change_flag.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__mapping_change_flagClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the mapping_change_flag model
+   */
+  interface mapping_change_flagFieldRefs {
+    readonly id: FieldRef<"mapping_change_flag", 'Int'>
+    readonly changed_at: FieldRef<"mapping_change_flag", 'DateTime'>
+    readonly processed: FieldRef<"mapping_change_flag", 'Boolean'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * mapping_change_flag findUnique
+   */
+  export type mapping_change_flagFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+    /**
+     * Filter, which mapping_change_flag to fetch.
+     */
+    where: mapping_change_flagWhereUniqueInput
+  }
+
+  /**
+   * mapping_change_flag findUniqueOrThrow
+   */
+  export type mapping_change_flagFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+    /**
+     * Filter, which mapping_change_flag to fetch.
+     */
+    where: mapping_change_flagWhereUniqueInput
+  }
+
+  /**
+   * mapping_change_flag findFirst
+   */
+  export type mapping_change_flagFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+    /**
+     * Filter, which mapping_change_flag to fetch.
+     */
+    where?: mapping_change_flagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mapping_change_flags to fetch.
+     */
+    orderBy?: mapping_change_flagOrderByWithRelationInput | mapping_change_flagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for mapping_change_flags.
+     */
+    cursor?: mapping_change_flagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mapping_change_flags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mapping_change_flags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of mapping_change_flags.
+     */
+    distinct?: Mapping_change_flagScalarFieldEnum | Mapping_change_flagScalarFieldEnum[]
+  }
+
+  /**
+   * mapping_change_flag findFirstOrThrow
+   */
+  export type mapping_change_flagFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+    /**
+     * Filter, which mapping_change_flag to fetch.
+     */
+    where?: mapping_change_flagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mapping_change_flags to fetch.
+     */
+    orderBy?: mapping_change_flagOrderByWithRelationInput | mapping_change_flagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for mapping_change_flags.
+     */
+    cursor?: mapping_change_flagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mapping_change_flags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mapping_change_flags.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of mapping_change_flags.
+     */
+    distinct?: Mapping_change_flagScalarFieldEnum | Mapping_change_flagScalarFieldEnum[]
+  }
+
+  /**
+   * mapping_change_flag findMany
+   */
+  export type mapping_change_flagFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+    /**
+     * Filter, which mapping_change_flags to fetch.
+     */
+    where?: mapping_change_flagWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mapping_change_flags to fetch.
+     */
+    orderBy?: mapping_change_flagOrderByWithRelationInput | mapping_change_flagOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing mapping_change_flags.
+     */
+    cursor?: mapping_change_flagWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mapping_change_flags from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mapping_change_flags.
+     */
+    skip?: number
+    distinct?: Mapping_change_flagScalarFieldEnum | Mapping_change_flagScalarFieldEnum[]
+  }
+
+  /**
+   * mapping_change_flag create
+   */
+  export type mapping_change_flagCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+    /**
+     * The data needed to create a mapping_change_flag.
+     */
+    data?: XOR<mapping_change_flagCreateInput, mapping_change_flagUncheckedCreateInput>
+  }
+
+  /**
+   * mapping_change_flag createMany
+   */
+  export type mapping_change_flagCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many mapping_change_flags.
+     */
+    data: mapping_change_flagCreateManyInput | mapping_change_flagCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * mapping_change_flag update
+   */
+  export type mapping_change_flagUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+    /**
+     * The data needed to update a mapping_change_flag.
+     */
+    data: XOR<mapping_change_flagUpdateInput, mapping_change_flagUncheckedUpdateInput>
+    /**
+     * Choose, which mapping_change_flag to update.
+     */
+    where: mapping_change_flagWhereUniqueInput
+  }
+
+  /**
+   * mapping_change_flag updateMany
+   */
+  export type mapping_change_flagUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update mapping_change_flags.
+     */
+    data: XOR<mapping_change_flagUpdateManyMutationInput, mapping_change_flagUncheckedUpdateManyInput>
+    /**
+     * Filter which mapping_change_flags to update
+     */
+    where?: mapping_change_flagWhereInput
+    /**
+     * Limit how many mapping_change_flags to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * mapping_change_flag upsert
+   */
+  export type mapping_change_flagUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+    /**
+     * The filter to search for the mapping_change_flag to update in case it exists.
+     */
+    where: mapping_change_flagWhereUniqueInput
+    /**
+     * In case the mapping_change_flag found by the `where` argument doesn't exist, create a new mapping_change_flag with this data.
+     */
+    create: XOR<mapping_change_flagCreateInput, mapping_change_flagUncheckedCreateInput>
+    /**
+     * In case the mapping_change_flag was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<mapping_change_flagUpdateInput, mapping_change_flagUncheckedUpdateInput>
+  }
+
+  /**
+   * mapping_change_flag delete
+   */
+  export type mapping_change_flagDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+    /**
+     * Filter which mapping_change_flag to delete.
+     */
+    where: mapping_change_flagWhereUniqueInput
+  }
+
+  /**
+   * mapping_change_flag deleteMany
+   */
+  export type mapping_change_flagDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which mapping_change_flags to delete
+     */
+    where?: mapping_change_flagWhereInput
+    /**
+     * Limit how many mapping_change_flags to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * mapping_change_flag without action
+   */
+  export type mapping_change_flagDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mapping_change_flag
+     */
+    select?: mapping_change_flagSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mapping_change_flag
+     */
+    omit?: mapping_change_flagOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Model gp_data
    */
 
@@ -11030,900 +12984,6 @@ export namespace Prisma {
      * Omit specific fields from the gp_data_temp
      */
     omit?: gp_data_tempOmit<ExtArgs> | null
-  }
-
-
-  /**
-   * Model mapping_change_flag
-   */
-
-  export type AggregateMapping_change_flag = {
-    _count: Mapping_change_flagCountAggregateOutputType | null
-    _avg: Mapping_change_flagAvgAggregateOutputType | null
-    _sum: Mapping_change_flagSumAggregateOutputType | null
-    _min: Mapping_change_flagMinAggregateOutputType | null
-    _max: Mapping_change_flagMaxAggregateOutputType | null
-  }
-
-  export type Mapping_change_flagAvgAggregateOutputType = {
-    id: number | null
-  }
-
-  export type Mapping_change_flagSumAggregateOutputType = {
-    id: number | null
-  }
-
-  export type Mapping_change_flagMinAggregateOutputType = {
-    id: number | null
-    changed_at: Date | null
-    processed: boolean | null
-  }
-
-  export type Mapping_change_flagMaxAggregateOutputType = {
-    id: number | null
-    changed_at: Date | null
-    processed: boolean | null
-  }
-
-  export type Mapping_change_flagCountAggregateOutputType = {
-    id: number
-    changed_at: number
-    processed: number
-    _all: number
-  }
-
-
-  export type Mapping_change_flagAvgAggregateInputType = {
-    id?: true
-  }
-
-  export type Mapping_change_flagSumAggregateInputType = {
-    id?: true
-  }
-
-  export type Mapping_change_flagMinAggregateInputType = {
-    id?: true
-    changed_at?: true
-    processed?: true
-  }
-
-  export type Mapping_change_flagMaxAggregateInputType = {
-    id?: true
-    changed_at?: true
-    processed?: true
-  }
-
-  export type Mapping_change_flagCountAggregateInputType = {
-    id?: true
-    changed_at?: true
-    processed?: true
-    _all?: true
-  }
-
-  export type Mapping_change_flagAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which mapping_change_flag to aggregate.
-     */
-    where?: mapping_change_flagWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of mapping_change_flags to fetch.
-     */
-    orderBy?: mapping_change_flagOrderByWithRelationInput | mapping_change_flagOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the start position
-     */
-    cursor?: mapping_change_flagWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` mapping_change_flags from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` mapping_change_flags.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Count returned mapping_change_flags
-    **/
-    _count?: true | Mapping_change_flagCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to average
-    **/
-    _avg?: Mapping_change_flagAvgAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to sum
-    **/
-    _sum?: Mapping_change_flagSumAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the minimum value
-    **/
-    _min?: Mapping_change_flagMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     * 
-     * Select which fields to find the maximum value
-    **/
-    _max?: Mapping_change_flagMaxAggregateInputType
-  }
-
-  export type GetMapping_change_flagAggregateType<T extends Mapping_change_flagAggregateArgs> = {
-        [P in keyof T & keyof AggregateMapping_change_flag]: P extends '_count' | 'count'
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateMapping_change_flag[P]>
-      : GetScalarType<T[P], AggregateMapping_change_flag[P]>
-  }
-
-
-
-
-  export type mapping_change_flagGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: mapping_change_flagWhereInput
-    orderBy?: mapping_change_flagOrderByWithAggregationInput | mapping_change_flagOrderByWithAggregationInput[]
-    by: Mapping_change_flagScalarFieldEnum[] | Mapping_change_flagScalarFieldEnum
-    having?: mapping_change_flagScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: Mapping_change_flagCountAggregateInputType | true
-    _avg?: Mapping_change_flagAvgAggregateInputType
-    _sum?: Mapping_change_flagSumAggregateInputType
-    _min?: Mapping_change_flagMinAggregateInputType
-    _max?: Mapping_change_flagMaxAggregateInputType
-  }
-
-  export type Mapping_change_flagGroupByOutputType = {
-    id: number
-    changed_at: Date
-    processed: boolean
-    _count: Mapping_change_flagCountAggregateOutputType | null
-    _avg: Mapping_change_flagAvgAggregateOutputType | null
-    _sum: Mapping_change_flagSumAggregateOutputType | null
-    _min: Mapping_change_flagMinAggregateOutputType | null
-    _max: Mapping_change_flagMaxAggregateOutputType | null
-  }
-
-  type GetMapping_change_flagGroupByPayload<T extends mapping_change_flagGroupByArgs> = Prisma.PrismaPromise<
-    Array<
-      PickEnumerable<Mapping_change_flagGroupByOutputType, T['by']> &
-        {
-          [P in ((keyof T) & (keyof Mapping_change_flagGroupByOutputType))]: P extends '_count'
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], Mapping_change_flagGroupByOutputType[P]>
-            : GetScalarType<T[P], Mapping_change_flagGroupByOutputType[P]>
-        }
-      >
-    >
-
-
-  export type mapping_change_flagSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
-    id?: boolean
-    changed_at?: boolean
-    processed?: boolean
-  }, ExtArgs["result"]["mapping_change_flag"]>
-
-
-
-  export type mapping_change_flagSelectScalar = {
-    id?: boolean
-    changed_at?: boolean
-    processed?: boolean
-  }
-
-  export type mapping_change_flagOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "changed_at" | "processed", ExtArgs["result"]["mapping_change_flag"]>
-
-  export type $mapping_change_flagPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    name: "mapping_change_flag"
-    objects: {}
-    scalars: $Extensions.GetPayloadResult<{
-      id: number
-      changed_at: Date
-      processed: boolean
-    }, ExtArgs["result"]["mapping_change_flag"]>
-    composites: {}
-  }
-
-  type mapping_change_flagGetPayload<S extends boolean | null | undefined | mapping_change_flagDefaultArgs> = $Result.GetResult<Prisma.$mapping_change_flagPayload, S>
-
-  type mapping_change_flagCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
-    Omit<mapping_change_flagFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
-      select?: Mapping_change_flagCountAggregateInputType | true
-    }
-
-  export interface mapping_change_flagDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
-    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['mapping_change_flag'], meta: { name: 'mapping_change_flag' } }
-    /**
-     * Find zero or one Mapping_change_flag that matches the filter.
-     * @param {mapping_change_flagFindUniqueArgs} args - Arguments to find a Mapping_change_flag
-     * @example
-     * // Get one Mapping_change_flag
-     * const mapping_change_flag = await prisma.mapping_change_flag.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends mapping_change_flagFindUniqueArgs>(args: SelectSubset<T, mapping_change_flagFindUniqueArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find one Mapping_change_flag that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {mapping_change_flagFindUniqueOrThrowArgs} args - Arguments to find a Mapping_change_flag
-     * @example
-     * // Get one Mapping_change_flag
-     * const mapping_change_flag = await prisma.mapping_change_flag.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends mapping_change_flagFindUniqueOrThrowArgs>(args: SelectSubset<T, mapping_change_flagFindUniqueOrThrowArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Mapping_change_flag that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {mapping_change_flagFindFirstArgs} args - Arguments to find a Mapping_change_flag
-     * @example
-     * // Get one Mapping_change_flag
-     * const mapping_change_flag = await prisma.mapping_change_flag.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends mapping_change_flagFindFirstArgs>(args?: SelectSubset<T, mapping_change_flagFindFirstArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find the first Mapping_change_flag that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {mapping_change_flagFindFirstOrThrowArgs} args - Arguments to find a Mapping_change_flag
-     * @example
-     * // Get one Mapping_change_flag
-     * const mapping_change_flag = await prisma.mapping_change_flag.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends mapping_change_flagFindFirstOrThrowArgs>(args?: SelectSubset<T, mapping_change_flagFindFirstOrThrowArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Find zero or more Mapping_change_flags that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {mapping_change_flagFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Mapping_change_flags
-     * const mapping_change_flags = await prisma.mapping_change_flag.findMany()
-     * 
-     * // Get first 10 Mapping_change_flags
-     * const mapping_change_flags = await prisma.mapping_change_flag.findMany({ take: 10 })
-     * 
-     * // Only select the `id`
-     * const mapping_change_flagWithIdOnly = await prisma.mapping_change_flag.findMany({ select: { id: true } })
-     * 
-     */
-    findMany<T extends mapping_change_flagFindManyArgs>(args?: SelectSubset<T, mapping_change_flagFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
-
-    /**
-     * Create a Mapping_change_flag.
-     * @param {mapping_change_flagCreateArgs} args - Arguments to create a Mapping_change_flag.
-     * @example
-     * // Create one Mapping_change_flag
-     * const Mapping_change_flag = await prisma.mapping_change_flag.create({
-     *   data: {
-     *     // ... data to create a Mapping_change_flag
-     *   }
-     * })
-     * 
-     */
-    create<T extends mapping_change_flagCreateArgs>(args: SelectSubset<T, mapping_change_flagCreateArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Create many Mapping_change_flags.
-     * @param {mapping_change_flagCreateManyArgs} args - Arguments to create many Mapping_change_flags.
-     * @example
-     * // Create many Mapping_change_flags
-     * const mapping_change_flag = await prisma.mapping_change_flag.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *     
-     */
-    createMany<T extends mapping_change_flagCreateManyArgs>(args?: SelectSubset<T, mapping_change_flagCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Delete a Mapping_change_flag.
-     * @param {mapping_change_flagDeleteArgs} args - Arguments to delete one Mapping_change_flag.
-     * @example
-     * // Delete one Mapping_change_flag
-     * const Mapping_change_flag = await prisma.mapping_change_flag.delete({
-     *   where: {
-     *     // ... filter to delete one Mapping_change_flag
-     *   }
-     * })
-     * 
-     */
-    delete<T extends mapping_change_flagDeleteArgs>(args: SelectSubset<T, mapping_change_flagDeleteArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Update one Mapping_change_flag.
-     * @param {mapping_change_flagUpdateArgs} args - Arguments to update one Mapping_change_flag.
-     * @example
-     * // Update one Mapping_change_flag
-     * const mapping_change_flag = await prisma.mapping_change_flag.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    update<T extends mapping_change_flagUpdateArgs>(args: SelectSubset<T, mapping_change_flagUpdateArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-    /**
-     * Delete zero or more Mapping_change_flags.
-     * @param {mapping_change_flagDeleteManyArgs} args - Arguments to filter Mapping_change_flags to delete.
-     * @example
-     * // Delete a few Mapping_change_flags
-     * const { count } = await prisma.mapping_change_flag.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     * 
-     */
-    deleteMany<T extends mapping_change_flagDeleteManyArgs>(args?: SelectSubset<T, mapping_change_flagDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Mapping_change_flags.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {mapping_change_flagUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Mapping_change_flags
-     * const mapping_change_flag = await prisma.mapping_change_flag.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     * 
-     */
-    updateMany<T extends mapping_change_flagUpdateManyArgs>(args: SelectSubset<T, mapping_change_flagUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create or update one Mapping_change_flag.
-     * @param {mapping_change_flagUpsertArgs} args - Arguments to update or create a Mapping_change_flag.
-     * @example
-     * // Update or create a Mapping_change_flag
-     * const mapping_change_flag = await prisma.mapping_change_flag.upsert({
-     *   create: {
-     *     // ... data to create a Mapping_change_flag
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Mapping_change_flag we want to update
-     *   }
-     * })
-     */
-    upsert<T extends mapping_change_flagUpsertArgs>(args: SelectSubset<T, mapping_change_flagUpsertArgs<ExtArgs>>): Prisma__mapping_change_flagClient<$Result.GetResult<Prisma.$mapping_change_flagPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
-
-
-    /**
-     * Count the number of Mapping_change_flags.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {mapping_change_flagCountArgs} args - Arguments to filter Mapping_change_flags to count.
-     * @example
-     * // Count the number of Mapping_change_flags
-     * const count = await prisma.mapping_change_flag.count({
-     *   where: {
-     *     // ... the filter for the Mapping_change_flags we want to count
-     *   }
-     * })
-    **/
-    count<T extends mapping_change_flagCountArgs>(
-      args?: Subset<T, mapping_change_flagCountArgs>,
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<'select', any>
-        ? T['select'] extends true
-          ? number
-          : GetScalarType<T['select'], Mapping_change_flagCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Mapping_change_flag.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {Mapping_change_flagAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-    **/
-    aggregate<T extends Mapping_change_flagAggregateArgs>(args: Subset<T, Mapping_change_flagAggregateArgs>): Prisma.PrismaPromise<GetMapping_change_flagAggregateType<T>>
-
-    /**
-     * Group by Mapping_change_flag.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {mapping_change_flagGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     * 
-    **/
-    groupBy<
-      T extends mapping_change_flagGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<'skip', Keys<T>>,
-        Extends<'take', Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: mapping_change_flagGroupByArgs['orderBy'] }
-        : { orderBy?: mapping_change_flagGroupByArgs['orderBy'] },
-      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
-      ByFields extends MaybeTupleToUnion<T['by']>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T['having']>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T['by'] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-      ? `Error: "by" must not be empty.`
-      : HavingValid extends False
-      ? {
-          [P in HavingFields]: P extends ByFields
-            ? never
-            : P extends string
-            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-            : [
-                Error,
-                'Field ',
-                P,
-                ` in "having" needs to be provided in "by"`,
-              ]
-        }[HavingFields]
-      : 'take' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "take", you also need to provide "orderBy"'
-      : 'skip' extends Keys<T>
-      ? 'orderBy' extends Keys<T>
-        ? ByValid extends True
-          ? {}
-          : {
-              [P in OrderFields]: P extends ByFields
-                ? never
-                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-            }[OrderFields]
-        : 'Error: If you provide "skip", you also need to provide "orderBy"'
-      : ByValid extends True
-      ? {}
-      : {
-          [P in OrderFields]: P extends ByFields
-            ? never
-            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-        }[OrderFields]
-    >(args: SubsetIntersection<T, mapping_change_flagGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMapping_change_flagGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
-  /**
-   * Fields of the mapping_change_flag model
-   */
-  readonly fields: mapping_change_flagFieldRefs;
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for mapping_change_flag.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__mapping_change_flagClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-
-
-
-  /**
-   * Fields of the mapping_change_flag model
-   */
-  interface mapping_change_flagFieldRefs {
-    readonly id: FieldRef<"mapping_change_flag", 'Int'>
-    readonly changed_at: FieldRef<"mapping_change_flag", 'DateTime'>
-    readonly processed: FieldRef<"mapping_change_flag", 'Boolean'>
-  }
-    
-
-  // Custom InputTypes
-  /**
-   * mapping_change_flag findUnique
-   */
-  export type mapping_change_flagFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the mapping_change_flag
-     */
-    select?: mapping_change_flagSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the mapping_change_flag
-     */
-    omit?: mapping_change_flagOmit<ExtArgs> | null
-    /**
-     * Filter, which mapping_change_flag to fetch.
-     */
-    where: mapping_change_flagWhereUniqueInput
-  }
-
-  /**
-   * mapping_change_flag findUniqueOrThrow
-   */
-  export type mapping_change_flagFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the mapping_change_flag
-     */
-    select?: mapping_change_flagSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the mapping_change_flag
-     */
-    omit?: mapping_change_flagOmit<ExtArgs> | null
-    /**
-     * Filter, which mapping_change_flag to fetch.
-     */
-    where: mapping_change_flagWhereUniqueInput
-  }
-
-  /**
-   * mapping_change_flag findFirst
-   */
-  export type mapping_change_flagFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the mapping_change_flag
-     */
-    select?: mapping_change_flagSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the mapping_change_flag
-     */
-    omit?: mapping_change_flagOmit<ExtArgs> | null
-    /**
-     * Filter, which mapping_change_flag to fetch.
-     */
-    where?: mapping_change_flagWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of mapping_change_flags to fetch.
-     */
-    orderBy?: mapping_change_flagOrderByWithRelationInput | mapping_change_flagOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for mapping_change_flags.
-     */
-    cursor?: mapping_change_flagWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` mapping_change_flags from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` mapping_change_flags.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of mapping_change_flags.
-     */
-    distinct?: Mapping_change_flagScalarFieldEnum | Mapping_change_flagScalarFieldEnum[]
-  }
-
-  /**
-   * mapping_change_flag findFirstOrThrow
-   */
-  export type mapping_change_flagFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the mapping_change_flag
-     */
-    select?: mapping_change_flagSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the mapping_change_flag
-     */
-    omit?: mapping_change_flagOmit<ExtArgs> | null
-    /**
-     * Filter, which mapping_change_flag to fetch.
-     */
-    where?: mapping_change_flagWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of mapping_change_flags to fetch.
-     */
-    orderBy?: mapping_change_flagOrderByWithRelationInput | mapping_change_flagOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for searching for mapping_change_flags.
-     */
-    cursor?: mapping_change_flagWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` mapping_change_flags from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` mapping_change_flags.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     * 
-     * Filter by unique combinations of mapping_change_flags.
-     */
-    distinct?: Mapping_change_flagScalarFieldEnum | Mapping_change_flagScalarFieldEnum[]
-  }
-
-  /**
-   * mapping_change_flag findMany
-   */
-  export type mapping_change_flagFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the mapping_change_flag
-     */
-    select?: mapping_change_flagSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the mapping_change_flag
-     */
-    omit?: mapping_change_flagOmit<ExtArgs> | null
-    /**
-     * Filter, which mapping_change_flags to fetch.
-     */
-    where?: mapping_change_flagWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     * 
-     * Determine the order of mapping_change_flags to fetch.
-     */
-    orderBy?: mapping_change_flagOrderByWithRelationInput | mapping_change_flagOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     * 
-     * Sets the position for listing mapping_change_flags.
-     */
-    cursor?: mapping_change_flagWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Take `±n` mapping_change_flags from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     * 
-     * Skip the first `n` mapping_change_flags.
-     */
-    skip?: number
-    distinct?: Mapping_change_flagScalarFieldEnum | Mapping_change_flagScalarFieldEnum[]
-  }
-
-  /**
-   * mapping_change_flag create
-   */
-  export type mapping_change_flagCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the mapping_change_flag
-     */
-    select?: mapping_change_flagSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the mapping_change_flag
-     */
-    omit?: mapping_change_flagOmit<ExtArgs> | null
-    /**
-     * The data needed to create a mapping_change_flag.
-     */
-    data?: XOR<mapping_change_flagCreateInput, mapping_change_flagUncheckedCreateInput>
-  }
-
-  /**
-   * mapping_change_flag createMany
-   */
-  export type mapping_change_flagCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to create many mapping_change_flags.
-     */
-    data: mapping_change_flagCreateManyInput | mapping_change_flagCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * mapping_change_flag update
-   */
-  export type mapping_change_flagUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the mapping_change_flag
-     */
-    select?: mapping_change_flagSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the mapping_change_flag
-     */
-    omit?: mapping_change_flagOmit<ExtArgs> | null
-    /**
-     * The data needed to update a mapping_change_flag.
-     */
-    data: XOR<mapping_change_flagUpdateInput, mapping_change_flagUncheckedUpdateInput>
-    /**
-     * Choose, which mapping_change_flag to update.
-     */
-    where: mapping_change_flagWhereUniqueInput
-  }
-
-  /**
-   * mapping_change_flag updateMany
-   */
-  export type mapping_change_flagUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * The data used to update mapping_change_flags.
-     */
-    data: XOR<mapping_change_flagUpdateManyMutationInput, mapping_change_flagUncheckedUpdateManyInput>
-    /**
-     * Filter which mapping_change_flags to update
-     */
-    where?: mapping_change_flagWhereInput
-    /**
-     * Limit how many mapping_change_flags to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * mapping_change_flag upsert
-   */
-  export type mapping_change_flagUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the mapping_change_flag
-     */
-    select?: mapping_change_flagSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the mapping_change_flag
-     */
-    omit?: mapping_change_flagOmit<ExtArgs> | null
-    /**
-     * The filter to search for the mapping_change_flag to update in case it exists.
-     */
-    where: mapping_change_flagWhereUniqueInput
-    /**
-     * In case the mapping_change_flag found by the `where` argument doesn't exist, create a new mapping_change_flag with this data.
-     */
-    create: XOR<mapping_change_flagCreateInput, mapping_change_flagUncheckedCreateInput>
-    /**
-     * In case the mapping_change_flag was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<mapping_change_flagUpdateInput, mapping_change_flagUncheckedUpdateInput>
-  }
-
-  /**
-   * mapping_change_flag delete
-   */
-  export type mapping_change_flagDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the mapping_change_flag
-     */
-    select?: mapping_change_flagSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the mapping_change_flag
-     */
-    omit?: mapping_change_flagOmit<ExtArgs> | null
-    /**
-     * Filter which mapping_change_flag to delete.
-     */
-    where: mapping_change_flagWhereUniqueInput
-  }
-
-  /**
-   * mapping_change_flag deleteMany
-   */
-  export type mapping_change_flagDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Filter which mapping_change_flags to delete
-     */
-    where?: mapping_change_flagWhereInput
-    /**
-     * Limit how many mapping_change_flags to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * mapping_change_flag without action
-   */
-  export type mapping_change_flagDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the mapping_change_flag
-     */
-    select?: mapping_change_flagSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the mapping_change_flag
-     */
-    omit?: mapping_change_flagOmit<ExtArgs> | null
   }
 
 
@@ -18526,6 +19586,926 @@ export namespace Prisma {
 
 
   /**
+   * Model procedure_log
+   */
+
+  export type AggregateProcedure_log = {
+    _count: Procedure_logCountAggregateOutputType | null
+    _avg: Procedure_logAvgAggregateOutputType | null
+    _sum: Procedure_logSumAggregateOutputType | null
+    _min: Procedure_logMinAggregateOutputType | null
+    _max: Procedure_logMaxAggregateOutputType | null
+  }
+
+  export type Procedure_logAvgAggregateOutputType = {
+    id: number | null
+    duration_seconds: number | null
+  }
+
+  export type Procedure_logSumAggregateOutputType = {
+    id: number | null
+    duration_seconds: number | null
+  }
+
+  export type Procedure_logMinAggregateOutputType = {
+    id: number | null
+    procedure_name: string | null
+    start_time: Date | null
+    end_time: Date | null
+    duration_seconds: number | null
+  }
+
+  export type Procedure_logMaxAggregateOutputType = {
+    id: number | null
+    procedure_name: string | null
+    start_time: Date | null
+    end_time: Date | null
+    duration_seconds: number | null
+  }
+
+  export type Procedure_logCountAggregateOutputType = {
+    id: number
+    procedure_name: number
+    start_time: number
+    end_time: number
+    duration_seconds: number
+    _all: number
+  }
+
+
+  export type Procedure_logAvgAggregateInputType = {
+    id?: true
+    duration_seconds?: true
+  }
+
+  export type Procedure_logSumAggregateInputType = {
+    id?: true
+    duration_seconds?: true
+  }
+
+  export type Procedure_logMinAggregateInputType = {
+    id?: true
+    procedure_name?: true
+    start_time?: true
+    end_time?: true
+    duration_seconds?: true
+  }
+
+  export type Procedure_logMaxAggregateInputType = {
+    id?: true
+    procedure_name?: true
+    start_time?: true
+    end_time?: true
+    duration_seconds?: true
+  }
+
+  export type Procedure_logCountAggregateInputType = {
+    id?: true
+    procedure_name?: true
+    start_time?: true
+    end_time?: true
+    duration_seconds?: true
+    _all?: true
+  }
+
+  export type Procedure_logAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which procedure_log to aggregate.
+     */
+    where?: procedure_logWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of procedure_logs to fetch.
+     */
+    orderBy?: procedure_logOrderByWithRelationInput | procedure_logOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: procedure_logWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` procedure_logs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` procedure_logs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned procedure_logs
+    **/
+    _count?: true | Procedure_logCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Procedure_logAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Procedure_logSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Procedure_logMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Procedure_logMaxAggregateInputType
+  }
+
+  export type GetProcedure_logAggregateType<T extends Procedure_logAggregateArgs> = {
+        [P in keyof T & keyof AggregateProcedure_log]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProcedure_log[P]>
+      : GetScalarType<T[P], AggregateProcedure_log[P]>
+  }
+
+
+
+
+  export type procedure_logGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: procedure_logWhereInput
+    orderBy?: procedure_logOrderByWithAggregationInput | procedure_logOrderByWithAggregationInput[]
+    by: Procedure_logScalarFieldEnum[] | Procedure_logScalarFieldEnum
+    having?: procedure_logScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Procedure_logCountAggregateInputType | true
+    _avg?: Procedure_logAvgAggregateInputType
+    _sum?: Procedure_logSumAggregateInputType
+    _min?: Procedure_logMinAggregateInputType
+    _max?: Procedure_logMaxAggregateInputType
+  }
+
+  export type Procedure_logGroupByOutputType = {
+    id: number
+    procedure_name: string
+    start_time: Date
+    end_time: Date | null
+    duration_seconds: number | null
+    _count: Procedure_logCountAggregateOutputType | null
+    _avg: Procedure_logAvgAggregateOutputType | null
+    _sum: Procedure_logSumAggregateOutputType | null
+    _min: Procedure_logMinAggregateOutputType | null
+    _max: Procedure_logMaxAggregateOutputType | null
+  }
+
+  type GetProcedure_logGroupByPayload<T extends procedure_logGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Procedure_logGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Procedure_logGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Procedure_logGroupByOutputType[P]>
+            : GetScalarType<T[P], Procedure_logGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type procedure_logSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    procedure_name?: boolean
+    start_time?: boolean
+    end_time?: boolean
+    duration_seconds?: boolean
+  }, ExtArgs["result"]["procedure_log"]>
+
+
+
+  export type procedure_logSelectScalar = {
+    id?: boolean
+    procedure_name?: boolean
+    start_time?: boolean
+    end_time?: boolean
+    duration_seconds?: boolean
+  }
+
+  export type procedure_logOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "procedure_name" | "start_time" | "end_time" | "duration_seconds", ExtArgs["result"]["procedure_log"]>
+
+  export type $procedure_logPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "procedure_log"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: number
+      procedure_name: string
+      start_time: Date
+      end_time: Date | null
+      duration_seconds: number | null
+    }, ExtArgs["result"]["procedure_log"]>
+    composites: {}
+  }
+
+  type procedure_logGetPayload<S extends boolean | null | undefined | procedure_logDefaultArgs> = $Result.GetResult<Prisma.$procedure_logPayload, S>
+
+  type procedure_logCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<procedure_logFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Procedure_logCountAggregateInputType | true
+    }
+
+  export interface procedure_logDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['procedure_log'], meta: { name: 'procedure_log' } }
+    /**
+     * Find zero or one Procedure_log that matches the filter.
+     * @param {procedure_logFindUniqueArgs} args - Arguments to find a Procedure_log
+     * @example
+     * // Get one Procedure_log
+     * const procedure_log = await prisma.procedure_log.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends procedure_logFindUniqueArgs>(args: SelectSubset<T, procedure_logFindUniqueArgs<ExtArgs>>): Prisma__procedure_logClient<$Result.GetResult<Prisma.$procedure_logPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Procedure_log that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {procedure_logFindUniqueOrThrowArgs} args - Arguments to find a Procedure_log
+     * @example
+     * // Get one Procedure_log
+     * const procedure_log = await prisma.procedure_log.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends procedure_logFindUniqueOrThrowArgs>(args: SelectSubset<T, procedure_logFindUniqueOrThrowArgs<ExtArgs>>): Prisma__procedure_logClient<$Result.GetResult<Prisma.$procedure_logPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Procedure_log that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {procedure_logFindFirstArgs} args - Arguments to find a Procedure_log
+     * @example
+     * // Get one Procedure_log
+     * const procedure_log = await prisma.procedure_log.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends procedure_logFindFirstArgs>(args?: SelectSubset<T, procedure_logFindFirstArgs<ExtArgs>>): Prisma__procedure_logClient<$Result.GetResult<Prisma.$procedure_logPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Procedure_log that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {procedure_logFindFirstOrThrowArgs} args - Arguments to find a Procedure_log
+     * @example
+     * // Get one Procedure_log
+     * const procedure_log = await prisma.procedure_log.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends procedure_logFindFirstOrThrowArgs>(args?: SelectSubset<T, procedure_logFindFirstOrThrowArgs<ExtArgs>>): Prisma__procedure_logClient<$Result.GetResult<Prisma.$procedure_logPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Procedure_logs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {procedure_logFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Procedure_logs
+     * const procedure_logs = await prisma.procedure_log.findMany()
+     * 
+     * // Get first 10 Procedure_logs
+     * const procedure_logs = await prisma.procedure_log.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const procedure_logWithIdOnly = await prisma.procedure_log.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends procedure_logFindManyArgs>(args?: SelectSubset<T, procedure_logFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$procedure_logPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Procedure_log.
+     * @param {procedure_logCreateArgs} args - Arguments to create a Procedure_log.
+     * @example
+     * // Create one Procedure_log
+     * const Procedure_log = await prisma.procedure_log.create({
+     *   data: {
+     *     // ... data to create a Procedure_log
+     *   }
+     * })
+     * 
+     */
+    create<T extends procedure_logCreateArgs>(args: SelectSubset<T, procedure_logCreateArgs<ExtArgs>>): Prisma__procedure_logClient<$Result.GetResult<Prisma.$procedure_logPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Procedure_logs.
+     * @param {procedure_logCreateManyArgs} args - Arguments to create many Procedure_logs.
+     * @example
+     * // Create many Procedure_logs
+     * const procedure_log = await prisma.procedure_log.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends procedure_logCreateManyArgs>(args?: SelectSubset<T, procedure_logCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Delete a Procedure_log.
+     * @param {procedure_logDeleteArgs} args - Arguments to delete one Procedure_log.
+     * @example
+     * // Delete one Procedure_log
+     * const Procedure_log = await prisma.procedure_log.delete({
+     *   where: {
+     *     // ... filter to delete one Procedure_log
+     *   }
+     * })
+     * 
+     */
+    delete<T extends procedure_logDeleteArgs>(args: SelectSubset<T, procedure_logDeleteArgs<ExtArgs>>): Prisma__procedure_logClient<$Result.GetResult<Prisma.$procedure_logPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Procedure_log.
+     * @param {procedure_logUpdateArgs} args - Arguments to update one Procedure_log.
+     * @example
+     * // Update one Procedure_log
+     * const procedure_log = await prisma.procedure_log.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends procedure_logUpdateArgs>(args: SelectSubset<T, procedure_logUpdateArgs<ExtArgs>>): Prisma__procedure_logClient<$Result.GetResult<Prisma.$procedure_logPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Procedure_logs.
+     * @param {procedure_logDeleteManyArgs} args - Arguments to filter Procedure_logs to delete.
+     * @example
+     * // Delete a few Procedure_logs
+     * const { count } = await prisma.procedure_log.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends procedure_logDeleteManyArgs>(args?: SelectSubset<T, procedure_logDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Procedure_logs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {procedure_logUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Procedure_logs
+     * const procedure_log = await prisma.procedure_log.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends procedure_logUpdateManyArgs>(args: SelectSubset<T, procedure_logUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one Procedure_log.
+     * @param {procedure_logUpsertArgs} args - Arguments to update or create a Procedure_log.
+     * @example
+     * // Update or create a Procedure_log
+     * const procedure_log = await prisma.procedure_log.upsert({
+     *   create: {
+     *     // ... data to create a Procedure_log
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Procedure_log we want to update
+     *   }
+     * })
+     */
+    upsert<T extends procedure_logUpsertArgs>(args: SelectSubset<T, procedure_logUpsertArgs<ExtArgs>>): Prisma__procedure_logClient<$Result.GetResult<Prisma.$procedure_logPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Procedure_logs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {procedure_logCountArgs} args - Arguments to filter Procedure_logs to count.
+     * @example
+     * // Count the number of Procedure_logs
+     * const count = await prisma.procedure_log.count({
+     *   where: {
+     *     // ... the filter for the Procedure_logs we want to count
+     *   }
+     * })
+    **/
+    count<T extends procedure_logCountArgs>(
+      args?: Subset<T, procedure_logCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Procedure_logCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Procedure_log.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Procedure_logAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Procedure_logAggregateArgs>(args: Subset<T, Procedure_logAggregateArgs>): Prisma.PrismaPromise<GetProcedure_logAggregateType<T>>
+
+    /**
+     * Group by Procedure_log.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {procedure_logGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends procedure_logGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: procedure_logGroupByArgs['orderBy'] }
+        : { orderBy?: procedure_logGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, procedure_logGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetProcedure_logGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the procedure_log model
+   */
+  readonly fields: procedure_logFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for procedure_log.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__procedure_logClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the procedure_log model
+   */
+  interface procedure_logFieldRefs {
+    readonly id: FieldRef<"procedure_log", 'Int'>
+    readonly procedure_name: FieldRef<"procedure_log", 'String'>
+    readonly start_time: FieldRef<"procedure_log", 'DateTime'>
+    readonly end_time: FieldRef<"procedure_log", 'DateTime'>
+    readonly duration_seconds: FieldRef<"procedure_log", 'Int'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * procedure_log findUnique
+   */
+  export type procedure_logFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the procedure_log
+     */
+    select?: procedure_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the procedure_log
+     */
+    omit?: procedure_logOmit<ExtArgs> | null
+    /**
+     * Filter, which procedure_log to fetch.
+     */
+    where: procedure_logWhereUniqueInput
+  }
+
+  /**
+   * procedure_log findUniqueOrThrow
+   */
+  export type procedure_logFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the procedure_log
+     */
+    select?: procedure_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the procedure_log
+     */
+    omit?: procedure_logOmit<ExtArgs> | null
+    /**
+     * Filter, which procedure_log to fetch.
+     */
+    where: procedure_logWhereUniqueInput
+  }
+
+  /**
+   * procedure_log findFirst
+   */
+  export type procedure_logFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the procedure_log
+     */
+    select?: procedure_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the procedure_log
+     */
+    omit?: procedure_logOmit<ExtArgs> | null
+    /**
+     * Filter, which procedure_log to fetch.
+     */
+    where?: procedure_logWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of procedure_logs to fetch.
+     */
+    orderBy?: procedure_logOrderByWithRelationInput | procedure_logOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for procedure_logs.
+     */
+    cursor?: procedure_logWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` procedure_logs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` procedure_logs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of procedure_logs.
+     */
+    distinct?: Procedure_logScalarFieldEnum | Procedure_logScalarFieldEnum[]
+  }
+
+  /**
+   * procedure_log findFirstOrThrow
+   */
+  export type procedure_logFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the procedure_log
+     */
+    select?: procedure_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the procedure_log
+     */
+    omit?: procedure_logOmit<ExtArgs> | null
+    /**
+     * Filter, which procedure_log to fetch.
+     */
+    where?: procedure_logWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of procedure_logs to fetch.
+     */
+    orderBy?: procedure_logOrderByWithRelationInput | procedure_logOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for procedure_logs.
+     */
+    cursor?: procedure_logWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` procedure_logs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` procedure_logs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of procedure_logs.
+     */
+    distinct?: Procedure_logScalarFieldEnum | Procedure_logScalarFieldEnum[]
+  }
+
+  /**
+   * procedure_log findMany
+   */
+  export type procedure_logFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the procedure_log
+     */
+    select?: procedure_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the procedure_log
+     */
+    omit?: procedure_logOmit<ExtArgs> | null
+    /**
+     * Filter, which procedure_logs to fetch.
+     */
+    where?: procedure_logWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of procedure_logs to fetch.
+     */
+    orderBy?: procedure_logOrderByWithRelationInput | procedure_logOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing procedure_logs.
+     */
+    cursor?: procedure_logWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` procedure_logs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` procedure_logs.
+     */
+    skip?: number
+    distinct?: Procedure_logScalarFieldEnum | Procedure_logScalarFieldEnum[]
+  }
+
+  /**
+   * procedure_log create
+   */
+  export type procedure_logCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the procedure_log
+     */
+    select?: procedure_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the procedure_log
+     */
+    omit?: procedure_logOmit<ExtArgs> | null
+    /**
+     * The data needed to create a procedure_log.
+     */
+    data: XOR<procedure_logCreateInput, procedure_logUncheckedCreateInput>
+  }
+
+  /**
+   * procedure_log createMany
+   */
+  export type procedure_logCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many procedure_logs.
+     */
+    data: procedure_logCreateManyInput | procedure_logCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * procedure_log update
+   */
+  export type procedure_logUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the procedure_log
+     */
+    select?: procedure_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the procedure_log
+     */
+    omit?: procedure_logOmit<ExtArgs> | null
+    /**
+     * The data needed to update a procedure_log.
+     */
+    data: XOR<procedure_logUpdateInput, procedure_logUncheckedUpdateInput>
+    /**
+     * Choose, which procedure_log to update.
+     */
+    where: procedure_logWhereUniqueInput
+  }
+
+  /**
+   * procedure_log updateMany
+   */
+  export type procedure_logUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update procedure_logs.
+     */
+    data: XOR<procedure_logUpdateManyMutationInput, procedure_logUncheckedUpdateManyInput>
+    /**
+     * Filter which procedure_logs to update
+     */
+    where?: procedure_logWhereInput
+    /**
+     * Limit how many procedure_logs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * procedure_log upsert
+   */
+  export type procedure_logUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the procedure_log
+     */
+    select?: procedure_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the procedure_log
+     */
+    omit?: procedure_logOmit<ExtArgs> | null
+    /**
+     * The filter to search for the procedure_log to update in case it exists.
+     */
+    where: procedure_logWhereUniqueInput
+    /**
+     * In case the procedure_log found by the `where` argument doesn't exist, create a new procedure_log with this data.
+     */
+    create: XOR<procedure_logCreateInput, procedure_logUncheckedCreateInput>
+    /**
+     * In case the procedure_log was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<procedure_logUpdateInput, procedure_logUncheckedUpdateInput>
+  }
+
+  /**
+   * procedure_log delete
+   */
+  export type procedure_logDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the procedure_log
+     */
+    select?: procedure_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the procedure_log
+     */
+    omit?: procedure_logOmit<ExtArgs> | null
+    /**
+     * Filter which procedure_log to delete.
+     */
+    where: procedure_logWhereUniqueInput
+  }
+
+  /**
+   * procedure_log deleteMany
+   */
+  export type procedure_logDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which procedure_logs to delete
+     */
+    where?: procedure_logWhereInput
+    /**
+     * Limit how many procedure_logs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * procedure_log without action
+   */
+  export type procedure_logDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the procedure_log
+     */
+    select?: procedure_logSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the procedure_log
+     */
+    omit?: procedure_logOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -18619,6 +20599,15 @@ export namespace Prisma {
   export type Psr_data_finalizedScalarFieldEnum = (typeof Psr_data_finalizedScalarFieldEnum)[keyof typeof Psr_data_finalizedScalarFieldEnum]
 
 
+  export const Psr_change_flagScalarFieldEnum: {
+    id: 'id',
+    changed_at: 'changed_at',
+    processed: 'processed'
+  };
+
+  export type Psr_change_flagScalarFieldEnum = (typeof Psr_change_flagScalarFieldEnum)[keyof typeof Psr_change_flagScalarFieldEnum]
+
+
   export const Channel_mappingScalarFieldEnum: {
     channel_id: 'channel_id',
     customer_type: 'customer_type',
@@ -18663,6 +20652,15 @@ export namespace Prisma {
   export type Product_mappingScalarFieldEnum = (typeof Product_mappingScalarFieldEnum)[keyof typeof Product_mappingScalarFieldEnum]
 
 
+  export const Mapping_change_flagScalarFieldEnum: {
+    id: 'id',
+    changed_at: 'changed_at',
+    processed: 'processed'
+  };
+
+  export type Mapping_change_flagScalarFieldEnum = (typeof Mapping_change_flagScalarFieldEnum)[keyof typeof Mapping_change_flagScalarFieldEnum]
+
+
   export const Gp_dataScalarFieldEnum: {
     gp_id: 'gp_id',
     document_date: 'document_date',
@@ -18685,15 +20683,6 @@ export namespace Prisma {
   };
 
   export type Gp_data_tempScalarFieldEnum = (typeof Gp_data_tempScalarFieldEnum)[keyof typeof Gp_data_tempScalarFieldEnum]
-
-
-  export const Mapping_change_flagScalarFieldEnum: {
-    id: 'id',
-    changed_at: 'changed_at',
-    processed: 'processed'
-  };
-
-  export type Mapping_change_flagScalarFieldEnum = (typeof Mapping_change_flagScalarFieldEnum)[keyof typeof Mapping_change_flagScalarFieldEnum]
 
 
   export const UserScalarFieldEnum: {
@@ -18773,6 +20762,17 @@ export namespace Prisma {
   };
 
   export type Base_channel_retailing_summaryScalarFieldEnum = (typeof Base_channel_retailing_summaryScalarFieldEnum)[keyof typeof Base_channel_retailing_summaryScalarFieldEnum]
+
+
+  export const Procedure_logScalarFieldEnum: {
+    id: 'id',
+    procedure_name: 'procedure_name',
+    start_time: 'start_time',
+    end_time: 'end_time',
+    duration_seconds: 'duration_seconds'
+  };
+
+  export type Procedure_logScalarFieldEnum = (typeof Procedure_logScalarFieldEnum)[keyof typeof Procedure_logScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -18979,6 +20979,13 @@ export namespace Prisma {
   };
 
   export type base_channel_retailing_summaryOrderByRelevanceFieldEnum = (typeof base_channel_retailing_summaryOrderByRelevanceFieldEnum)[keyof typeof base_channel_retailing_summaryOrderByRelevanceFieldEnum]
+
+
+  export const procedure_logOrderByRelevanceFieldEnum: {
+    procedure_name: 'procedure_name'
+  };
+
+  export type procedure_logOrderByRelevanceFieldEnum = (typeof procedure_logOrderByRelevanceFieldEnum)[keyof typeof procedure_logOrderByRelevanceFieldEnum]
 
 
   /**
@@ -19445,6 +21452,50 @@ export namespace Prisma {
     retailing?: DecimalWithAggregatesFilter<"psr_data_finalized"> | Decimal | DecimalJsLike | number | string
   }
 
+  export type psr_change_flagWhereInput = {
+    AND?: psr_change_flagWhereInput | psr_change_flagWhereInput[]
+    OR?: psr_change_flagWhereInput[]
+    NOT?: psr_change_flagWhereInput | psr_change_flagWhereInput[]
+    id?: IntFilter<"psr_change_flag"> | number
+    changed_at?: DateTimeFilter<"psr_change_flag"> | Date | string
+    processed?: BoolFilter<"psr_change_flag"> | boolean
+  }
+
+  export type psr_change_flagOrderByWithRelationInput = {
+    id?: SortOrder
+    changed_at?: SortOrder
+    processed?: SortOrder
+  }
+
+  export type psr_change_flagWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: psr_change_flagWhereInput | psr_change_flagWhereInput[]
+    OR?: psr_change_flagWhereInput[]
+    NOT?: psr_change_flagWhereInput | psr_change_flagWhereInput[]
+    changed_at?: DateTimeFilter<"psr_change_flag"> | Date | string
+    processed?: BoolFilter<"psr_change_flag"> | boolean
+  }, "id">
+
+  export type psr_change_flagOrderByWithAggregationInput = {
+    id?: SortOrder
+    changed_at?: SortOrder
+    processed?: SortOrder
+    _count?: psr_change_flagCountOrderByAggregateInput
+    _avg?: psr_change_flagAvgOrderByAggregateInput
+    _max?: psr_change_flagMaxOrderByAggregateInput
+    _min?: psr_change_flagMinOrderByAggregateInput
+    _sum?: psr_change_flagSumOrderByAggregateInput
+  }
+
+  export type psr_change_flagScalarWhereWithAggregatesInput = {
+    AND?: psr_change_flagScalarWhereWithAggregatesInput | psr_change_flagScalarWhereWithAggregatesInput[]
+    OR?: psr_change_flagScalarWhereWithAggregatesInput[]
+    NOT?: psr_change_flagScalarWhereWithAggregatesInput | psr_change_flagScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"psr_change_flag"> | number
+    changed_at?: DateTimeWithAggregatesFilter<"psr_change_flag"> | Date | string
+    processed?: BoolWithAggregatesFilter<"psr_change_flag"> | boolean
+  }
+
   export type channel_mappingWhereInput = {
     AND?: channel_mappingWhereInput | channel_mappingWhereInput[]
     OR?: channel_mappingWhereInput[]
@@ -19665,6 +21716,50 @@ export namespace Prisma {
     created_at?: DateTimeWithAggregatesFilter<"product_mapping"> | Date | string
   }
 
+  export type mapping_change_flagWhereInput = {
+    AND?: mapping_change_flagWhereInput | mapping_change_flagWhereInput[]
+    OR?: mapping_change_flagWhereInput[]
+    NOT?: mapping_change_flagWhereInput | mapping_change_flagWhereInput[]
+    id?: IntFilter<"mapping_change_flag"> | number
+    changed_at?: DateTimeFilter<"mapping_change_flag"> | Date | string
+    processed?: BoolFilter<"mapping_change_flag"> | boolean
+  }
+
+  export type mapping_change_flagOrderByWithRelationInput = {
+    id?: SortOrder
+    changed_at?: SortOrder
+    processed?: SortOrder
+  }
+
+  export type mapping_change_flagWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: mapping_change_flagWhereInput | mapping_change_flagWhereInput[]
+    OR?: mapping_change_flagWhereInput[]
+    NOT?: mapping_change_flagWhereInput | mapping_change_flagWhereInput[]
+    changed_at?: DateTimeFilter<"mapping_change_flag"> | Date | string
+    processed?: BoolFilter<"mapping_change_flag"> | boolean
+  }, "id">
+
+  export type mapping_change_flagOrderByWithAggregationInput = {
+    id?: SortOrder
+    changed_at?: SortOrder
+    processed?: SortOrder
+    _count?: mapping_change_flagCountOrderByAggregateInput
+    _avg?: mapping_change_flagAvgOrderByAggregateInput
+    _max?: mapping_change_flagMaxOrderByAggregateInput
+    _min?: mapping_change_flagMinOrderByAggregateInput
+    _sum?: mapping_change_flagSumOrderByAggregateInput
+  }
+
+  export type mapping_change_flagScalarWhereWithAggregatesInput = {
+    AND?: mapping_change_flagScalarWhereWithAggregatesInput | mapping_change_flagScalarWhereWithAggregatesInput[]
+    OR?: mapping_change_flagScalarWhereWithAggregatesInput[]
+    NOT?: mapping_change_flagScalarWhereWithAggregatesInput | mapping_change_flagScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"mapping_change_flag"> | number
+    changed_at?: DateTimeWithAggregatesFilter<"mapping_change_flag"> | Date | string
+    processed?: BoolWithAggregatesFilter<"mapping_change_flag"> | boolean
+  }
+
   export type gp_dataWhereInput = {
     AND?: gp_dataWhereInput | gp_dataWhereInput[]
     OR?: gp_dataWhereInput[]
@@ -19783,50 +21878,6 @@ export namespace Prisma {
     retailer_name?: StringWithAggregatesFilter<"gp_data_temp"> | string
     p3m_gp?: IntWithAggregatesFilter<"gp_data_temp"> | number
     p1m_gp?: IntWithAggregatesFilter<"gp_data_temp"> | number
-  }
-
-  export type mapping_change_flagWhereInput = {
-    AND?: mapping_change_flagWhereInput | mapping_change_flagWhereInput[]
-    OR?: mapping_change_flagWhereInput[]
-    NOT?: mapping_change_flagWhereInput | mapping_change_flagWhereInput[]
-    id?: IntFilter<"mapping_change_flag"> | number
-    changed_at?: DateTimeFilter<"mapping_change_flag"> | Date | string
-    processed?: BoolFilter<"mapping_change_flag"> | boolean
-  }
-
-  export type mapping_change_flagOrderByWithRelationInput = {
-    id?: SortOrder
-    changed_at?: SortOrder
-    processed?: SortOrder
-  }
-
-  export type mapping_change_flagWhereUniqueInput = Prisma.AtLeast<{
-    id?: number
-    AND?: mapping_change_flagWhereInput | mapping_change_flagWhereInput[]
-    OR?: mapping_change_flagWhereInput[]
-    NOT?: mapping_change_flagWhereInput | mapping_change_flagWhereInput[]
-    changed_at?: DateTimeFilter<"mapping_change_flag"> | Date | string
-    processed?: BoolFilter<"mapping_change_flag"> | boolean
-  }, "id">
-
-  export type mapping_change_flagOrderByWithAggregationInput = {
-    id?: SortOrder
-    changed_at?: SortOrder
-    processed?: SortOrder
-    _count?: mapping_change_flagCountOrderByAggregateInput
-    _avg?: mapping_change_flagAvgOrderByAggregateInput
-    _max?: mapping_change_flagMaxOrderByAggregateInput
-    _min?: mapping_change_flagMinOrderByAggregateInput
-    _sum?: mapping_change_flagSumOrderByAggregateInput
-  }
-
-  export type mapping_change_flagScalarWhereWithAggregatesInput = {
-    AND?: mapping_change_flagScalarWhereWithAggregatesInput | mapping_change_flagScalarWhereWithAggregatesInput[]
-    OR?: mapping_change_flagScalarWhereWithAggregatesInput[]
-    NOT?: mapping_change_flagScalarWhereWithAggregatesInput | mapping_change_flagScalarWhereWithAggregatesInput[]
-    id?: IntWithAggregatesFilter<"mapping_change_flag"> | number
-    changed_at?: DateTimeWithAggregatesFilter<"mapping_change_flag"> | Date | string
-    processed?: BoolWithAggregatesFilter<"mapping_change_flag"> | boolean
   }
 
   export type UserWhereInput = {
@@ -20233,6 +22284,61 @@ export namespace Prisma {
     month?: IntWithAggregatesFilter<"base_channel_retailing_summary"> | number
     fiscal_year?: IntWithAggregatesFilter<"base_channel_retailing_summary"> | number
     total_retailing?: DecimalWithAggregatesFilter<"base_channel_retailing_summary"> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type procedure_logWhereInput = {
+    AND?: procedure_logWhereInput | procedure_logWhereInput[]
+    OR?: procedure_logWhereInput[]
+    NOT?: procedure_logWhereInput | procedure_logWhereInput[]
+    id?: IntFilter<"procedure_log"> | number
+    procedure_name?: StringFilter<"procedure_log"> | string
+    start_time?: DateTimeFilter<"procedure_log"> | Date | string
+    end_time?: DateTimeNullableFilter<"procedure_log"> | Date | string | null
+    duration_seconds?: IntNullableFilter<"procedure_log"> | number | null
+  }
+
+  export type procedure_logOrderByWithRelationInput = {
+    id?: SortOrder
+    procedure_name?: SortOrder
+    start_time?: SortOrder
+    end_time?: SortOrderInput | SortOrder
+    duration_seconds?: SortOrderInput | SortOrder
+    _relevance?: procedure_logOrderByRelevanceInput
+  }
+
+  export type procedure_logWhereUniqueInput = Prisma.AtLeast<{
+    id?: number
+    AND?: procedure_logWhereInput | procedure_logWhereInput[]
+    OR?: procedure_logWhereInput[]
+    NOT?: procedure_logWhereInput | procedure_logWhereInput[]
+    procedure_name?: StringFilter<"procedure_log"> | string
+    start_time?: DateTimeFilter<"procedure_log"> | Date | string
+    end_time?: DateTimeNullableFilter<"procedure_log"> | Date | string | null
+    duration_seconds?: IntNullableFilter<"procedure_log"> | number | null
+  }, "id">
+
+  export type procedure_logOrderByWithAggregationInput = {
+    id?: SortOrder
+    procedure_name?: SortOrder
+    start_time?: SortOrder
+    end_time?: SortOrderInput | SortOrder
+    duration_seconds?: SortOrderInput | SortOrder
+    _count?: procedure_logCountOrderByAggregateInput
+    _avg?: procedure_logAvgOrderByAggregateInput
+    _max?: procedure_logMaxOrderByAggregateInput
+    _min?: procedure_logMinOrderByAggregateInput
+    _sum?: procedure_logSumOrderByAggregateInput
+  }
+
+  export type procedure_logScalarWhereWithAggregatesInput = {
+    AND?: procedure_logScalarWhereWithAggregatesInput | procedure_logScalarWhereWithAggregatesInput[]
+    OR?: procedure_logScalarWhereWithAggregatesInput[]
+    NOT?: procedure_logScalarWhereWithAggregatesInput | procedure_logScalarWhereWithAggregatesInput[]
+    id?: IntWithAggregatesFilter<"procedure_log"> | number
+    procedure_name?: StringWithAggregatesFilter<"procedure_log"> | string
+    start_time?: DateTimeWithAggregatesFilter<"procedure_log"> | Date | string
+    end_time?: DateTimeNullableWithAggregatesFilter<"procedure_log"> | Date | string | null
+    duration_seconds?: IntNullableWithAggregatesFilter<"procedure_log"> | number | null
   }
 
   export type psr_data_tempCreateInput = {
@@ -20699,6 +22805,45 @@ export namespace Prisma {
     retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
+  export type psr_change_flagCreateInput = {
+    changed_at?: Date | string
+    processed?: boolean
+  }
+
+  export type psr_change_flagUncheckedCreateInput = {
+    id?: number
+    changed_at?: Date | string
+    processed?: boolean
+  }
+
+  export type psr_change_flagUpdateInput = {
+    changed_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    processed?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type psr_change_flagUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    changed_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    processed?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type psr_change_flagCreateManyInput = {
+    id?: number
+    changed_at?: Date | string
+    processed?: boolean
+  }
+
+  export type psr_change_flagUpdateManyMutationInput = {
+    changed_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    processed?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type psr_change_flagUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    changed_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    processed?: BoolFieldUpdateOperationsInput | boolean
+  }
+
   export type channel_mappingCreateInput = {
     customer_type: string
     base_channel: string
@@ -20935,6 +23080,45 @@ export namespace Prisma {
     created_at?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type mapping_change_flagCreateInput = {
+    changed_at?: Date | string
+    processed?: boolean
+  }
+
+  export type mapping_change_flagUncheckedCreateInput = {
+    id?: number
+    changed_at?: Date | string
+    processed?: boolean
+  }
+
+  export type mapping_change_flagUpdateInput = {
+    changed_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    processed?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type mapping_change_flagUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    changed_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    processed?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type mapping_change_flagCreateManyInput = {
+    id?: number
+    changed_at?: Date | string
+    processed?: boolean
+  }
+
+  export type mapping_change_flagUpdateManyMutationInput = {
+    changed_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    processed?: BoolFieldUpdateOperationsInput | boolean
+  }
+
+  export type mapping_change_flagUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    changed_at?: DateTimeFieldUpdateOperationsInput | Date | string
+    processed?: BoolFieldUpdateOperationsInput | boolean
+  }
+
   export type gp_dataCreateInput = {
     document_date: Date | string
     retailer_code: string
@@ -21053,45 +23237,6 @@ export namespace Prisma {
     retailer_name?: StringFieldUpdateOperationsInput | string
     p3m_gp?: IntFieldUpdateOperationsInput | number
     p1m_gp?: IntFieldUpdateOperationsInput | number
-  }
-
-  export type mapping_change_flagCreateInput = {
-    changed_at?: Date | string
-    processed?: boolean
-  }
-
-  export type mapping_change_flagUncheckedCreateInput = {
-    id?: number
-    changed_at?: Date | string
-    processed?: boolean
-  }
-
-  export type mapping_change_flagUpdateInput = {
-    changed_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    processed?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type mapping_change_flagUncheckedUpdateInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    changed_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    processed?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type mapping_change_flagCreateManyInput = {
-    id?: number
-    changed_at?: Date | string
-    processed?: boolean
-  }
-
-  export type mapping_change_flagUpdateManyMutationInput = {
-    changed_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    processed?: BoolFieldUpdateOperationsInput | boolean
-  }
-
-  export type mapping_change_flagUncheckedUpdateManyInput = {
-    id?: IntFieldUpdateOperationsInput | number
-    changed_at?: DateTimeFieldUpdateOperationsInput | Date | string
-    processed?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type UserCreateInput = {
@@ -21495,6 +23640,59 @@ export namespace Prisma {
     month?: IntFieldUpdateOperationsInput | number
     fiscal_year?: IntFieldUpdateOperationsInput | number
     total_retailing?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+  }
+
+  export type procedure_logCreateInput = {
+    procedure_name: string
+    start_time: Date | string
+    end_time?: Date | string | null
+    duration_seconds?: number | null
+  }
+
+  export type procedure_logUncheckedCreateInput = {
+    id?: number
+    procedure_name: string
+    start_time: Date | string
+    end_time?: Date | string | null
+    duration_seconds?: number | null
+  }
+
+  export type procedure_logUpdateInput = {
+    procedure_name?: StringFieldUpdateOperationsInput | string
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration_seconds?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type procedure_logUncheckedUpdateInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    procedure_name?: StringFieldUpdateOperationsInput | string
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration_seconds?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type procedure_logCreateManyInput = {
+    id?: number
+    procedure_name: string
+    start_time: Date | string
+    end_time?: Date | string | null
+    duration_seconds?: number | null
+  }
+
+  export type procedure_logUpdateManyMutationInput = {
+    procedure_name?: StringFieldUpdateOperationsInput | string
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration_seconds?: NullableIntFieldUpdateOperationsInput | number | null
+  }
+
+  export type procedure_logUncheckedUpdateManyInput = {
+    id?: IntFieldUpdateOperationsInput | number
+    procedure_name?: StringFieldUpdateOperationsInput | string
+    start_time?: DateTimeFieldUpdateOperationsInput | Date | string
+    end_time?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    duration_seconds?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
   export type IntFilter<$PrismaModel = never> = {
@@ -21919,6 +24117,45 @@ export namespace Prisma {
     retailing?: SortOrder
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type psr_change_flagCountOrderByAggregateInput = {
+    id?: SortOrder
+    changed_at?: SortOrder
+    processed?: SortOrder
+  }
+
+  export type psr_change_flagAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type psr_change_flagMaxOrderByAggregateInput = {
+    id?: SortOrder
+    changed_at?: SortOrder
+    processed?: SortOrder
+  }
+
+  export type psr_change_flagMinOrderByAggregateInput = {
+    id?: SortOrder
+    changed_at?: SortOrder
+    processed?: SortOrder
+  }
+
+  export type psr_change_flagSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type channel_mappingOrderByRelevanceInput = {
     fields: channel_mappingOrderByRelevanceFieldEnum | channel_mappingOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -22068,6 +24305,32 @@ export namespace Prisma {
     p_code?: SortOrder
   }
 
+  export type mapping_change_flagCountOrderByAggregateInput = {
+    id?: SortOrder
+    changed_at?: SortOrder
+    processed?: SortOrder
+  }
+
+  export type mapping_change_flagAvgOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
+  export type mapping_change_flagMaxOrderByAggregateInput = {
+    id?: SortOrder
+    changed_at?: SortOrder
+    processed?: SortOrder
+  }
+
+  export type mapping_change_flagMinOrderByAggregateInput = {
+    id?: SortOrder
+    changed_at?: SortOrder
+    processed?: SortOrder
+  }
+
+  export type mapping_change_flagSumOrderByAggregateInput = {
+    id?: SortOrder
+  }
+
   export type gp_dataOrderByRelevanceInput = {
     fields: gp_dataOrderByRelevanceFieldEnum | gp_dataOrderByRelevanceFieldEnum[]
     sort: SortOrder
@@ -22156,45 +24419,6 @@ export namespace Prisma {
     gp_id?: SortOrder
     p3m_gp?: SortOrder
     p1m_gp?: SortOrder
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type mapping_change_flagCountOrderByAggregateInput = {
-    id?: SortOrder
-    changed_at?: SortOrder
-    processed?: SortOrder
-  }
-
-  export type mapping_change_flagAvgOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
-  export type mapping_change_flagMaxOrderByAggregateInput = {
-    id?: SortOrder
-    changed_at?: SortOrder
-    processed?: SortOrder
-  }
-
-  export type mapping_change_flagMinOrderByAggregateInput = {
-    id?: SortOrder
-    changed_at?: SortOrder
-    processed?: SortOrder
-  }
-
-  export type mapping_change_flagSumOrderByAggregateInput = {
-    id?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type IntNullableFilter<$PrismaModel = never> = {
@@ -22631,6 +24855,46 @@ export namespace Prisma {
     month?: SortOrder
     fiscal_year?: SortOrder
     total_retailing?: SortOrder
+  }
+
+  export type procedure_logOrderByRelevanceInput = {
+    fields: procedure_logOrderByRelevanceFieldEnum | procedure_logOrderByRelevanceFieldEnum[]
+    sort: SortOrder
+    search: string
+  }
+
+  export type procedure_logCountOrderByAggregateInput = {
+    id?: SortOrder
+    procedure_name?: SortOrder
+    start_time?: SortOrder
+    end_time?: SortOrder
+    duration_seconds?: SortOrder
+  }
+
+  export type procedure_logAvgOrderByAggregateInput = {
+    id?: SortOrder
+    duration_seconds?: SortOrder
+  }
+
+  export type procedure_logMaxOrderByAggregateInput = {
+    id?: SortOrder
+    procedure_name?: SortOrder
+    start_time?: SortOrder
+    end_time?: SortOrder
+    duration_seconds?: SortOrder
+  }
+
+  export type procedure_logMinOrderByAggregateInput = {
+    id?: SortOrder
+    procedure_name?: SortOrder
+    start_time?: SortOrder
+    end_time?: SortOrder
+    duration_seconds?: SortOrder
+  }
+
+  export type procedure_logSumOrderByAggregateInput = {
+    id?: SortOrder
+    duration_seconds?: SortOrder
   }
 
   export type StringFieldUpdateOperationsInput = {

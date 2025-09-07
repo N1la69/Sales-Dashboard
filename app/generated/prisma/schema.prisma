@@ -8,7 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// SCHEMAS
+// PSR SCHEMAS
 model psr_data_temp {
   psr_id        Int      @id @default(autoincrement())
   document_no   String   @db.VarChar(45)
@@ -77,6 +77,13 @@ model psr_data_finalized {
   retailing     Decimal  @db.Decimal(12, 2)
 }
 
+model psr_change_flag {
+  id         Int      @id @default(autoincrement())
+  changed_at DateTime @default(now())
+  processed  Boolean  @default(false)
+}
+
+// MAPPING SCHEMAS
 model channel_mapping {
   channel_id    Int      @id @default(autoincrement())
   customer_type String   @db.VarChar(90)
@@ -112,6 +119,13 @@ model product_mapping {
   created_at   DateTime @default(now())
 }
 
+model mapping_change_flag {
+  id         Int      @id @default(autoincrement())
+  changed_at DateTime @default(now())
+  processed  Boolean  @default(false)
+}
+
+// GP SCHEMAS
 model gp_data {
   gp_id         Int      @id @default(autoincrement())
   document_date DateTime
@@ -130,12 +144,7 @@ model gp_data_temp {
   p1m_gp        Int
 }
 
-model mapping_change_flag {
-  id         Int      @id @default(autoincrement())
-  changed_at DateTime @default(now())
-  processed  Boolean  @default(false)
-}
-
+// USER AND PERMISSION SCHEMAS
 model User {
   id        Int      @id @default(autoincrement())
   name      String   @db.VarChar(120)
@@ -211,4 +220,13 @@ model base_channel_retailing_summary {
   total_retailing Decimal @db.Decimal(18, 2)
 
   @@id([base_channel, month, fiscal_year])
+}
+
+// LOG SCHEMA
+model procedure_log {
+  id               Int       @id @default(autoincrement())
+  procedure_name   String    @db.VarChar(255)
+  start_time       DateTime
+  end_time         DateTime?
+  duration_seconds Int?
 }

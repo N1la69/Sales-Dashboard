@@ -2,8 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/utils";
 import { runGenerateFilters } from "@/lib/runGenerateFilters";
 
-// --- batch size can be tuned depending on memory/locks ---
-const BATCH_SIZE = 50000;
+const BATCH_SIZE = 100000;
 
 async function moveTableData(
   sourceTable: string,
@@ -20,7 +19,7 @@ async function moveTableData(
       LIMIT ${BATCH_SIZE};
     `);
 
-    if (inserted === 0) break; // ✅ no more rows
+    if (inserted === 0) break; // no more rows
 
     rowsMoved += inserted;
 
@@ -42,7 +41,7 @@ export default async function handler(
   }
 
   try {
-    // 1️⃣ Step 1: Move psr_finalized_temp → psr_data_finalized
+    // Move psr_finalized_temp → psr_data_finalized
     const finalizedColumns = [
       "document_date",
       "customer_code",
@@ -67,7 +66,7 @@ export default async function handler(
       finalizedColumns
     );
 
-    // 2️⃣ Step 2: Move psr_data_temp → psr_data_historical
+    // Move psr_data_temp → psr_data_historical
     const historicalColumns = [
       "document_no",
       "document_date",
@@ -88,7 +87,14 @@ export default async function handler(
       historicalColumns
     );
 
-    // 3️⃣ Generate filters AFTER finalized merge (not for historical)
+    // Insert into psr_change_flag if historical data moved
+    if (historicalMoved > 0) {
+      await prisma.psr_change_flag.create({
+        data: { processed: false },
+      });
+    }
+
+    // Generate filters AFTER finalized merge (not for historical)
     if (finalizedMoved > 0) {
       runGenerateFilters();
     }
