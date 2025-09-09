@@ -1,15 +1,19 @@
 import { verifyUser } from "@/lib/auth/verifyUser";
 import { NextRequest, NextResponse } from "next/server";
+import { isBlockedTime } from "./lib/maintenance";
 
+// Define public paths that don't require authentication
 const publicPaths = [
   "/login",
   "/forgot-password",
   "/reset-password",
   "/verify-reset-otp",
   "/favicon.ico",
+  "/logo.jpeg",
   "/api/user/auth",
 ];
 
+// Check if the path is public
 function isPublicPath(pathname: string) {
   return publicPaths.some((p) => pathname.startsWith(p));
 }
@@ -19,12 +23,27 @@ export const config = {
 };
 
 export async function middleware(request: NextRequest) {
+
+  // Step 1. Proceed with authentication checks
   const { pathname } = request.nextUrl;
 
+
+  // Step 2. Check if the site is under maintenance
+  if (isBlockedTime() && pathname.includes("/api")) return NextResponse.json({
+    message: "The site is under maintenance. Please try again later.",
+    success: false,
+    timeStamp: new Date().toISOString(),
+  }, {
+    status: 503
+  });
+
+
+  // Allow public paths
   if (isPublicPath(pathname)) {
     return NextResponse.next();
   }
 
+  // Verify user authentication
   const { status, message, user } = await verifyUser(request);
 
   if (status !== 200 || !user) {
