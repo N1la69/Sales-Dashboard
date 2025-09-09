@@ -12,11 +12,12 @@ interface TopStoresQueryParams {
   category?: string;
   branch?: string;
   baseChannel?: string;
+  shortChannel?: string;
+  channelDesc?: string;
   brand?: string;
+  brandform?: string;
   startDate?: string;
   endDate?: string;
-  page: number;
-  pageSize: number;
   countOnly?: boolean;
 }
 
@@ -91,7 +92,7 @@ export async function getStoreCodesByFilter(
     where: { [column]: { in: values } },
     select: { Old_Store_Code: true },
   });
-  return stores.map((store) => store.Old_Store_Code);
+  return stores.map((store: { Old_Store_Code: any }) => store.Old_Store_Code);
 }
 
 export async function getCustomerTypesByChannelFilter(
@@ -102,7 +103,7 @@ export async function getCustomerTypesByChannelFilter(
     where: { [column]: { in: values } },
     select: { customer_type: true },
   });
-  return mappings.map((map) => map.customer_type);
+  return mappings.map((map: { customer_type: any }) => map.customer_type);
 }
 
 export function mergeFilterResults(
@@ -593,15 +594,19 @@ export async function getTotalRetailing(filters: any, source: string) {
 
     for (const table of tables) {
       let query = `
-        SELECT p.document_date, SUM(p.retailing) AS total
-        FROM ${table} p
-        WHERE 1=1
-      `;
+    SELECT 
+      YEAR(p.document_date) as year,
+      MONTH(p.document_date) as month,
+      CAST(SUM(p.retailing) AS DECIMAL(18,2)) AS total_retailing
+    FROM ${table} p
+    WHERE 1=1
+  `;
 
       const { whereClause, params } = await buildWhereClauseForRawSQL(
         filtersWithFiscalMonth
       );
-      query += whereClause + ` GROUP BY p.document_date`;
+      query +=
+        whereClause + ` GROUP BY YEAR(p.document_date), MONTH(p.document_date)`;
 
       const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
 
@@ -609,7 +614,6 @@ export async function getTotalRetailing(filters: any, source: string) {
         const dt = new Date(Number(row.year), Number(row.month) - 1, 1);
         const fy = getFiscalYear(dt);
 
-        // Safe numeric conversion
         let subtotal = 0;
         if (row.total_retailing != null) {
           subtotal =
@@ -1565,8 +1569,8 @@ export async function getAllBranches(): Promise<string[]> {
   });
 
   return branches
-    .map((b) => b.Branch)
-    .filter((branch): branch is string => branch !== null);
+    .map((b: { Branch: any }) => b.Branch)
+    .filter((branch: unknown): branch is string => typeof branch === "string");
 }
 
 export async function suggestStores(branch: string | null, query: string) {
@@ -1686,11 +1690,17 @@ export async function getLastStoreBills(
     ...rawTables.flatMap(() => allParams)
   );
 
-  return results.map((row) => ({
-    documentNo: row.documentNo,
-    totalRetailing: Number(row.totalRetailing),
-    documentDate: new Date(row.documentDate).toISOString(),
-  }));
+  return results.map(
+    (row: {
+      documentNo: any;
+      totalRetailing: any;
+      documentDate: string | number | Date;
+    }) => ({
+      documentNo: row.documentNo,
+      totalRetailing: Number(row.totalRetailing),
+      documentDate: new Date(row.documentDate).toISOString(),
+    })
+  );
 }
 
 export async function getStoreRetailingTrend(
@@ -1752,7 +1762,7 @@ export async function getStoreRetailingTrend(
 
   const result = await prisma.$queryRawUnsafe<any[]>(fullQuery, ...queryParams);
 
-  return result.map((r) => ({
+  return result.map((r: { year: any; month: any; total: any }) => ({
     year: Number(r.year),
     month: Number(r.month),
     retailing: Number(r.total),
@@ -1823,7 +1833,7 @@ export async function getStoreGPTrend(
 
   const result = await prisma.$queryRawUnsafe<any[]>(fullQuery, ...queryParams);
 
-  return result.map((r) => ({
+  return result.map((r: { year: any; month: any; gp: any }) => ({
     year: Number(r.year),
     month: Number(r.month),
     gp: Number(r.gp), // ✅ alias fixed
@@ -2053,22 +2063,31 @@ export async function getStoreGPStats(
   }
 
   // Process results
-  const parsedResults = results.map((r) => ({
-    year: Number(r.year),
-    month: Number(r.month),
-    gp: Number(r.total),
-  }));
+  const parsedResults = results.map(
+    (r: { year: any; month: any; total: any }) => ({
+      year: Number(r.year),
+      month: Number(r.month),
+      gp: Number(r.total),
+    })
+  );
 
   const highest = parsedResults.reduce(
-    (max, curr) => (!max || curr.gp > max.gp ? curr : max),
-    null as any
+    (
+      max: { year: number; month: number; gp: number } | null,
+      curr: { year: number; month: number; gp: number }
+    ) => (!max || curr.gp > max.gp ? curr : max),
+    null as { year: number; month: number; gp: number } | null
   );
   const lowest = parsedResults.reduce(
-    (min, curr) => (!min || curr.gp < min.gp ? curr : min),
-    null as any
+    (
+      min: { year: number; month: number; gp: number } | null,
+      curr: { year: number; month: number; gp: number }
+    ) => (!min || curr.gp < min.gp ? curr : min),
+    null as { year: number; month: number; gp: number } | null
   );
   const average =
-    parsedResults.reduce((sum, r) => sum + r.gp, 0) / parsedResults.length;
+    parsedResults.reduce((sum: any, r: { gp: any }) => sum + r.gp, 0) /
+    parsedResults.length;
 
   return {
     highestGPMonth: highest
@@ -2102,7 +2121,10 @@ export async function getCategoryRetailing(
     select: { p_code: true, category: true },
   });
   const productMap = new Map(
-    products.map((p) => [p.p_code, p.category ?? "Unknown"])
+    products.map((p: { p_code: any; category: any }) => [
+      p.p_code,
+      p.category ?? "Unknown",
+    ])
   );
 
   // Step 2: Build date range from fiscal filters
@@ -2159,13 +2181,14 @@ export async function getCategoryRetailing(
   const categoryMap = new Map<string, Map<number, number>>();
 
   for (const row of rawResults) {
-    const category = productMap.get(row.p_code) ?? "Unknown";
+    const category: string = String(productMap.get(row.p_code) ?? "Unknown");
     const fy =
       row.document_date.getMonth() >= 6
         ? row.document_date.getFullYear() + 1
         : row.document_date.getFullYear();
 
-    if (!categoryMap.has(category)) categoryMap.set(category, new Map());
+    if (!categoryMap.has(category))
+      categoryMap.set(category, new Map<number, number>());
     const yearMap = categoryMap.get(category)!;
     yearMap.set(fy, (yearMap.get(fy) ?? 0) + row.retailing);
   }
@@ -2199,10 +2222,12 @@ export async function getTopStoresQuery({
   category,
   branch,
   baseChannel,
+  shortChannel,
+  channelDesc,
   brand,
+  brandform,
   startDate,
   endDate,
-  countOnly = false, // pagination removed
 }: TopStoresQueryParams): Promise<{ query: string; values: any[] }> {
   const tables = resolveTables(source);
 
@@ -2269,9 +2294,21 @@ export async function getTopStoresQuery({
     filters.push("p.base_channel = ?");
     dynamicValues.push(baseChannel);
   }
+  if (shortChannel) {
+    filters.push("p.short_channel = ?");
+    dynamicValues.push(shortChannel);
+  }
+  if (channelDesc) {
+    filters.push("p.channel_desc = ?");
+    dynamicValues.push(channelDesc);
+  }
   if (brand) {
     filters.push("p.brand = ?");
     dynamicValues.push(brand);
+  }
+  if (brandform) {
+    filters.push("p.brandform = ?");
+    dynamicValues.push(brandform);
   }
 
   const filterClause = filters.length ? `AND ${filters.join(" AND ")}` : "";
@@ -2316,16 +2353,6 @@ export async function getTopStoresQuery({
     monthsValues.length, // divisor for avg_retailing
     ...repeatedValues, // repeated for each table subquery
   ];
-
-  if (countOnly) {
-    return {
-      query: `
-        ${topStoresCTE}
-        SELECT COUNT(*) as count FROM ranked_stores
-      `,
-      values: allValues,
-    };
-  }
 
   // --- Final: Always return top 100 (no pagination) ---
   return {
