@@ -1,4 +1,4 @@
-import cookie from "cookie";
+import * as cookie from "cookie";
 import { NextApiResponse } from "next";
 import { NextRequest } from "next/server";
 
@@ -11,11 +11,17 @@ export default async function GET(request: NextRequest, response: NextApiRespons
       "Set-Cookie",
       cookie.serialize("token", "", {
         httpOnly: true,
-        secure: !isDev,
-        sameSite: isDev ? "lax" : "none",
-        domain: process.env.COOKIE_DOMAIN || ".localhost",
+        secure: !isDev, // cookies must be secure (https) in production
+        sameSite: isDev ? "lax" : "none", // "none" needed for cross-site cookies
         path: "/",
-        maxAge: 0, // Expire the cookie
+        maxAge: 0, // 1 day
+        domain: isDev ? undefined : process.env.COOKIE_DOMAIN,
+        /**
+         * - Localhost: undefined (host-only cookie for localhost:3000)
+         * - Vercel: undefined → works fine with your project domain
+         * - Custom domain (e.g. dashboard.mycompany.com):
+         *     set COOKIE_DOMAIN=".mycompany.com" in env
+         */
       })
     );
 

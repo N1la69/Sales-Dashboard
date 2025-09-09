@@ -1,6 +1,6 @@
 import { UserModel } from "@/CustomModels/UserModel";
 import prisma from "@/lib/utils";
-import cookie from "cookie";
+import * as cookie from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
 
 
@@ -39,11 +39,17 @@ export default async function POST(
       "Set-Cookie",
       cookie.serialize("token", token, {
         httpOnly: true,
-        secure: !isDev,
-        sameSite: isDev ? "lax" : "none",
-        domain: process.env.COOKIE_DOMAIN || ".localhost",
+        secure: !isDev, // cookies must be secure (https) in production
+        sameSite: isDev ? "lax" : "none", // "none" needed for cross-site cookies
         path: "/",
-        maxAge: 86400,
+        maxAge: 60 * 60 * 24, // 1 day
+        domain: isDev ? undefined : process.env.COOKIE_DOMAIN,
+        /**
+         * - Localhost: undefined (host-only cookie for localhost:3000)
+         * - Vercel: undefined → works fine with your project domain
+         * - Custom domain (e.g. dashboard.mycompany.com):
+         *     set COOKIE_DOMAIN=".mycompany.com" in env
+         */
       })
     );
 
