@@ -475,7 +475,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Work_Directory\\sales_dashboard\\app\\generated\\prisma",
+      "value": "E:\\salesProjectNew\\app\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -489,11 +489,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Work_Directory\\sales_dashboard\\prisma\\schema.prisma",
+    "sourceFilePath": "E:\\salesProjectNew\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../../prisma",
