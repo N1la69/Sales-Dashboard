@@ -173,7 +173,10 @@ async function DELETE(req: NextApiRequest, res: NextApiResponse) {
     }
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse): void | Promise<void> {
+export default function handler(
+    req: NextApiRequest,
+    res: NextApiResponse
+): void | Promise<void> {
     switch (req.method) {
         case "GET":
             return GET(req, res);
@@ -187,6 +190,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return DELETE(req, res);
         default:
             res.setHeader("Allow", ["GET", "POST", "PUT", "PATCH", "DELETE"]);
-            return res.status(405).end(`Method ${req.method} Not Allowed`);
+            res.status(405).end(`Method ${req.method} Not Allowed`);
     }
 }
