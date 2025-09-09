@@ -29,6 +29,7 @@ import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
+import { useAppContext } from "@/hooks/AppContext";
 
 // ================= GraphQL Queries =================
 const GET_TOP_STORES = gql`
@@ -138,6 +139,8 @@ const RankingPage = () => {
 
   const [page, setPage] = useState(0);
   const pageSize = 20;
+  const { state } = useAppContext();
+  const isUserAdmin = state?.user?.user?.role === "ADMIN" ? true : false;
 
   const handleSourceChange = (source: "combined" | "main" | "temp") => {
     setDataSource(source);
@@ -265,35 +268,37 @@ const RankingPage = () => {
       </div>
 
       {/* Data Source Dropdown */}
-      <div className="absolute top-3 right-3 md:right-4 md:top-5">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              className="cursor-pointer border-indigo-300 dark:border-indigo-700 bg-indigo-500 dark:bg-indigo-200 text-indigo-50 dark:text-indigo-900"
-            >
-              {dataSource.charAt(0).toUpperCase() + dataSource.slice(1)} DB
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-36">
-            {["combined", "main", "temp"].map((source) => (
-              <DropdownMenuItem
-                key={source}
-                onClick={() =>
-                  handleSourceChange(source as "combined" | "main" | "temp")
-                }
-                className={`cursor-pointer ${
-                  dataSource === source
-                    ? "bg-indigo-100 dark:bg-indigo-900 font-semibold"
-                    : ""
-                }`}
+      {isUserAdmin && (
+        <div className="absolute top-3 right-3 md:right-4 md:top-5">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                className="cursor-pointer border-indigo-300 dark:border-indigo-700 bg-indigo-500 dark:bg-indigo-200 text-indigo-50 dark:text-indigo-900"
               >
-                {source.charAt(0).toUpperCase() + source.slice(1)} DB
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+                {dataSource.charAt(0).toUpperCase() + dataSource.slice(1)} DB
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-36">
+              {["combined", "main", "temp"].map((source) => (
+                <DropdownMenuItem
+                  key={source}
+                  onClick={() =>
+                    handleSourceChange(source as "combined" | "main" | "temp")
+                  }
+                  className={`cursor-pointer ${
+                    dataSource === source
+                      ? "bg-indigo-100 dark:bg-indigo-900 font-semibold"
+                      : ""
+                  }`}
+                >
+                  {source.charAt(0).toUpperCase() + source.slice(1)} DB
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      )}
 
       {/* FILTERS */}
       <div className="flex flex-wrap gap-3 sm:gap-4 mb-4">
