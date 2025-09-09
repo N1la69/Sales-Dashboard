@@ -186,19 +186,13 @@ export const typeDefs = gql`
     store_code: String
     store_name: String
     branch_name: String
+    channel_desc: String
     average_retailing: Float
   }
 
   type TopStoresResponse {
     totalCount: Int
     stores: [TopStore!]!
-  }
-
-  type DownloadTopStore {
-    store_code: String
-    store_name: String
-    branch_name: String
-    average_retailing: Float
   }
 
   type Query {
@@ -291,25 +285,12 @@ export const typeDefs = gql`
       category: String
       branch: String
       baseChannel: String
+      shortChannel: String
+      channelDesc: String
       brand: String
+      brandform: String
       startDate: String
       endDate: String
-      page: Int!
-      pageSize: Int!
     ): TopStoresResponse
-    downloadTopStores(
-      source: String!
-      months: Int!
-      zm: String
-      rsm: String
-      asm: String
-      tsi: String
-      category: String
-      branch: String
-      brand: String
-      baseChannel: String
-      startDate: String
-      endDate: String
-    ): [DownloadTopStore!]!
   }
 `;

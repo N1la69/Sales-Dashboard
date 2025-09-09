@@ -198,11 +198,12 @@ export const resolvers = {
         category,
         branch,
         baseChannel,
+        shortChannel,
+        channelDesc,
         brand,
+        brandform,
         startDate,
         endDate,
-        page,
-        pageSize,
       }: {
         source: string;
         months: number;
@@ -212,11 +213,12 @@ export const resolvers = {
         category?: string;
         branch?: string;
         baseChannel?: string;
+        shortChannel?: string;
+        channelDesc?: string;
         brand?: string;
+        brandform?: string;
         startDate?: string;
         endDate?: string;
-        page: number;
-        pageSize: number;
       }
     ) => {
       try {
@@ -230,58 +232,74 @@ export const resolvers = {
           category,
           branch,
           baseChannel,
+          shortChannel,
+          channelDesc,
           brand,
+          brandform,
           startDate,
           endDate,
-          page,
-          pageSize,
         });
 
         const stores: any[] = await prisma.$queryRawUnsafe(query, ...values);
 
-        // 2. Enrich with store names
+        // 2. Enrich with store names and channel_desc
         const storeCodes = stores.map((s) => s.store_code);
-        let nameMap: Record<string, string> = {};
+        let metaMap: Record<string, { name: string; channel_desc: string }> =
+          {};
 
         if (storeCodes.length > 0) {
           const mappings = await prisma.store_mapping.findMany({
             where: { Old_Store_Code: { in: storeCodes } },
-            select: { Old_Store_Code: true, customer_name: true },
+            select: {
+              Old_Store_Code: true,
+              customer_name: true,
+              customer_type: true,
+            },
           });
-          nameMap = Object.fromEntries(
-            mappings.map((m) => [m.Old_Store_Code, m.customer_name])
+
+          const customerTypes = [
+            ...new Set(
+              mappings.map((m: { customer_type: any }) => m.customer_type)
+            ),
+          ];
+          const channelMappings = await prisma.channel_mapping.findMany({
+            where: { customer_type: { in: customerTypes } },
+            select: { customer_type: true, channel_desc: true },
+          });
+          const channelMap = Object.fromEntries(
+            channelMappings.map(
+              (c: { customer_type: any; channel_desc: any }) => [
+                c.customer_type,
+                c.channel_desc,
+              ]
+            )
+          );
+
+          metaMap = Object.fromEntries(
+            mappings.map(
+              (m: {
+                Old_Store_Code: any;
+                customer_name: any;
+                customer_type: string | number;
+              }) => [
+                m.Old_Store_Code,
+                {
+                  name: m.customer_name,
+                  channel_desc: channelMap[m.customer_type] ?? null,
+                },
+              ]
+            )
           );
         }
 
         const enrichedStores = stores.map((s) => ({
           ...s,
-          store_name: nameMap[s.store_code] ?? null,
+          store_name: metaMap[s.store_code]?.name ?? null,
+          channel_desc: metaMap[s.store_code]?.channel_desc ?? null,
         }));
 
-        // 3. Count query
-        const { query: countQuery, values: countValues } =
-          await getTopStoresQuery({
-            source,
-            months,
-            zm,
-            rsm,
-            asm,
-            category,
-            branch,
-            baseChannel,
-            brand,
-            startDate,
-            endDate,
-            page: 0,
-            pageSize: 0,
-            countOnly: true,
-          });
-
-        const countResult: any[] = await prisma.$queryRawUnsafe(
-          countQuery,
-          ...countValues
-        );
-        const totalCount = parseInt(countResult[0]?.count ?? "0", 10);
+        // ✅ No need for count query anymore
+        const totalCount = enrichedStores.length;
 
         return {
           totalCount,
@@ -290,58 +308,6 @@ export const resolvers = {
       } catch (error) {
         console.error("Error fetching top stores:", error);
         throw new Error("Failed to fetch top stores");
-      }
-    },
-    downloadTopStores: async (
-      _: any,
-      {
-        source,
-        months = 3,
-        zm,
-        rsm,
-        asm,
-        category,
-        branch,
-        baseChannel,
-        brand,
-        startDate,
-        endDate,
-      }: {
-        source: string;
-        months: number;
-        zm?: string;
-        rsm?: string;
-        asm?: string;
-        category?: string;
-        branch?: string;
-        baseChannel?: string;
-        brand?: string;
-        startDate?: string;
-        endDate?: string;
-      }
-    ) => {
-      try {
-        const { query, values } = await getTopStoresQuery({
-          source,
-          months,
-          zm,
-          rsm,
-          asm,
-          category,
-          branch,
-          baseChannel,
-          brand,
-          startDate,
-          endDate,
-          page: 0,
-          pageSize: 100, // Always fetch all top 100
-        });
-
-        const stores = await prisma.$queryRawUnsafe(query, ...values);
-        return stores;
-      } catch (error) {
-        console.error("Error downloading top stores:", error);
-        throw new Error("Failed to download top stores");
       }
     },
   },
