@@ -173,7 +173,7 @@ async function DELETE(req: NextApiRequest, res: NextApiResponse) {
     }
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse): void | Promise<void> {
     switch (req.method) {
         case "GET":
             return GET(req, res);
