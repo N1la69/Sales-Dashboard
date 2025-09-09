@@ -96,7 +96,7 @@ export function AppSidebar() {
           <div className="flex items-center gap-2">
             <Image src="/logo.png" alt="Logo" width={36} height={36} />
             <p className="text-base font-semibold text-gray-900 dark:text-gray-200">
-              B G Distributors Pvt Ltd
+              {process.env.NEXT_PUBLIC_APP_NAME}
             </p>
           </div>
           <Button

@@ -63,7 +63,7 @@ const LoginPage = () => {
         <CardHeader>
           <CardTitle className="text-center space-y-2 mb-3">
             <h1 className="text-2xl font-medium text-gray-800 dark:text-gray-100">
-              B G Distributors Pvt Ltd
+              {process.env.NEXT_PUBLIC_APP_NAME}
             </h1>
             <h2 className="text-gray-500 dark:text-gray-300 font-normal">
               Sign in to your account

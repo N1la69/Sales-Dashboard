@@ -55,7 +55,7 @@ export default function Navbar() {
         <div className="flex items-center space-x-3">
           <Image src="/logo.png" alt="logo" width={40} height={40} priority />
           <h1 className="hidden md:block text-lg font-bold text-gray-900 dark:text-gray-200 tracking-tight">
-            B G Distributors Pvt Ltd
+            {process.env.NEXT_PUBLIC_APP_NAME}
           </h1>
         </div>
 
