@@ -5,7 +5,9 @@ import { Input } from "@/components/ui/input";
 import { upload } from "@vercel/blob/client";
 import ExcelJS from "exceljs";
 import { useState } from "react";
-
+import { toast } from "react-toastify";
+import UploadHistory from "./History";
+import UploadPopup from "./UploadPopUp";
 const UploadPage = () => {
   const [channelFile, setChannelFile] = useState<File | null>(null);
   const [storeFile, setStoreFile] = useState<File | null>(null);
@@ -28,6 +30,7 @@ const UploadPage = () => {
     | "clear"
     | "transform"
   >("");
+  const [percentage, setPercentage] = useState(0);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
@@ -44,19 +47,22 @@ const UploadPage = () => {
       const fileResponse = await upload(
         `${fileType}/${new Date().getFullYear()}/${String(
           new Date().getMonth() + 1
-        ).padStart(2, "0")}_${file.name}`,
+        ).padStart(2, "0")}/${file.name}`,
         file,
         {
           access: "public",
           handleUploadUrl: "/api/file", // backend route for signed upload URL
-          onUploadProgress: (progress) => console.log(progress),
+          onUploadProgress: (progress) => setPercentage(progress.percentage),
         }
       );
       console.log("✅ File uploaded successfully:", fileResponse);
       return fileResponse;
-    } catch (error) {
+    } catch (error: any) {
       console.error("❌ Error uploading file:", error);
+      toast.error(error?.message || error || "File upload failed");
       throw error;
+    } finally {
+      setTimeout(() => setPercentage(0), 1000);
     }
   };
 
@@ -92,11 +98,15 @@ const UploadPage = () => {
       }
 
       setSuccess(`${type.toUpperCase()} data uploaded successfully.`);
+      toast.success(`${type.toUpperCase()} data uploaded successfully.`);
       return await response.json();
     } catch (err: any) {
       console.error("❌ Upload error:", err.message);
       setError(
         err.message || `An error occurred while uploading ${type} data.`
+      );
+      toast.error(
+        err?.message || err || `An error occurred while uploading ${type} data.`
       );
     } finally {
       setLoadingType("");
@@ -119,8 +129,12 @@ const UploadPage = () => {
 
       const resData = await response.json();
       setSuccess(resData.message);
+      toast.success(resData.message || "PSR data transformed successfully.");
     } catch (err: any) {
       setError(err.message || "An error occurred while transforming data.");
+      toast.error(
+        err?.message || err || "An error occurred while transforming data."
+      );
     } finally {
       setLoadingType("");
     }
@@ -142,8 +156,12 @@ const UploadPage = () => {
 
       const resData = await response.json();
       setSuccess(resData.message);
+      toast.success(resData.message || "PSR data merged successfully.");
     } catch (err: any) {
       setError(err.message || "An error occurred while merging data.");
+      toast.error(
+        err?.message || err || "An error occurred while merging data."
+      );
     } finally {
       setLoadingType("");
     }
@@ -165,8 +183,13 @@ const UploadPage = () => {
 
       const resData = await response.json();
       setSuccess(resData.message);
+
+      toast.success(resData.message || "GP data merged successfully.");
     } catch (error: any) {
       setError(error.message || "An error occurred while merging data.");
+      toast.error(
+        error?.message || error || "An error occurred while merging data."
+      );
     } finally {
       setLoadingType("");
     }
@@ -188,9 +211,13 @@ const UploadPage = () => {
 
       const resData = await response.json();
       setSuccess(resData.message);
+      toast.success(resData.message || "PSR temp data cleared successfully.");
     } catch (err: any) {
       setError(
         err.message || "An error occurred while clearing PSR temp data."
+      );
+      toast.error(
+        err?.message || err || "An error occurred while clearing PSR temp data."
       );
     } finally {
       setLoadingType("");
@@ -213,9 +240,15 @@ const UploadPage = () => {
 
       const resData = await response.json();
       setSuccess(resData.message);
+      toast.success(resData.message || "GP temp data cleared successfully.");
     } catch (error: any) {
       setError(
         error.message || "An error occurred while clearing GP temp data."
+      );
+      toast.error(
+        error?.message ||
+          error ||
+          "An error occurred while clearing GP temp data."
       );
     } finally {
       setLoadingType("");
@@ -365,13 +398,15 @@ const UploadPage = () => {
     a.click();
     window.URL.revokeObjectURL(url);
   }
-
   return (
     <div className="pt-3 px-4 sm:px-6 md:px-10 z-20 dark:text-blue-100">
       <h1 className="text-center text-2xl sm:text-3xl font-bold">
         Upload Analytics Data Here
       </h1>
-
+      <UploadPopup
+        filetype={loadingType.toUpperCase()}
+        percentage={percentage}
+      />
       {/* Status Messages */}
       {success && <p className="text-green-500 text-center mt-4">{success}</p>}
       {error && <p className="text-red-500 text-center mt-4">{error}</p>}
@@ -698,6 +733,9 @@ const UploadPage = () => {
           </div>
         </CardContent>
       </Card>
+
+      {/* Upload History */}
+      <UploadHistory />
     </div>
   );
 };

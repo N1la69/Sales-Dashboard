@@ -162,6 +162,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Unknown error";
     console.error("❌ Upload failed:", message);
-    return res.status(500).json({ error: message });
+    return res.status(500).json({ message: message, success: false, error: message, timeStamp: new Date().toISOString() });// Added timestamp to error response for better debugging
   }
 }
