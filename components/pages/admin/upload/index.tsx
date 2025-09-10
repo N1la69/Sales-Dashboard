@@ -1,10 +1,10 @@
 "use client";
-
-import ExcelJS from "exceljs";
-import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { upload } from "@vercel/blob/client";
+import ExcelJS from "exceljs";
+import { useState } from "react";
 
 const UploadPage = () => {
   const [channelFile, setChannelFile] = useState<File | null>(null);
@@ -36,43 +36,64 @@ const UploadPage = () => {
     setSuccess("");
   };
 
+  const uploadContentFile = async (
+    file: File,
+    fileType: "psr" | "channel" | "store" | "product" | "gp"
+  ) => {
+    try {
+      const fileResponse = await upload(
+        `${fileType}/${new Date().getFullYear()}/${String(
+          new Date().getMonth() + 1
+        ).padStart(2, "0")}_${file.name}`,
+        file,
+        {
+          access: "public",
+          handleUploadUrl: "/api/file", // backend route for signed upload URL
+          onUploadProgress: (progress) => console.log(progress),
+        }
+      );
+      console.log("✅ File uploaded successfully:", fileResponse);
+      return fileResponse;
+    } catch (error) {
+      console.error("❌ Error uploading file:", error);
+      throw error;
+    }
+  };
+
   const uploadFile = async (
     file: File,
     type: "psr" | "channel" | "store" | "product" | "gp",
     action: "append" | "overwrite" = "overwrite"
   ) => {
     if (!file) {
-      setError(`Please select a ${type} file to upload.`);
-      return;
+      throw new Error(`Please select a ${type} file to upload.`);
     }
 
-    setLoadingType(type);
-    resetMessages();
-
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("type", type);
+      const uploaded = await uploadContentFile(file, type);
 
-      if (type === "psr") {
-        formData.append("action", action);
-      }
+      const body = {
+        type,
+        fileUrl: uploaded?.url || "",
+        ...(type === "psr" ? { action } : {}),
+      };
 
       const response = await fetch("/api/upload", {
         method: "POST",
-        body: formData,
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(body),
       });
 
       if (!response.ok) {
-        const resData = await response.json();
-        throw new Error(resData.error || `Failed to upload ${type} data`);
+        const err = await response.json();
+        throw new Error(err.error || "Failed to upload data");
       }
 
-      setSuccess(`${type.toUpperCase()} file uploaded successfully!`);
+      return await response.json();
     } catch (err: any) {
-      setError(err.message || `An error occurred during ${type} upload.`);
-    } finally {
-      setLoadingType("");
+      console.error("❌ Upload error:", err.message);
+      throw err;
     }
   };
 
@@ -344,11 +365,16 @@ const UploadPage = () => {
       <h1 className="text-center text-2xl sm:text-3xl font-bold">
         Upload Analytics Data Here
       </h1>
-
+      <input
+        type="file"
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file) uploadContentFile(file);
+        }}
+      />
       {/* Status Messages */}
       {success && <p className="text-green-500 text-center mt-4">{success}</p>}
       {error && <p className="text-red-500 text-center mt-4">{error}</p>}
-
       {/* PSR Data Upload */}
       <Card className="mt-6 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
@@ -442,7 +468,6 @@ const UploadPage = () => {
           </div>
         </CardContent>
       </Card>
-
       {/* GP Data Upload */}
       <Card className="mt-6 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
@@ -524,7 +549,6 @@ const UploadPage = () => {
           </div>
         </CardContent>
       </Card>
-
       {/* Channel Mapping Upload */}
       <Card className="mt-6 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
@@ -573,7 +597,6 @@ const UploadPage = () => {
           </div>
         </CardContent>
       </Card>
-
       {/* Store Mapping Upload */}
       <Card className="mt-6 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
@@ -622,7 +645,6 @@ const UploadPage = () => {
           </div>
         </CardContent>
       </Card>
-
       {/* Product Mapping Upload */}
       <Card className="mt-6 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
