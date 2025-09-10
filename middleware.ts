@@ -9,7 +9,7 @@ const publicPaths = [
   "/reset-password",
   "/verify-reset-otp",
   "/favicon.ico",
-  "/logo.jpeg",
+  "/logo.png",
   "/api/user/auth",
 ];
 
@@ -23,20 +23,21 @@ export const config = {
 };
 
 export async function middleware(request: NextRequest) {
-
   // Step 1. Proceed with authentication checks
   const { pathname } = request.nextUrl;
 
-
   // Step 2. Check if the site is under maintenance
-  if (isBlockedTime() && pathname.includes("/api")) return NextResponse.json({
-    message: "The site is under maintenance. Please try again later.",
-    success: false,
-    timeStamp: new Date().toISOString(),
-  }, {
-    status: 503
-  });
-
+  if (isBlockedTime() && pathname.includes("/api"))
+    return NextResponse.json(
+      {
+        message: "The site is under maintenance. Please try again later.",
+        success: false,
+        timeStamp: new Date().toISOString(),
+      },
+      {
+        status: 503,
+      }
+    );
 
   // Allow public paths
   if (isPublicPath(pathname)) {

@@ -70,6 +70,7 @@ const UploadPage = () => {
     }
 
     try {
+      setLoadingType(type);
       const uploaded = await uploadContentFile(file, type);
 
       const body = {
@@ -90,10 +91,15 @@ const UploadPage = () => {
         throw new Error(err.error || "Failed to upload data");
       }
 
+      setSuccess(`${type.toUpperCase()} data uploaded successfully.`);
       return await response.json();
     } catch (err: any) {
       console.error("❌ Upload error:", err.message);
-      throw err;
+      setError(
+        err.message || `An error occurred while uploading ${type} data.`
+      );
+    } finally {
+      setLoadingType("");
     }
   };
 
@@ -365,16 +371,11 @@ const UploadPage = () => {
       <h1 className="text-center text-2xl sm:text-3xl font-bold">
         Upload Analytics Data Here
       </h1>
-      <input
-        type="file"
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) uploadContentFile(file);
-        }}
-      />
+
       {/* Status Messages */}
       {success && <p className="text-green-500 text-center mt-4">{success}</p>}
       {error && <p className="text-red-500 text-center mt-4">{error}</p>}
+
       {/* PSR Data Upload */}
       <Card className="mt-6 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
@@ -468,6 +469,7 @@ const UploadPage = () => {
           </div>
         </CardContent>
       </Card>
+
       {/* GP Data Upload */}
       <Card className="mt-6 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
@@ -549,6 +551,7 @@ const UploadPage = () => {
           </div>
         </CardContent>
       </Card>
+
       {/* Channel Mapping Upload */}
       <Card className="mt-6 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
@@ -597,6 +600,7 @@ const UploadPage = () => {
           </div>
         </CardContent>
       </Card>
+
       {/* Store Mapping Upload */}
       <Card className="mt-6 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
@@ -645,6 +649,7 @@ const UploadPage = () => {
           </div>
         </CardContent>
       </Card>
+
       {/* Product Mapping Upload */}
       <Card className="mt-6 border border-border bg-background shadow-xl dark:shadow-blue-900/10 rounded-2xl">
         <CardHeader>
