@@ -91,19 +91,21 @@ const UploadPage = () => {
         credentials: "include",
         body: JSON.stringify(body),
       });
-
-      if (!response.ok) {
-        const err = await response.json();
-        throw new Error(err.error || "Failed to upload data");
+      const data = await response.json();
+      if (!data?.success) {
+        toast.error(data?.message);
+        return;
       }
-
-      setSuccess(`${type.toUpperCase()} data uploaded successfully.`);
-      toast.success(`${type.toUpperCase()} data uploaded successfully.`);
-      return await response.json();
+      setSuccess(
+        data?.message || `${type.toUpperCase()} data uploaded successfully.`
+      );
+      toast.success(
+        data?.message || `${type.toUpperCase()} data uploaded successfully.`
+      );
     } catch (err: any) {
-      console.error("❌ Upload error:", err.message);
+      console.error("❌ Upload error:", err?.message || err);
       setError(
-        err.message || `An error occurred while uploading ${type} data.`
+        err?.message || err || `An error occurred while uploading ${type} data.`
       );
       toast.error(
         err?.message || err || `An error occurred while uploading ${type} data.`

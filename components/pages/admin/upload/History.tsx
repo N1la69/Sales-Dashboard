@@ -42,7 +42,13 @@ export default function UploadHistory() {
   useEffect(() => {
     fetch("/api/file")
       .then((res) => res.json())
-      .then((data) => setUploads(data.data || []))
+      .then((data) =>
+        setUploads(
+          Array.from(data.data).filter(
+            (item) => item.pathname !== "robots.txt"
+          ) || []
+        )
+      )
       .catch((err) => {
         console.error("Error fetching upload history:", err);
         toast.error(err?.message || err || "Error fetching upload history");
@@ -54,8 +60,9 @@ export default function UploadHistory() {
     fetch(`/api/file?url=${encodeURIComponent(pathname)}`, {
       method: "DELETE",
     })
-      .then(() => toast.success("File deleted"))
-      .catch(() => toast.error("Failed to delete file"));
+      .then((res) => res.json())
+      .then((data) => toast.success(data?.message || "File deleted"))
+      .catch((error) => toast.error(error?.message || "Failed to delete file"));
   };
 
   const children = getChildren(currentPath, uploads);

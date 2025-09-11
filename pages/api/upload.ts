@@ -305,13 +305,23 @@ export default async function handler(
       console.log(`✅ GP upload complete: ${total} rows`);
       return res
         .status(200)
-        .json({ message: `✅ GP upload complete: ${total} rows` });
+        .json({
+          timeStamp: new Date().toISOString(),
+          message: `✅ GP upload complete: ${total} rows`,
+          success: true,
+        });
     }
 
-    return res.status(400).json({ error: "Invalid upload type" });
-  } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : "Unknown error";
-    console.error("❌ Upload failed:", message);
-    return res.status(500).json({ message: message, success: false, error: message, timeStamp: new Date().toISOString() });// Added timestamp to error response for better debugging
+    return res.status(400).json({
+      timeStamp: new Date().toISOString(),
+      success: false,
+      message: "Invalid upload type"
+    });
+  } catch (err: any) {
+    console.error("❌ Upload failed:", err);
+    return res.status(500).json({
+      message: err?.message || err || "Failed to Upload File !"
+      , success: false, timeStamp: new Date().toISOString()
+    });
   }
 }
