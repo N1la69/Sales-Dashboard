@@ -8,6 +8,7 @@ import DistributionPage from "@/components/pages/public/distribution";
 import UserProfilePage from "@/components/pages/public/profile";
 import RankingPage from "@/components/pages/public/ranking";
 import StorePage from "@/components/pages/public/store";
+import LogPage from "@/components/pages/admin/log";
 import {
   BarChart3,
   ChartBar,
@@ -15,6 +16,7 @@ import {
   LayoutDashboard,
   LogIn,
   LucideIcon,
+  ScrollText,
   ShieldQuestion,
   Store,
   Unlock,
@@ -116,7 +118,7 @@ export const PublicNavLinks: NavLink[] = [
     icon: CircleUserRound,
     module: UserProfilePage,
     toRender: true,
-  }
+  },
 ];
 
 export const AdminNavLinks: NavLink[] = [
@@ -138,6 +140,16 @@ export const AdminNavLinks: NavLink[] = [
     key: "manage-user",
     icon: UsersRound,
     module: UserManagementPage,
+    toRender: true,
+  },
+  {
+    id: 2,
+    path: "/admin/log",
+    title: "Activity Log",
+    page: "log",
+    key: "log",
+    icon: ScrollText,
+    module: LogPage,
     toRender: true,
   },
 ];
