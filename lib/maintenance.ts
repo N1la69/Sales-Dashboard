@@ -1,4 +1,13 @@
 // utils/maintenance.ts
+import { toZonedTime } from "date-fns-tz";
+
+function getNowIST() {
+    const now = new Date();
+    const istTime = toZonedTime(now, "Asia/Kolkata");
+    const day = istTime.getDay();
+    const totalMinutes = istTime.getHours() * 60 + istTime.getMinutes();
+    return { day, totalMinutes, now: istTime };
+}
 
 export type MaintenanceWindow = {
     day: "ALL" | number; // internally still number (0-6) or ALL
@@ -63,16 +72,13 @@ export function parseWindows(config?: string): MaintenanceWindow[] {
 export function isBlockedTime(
     windows: MaintenanceWindow[] = parseWindows(process.env.NEXT_PUBLIC_MAINTENANCE_WINDOWS)
 ): boolean {
-    const now = new Date();
-    const day = now.getDay();
-    const totalMinutes = now.getHours() * 60 + now.getMinutes();
+    const { day, totalMinutes } = getNowIST();
+
     return windows.some((w) => {
         if (w.day === "ALL" || w.day === day) {
             if (w.start <= w.end) {
-                // Normal window (e.g., 01:00–05:00)
                 return totalMinutes >= w.start && totalMinutes < w.end;
             } else {
-                // Wraps past midnight (e.g., 23:00–02:00)
                 return totalMinutes >= w.start || totalMinutes < w.end;
             }
         }
@@ -86,9 +92,7 @@ export function isBlockedTime(
 export function getMaintenanceEnd(
     windows: MaintenanceWindow[] = parseWindows(process.env.NEXT_PUBLIC_MAINTENANCE_WINDOWS)
 ): Date | null {
-    const now = new Date();
-    const day = now.getDay();
-    const totalMinutes = now.getHours() * 60 + now.getMinutes();
+    const { day, totalMinutes, now } = getNowIST();
 
     for (const w of windows) {
         if (w.day === "ALL" || w.day === day) {
@@ -99,7 +103,6 @@ export function getMaintenanceEnd(
                     return end;
                 }
             } else {
-                // Window wraps past midnight
                 if (totalMinutes >= w.start || totalMinutes < w.end) {
                     const end = new Date(now);
                     if (totalMinutes < w.end) {
