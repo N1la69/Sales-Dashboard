@@ -1146,7 +1146,7 @@ export async function getRetailingByCategory(filters: any, source: string) {
     const results: any[] = await prisma.$queryRawUnsafe(unionQuery);
 
     for (const row of results) {
-      const category = row.category || "Unknown";
+      const category = row.category ?? "Unknown";
       const fy = Number(row.fiscal_year);
       const value = toNumber(row.total_retailing);
 
@@ -1154,7 +1154,7 @@ export async function getRetailingByCategory(filters: any, source: string) {
       breakdownMap[category][fy] = (breakdownMap[category][fy] || 0) + value;
     }
   } else {
-    // ✅ Filters applied → follow original buildWhereClause + GROUP BY document_date pattern
+    // ✅ Filters applied → group by category + fiscal_year
     const filtersWithFiscalMonth = { ...filters, FiscalMonth: filters.Month };
     const tables = resolveTables(source);
 
@@ -1162,7 +1162,10 @@ export async function getRetailingByCategory(filters: any, source: string) {
       let query = `
         SELECT 
           p.category, 
-          p.document_date, 
+          CASE WHEN MONTH(p.document_date) >= 7 
+               THEN YEAR(p.document_date) + 1 
+               ELSE YEAR(p.document_date) 
+          END AS fiscal_year,
           CAST(SUM(p.retailing) AS DECIMAL(18,2)) AS total_retailing
         FROM ${table} p
         WHERE 1=1
@@ -1172,13 +1175,13 @@ export async function getRetailingByCategory(filters: any, source: string) {
         filtersWithFiscalMonth
       );
       query += whereClause;
-      query += ` GROUP BY p.category, p.document_date`;
+      query += ` GROUP BY p.category, fiscal_year`;
 
       const results: any[] = await prisma.$queryRawUnsafe(query, ...params);
 
       for (const row of results) {
-        const category = row.category || "Unknown";
-        const fy = getFiscalYear(new Date(row.document_date));
+        const category = row.category ?? "Unknown";
+        const fy = Number(row.fiscal_year);
         const value = toNumber(row.total_retailing);
 
         if (!breakdownMap[category]) breakdownMap[category] = {};
@@ -1472,8 +1475,12 @@ export async function getTopBrandforms(filters: any, source: string) {
       queries.push(`
         SELECT 
           p.brandform,
-          YEAR(p.document_date) AS fiscal_year,
-          CAST(SUM(p.retailing) AS DECIMAL(18,2)) AS total
+        CASE 
+          WHEN MONTH(p.document_date) >= 7 
+          THEN YEAR(p.document_date) + 1 
+          ELSE YEAR(p.document_date) 
+        END AS fiscal_year,
+        CAST(SUM(p.retailing) AS DECIMAL(18,2)) AS total
         FROM psr_finalized_temp p
         GROUP BY p.brandform, fiscal_year
       `);

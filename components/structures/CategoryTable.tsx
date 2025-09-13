@@ -135,9 +135,11 @@ export default function CategoryTable({
   });
 
   // Determine unique years
-  const uniqueYears = Array.from(
+  const allYears = Array.from(
     new Set(normalized.flatMap((item) => item.breakdown.map((b) => b.year)))
   ).sort((a, b) => b - a);
+
+  const uniqueYears = allYears.slice(0, 2);
 
   const latestYear = uniqueYears[0] ?? null;
   const previousYear = uniqueYears[1] ?? null;
