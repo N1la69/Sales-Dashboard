@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const ResetPasswordPage = () => {
@@ -24,7 +24,7 @@ const ResetPasswordPage = () => {
       const data = await res.json();
       if (res.ok) {
         toast.success("Password reset successfully");
-        // Redirect to /
+        await new Promise((resolve) => setTimeout(resolve, 1500)); // Slight delay for better UX
         window.location.href = "/";
       } else {
         toast.error(data.error || "Failed to reset password");

@@ -14,16 +14,21 @@ const LoginPage = () => {
   const { user } = state;
   // 🔐 Check if user is already logged in
   useEffect(() => {
-    try {
-      if (user) {
-        const params = new URLSearchParams(window.location.search);
-        const redirectTo = params.get("from") || "/";
-        window.location.href = redirectTo;
+    const verifyAndRedirect = async () => {
+      try {
+        if (user?.user?.id) {
+          const params = new URLSearchParams(window.location.search);
+          const redirectTo = params.get("from") || "/";
+          toast.success(`Welcome Back, ${user.user.name || "User"}!`);
+          await new Promise((resolve) => setTimeout(resolve, 1500)); // Slight delay for better UX
+          window.location.href = redirectTo;
+        }
+      } catch (err) {
+        console.error("User verification failed:", err);
       }
-    } catch (err) {
-      // Not logged in — do nothing
-      console.error("User verification failed:", err);
-    }
+    };
+
+    verifyAndRedirect();
   }, [user]);
 
   // 🔑 Handle login form submission
