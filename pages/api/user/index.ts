@@ -16,6 +16,11 @@ async function GET(req: NextApiRequest, res: NextApiResponse) {
                 image: true,
                 permissionSets: true,
             },
+            where: {
+                role: {
+                    not: "OWNER",
+                }
+            }
         });
 
         if (!foundUsers?.length) {
