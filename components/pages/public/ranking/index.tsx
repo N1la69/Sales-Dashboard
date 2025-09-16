@@ -140,7 +140,9 @@ const RankingPage = () => {
   const [page, setPage] = useState(0);
   const pageSize = 20;
   const { state } = useAppContext();
-  const isUserAdmin = state?.user?.user?.role === "ADMIN" ? true : false;
+  const isUserAdmin = ["ADMIN", "OWNER"].includes(
+    state?.user?.user?.role || ""
+  );
 
   const handleSourceChange = (source: "combined" | "main" | "temp") => {
     setDataSource(source);

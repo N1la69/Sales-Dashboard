@@ -43,7 +43,7 @@ export function AppSidebar() {
 
   // ✅ same logic as Navbar
   const IS_LOGGED_IN = useMemo(() => !!currentUser, [currentUser]);
-  const IS_ADMIN = currentUser?.role === "ADMIN";
+  const IS_ADMIN = ["ADMIN", "OWNER"].includes(currentUser?.role || "");
   const IS_ADMIN_PAGE = useMemo(
     () => pathname?.startsWith("/admin"),
     [pathname]

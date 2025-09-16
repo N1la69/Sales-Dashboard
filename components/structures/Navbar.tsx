@@ -30,7 +30,7 @@ export default function Navbar() {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const IS_LOGGED_IN = useMemo(() => !!currentUser, [currentUser]);
-  const IS_ADMIN = currentUser?.role === "ADMIN";
+  const IS_ADMIN = ["ADMIN", "OWNER"].includes(currentUser?.role || "");
   const IS_ADMIN_PAGE = useMemo(
     () => pathname?.startsWith("/admin"),
     [pathname]

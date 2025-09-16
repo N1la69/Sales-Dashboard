@@ -146,7 +146,9 @@ export default function Dashboard() {
     "combined"
   );
   const { state } = useAppContext();
-  const isUserAdmin = state?.user?.user?.role === "ADMIN" ? true : false;
+  const isUserAdmin = ["ADMIN", "OWNER"].includes(
+    state?.user?.user?.role || ""
+  );
   const queryOptions = {
     variables: {
       filters: {
