@@ -57,7 +57,7 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
                 data: {
                     name: user.name,
                     email: user.email,
-                    role: user.role ?? "staff",
+                    role: String(user.role).toUpperCase() ?? "USER",
                     isActive: user.isActive ?? true,
                     lastLogin: user.lastLogin ? new Date(user.lastLogin) : new Date(),
                     image: user.image ?? "https://picsum.photos/100/100",
@@ -76,7 +76,7 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
                 }
             }
 
-            createdUsers.push(userModel.userDetails);
+            createdUsers.push(userModel.userDetails as SafeUser);
         }
 
         return res.status(201).json({
