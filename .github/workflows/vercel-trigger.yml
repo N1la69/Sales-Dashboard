@@ -18,24 +18,24 @@ jobs:
       with:
         fetch-depth: 0
 
-    - name: Update deploy trigger file
-      run: |
-        echo "Last deploy trigger: $(date -u)" > .vercel-deploy-trigger.txt
-
     - name: Configure Git user
       run: |
         git config user.name "${{ secrets.OWNER_NAME }}"
         git config user.email "${{ secrets.OWNER_EMAIL }}"
 
-    # Pull latest before commit to avoid non-fast-forward errors
+    # Pull latest before making any changes
     - name: Pull latest main branch
       run: |
         git pull --rebase origin main
 
+    - name: Update deploy trigger file
+      run: |
+        echo "Last deploy trigger: $(date -u)" > .vercel-deploy-trigger.txt
+
     - name: Commit & push as owner
       run: |
         git add .vercel-deploy-trigger.txt
-        git commit -m "chore: trigger vercel deploy [ci skip]" || echo "No changes"
+        git diff --cached --quiet && echo "No changes to commit" || git commit -m "chore: trigger vercel deploy [ci skip]"
         git push origin main
       env:
         GIT_AUTHOR_NAME: "${{ secrets.OWNER_NAME }}"
