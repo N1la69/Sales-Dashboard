@@ -1,5 +1,5 @@
+import { pbkdf2Sync, randomBytes } from "crypto";
 import { PrismaClient } from "../app/generated/prisma/index";
-import { randomBytes, pbkdf2Sync } from "crypto";
 
 const prisma = new PrismaClient();
 
@@ -52,4 +52,6 @@ main()
   })
   .finally(async () => {
     await prisma.$disconnect();
+    console.log("🌱 Seeding completed.")
+    process.exit(0);
   });
