@@ -1,60 +1,45 @@
-name: Force Vercel Deploy
-
-permissions:
-  contents: write
+name: Promote Main to Production
 
 on:
   push:
     branches:
-    - main
+      - main
   workflow_dispatch:
 
+permissions:
+  contents: write
 
 jobs:
-  trigger-deploy:
+  promote:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout repo
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
 
-    - name: Configure Git user
-      run: |
-        git config user.name "${{ secrets.OWNER_NAME }}"
-        git config user.email "${{ secrets.OWNER_EMAIL }}"
-      env:
-        GIT_AUTHOR_NAME: "${{ secrets.OWNER_NAME }}"
-        GIT_AUTHOR_EMAIL: "${{ secrets.OWNER_EMAIL }}"
-        GIT_COMMITTER_NAME: "${{ secrets.OWNER_NAME }}"
-        GIT_COMMITTER_EMAIL: "${{ secrets.OWNER_EMAIL }}"
+      - name: Set up Git
+        run: |
+          git config user.name "${{ secrets.OWNER_NAME }}"
+          git config user.email "${{ secrets.OWNER_EMAIL }}"
+        env:
+          GIT_AUTHOR_NAME: "${{ secrets.OWNER_NAME }}"
+          GIT_AUTHOR_EMAIL: "${{ secrets.OWNER_EMAIL }}"
+          GIT_COMMITTER_NAME: "${{ secrets.OWNER_NAME }}"
+          GIT_COMMITTER_EMAIL: "${{ secrets.OWNER_EMAIL }}"
 
-    - name: Pull latest main branch
-      run: |
-        git pull --rebase origin main
-      env:
-        GIT_AUTHOR_NAME: "${{ secrets.OWNER_NAME }}"
-        GIT_AUTHOR_EMAIL: "${{ secrets.OWNER_EMAIL }}"
-        GIT_COMMITTER_NAME: "${{ secrets.OWNER_NAME }}"
-        GIT_COMMITTER_EMAIL: "${{ secrets.OWNER_EMAIL }}"
+      - name: Fetch all branches
+        run: git fetch --all
 
-    - name: Create empty commit to trigger Vercel deploy (if needed)
-      run: |
-        if ! git log -1 --pretty=%B | grep -q 'chore: trigger vercel deploy'; then
-          git commit --allow-empty -m "chore: trigger vercel deploy [ci skip]"
-          git push origin main
-        else
-          echo "Last commit already a deploy trigger, skipping."
-        fi
-      env:
-        GIT_AUTHOR_NAME: "${{ secrets.OWNER_NAME }}"
-        GIT_AUTHOR_EMAIL: "${{ secrets.OWNER_EMAIL }}"
-        GIT_COMMITTER_NAME: "${{ secrets.OWNER_NAME }}"
-        GIT_COMMITTER_EMAIL: "${{ secrets.OWNER_EMAIL }}"
-        GIT_ASKPASS: /dev/null
-        GIT_TERMINAL_PROMPT: 0
-        GITHUB_TOKEN: ${{ secrets.OWNER_TOKEN }}
+      - name: Switch to production branch (create if doesn't exist)
+        run: |
+          git checkout production || git checkout -b production
 
-    - name: Trigger Vercel Deploy
-      run: |
-        curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK }}"
+      - name: Merge main into production
+        run: |
+          git merge origin/main --no-ff -m "ci: promote main to production [ci skip]"
+
+      - name: Push production branch
+        run: |
+          git push origin production
