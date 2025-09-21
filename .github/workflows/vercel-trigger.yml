@@ -24,7 +24,7 @@ jobs:
         git config user.email "${{ secrets.OWNER_EMAIL }}"
         git add .vercel-deploy-trigger.txt
         git commit -m "chore: trigger vercel deploy [ci skip]" || echo "No changes"
-        git push https://${{ secrets.OWNER_NAME }}:${{ secrets.OWNER_TOKEN }}@github.com/ManmohanKhandelwal/sales-dashboard.git HEAD:main
+        git push origin main
       env:
         GIT_AUTHOR_NAME: "${{ secrets.OWNER_NAME }}"
         GIT_AUTHOR_EMAIL: "${{ secrets.OWNER_EMAIL }}"
