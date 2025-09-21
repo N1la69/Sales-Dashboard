@@ -7,7 +7,7 @@ export const config = {
   api: { bodyParser: true },
 };
 
-// Utility: parse Excel date
+// Utility: parse Excel date.
 function parseExcelDate(excelValue: unknown): Date {
   if (excelValue instanceof Date) return excelValue;
   if (typeof excelValue === "number") {
