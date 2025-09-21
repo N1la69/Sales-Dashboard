@@ -36,9 +36,10 @@ jobs:
         run: |
           git checkout production || git checkout -b production
 
-      - name: Merge main into production
+      - name: Merge main into production with latest commit message
         run: |
-          git merge origin/main --no-ff -m "ci: promote main to production [ci skip]"
+          LATEST_MSG=$(git log origin/main -1 --pretty=%B)
+          git merge origin/main --no-ff -m "ci: promote main to production: $LATEST_MSG"
 
       - name: Push production branch
         run: |
