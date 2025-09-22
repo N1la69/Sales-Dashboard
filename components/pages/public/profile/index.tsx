@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAppContext } from "@/hooks/AppContext";
+import { useAppContext } from "@/context/AppContext";
 import { useState } from "react";
 import { toast } from "react-toastify";
 

@@ -21,7 +21,7 @@ import { filters } from "@/constants/data";
 import { BillTable } from "@/components/structures/BillTable";
 import StoreGPTrendChart from "@/components/visuals/StoreGPTrendChart";
 import { StoreGPStatsCard } from "@/components/structures/StoreGPStatsCard";
-import { useAppContext } from "@/hooks/AppContext";
+import { useAppContext } from "@/context/AppContext";
 
 // ================= GraphQL Queries =================
 const GET_ALL_BRANCHES = gql`

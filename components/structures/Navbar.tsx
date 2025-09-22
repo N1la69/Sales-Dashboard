@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AdminNavLinks, PublicNavLinks } from "@/constants/data";
-import { useAppContext } from "@/hooks/AppContext";
+import { useAppContext } from "@/context/AppContext";
 import { logOutUser } from "@/lib/auth/logOutUser";
 import { cn } from "@/lib/utils";
 import { CircleUserRound, LogOut, Moon, Settings, Sun } from "lucide-react";

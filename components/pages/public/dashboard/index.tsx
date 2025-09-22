@@ -21,7 +21,7 @@ import {
 import DateRange from "@/components/structures/DateRange";
 import BaseChannelTable from "@/components/structures/BaseChannelTable";
 import GpCard from "@/components/structures/GpCard";
-import { useAppContext } from "@/hooks/AppContext";
+import { useAppContext } from "@/context/AppContext";
 
 // ================= GraphQL Queries =================
 const GET_RETAILING_STATS = gql`

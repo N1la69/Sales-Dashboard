@@ -29,7 +29,7 @@ import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
-import { useAppContext } from "@/hooks/AppContext";
+import { useAppContext } from "@/context/AppContext";
 
 // ================= GraphQL Queries =================
 const GET_TOP_STORES = gql`
