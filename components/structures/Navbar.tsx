@@ -20,14 +20,16 @@ import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
+import LoadingButton from "./LoadingButton";
 
 export default function Navbar() {
+  const [loggingOut, setLoggingOut] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const pathname = usePathname();
+  const { theme, setTheme } = useTheme();
   const { state } = useAppContext();
   const { user } = state;
   const currentUser = user?.user;
-  const { theme, setTheme } = useTheme();
-  const pathname = usePathname();
-  const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const IS_LOGGED_IN = useMemo(() => !!currentUser, [currentUser]);
   const IS_ADMIN = ["ADMIN", "OWNER"].includes(currentUser?.role || "");
@@ -192,9 +194,37 @@ export default function Navbar() {
                   Settings
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => logOutUser()}>
-                  <LogOut className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                  Log out
+                <DropdownMenuItem
+                  asChild // 👈 makes the child (LoadingButton) take on the MenuItem role & styles
+                  onSelect={(e) => {
+                    e.preventDefault(); // Prevent auto-close
+                  }}
+                >
+                  <LoadingButton
+                    loading={loggingOut}
+                    variant="ghost"
+                    loadingStyle="dots"
+                    className="flex !justify-start w-full" // 👈 fix alignment
+                    onClick={async () => {
+                      try {
+                        setLoggingOut(true);
+                        console.log("Logging out...");
+                        console.log(loggingOut);
+                        await logOutUser();
+                      } finally {
+                        setLoggingOut(false);
+                      }
+                    }}
+                  >
+                    {loggingOut ? (
+                      "Logging Out"
+                    ) : (
+                      <>
+                        <LogOut className="h-4 w-4 text-gray-500 dark:text-gray-400 mr-2" />
+                        Log out
+                      </>
+                    )}
+                  </LoadingButton>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
