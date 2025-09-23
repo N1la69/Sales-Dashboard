@@ -65,7 +65,7 @@ export default function UserManagementPage() {
     user: SafeUser | null;
     mode: "editDetails" | "permissionBox" | "";
   }>({ user: null, mode: "" });
-  const [localPerms, setLocalPerms] = useState<Record<string, string[]>>([]);
+  const [localPerms, setLocalPerms] = useState<never[]>([]);
   const [pagination, setPagination] = useState({ pageIndex: 0, pageSize: 5 });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
@@ -469,8 +469,12 @@ export default function UserManagementPage() {
                   >
                     Cancel
                   </Button>
-                  <LoadingButton type="submit" loading={working.savingDetails}>
-                    {working.savingDetails ? "Saving..." : "Save"}
+                  <LoadingButton
+                    type="submit"
+                    loading={working.savingDetails}
+                    loadingStyle="dots"
+                  >
+                    {working.savingDetails ? "Saving" : "Save"}
                   </LoadingButton>
                 </div>
               </form>
@@ -557,8 +561,9 @@ export default function UserManagementPage() {
                 <LoadingButton
                   onClick={savePermissions}
                   loading={working.savingPerms}
+                  loadingStyle="dots"
                 >
-                  {working.savingPerms ? "Saving..." : "Save"}
+                  {working.savingPerms ? "Saving" : "Save"}
                 </LoadingButton>
               </div>
             </DialogContent>
@@ -568,9 +573,11 @@ export default function UserManagementPage() {
             size="sm"
             variant="destructive"
             onClick={() => deleteUser(row.original.id)}
+            loadingStyle="delete"
             loading={deletingUserId === row.original.id.toString()} // only this row shows loading
           >
-            {working.deleting ? (
+            {working.deleting &&
+            deletingUserId === row.original.id.toString() ? (
               "Deleting"
             ) : (
               <>
@@ -751,8 +758,12 @@ export default function UserManagementPage() {
             <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
               Cancel
             </Button>
-            <LoadingButton onClick={handleUpload} loading={working.uploading}>
-              {working.uploading ? "Uploading..." : "Upload"}
+            <LoadingButton
+              onClick={handleUpload}
+              loading={working.uploading}
+              loadingStyle="dots"
+            >
+              {working.uploading ? "Uploading" : "Upload"}
             </LoadingButton>
             <Button onClick={downloadTemplate}>Download Template</Button>
           </DialogFooter>

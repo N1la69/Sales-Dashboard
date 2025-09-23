@@ -92,7 +92,7 @@ export default async function handler(
     };
 
     if (!fileUrl || !type) {
-      return res.status(400).json({ error: "Missing fileUrl or type" });
+      return res.status(400).json({ message: "Missing fileUrl or type", success: false, timeStamp: new Date().toISOString() });
     }
 
     console.log(`📥 Fetching file from Blob: ${fileUrl}`);
@@ -185,7 +185,7 @@ export default async function handler(
 
       await prisma.mapping_change_flag.create({ data: { processed: false } });
       console.log("🚩 Mapping change flag created");
-      return res.status(200).json({ message: `✅ ${type} mapping uploaded.` });
+      return res.status(200).json({ message: `✅ ${type} mapping uploaded.`, timeStamp: new Date().toISOString(), success: true });
     }
 
     // ====== PSR FILE ======

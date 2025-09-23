@@ -1,67 +1,66 @@
 "use client";
 
+import LoadingButton from "@/components/structures/LoadingButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAppContext } from "@/context/AppContext";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { useMutation } from "@tanstack/react-query";
-import { Loader2 } from "lucide-react";
-
-const loginUser = async ({
-  email,
-  password,
-}: {
-  email: string;
-  password: string;
-}) => {
-  const res = await fetch("/api/user/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({ email, password }),
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "Login failed");
-  return data;
-};
 
 const LoginPage = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const { state } = useAppContext();
   const { user } = state;
-
-  // 🔐 Already logged in → redirect
+  // 🔐 Check if user is already logged in
   useEffect(() => {
-    if (user?.user?.id) {
-      const params = new URLSearchParams(window.location.search);
-      const redirectTo = params.get("from") || "/";
-      toast.success(`Welcome Back, ${user.user.name || "User"}!`);
-      setTimeout(() => {
-        window.location.href = redirectTo;
-      }, 1500);
-    }
+    const verifyAndRedirect = async () => {
+      try {
+        if (user?.user?.id) {
+          const params = new URLSearchParams(window.location.search);
+          const redirectTo = params.get("from") || "/";
+          toast.success(`Welcome Back, ${user.user.name || "User"}!`);
+          await new Promise((resolve) => setTimeout(resolve, 1500)); // Slight delay for better UX
+          window.location.href = redirectTo;
+        }
+      } catch (err) {
+        console.error("User verification failed:", err);
+      }
+    };
+
+    verifyAndRedirect();
   }, [user]);
 
-  // 🔑 React Query mutation handles loading/error states
-  const mutation = useMutation({
-    mutationFn: loginUser,
-    onSuccess: () => {
-      const params = new URLSearchParams(window.location.search);
-      const redirectTo = params.get("from") || "/";
-      window.location.href = redirectTo;
-    },
-    onError: (err: any) => {
-      toast.error(err.message || "An error occurred during login");
-    },
-  });
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  // 🔑 Handle login form submission
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    mutation.mutate({
-      email: formData.get("email") as string,
-      password: formData.get("password") as string,
-    });
+    setLoading(true);
+
+    try {
+      const res = await fetch("/api/user/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        const params = new URLSearchParams(window.location.search);
+        const redirectTo = params.get("from") || "/";
+        window.location.href = redirectTo;
+      } else {
+        toast.error(data.error || "Login failed");
+      }
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      console.error("Login error:", err);
+      toast.error(err?.message || "An error occurred during login");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -86,7 +85,8 @@ const LoginPage = () => {
               </label>
               <input
                 type="text"
-                name="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
                 className="border border-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md py-2 px-2"
               />
@@ -98,7 +98,8 @@ const LoginPage = () => {
               </label>
               <input
                 type="password"
-                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
                 className="border border-gray-400 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-md py-2 px-2"
               />
@@ -112,16 +113,14 @@ const LoginPage = () => {
               </div>
             </div>
 
-            <button
+            <LoadingButton
               type="submit"
-              disabled={mutation.isPending}
-              className="w-full flex items-center justify-center gap-2 bg-gray-900 dark:bg-gray-700 hover:bg-gray-600 dark:hover:bg-gray-600 text-white font-medium py-2.5 rounded-md cursor-pointer disabled:opacity-50"
+              loading={loading}
+              loadingStyle="dots"
+              className="w-full bg-gray-900 dark:bg-gray-700 hover:bg-gray-600 dark:hover:bg-gray-600 text-white font-medium py-2.5 rounded-md cursor-pointer"
             >
-              {mutation.isPending && (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              )}
-              {mutation.isPending ? "Signing in..." : "Sign In"}
-            </button>
+              {loading ? "Signing in" : "Sign In"}
+            </LoadingButton>
           </form>
         </CardContent>
       </Card>

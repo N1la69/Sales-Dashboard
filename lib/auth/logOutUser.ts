@@ -1,18 +1,20 @@
 import { toast } from "react-toastify";
 export const logOutUser = async () => {
-    fetch("/api/user/logout", {
-        method: "POST",
-        credentials: "include",
-    }).then((res) => {
+    try {
+        const res = await fetch("/api/user/logout", {
+            method: "POST",
+            credentials: "include",
+        });
         if (res.ok) {
-            // Handle successful logout
             console.log("User logged out successfully");
             toast.success("Logged out successfully");
-            window.location.href = "/login"; // Redirect to login page
+            window.location.reload();
         } else {
-            // Handle logout error
             console.error("Logout failed");
             toast.error("Logout failed");
         }
-    });
-}
+    } catch (err) {
+        console.error("An error occurred during logout:", err);
+        toast.error("An error occurred during logout");
+    }
+};

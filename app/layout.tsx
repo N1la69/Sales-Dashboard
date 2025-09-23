@@ -7,6 +7,7 @@ import { AuthProvider } from "@/context/AppContext";
 import ReactQueryProvider from "@/context/QueryClient";
 import { ThemeProvider } from "@/context/theme-provider";
 import { isBlockedTime } from "@/lib/maintenance";
+import { loadDevMessages, loadErrorMessages } from "@apollo/client/dev";
 import type { Metadata } from "next";
 import { ToastContainer } from "react-toastify";
 import "./globals.css";
@@ -21,6 +22,12 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  if (process.env.NODE_ENV === "development") {
+    // Adds messages only in a dev environment
+    loadDevMessages();
+    loadErrorMessages();
+  }
+
   // Steering maintenance mode
   if (isBlockedTime())
     return (

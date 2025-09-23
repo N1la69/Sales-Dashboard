@@ -7,7 +7,7 @@ export default async function handler(
   res: NextApiResponse
 ) {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return res.status(405).json({ message: "Method not allowed", success: false, timeStamp: new Date().toISOString() });
   }
 
   try {
@@ -48,12 +48,15 @@ export default async function handler(
 
     return res.status(200).json({
       message: "Transformation completed successfully",
+      success: true,
+      timeStamp: new Date().toISOString()
     });
   } catch (error: any) {
     console.error("Error transforming PSR data:", error);
     return res.status(500).json({
-      error: "Internal Server Error",
-      details: error.message,
+      message: error?.message || error || "Failed to transform PSR data",
+      success: false,
+      timeStamp: new Date().toISOString()
     });
   }
 }
