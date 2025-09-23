@@ -10,7 +10,7 @@ export default async function handler(
     const { type } = req.query;
 
     if (!type) {
-      res.status(400).json({ error: "Missing type" });
+      res.status(400).json({ message: "Missing type", success: false, timeStamp: new Date().toISOString() });
       return;
     }
 
@@ -60,7 +60,7 @@ export default async function handler(
         ];
         break;
       default:
-        res.status(400).json({ error: "Invalid type" });
+        res.status(400).json({ message: "Invalid type", success: false, timeStamp: new Date().toISOString() });
         return;
     }
 
@@ -110,6 +110,6 @@ export default async function handler(
     res.end();
   } catch (err: any) {
     console.error(err);
-    res.status(500).json({ error: "Failed to generate mapping file" });
+    res.status(500).json({ message: err?.message || err || "Failed to generate mapping file", success: false, timeStamp: new Date().toISOString() });
   }
 }

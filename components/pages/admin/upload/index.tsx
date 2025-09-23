@@ -237,7 +237,7 @@ const UploadPage = () => {
 
       if (!response.ok) {
         const resData = await response.json();
-        throw new Error(resData.error || "Failed to clear GP temp data.");
+        throw new Error(resData?.message || "Failed to clear GP temp data.");
       }
 
       const resData = await response.json();

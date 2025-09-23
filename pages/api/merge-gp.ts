@@ -59,9 +59,11 @@ export default async function handler(
     return res.status(200).json({
       message: "✅ Merge completed successfully",
       finalizedMoved,
+      success: true,
+      timeStamp: new Date().toISOString()
     });
   } catch (error) {
     console.error("❌ Merge error:", error);
-    return res.status(500).json({ error: "Failed to merge data" });
+    return res.status(500).json({ message: error?.message || error || "Failed to merge data", success: false, timeStamp: new Date().toISOString() });
   }
 }
