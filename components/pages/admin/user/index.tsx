@@ -44,7 +44,7 @@ import {
 import ExcelJS from "exceljs";
 import { Edit, Settings, Trash2, UserPlus } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 const OPERATIONS = [
@@ -86,9 +86,12 @@ export default function UserManagementPage() {
         credentials: "include",
       });
       const json = await res.json();
-      if (json.success) setData(json.data);
-    } catch {
-      toast.error("Failed to fetch users");
+      if (!json.success) throw new Error(json?.message);
+      setData(json.data);
+      toast.success(json.message);
+    } catch (error: any) {
+      console.error("❌ Fetch users error:", error?.message || error);
+      toast.error(error?.message || error);
     }
     setLoading(false);
   };
@@ -109,12 +112,12 @@ export default function UserManagementPage() {
         body: JSON.stringify({ id }),
       });
       const json = await res.json();
-      if (json.success) {
-        setData((prev) => prev.filter((u) => u.id !== id));
-        toast.success("User deleted");
-      }
-    } catch {
-      toast.error("Error deleting user");
+      if (!json.success) throw new Error(json?.message);
+      setData((prev) => prev.filter((u) => u.id !== id));
+      toast.success(json.message);
+    } catch (error: any) {
+      console.error("❌ Delete user error:", error?.message || error);
+      toast.error(error?.message || error);
     } finally {
       setWorking((prev) => ({ ...prev, deleting: false }));
       setDeletingUserId(null);
@@ -134,15 +137,11 @@ export default function UserManagementPage() {
         }),
       });
       const json = await res.json();
-      if (json.success) {
-        toast.success(
-          `User ${user.name} is now ${!user.isActive ? "Active" : "Inactive"}`
-        );
-        fetchUsers();
-      }
-    } catch (e) {
-      console.log(e);
-      toast.error(e?.message || "Failed to toggle user status");
+      if (!json.success) throw new Error(json?.message);
+      toast.success(json.message || "User status updated");
+    } catch (error: any) {
+      console.error("❌ Toggle user status error:", error?.message || error);
+      toast.error(error?.message || error);
     }
   };
 
@@ -161,13 +160,14 @@ export default function UserManagementPage() {
         }),
       });
       const json = await res.json();
-      if (json.success) {
-        toast.success("Permissions updated");
-        setSelectedUser({ user: null, mode: "" });
-        fetchUsers();
-      } else toast.error(json.error || "Failed");
-    } catch {
-      toast.error("Server error");
+      if (!json.success) throw new Error(json?.message);
+
+      toast.success(json.message || "Permissions updated");
+      setSelectedUser({ user: null, mode: "" });
+      fetchUsers();
+    } catch (error: any) {
+      console.error("❌ Save permissions error:", error?.message || error);
+      toast.error(error?.message || error);
     } finally {
       setWorking((prev) => ({ ...prev, savingPerms: false }));
     }
@@ -185,7 +185,10 @@ export default function UserManagementPage() {
   };
 
   // 🟠 Handle User Detail Update
-  async function handleUserUpdate(e, row) {
+  async function handleUserUpdate(
+    e: React.FormEvent<HTMLFormElement>,
+    row: any
+  ) {
     e.preventDefault();
     setWorking((prev) => ({ ...prev, savingDetails: true }));
     const formData = new FormData(e.currentTarget);
@@ -207,10 +210,12 @@ export default function UserManagementPage() {
         }),
       });
       const json = await res.json();
-      if (json.success) toast.success(json.message || "User updated");
-      else throw new Error(json.message || "Update failed");
-    } catch (error) {
-      toast.error(error.message || error || "Server error");
+      if (!json.success) throw new Error(json.message || "Update failed");
+      toast.success(json.message || "User updated successfully");
+      fetchUsers();
+    } catch (error: any) {
+      console.error("❌ Update user error:", error?.message || error);
+      toast.error(error.message || error);
     } finally {
       setWorking((prev) => ({ ...prev, savingDetails: false }));
       setSelectedUser({ user: null, mode: "" });
@@ -259,18 +264,14 @@ export default function UserManagementPage() {
         body: JSON.stringify(rows),
       });
       const result = await res.json();
-
-      if (result.success) {
-        toast.success(result.message || "Users uploaded successfully");
-        fetchUsers();
-        setIsDialogOpen(false); // close dialog after success
-        setFile(null);
-      } else {
-        toast.error(result?.message || "Upload failed");
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error(err?.message || err || "Invalid Excel file");
+      if (!result.success) throw new Error(result?.message);
+      toast.success(result.message || "Users uploaded successfully");
+      fetchUsers();
+      setIsDialogOpen(false); // close dialog after success
+      setFile(null);
+    } catch (error: any) {
+      console.error("❌ Upload users error:", error?.message || error);
+      toast.error(error?.message || error);
     } finally {
       setWorking((prev) => ({ ...prev, uploading: false }));
     }
@@ -294,7 +295,6 @@ export default function UserManagementPage() {
     headerRow.font = { bold: true };
 
     // Example: Add role validation dropdown for rows 2–100
-    const roleColumn = worksheet.getColumn("role");
     for (let i = 2; i <= 100; i++) {
       worksheet.getCell(`B${i}`).dataValidation = {
         type: "list",

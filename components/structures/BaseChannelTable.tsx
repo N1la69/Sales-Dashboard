@@ -254,8 +254,8 @@ export default function BaseChannelTable({
           if (sortedChildren.length > 0) {
             setExpanded((p) => ({ ...p, [rowKey]: true }));
           }
-        } catch (err) {
-          console.error("Drill fetch failed:", err);
+        } catch (error) {
+          console.error("Drill fetch failed:", error);
         } finally {
           // remove from loading
           setLoadingKeys((prev) => prev.filter((k) => k !== rowKey));

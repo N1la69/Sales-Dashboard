@@ -5,16 +5,13 @@ export const logOutUser = async () => {
             method: "POST",
             credentials: "include",
         });
-        if (res.ok) {
-            console.log("User logged out successfully");
-            toast.success("Logged out successfully");
-            window.location.reload();
-        } else {
-            console.error("Logout failed");
-            toast.error("Logout failed");
-        }
-    } catch (err) {
-        console.error("An error occurred during logout:", err);
-        toast.error("An error occurred during logout");
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+        toast.success(data.message || "Logged out successfully");
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        window.location.reload();
+    } catch (error: any) {
+        console.error("❌ Error in logout:", error);
+        toast.error(error?.message || error);
     }
 };

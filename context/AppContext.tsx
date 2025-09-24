@@ -73,12 +73,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           method: "GET",
           credentials: "include", // ensures cookie is sent
         });
-
-        if (!res.ok) throw new Error("Not authenticated");
-
-        const { data } = await res.json();
-        dispatch({ type: "SET_USER", payload: data });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+        dispatch({ type: "SET_USER", payload: data.data });
       } catch (error: any) {
+        console.error("❌ Fetch user error:", error);
         dispatch({ type: "SET_ERROR", payload: error.message });
       }
     };

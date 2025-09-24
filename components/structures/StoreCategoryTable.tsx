@@ -197,8 +197,8 @@ export default function StoreCategoryTable({
       // **Set children first, then expand**
       setChildrenData((prev) => ({ ...prev, [rowKey]: sortedChildren }));
       setExpanded((prev) => ({ ...prev, [rowKey]: true }));
-    } catch (err) {
-      console.error("Drill fetch failed:", err);
+    } catch (error) {
+      console.error("Drill fetch failed:", error);
     } finally {
       setLoadingKeys((prev) => prev.filter((k) => k !== rowKey));
     }
