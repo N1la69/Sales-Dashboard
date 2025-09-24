@@ -1,10 +1,23 @@
 import type { VariantProps } from "class-variance-authority";
-import { File, Loader, Newspaper, Trash2 } from "lucide-react";
+import { Loader, Newspaper, Trash2 } from "lucide-react";
 import * as React from "react";
 import { Button, buttonVariants } from "../ui/button";
 
 type LoadingStyle = "spinner" | "dots" | "bar" | "pulse" | "delete";
 
+/**
+ * @name LoadingButton
+ * @description A button component that shows different loading animations based on the loadingStyle prop.
+ * @param loading - Whether the button is in a loading state.
+ * @param loadingStyle - The style of the loading animation.
+ * @returns A button element with loading animations.
+ * @example
+ * <LoadingButton loading={true} loadingStyle="spinner">Submit</LoadingButton>
+ * <LoadingButton loading={true} loadingStyle="dots">Submit</LoadingButton>
+ * <LoadingButton loading={true} loadingStyle="bar">Submit</LoadingButton>
+ * <LoadingButton loading={true} loadingStyle="pulse">Submit</LoadingButton>
+ * <LoadingButton loading={true} loadingStyle="delete">Delete</LoadingButton>
+ */
 export default function LoadingButton({
   loading,
   loadingStyle = "spinner", // 👈 choose style
@@ -19,7 +32,7 @@ export default function LoadingButton({
     <Button
       {...props}
       type={props.type ?? "button"}
-      // disabled={loading || props.disabled}
+      disabled={loading || props.disabled}
       className={`flex items-center justify-center ${props.className}`}
     >
       {/* Spinner before text */}
