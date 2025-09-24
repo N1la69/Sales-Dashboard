@@ -53,8 +53,6 @@ const LoginPage = () => {
       } else {
         toast.error(data.error || "Login failed");
       }
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       console.error("Login error:", err);
       toast.error(err?.message || "An error occurred during login");

@@ -78,8 +78,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
         const { data } = await res.json();
         dispatch({ type: "SET_USER", payload: data });
-        //
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         dispatch({ type: "SET_ERROR", payload: error.message });
       }
