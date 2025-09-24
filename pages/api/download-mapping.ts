@@ -105,10 +105,10 @@ export default async function handler(
 
     await workbook.xlsx.write(res);
     res.end();
-  } catch (err: any) {
-    console.error("Error generating mapping file:", err);
-    return res.status(err?.status || 500).json({
-      message: err?.message || err || "Failed to generate mapping file",
+  } catch (error: any) {
+    console.error("Error generating mapping file:", error);
+    return res.status(error?.status || 500).json({
+      message: error?.message || error || "Failed to generate mapping file",
       success: false,
       timeStamp: new Date().toISOString()
     });

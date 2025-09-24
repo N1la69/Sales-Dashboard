@@ -58,7 +58,7 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
         return res.status(200).json({
             success: true,
             timeStamp: new Date().toISOString(),
-            message: "Login successful",
+            message: `Password reset successful. Welcome back, ${userModel.userDetails.name}!`,
             data: {
                 userModel,
                 permissions,

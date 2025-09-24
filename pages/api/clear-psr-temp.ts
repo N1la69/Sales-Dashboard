@@ -19,10 +19,10 @@ export default async function handler(
       success: true,
       timeStamp: new Date().toISOString()
     });
-  } catch (err: any) {
-    console.error("Error clearing temp tables:", err);
-    return res.status(err?.status || 500).json({
-      message: err?.message || err || "Failed to clear PSR temp tables.",
+  } catch (error: any) {
+    console.error("Error clearing temp tables:", error);
+    return res.status(error?.status || 500).json({
+      message: error?.message || error || "Failed to clear PSR temp tables.",
       success: false,
       timeStamp: new Date().toISOString()
     });

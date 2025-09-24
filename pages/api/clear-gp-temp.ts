@@ -20,10 +20,10 @@ export default async function handler(
         success: true,
         timeStamp: new Date().toISOString(),
       });
-  } catch (err: any) {
-    console.error("Error clearing gp_data_temp:", err);
-    return res.status(err?.status || 500).json({
-      message: err?.message || err || "Failed to clear gp_data_temp.",
+  } catch (error: any) {
+    console.error("Error clearing gp_data_temp:", error);
+    return res.status(error?.status || 500).json({
+      message: error?.message || error || "Failed to clear gp_data_temp.",
       success: false,
       timeStamp: new Date().toISOString()
     });

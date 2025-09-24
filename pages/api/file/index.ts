@@ -69,10 +69,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             timeStamp: new Date().toISOString(),
             success: false,
         });
-    } catch (err: any) {
-        console.error("Blob API error:", err);
-        return res.status(err?.status || 500).json({
-            message: err?.message || err || "Internal Server Error",
+    } catch (error: any) {
+        console.error("Blob API error:", error);
+        return res.status(error?.status || 500).json({
+            message: error?.message || error || "Internal Server Error",
             timeStamp: new Date().toISOString(),
             success: false
         });

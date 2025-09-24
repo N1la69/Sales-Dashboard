@@ -318,10 +318,10 @@ export default async function handler(
     }
 
     else throw { message: "Invalid type specified", status: 400 };
-  } catch (err: any) {
-    console.error("❌ Upload failed:", err);
-    return res.status(err?.status || 500).json({
-      message: err?.message || err || "Failed to Upload File !",
+  } catch (error: any) {
+    console.error("❌ Upload failed:", error);
+    return res.status(error?.status || 500).json({
+      message: error?.message || error || "Failed to Upload File !",
       success: false,
       timeStamp: new Date().toISOString()
     });
