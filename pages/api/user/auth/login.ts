@@ -68,12 +68,12 @@ export default async function POST(
         permissions,
       },
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   } catch (error: any) {
     console.error("Login error @ User:", error);
     return res.status(error?.status || 500).json({
       success: false,
-      error: error?.message || error || "Server error during login",
+      message: error?.message || error || "Server error during login",
       timeStamp: new Date().toISOString(),
     });
   }

@@ -1,7 +1,7 @@
 // pages/api/blob.ts
-import type { NextApiRequest, NextApiResponse } from "next";
-import { handleUpload } from "@vercel/blob/client";
 import { del, list } from "@vercel/blob";
+import { handleUpload } from "@vercel/blob/client";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 // 🔑 API Handler
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -30,7 +30,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     console.log("Token Payload:", tokenPayload);
                 },
             });
-            return res.status(200).json(response);
+            return res.status(200).json({
+                response,
+                message: "File uploaded successfully",
+                timeStamp: new Date().toISOString(),
+                success: true
+            });
         }
 
         // ✅ List files (GET)
@@ -39,6 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             return res.status(200).json({
                 data: blobs?.blobs,
                 message: "Files retrieved successfully",
+                timeStamp: new Date().toISOString(),
                 success: true
             });
         }
@@ -46,21 +52,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // ✅ Delete a file (DELETE)
         if (req.method === "DELETE") {
             const { url } = req.query;
-            if (!url || typeof url !== "string") {
-                return res.status(400).json({ error: "Missing ?url= param" });
-            }
+            if (!url || typeof url !== "string") throw { message: "File URL is required", status: 400 };
 
             await del(url);
             return res.status(200).json({
                 success: true,
+                timeStamp: new Date().toISOString(),
                 data: url,
                 message: "File deleted successfully"
             });
         }
 
-        return res.status(405).json({ message: "Method Not Allowed", success: false });
+        res.setHeader("Allow", ["GET", "POST", "DELETE"]);
+        return res.status(405).json({
+            message: `Method ${req.method} Not Allowed`,
+            timeStamp: new Date().toISOString(),
+            success: false,
+        });
     } catch (err: any) {
         console.error("Blob API error:", err);
-        return res.status(500).json({ message: err.message || err || "Internal Server Error", success: false });
+        return res.status(err?.status || 500).json({
+            message: err?.message || err || "Internal Server Error",
+            timeStamp: new Date().toISOString(),
+            success: false
+        });
     }
 }

@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '@/lib/utils';
 import { UserModel } from '@/CustomModels/UserModel';
+import prisma from '@/lib/utils';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function POST(req: NextApiRequest, res: NextApiResponse) {
     try {
@@ -24,12 +24,11 @@ export default async function POST(req: NextApiRequest, res: NextApiResponse) {
             timeStamp: new Date().toISOString(),
             message: result.success ? 'OTP sent successfully' : 'Failed to send OTP'
         });
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         console.error('Forgot Password Error @ User:', error);
         return res.status(error?.status || 500).json({
             success: false,
-            error: error?.message || error || 'Internal server error',
+            message: error?.message || error || 'Internal server error',
             timeStamp: new Date().toISOString()
         });
     }

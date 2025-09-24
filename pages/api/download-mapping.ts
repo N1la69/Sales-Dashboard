@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/utils";
 import ExcelJS from "exceljs";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,10 +9,8 @@ export default async function handler(
   try {
     const { type } = req.query;
 
-    if (!type) {
-      res.status(400).json({ message: "Missing type", success: false, timeStamp: new Date().toISOString() });
-      return;
-    }
+    if (!type) throw { message: "Type is required", status: 400 };
+
 
     let data: any[] = [];
     let headers: string[] = [];
@@ -60,8 +58,7 @@ export default async function handler(
         ];
         break;
       default:
-        res.status(400).json({ message: "Invalid type", success: false, timeStamp: new Date().toISOString() });
-        return;
+        throw { message: "Invalid type", status: 400 };
     }
 
     // Create Excel workbook
@@ -109,7 +106,11 @@ export default async function handler(
     await workbook.xlsx.write(res);
     res.end();
   } catch (err: any) {
-    console.error(err);
-    res.status(500).json({ message: err?.message || err || "Failed to generate mapping file", success: false, timeStamp: new Date().toISOString() });
+    console.error("Error generating mapping file:", err);
+    return res.status(err?.status || 500).json({
+      message: err?.message || err || "Failed to generate mapping file",
+      success: false,
+      timeStamp: new Date().toISOString()
+    });
   }
 }

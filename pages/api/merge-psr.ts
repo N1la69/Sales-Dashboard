@@ -1,6 +1,6 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import prisma from "@/lib/utils";
 import { runGenerateFilters } from "@/lib/runGenerateFilters";
+import prisma from "@/lib/utils";
+import { NextApiRequest, NextApiResponse } from "next";
 
 const BATCH_SIZE = 100000;
 
@@ -36,9 +36,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+  if (req.method !== "POST") throw { message: "Method Not Allowed", status: 405 };
 
   try {
     // Move psr_finalized_temp → psr_data_finalized
@@ -106,8 +104,12 @@ export default async function handler(
       success: true,
       timeStamp: new Date().toISOString()
     });
-  } catch (error) {
-    console.error("❌ Merge error:", error);
-    return res.status(500).json({ message: error?.message || error || "Failed to merge data", success: false, timeStamp: new Date().toISOString() });
+  } catch (error: any) {
+    console.error("❌ Merge PSR error:", error);
+    return res.status(error?.status || 500).json({
+      message: error?.message || error || "Failed to merge PSR data",
+      success: false,
+      timeStamp: new Date().toISOString()
+    });
   }
 }
