@@ -8,6 +8,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import UploadHistory from "./History";
 import UploadPopup from "./UploadPopUp";
+import LoadingButton from "@/components/structures/LoadingButton";
 const UploadPage = () => {
   const [channelFile, setChannelFile] = useState<File | null>(null);
   const [storeFile, setStoreFile] = useState<File | null>(null);
@@ -412,41 +413,43 @@ const UploadPage = () => {
           </div>
 
           <div className="flex flex-wrap gap-3 mt-3">
-            <Button
+            <LoadingButton
               onClick={() => psrFile && uploadFile(psrFile, "psr", psrAction)}
-              disabled={loadingType === "psr"}
+              loading={loadingType === "psr"}
+              loadingStyle="dots"
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
-              {loadingType === "psr" ? "Uploading..." : "Upload"}
-            </Button>
+              {loadingType === "psr" ? "Uploading" : "Upload"}
+            </LoadingButton>
 
-            <Button
+            <LoadingButton
               onClick={handleTransformPsrData}
-              disabled={loadingType === "transform"}
+              loading={loadingType === "transform"}
+              loadingStyle="dots"
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
               {loadingType === "transform"
-                ? "Transforming..."
+                ? "Transforming"
                 : "Transform Temp Data"}
-            </Button>
+            </LoadingButton>
 
-            <Button
+            <LoadingButton
               onClick={handleMergePsrData}
-              disabled={loadingType === "merge-psr"}
+              loading={loadingType === "merge-psr"}
+              loadingStyle="dots"
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
-              {loadingType === "merge-psr"
-                ? "Merging..."
-                : "Merge to Main Data"}
-            </Button>
+              {loadingType === "merge-psr" ? "Merging" : "Merge to Main Data"}
+            </LoadingButton>
 
-            <Button
+            <LoadingButton
               onClick={handleClearPsrTemp}
-              disabled={loadingType === "clear"}
+              loading={loadingType === "clear"}
+              loadingStyle="dots"
               variant="destructive"
             >
-              {loadingType === "clear" ? "Clearing..." : "Clear Temp Data"}
-            </Button>
+              {loadingType === "clear" ? "Clearing" : "Clear Temp Data"}
+            </LoadingButton>
 
             <Button
               onClick={() => downloadTemplate("psr")}
@@ -506,29 +509,32 @@ const UploadPage = () => {
           </div>
 
           <div className="flex flex-wrap gap-3 mt-3">
-            <Button
+            <LoadingButton
               onClick={() => gpFile && uploadFile(gpFile, "gp", gpAction)}
-              disabled={loadingType === "gp"}
+              loading={loadingType === "gp"}
+              loadingStyle="dots"
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
-              {loadingType === "gp" ? "Uploading..." : "Upload"}
-            </Button>
+              {loadingType === "gp" ? "Uploading" : "Upload"}
+            </LoadingButton>
 
-            <Button
+            <LoadingButton
               onClick={handleMergeGpData}
-              disabled={loadingType === "merge-gp"}
+              loading={loadingType === "merge-gp"}
+              loadingStyle="dots"
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
-              {loadingType === "merge-gp" ? "Merging..." : "Merge to Main Data"}
-            </Button>
+              {loadingType === "merge-gp" ? "Merging" : "Merge to Main Data"}
+            </LoadingButton>
 
-            <Button
+            <LoadingButton
+              loading={loadingType === "clear"}
+              loadingStyle="dots"
               onClick={handleClearGpTemp}
-              disabled={loadingType === "clear"}
               variant="destructive"
             >
-              {loadingType === "clear" ? "Clearing..." : "Clear Temp Data"}
-            </Button>
+              {loadingType === "clear" ? "Clearing" : "Clear Temp Data"}
+            </LoadingButton>
 
             <Button
               onClick={() => downloadTemplate("gp")}
@@ -561,13 +567,14 @@ const UploadPage = () => {
             className="cursor-pointer border border-blue-200 dark:border-blue-700 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/20 file:text-blue-700 dark:file:text-blue-200 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/30"
           />
           <div className="flex flex-wrap gap-3">
-            <Button
+            <LoadingButton
               onClick={() => channelFile && uploadFile(channelFile, "channel")}
-              disabled={loadingType === "channel"}
+              loading={loadingType === "channel"}
+              loadingStyle="dots"
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
-              {loadingType === "channel" ? "Uploading..." : "Upload"}
-            </Button>
+              {loadingType === "channel" ? "Uploading" : "Upload"}
+            </LoadingButton>
 
             <Button
               variant="outline"
@@ -610,13 +617,14 @@ const UploadPage = () => {
             className="cursor-pointer border border-blue-200 dark:border-blue-700 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/20 file:text-blue-700 dark:file:text-blue-200 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/30"
           />
           <div className="flex flex-wrap gap-3">
-            <Button
+            <LoadingButton
+              loading={loadingType === "store"}
+              loadingStyle="dots"
               onClick={() => storeFile && uploadFile(storeFile, "store")}
-              disabled={loadingType === "store"}
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
-              {loadingType === "store" ? "Uploading..." : "Upload"}
-            </Button>
+              {loadingType === "store" ? "Uploading" : "Upload"}
+            </LoadingButton>
 
             <Button
               variant="outline"
@@ -659,13 +667,14 @@ const UploadPage = () => {
             className="cursor-pointer border border-blue-200 dark:border-blue-700 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/20 file:text-blue-700 dark:file:text-blue-200 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/30"
           />
           <div className="flex flex-wrap gap-3">
-            <Button
+            <LoadingButton
+              loading={loadingType === "product"}
+              loadingStyle="dots"
               onClick={() => productFile && uploadFile(productFile, "product")}
-              disabled={loadingType === "product"}
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
-              {loadingType === "product" ? "Uploading..." : "Upload"}
-            </Button>
+              {loadingType === "product" ? "Uploading" : "Upload"}
+            </LoadingButton>
 
             <Button
               variant="outline"

@@ -30,12 +30,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     console.log("Token Payload:", tokenPayload);
                 },
             });
-            return res.status(200).json({
-                response,
-                message: "File uploaded successfully",
-                timeStamp: new Date().toISOString(),
-                success: true
-            });
+            return res.status(200).json(response);
         }
 
         // ✅ List files (GET)
