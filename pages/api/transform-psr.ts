@@ -6,9 +6,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method not allowed", success: false, timeStamp: new Date().toISOString() });
-  }
+  if (req.method !== "POST") throw { message: "Method not allowed", status: 405 };
 
   try {
     // 1. Clear psr_finalized_temp table before inserting
@@ -53,7 +51,7 @@ export default async function handler(
     });
   } catch (error: any) {
     console.error("Error transforming PSR data:", error);
-    return res.status(500).json({
+    return res.status(error?.status || 500).json({
       message: error?.message || error || "Failed to transform PSR data",
       success: false,
       timeStamp: new Date().toISOString()

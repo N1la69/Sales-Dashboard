@@ -76,9 +76,7 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+  if (req.method !== "POST") throw { message: "Method not allowed", status: 405 };
 
   try {
     const {
@@ -91,9 +89,8 @@ export default async function handler(
       action?: "append" | "overwrite";
     };
 
-    if (!fileUrl || !type) {
-      return res.status(400).json({ message: "Missing fileUrl or type", success: false, timeStamp: new Date().toISOString() });
-    }
+    if (!fileUrl || !type) throw { message: "Missing fileUrl or type", status: 400 };
+
 
     console.log(`📥 Fetching file from Blob: ${fileUrl}`);
     const resp = await fetch(fileUrl);
@@ -185,11 +182,15 @@ export default async function handler(
 
       await prisma.mapping_change_flag.create({ data: { processed: false } });
       console.log("🚩 Mapping change flag created");
-      return res.status(200).json({ message: `✅ ${type} mapping uploaded.`, timeStamp: new Date().toISOString(), success: true });
+      return res.status(200).json({
+        message: `✅ ${type} mapping uploaded.`,
+        timeStamp: new Date().toISOString(),
+        success: true
+      });
     }
 
     // ====== PSR FILE ======
-    if (type === "psr") {
+    else if (type === "psr") {
       if (action === "overwrite") {
         await prisma.$executeRaw`TRUNCATE TABLE psr_data_temp`;
       }
@@ -247,11 +248,15 @@ export default async function handler(
       console.log(`✅ PSR upload complete: ${total} rows`);
       return res
         .status(200)
-        .json({ message: `✅ PSR upload complete: ${total} rows` });
+        .json({
+          message: `✅ PSR upload complete: ${total} rows`,
+          timeStamp: new Date().toISOString(),
+          success: true
+        });
     }
 
     // ====== GP FILE ======
-    if (type === "gp") {
+    else if (type === "gp") {
       if (action === "overwrite") {
         console.log("🧹 Clearing gp_data_temp before upload...");
         await prisma.$executeRaw`TRUNCATE TABLE gp_data_temp`;
@@ -312,16 +317,13 @@ export default async function handler(
         });
     }
 
-    return res.status(400).json({
-      timeStamp: new Date().toISOString(),
+    else throw { message: "Invalid type specified", status: 400 };
+  } catch (error: any) {
+    console.error("❌ Upload failed:", error);
+    return res.status(error?.status || 500).json({
+      message: error?.message || error || "Failed to Upload File !",
       success: false,
-      message: "Invalid upload type"
-    });
-  } catch (err: any) {
-    console.error("❌ Upload failed:", err);
-    return res.status(500).json({
-      message: err?.message || err || "Failed to Upload File !"
-      , success: false, timeStamp: new Date().toISOString()
+      timeStamp: new Date().toISOString()
     });
   }
 }

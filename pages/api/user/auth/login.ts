@@ -62,18 +62,18 @@ export default async function POST(
     return res.status(200).json({
       success: true,
       timeStamp: new Date().toISOString(),
-      message: "Login successful",
+      message: `Welcome Back! ${userModel.userDetails.name}`,
       data: {
         userModel,
         permissions,
       },
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   } catch (error: any) {
     console.error("Login error @ User:", error);
     return res.status(error?.status || 500).json({
       success: false,
-      error: error?.message || error || "Server error during login",
+      message: error?.message || error || "Server error during login",
       timeStamp: new Date().toISOString(),
     });
   }

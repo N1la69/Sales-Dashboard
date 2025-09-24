@@ -1,11 +1,10 @@
 import LoadingButton from "@/components/structures/LoadingButton";
 import { ChevronRight, Download, FileText, Folder, Trash2 } from "lucide-react";
-import path from "path";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 type UploadHistoryData = {
-  pathname: string; // e.g. "gp/2025/09_GP-Apr'25.xlsx"
+  pathname: string;
   uploadedAt: string;
   size: number;
   downloadUrl: string;
@@ -46,14 +45,14 @@ export default function UploadHistory() {
       .then((res) => res.json())
       .then((data) =>
         setUploads(
-          Array.from(data.data).filter(
+          (Array.from(data.data) as UploadHistoryData[]).filter(
             (item) => item.pathname !== "robots.txt"
           ) || []
         )
       )
-      .catch((err) => {
-        console.error("Error fetching upload history:", err);
-        toast.error(err?.message || err || "Error fetching upload history");
+      .catch((error: any) => {
+        console.error("Error fetching upload history:", error);
+        toast.error(error?.message || error);
       });
   }, []);
 
@@ -67,7 +66,7 @@ export default function UploadHistory() {
         setUploads((prev) => prev.filter((f) => f.pathname !== pathname));
         toast.success(data?.message || "File deleted");
       })
-      .catch((error) => toast.error(error?.message || "Failed to delete file"))
+      .catch((error) => toast.error(error?.message || error))
       .finally(() => setDeleting((prev) => prev.filter((p) => p !== pathname)));
   };
 

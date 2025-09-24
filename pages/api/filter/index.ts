@@ -139,12 +139,11 @@ export default async function GET(req: NextApiRequest, res: NextApiResponse) {
             message: "Fetched filter values successfully",
             data: filteredValues,
         });
-        //eslint-disable-next-line
     } catch (error: any) {
         console.error("❌ Error generating filter values:", error);
         return res.status(error?.status || 500).json({
             success: false,
-            error: error?.message || "Server error while fetching filters",
+            message: error?.message || error || "Server error while fetching filters",
             timeStamp: new Date().toISOString(),
         });
     }

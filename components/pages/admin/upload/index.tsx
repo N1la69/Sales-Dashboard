@@ -51,7 +51,7 @@ const UploadPage = () => {
         file,
         {
           access: "public",
-          handleUploadUrl: "/api/file", // backend route for signed upload URL
+          handleUploadUrl: "/api/file",
           onUploadProgress: (progress) => setPercentage(progress.percentage),
         }
       );
@@ -92,24 +92,13 @@ const UploadPage = () => {
         body: JSON.stringify(body),
       });
       const data = await response.json();
-      if (!data?.success) {
-        toast.error(data?.message);
-        return;
-      }
-      setSuccess(
-        data?.message || `${type.toUpperCase()} data uploaded successfully.`
-      );
-      toast.success(
-        data?.message || `${type.toUpperCase()} data uploaded successfully.`
-      );
-    } catch (err: any) {
-      console.error("❌ Upload error:", err?.message || err);
-      setError(
-        err?.message || err || `An error occurred while uploading ${type} data.`
-      );
-      toast.error(
-        err?.message || err || `An error occurred while uploading ${type} data.`
-      );
+      if (!data?.success) throw new Error(data?.message);
+      setSuccess(data?.message);
+      toast.success(data?.message);
+    } catch (error: any) {
+      console.error("❌ Upload error:", error?.message || error);
+      setError(error?.message || error);
+      toast.error(error?.message || error);
     } finally {
       setLoadingType("");
     }
@@ -123,20 +112,13 @@ const UploadPage = () => {
       const response = await fetch("/api/transform-psr", {
         method: "POST",
       });
-
-      if (!response.ok) {
-        const resData = await response.json();
-        throw new Error(resData.error || "Failed to transform PSR data.");
-      }
-
       const resData = await response.json();
+      if (!resData.success) throw new Error(resData.message);
       setSuccess(resData.message);
-      toast.success(resData.message || "PSR data transformed successfully.");
-    } catch (err: any) {
-      setError(err.message || "An error occurred while transforming data.");
-      toast.error(
-        err?.message || err || "An error occurred while transforming data."
-      );
+      toast.success(resData.message);
+    } catch (error: any) {
+      setError(error?.message || error);
+      toast.error(error?.message || error);
     } finally {
       setLoadingType("");
     }
@@ -150,20 +132,13 @@ const UploadPage = () => {
       const response = await fetch("/api/merge-psr", {
         method: "POST",
       });
-
-      if (!response.ok) {
-        const resData = await response.json();
-        throw new Error(resData.error || "Failed to merge PSR data");
-      }
-
       const resData = await response.json();
+      if (!resData.success) throw new Error(resData.message);
       setSuccess(resData.message);
-      toast.success(resData.message || "PSR data merged successfully.");
-    } catch (err: any) {
-      setError(err.message || "An error occurred while merging data.");
-      toast.error(
-        err?.message || err || "An error occurred while merging data."
-      );
+      toast.success(resData.message);
+    } catch (error: any) {
+      setError(error?.message || error);
+      toast.error(error?.message || error);
     } finally {
       setLoadingType("");
     }
@@ -178,20 +153,14 @@ const UploadPage = () => {
         method: "POST",
       });
 
-      if (!response.ok) {
-        const resData = await response.json();
-        throw new Error(resData.error || "Failed to merge GP data");
-      }
-
       const resData = await response.json();
+      if (!resData.success) throw new Error(resData?.message);
       setSuccess(resData.message);
 
-      toast.success(resData.message || "GP data merged successfully.");
+      toast.success(resData.message);
     } catch (error: any) {
-      setError(error.message || "An error occurred while merging data.");
-      toast.error(
-        error?.message || error || "An error occurred while merging data."
-      );
+      setError(error?.message || error);
+      toast.error(error?.message || error);
     } finally {
       setLoadingType("");
     }
@@ -206,21 +175,13 @@ const UploadPage = () => {
         method: "POST",
       });
 
-      if (!response.ok) {
-        const resData = await response.json();
-        throw new Error(resData.error || "Failed to clear PSR temp data.");
-      }
-
       const resData = await response.json();
+      if (!resData.success) throw new Error(resData?.message);
       setSuccess(resData.message);
-      toast.success(resData.message || "PSR temp data cleared successfully.");
-    } catch (err: any) {
-      setError(
-        err.message || "An error occurred while clearing PSR temp data."
-      );
-      toast.error(
-        err?.message || err || "An error occurred while clearing PSR temp data."
-      );
+      toast.success(resData.message);
+    } catch (error: any) {
+      setError(error?.message || error);
+      toast.error(error?.message || error);
     } finally {
       setLoadingType("");
     }
@@ -235,23 +196,14 @@ const UploadPage = () => {
         method: "POST",
       });
 
-      if (!response.ok) {
-        const resData = await response.json();
-        throw new Error(resData?.message || "Failed to clear GP temp data.");
-      }
-
       const resData = await response.json();
+      if (!resData.success)
+        throw new Error(resData?.message || "Failed to clear GP temp data.");
       setSuccess(resData.message);
-      toast.success(resData.message || "GP temp data cleared successfully.");
+      toast.success(resData.message);
     } catch (error: any) {
-      setError(
-        error.message || "An error occurred while clearing GP temp data."
-      );
-      toast.error(
-        error?.message ||
-          error ||
-          "An error occurred while clearing GP temp data."
-      );
+      setError(error?.message || error);
+      toast.error(error?.message || error);
     } finally {
       setLoadingType("");
     }

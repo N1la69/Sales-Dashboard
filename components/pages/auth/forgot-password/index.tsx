@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingButton from "@/components/structures/LoadingButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -19,19 +20,16 @@ const ForgotPasswordPage = () => {
       });
 
       const data = await res.json();
-      if (res.ok) {
-        toast.success("OTP sent to your email");
-        // Redirect to verify OTP page
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        window.location.href = `/reset-password?email=${encodeURIComponent(
-          email
-        )}`;
-      } else {
-        toast.error(data.error || "Failed to send OTP");
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("Something went wrong");
+      if (!data.success) throw new Error(data.message);
+      toast.success(data.message);
+      // Redirect to verify OTP page
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      window.location.href = `/reset-password?email=${encodeURIComponent(
+        email
+      )}`;
+    } catch (error: any) {
+      console.error("❌ Forgot Password error:", error);
+      toast.error(error?.message || error);
     } finally {
       setLoading(false);
     }
@@ -66,13 +64,14 @@ const ForgotPasswordPage = () => {
               />
             </div>
 
-            <button
+            <LoadingButton
               type="submit"
-              disabled={loading}
+              loading={loading}
+              loadingStyle="dots"
               className="w-full bg-gray-900 dark:bg-gray-700 hover:bg-gray-600 dark:hover:bg-gray-600 text-white font-medium py-2.5 rounded-md cursor-pointer"
             >
-              {loading ? "Sending..." : "Send OTP"}
-            </button>
+              {loading ? "Sending" : "Send OTP"}
+            </LoadingButton>
           </form>
         </CardContent>
       </Card>

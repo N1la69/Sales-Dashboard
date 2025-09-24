@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   getAllBranches,
   getCategoryRetailing,
@@ -282,12 +281,12 @@ export const resolvers = {
                 customer_name: any;
                 customer_type: string | number;
               }) => [
-                m.Old_Store_Code,
-                {
-                  name: m.customer_name,
-                  channel_desc: channelMap[m.customer_type] ?? null,
-                },
-              ]
+                  m.Old_Store_Code,
+                  {
+                    name: m.customer_name,
+                    channel_desc: channelMap[m.customer_type] ?? null,
+                  },
+                ]
             )
           );
         }

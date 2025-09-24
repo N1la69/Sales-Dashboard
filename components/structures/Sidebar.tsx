@@ -29,15 +29,17 @@ import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
+import LoadingButton from "./LoadingButton";
 
 export function AppSidebar() {
+  const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [loggingOut, setLoggingOut] = useState(false);
+  const { theme, setTheme } = useTheme();
   const { state } = useAppContext();
   const { user } = state;
   const currentUser = user?.user;
   const pathname = usePathname();
-  const [open, setOpen] = useState(false);
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
@@ -239,9 +241,35 @@ export function AppSidebar() {
                   Settings
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => logOutUser()}>
-                  <LogOut className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-                  Log out
+                <DropdownMenuItem
+                  asChild // 👈 makes the child (LoadingButton) take on the MenuItem role & styles
+                  onSelect={(e) => {
+                    e.preventDefault(); // Prevent auto-close
+                  }}
+                >
+                  <LoadingButton
+                    loading={loggingOut}
+                    variant="ghost"
+                    loadingStyle="dots"
+                    className="flex !justify-start w-full" // 👈 fix alignment
+                    onClick={async () => {
+                      try {
+                        setLoggingOut(true);
+                        await logOutUser();
+                      } finally {
+                        setLoggingOut(false);
+                      }
+                    }}
+                  >
+                    {loggingOut ? (
+                      "Logging Out"
+                    ) : (
+                      <>
+                        <LogOut className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                        Log out
+                      </>
+                    )}
+                  </LoadingButton>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

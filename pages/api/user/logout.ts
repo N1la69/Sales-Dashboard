@@ -30,12 +30,12 @@ export default async function GET(request: NextRequest, response: NextApiRespons
       message: "Logout successful",
       timeStamp: new Date().toISOString(),
     });
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
   } catch (error: any) {
-    console.error("Logout error @ User Logout:", error);
-    return response.status(500).json({
+    console.error("Logout error @ User:", error);
+    return response.status(error?.status || 500).json({
       success: false,
-      error: "Server error during logout",
+      message: error?.message || error || "Something went wrong during logout",
       timeStamp: new Date().toISOString(),
     });
   }

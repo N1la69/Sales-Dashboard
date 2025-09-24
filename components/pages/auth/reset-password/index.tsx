@@ -1,5 +1,6 @@
 "use client";
 
+import LoadingButton from "@/components/structures/LoadingButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -22,16 +23,13 @@ const ResetPasswordPage = () => {
       });
 
       const data = await res.json();
-      if (res.ok) {
-        toast.success("Password reset successfully");
-        await new Promise((resolve) => setTimeout(resolve, 1500)); // Slight delay for better UX
-        window.location.href = "/";
-      } else {
-        toast.error(data.error || "Failed to reset password");
-      }
-    } catch (err) {
-      console.error(err);
-      toast.error("Something went wrong");
+      if (!data.success) throw new Error(data.message);
+      toast.success("Password reset successfully");
+      await new Promise((resolve) => setTimeout(resolve, 1500)); // Slight delay for better UX
+      window.location.href = "/";
+    } catch (error: any) {
+      console.error("Reset Password error:", error);
+      toast.error(error?.message || error);
     } finally {
       setLoading(false);
     }
@@ -102,13 +100,14 @@ const ResetPasswordPage = () => {
               />
             </div>
 
-            <button
+            <LoadingButton
               type="submit"
-              disabled={loading}
+              loading={loading}
+              loadingStyle="dots"
               className="w-full bg-gray-900 dark:bg-gray-700 hover:bg-gray-600 dark:hover:bg-gray-600 text-white font-medium py-2.5 rounded-md cursor-pointer"
             >
-              {loading ? "Resetting..." : "Reset Password"}
-            </button>
+              {loading ? "Resetting" : "Reset Password"}
+            </LoadingButton>
           </form>
         </CardContent>
       </Card>

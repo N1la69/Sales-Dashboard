@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SafeUser, UserModel } from "@/CustomModels/UserModel";
 import prisma from "@/lib/utils";
 import { NextApiRequest, NextApiResponse } from "next";
@@ -36,7 +35,7 @@ async function GET(req: NextApiRequest, res: NextApiResponse) {
     } catch (error: any) {
         return res.status(error?.status || 500).json({
             success: false,
-            error: error?.message || "Server error during fetch",
+            message: error?.message || error || "Server error during fetch",
             timeStamp: new Date().toISOString(),
         });
     }
@@ -88,7 +87,7 @@ async function POST(req: NextApiRequest, res: NextApiResponse) {
     } catch (error: any) {
         return res.status(error?.status || 500).json({
             success: false,
-            error: error?.message || "Server error during creation",
+            message: error?.message || error || "Server error during creation",
             timeStamp: new Date().toISOString(),
         });
     }
@@ -117,12 +116,14 @@ async function PUT(req: NextApiRequest, res: NextApiResponse) {
         return res.status(200).json({
             success: true,
             message: "User updated successfully",
+            timeStamp: new Date().toISOString(),
             data: updated,
         });
     } catch (error: any) {
         return res.status(error?.status || 500).json({
             success: false,
-            error: error?.message || "Server error during update",
+            timeStamp: new Date().toISOString(),
+            message: error?.message || error || "Server error during update",
         });
     }
 }
@@ -144,12 +145,14 @@ async function PATCH(req: NextApiRequest, res: NextApiResponse) {
         return res.status(200).json({
             success: true,
             message: "Permissions updated",
+            timeStamp: new Date().toISOString(),
             data: result,
         });
     } catch (error: any) {
         return res.status(error?.status || 500).json({
             success: false,
-            error: error?.message || "Server error during permissions update",
+            message: error?.message || error || "Server error during permissions update",
+            timeStamp: new Date().toISOString(),
         });
     }
 }
@@ -167,13 +170,15 @@ async function DELETE(req: NextApiRequest, res: NextApiResponse) {
         await userModel.deleteUser();
 
         return res.status(200).json({
+            timeStamp: new Date().toISOString(),
             success: true,
             message: "User deleted successfully",
         });
     } catch (error: any) {
         return res.status(error?.status || 500).json({
             success: false,
-            error: error?.message || "Server error during deletion",
+            timeStamp: new Date().toISOString(),
+            message: error?.message || error || "Server error during deletion",
         });
     }
 }
@@ -195,6 +200,10 @@ export default function handler(
             return DELETE(req, res);
         default:
             res.setHeader("Allow", ["GET", "POST", "PUT", "PATCH", "DELETE"]);
-            res.status(405).end(`Method ${req.method} Not Allowed`);
+            return res.status(405).json({
+                message: `Method ${req.method} Not Allowed`,
+                timeStamp: new Date().toISOString(),
+                success: false,
+            });
     }
 }

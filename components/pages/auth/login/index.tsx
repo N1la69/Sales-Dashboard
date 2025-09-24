@@ -24,8 +24,8 @@ const LoginPage = () => {
           await new Promise((resolve) => setTimeout(resolve, 1500)); // Slight delay for better UX
           window.location.href = redirectTo;
         }
-      } catch (err) {
-        console.error("User verification failed:", err);
+      } catch (error: any) {
+        console.error("User verification failed:", error);
       }
     };
 
@@ -46,18 +46,15 @@ const LoginPage = () => {
       });
 
       const data = await res.json();
-      if (res.ok) {
-        const params = new URLSearchParams(window.location.search);
-        const redirectTo = params.get("from") || "/";
-        window.location.href = redirectTo;
-      } else {
-        toast.error(data.error || "Login failed");
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      console.error("Login error:", err);
-      toast.error(err?.message || "An error occurred during login");
+      if (!data.success) throw new Error(data.message);
+      toast.success(data.message || "Login successful");
+      await new Promise((resolve) => setTimeout(resolve, 1500)); // Slight delay for better UX
+      const params = new URLSearchParams(window.location.search);
+      const redirectTo = params.get("from") || "/";
+      window.location.href = redirectTo;
+    } catch (error: any) {
+      console.error("Login error:", error);
+      toast.error(error?.message || error);
     } finally {
       setLoading(false);
     }

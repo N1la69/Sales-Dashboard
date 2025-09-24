@@ -102,7 +102,11 @@ export default function Navbar() {
         )}
 
         {/* Right Section: Theme + User */}
-        <div className="flex items-center space-x-4 md:pr-2 lg:pr-6">
+        <div
+          className={`flex items-center md:space-x-4 md:pr-2 lg:pr-6 ${
+            !IS_LOGGED_IN && "mr-3"
+          }`}
+        >
           {/* 🔹 Only admins get the Admin/Public switcher */}
           {IS_LOGGED_IN && IS_ADMIN && (
             <DropdownMenu>
@@ -114,7 +118,7 @@ export default function Navbar() {
                   {IS_ADMIN_PAGE ? "Public" : "Admin"} Pages
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuContent align="end" className="w-[10vw]">
                 <DropdownMenuLabel>Switch Pages</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 {(IS_ADMIN_PAGE
@@ -208,8 +212,6 @@ export default function Navbar() {
                     onClick={async () => {
                       try {
                         setLoggingOut(true);
-                        console.log("Logging out...");
-                        console.log(loggingOut);
                         await logOutUser();
                       } finally {
                         setLoggingOut(false);
@@ -220,7 +222,7 @@ export default function Navbar() {
                       "Logging Out"
                     ) : (
                       <>
-                        <LogOut className="h-4 w-4 text-gray-500 dark:text-gray-400 mr-2" />
+                        <LogOut className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                         Log out
                       </>
                     )}
