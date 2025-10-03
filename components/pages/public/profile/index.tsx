@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useAppContext } from "@/hooks/AppContext";
+import { useAppContext } from "@/context/AppContext";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
@@ -48,15 +48,13 @@ export default function UserProfilePage() {
         }),
       });
       const json = await res.json();
-      if (json.success) {
-        toast.success("Profile updated");
-        setOpenEdit(false);
-        setOpenPassword(false);
-      } else {
-        toast.error(json.error || "Update failed");
-      }
-    } catch {
-      toast.error("Server error");
+      if (!json.success) throw new Error(json.message);
+      toast.success(json.message);
+      setOpenEdit(false);
+      setOpenPassword(false);
+    } catch (error: any) {
+      console.error("❌ Update profile error:", error);
+      toast.error(error?.message || error);
     }
   };
 

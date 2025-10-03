@@ -1,18 +1,17 @@
 import { toast } from "react-toastify";
 export const logOutUser = async () => {
-    fetch("/api/user/logout", {
-        method: "POST",
-        credentials: "include",
-    }).then((res) => {
-        if (res.ok) {
-            // Handle successful logout
-            console.log("User logged out successfully");
-            toast.success("Logged out successfully");
-            window.location.href = "/login"; // Redirect to login page
-        } else {
-            // Handle logout error
-            console.error("Logout failed");
-            toast.error("Logout failed");
-        }
-    });
-}
+    try {
+        const res = await fetch("/api/user/logout", {
+            method: "POST",
+            credentials: "include",
+        });
+        const data = await res.json();
+        if (!data.success) throw new Error(data.message);
+        toast.success(data.message || "Logged out successfully");
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        window.location.reload();
+    } catch (error: any) {
+        console.error("❌ Error in logout:", error);
+        toast.error(error?.message || error);
+    }
+};

@@ -2,7 +2,7 @@
 
 import { PermissionSet } from "@/app/generated/prisma";
 import { AdminNavLinks } from "@/constants/data";
-import { useAppContext } from "@/hooks/AppContext";
+import { useAppContext } from "@/context/AppContext";
 import { notFound } from "next/navigation";
 import { use, useEffect } from "react";
 

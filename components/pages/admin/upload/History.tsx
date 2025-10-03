@@ -1,9 +1,10 @@
+import LoadingButton from "@/components/structures/LoadingButton";
 import { ChevronRight, Download, FileText, Folder, Trash2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 type UploadHistoryData = {
-  pathname: string; // e.g. "gp/2025/09_GP-Apr'25.xlsx"
+  pathname: string;
   uploadedAt: string;
   size: number;
   downloadUrl: string;
@@ -38,31 +39,35 @@ function getChildren(path: string[], uploads: UploadHistoryData[]) {
 export default function UploadHistory() {
   const [currentPath, setCurrentPath] = useState<string[]>([]);
   const [uploads, setUploads] = useState<UploadHistoryData[]>([]);
-
+  const [deleting, setDeleting] = useState<string[]>([]);
   useEffect(() => {
     fetch("/api/file")
       .then((res) => res.json())
       .then((data) =>
         setUploads(
-          Array.from(data.data).filter(
+          (Array.from(data.data) as UploadHistoryData[]).filter(
             (item) => item.pathname !== "robots.txt"
           ) || []
         )
       )
-      .catch((err) => {
-        console.error("Error fetching upload history:", err);
-        toast.error(err?.message || err || "Error fetching upload history");
+      .catch((error: any) => {
+        console.error("Error fetching upload history:", error);
+        toast.error(error?.message || error);
       });
   }, []);
 
   const handleDelete = async (pathname: string) => {
-    setUploads((prev) => prev.filter((f) => f.pathname !== pathname));
+    setDeleting((prev) => [...prev, pathname]);
     fetch(`/api/file?url=${encodeURIComponent(pathname)}`, {
       method: "DELETE",
     })
       .then((res) => res.json())
-      .then((data) => toast.success(data?.message || "File deleted"))
-      .catch((error) => toast.error(error?.message || "Failed to delete file"));
+      .then((data) => {
+        setUploads((prev) => prev.filter((f) => f.pathname !== pathname));
+        toast.success(data?.message || "File deleted");
+      })
+      .catch((error) => toast.error(error?.message || error))
+      .finally(() => setDeleting((prev) => prev.filter((p) => p !== pathname)));
   };
 
   const children = getChildren(currentPath, uploads);
@@ -146,14 +151,22 @@ export default function UploadHistory() {
                     >
                       <Download className="h-4 w-4" /> Download
                     </a>
-                    <button
+                    <LoadingButton
                       onClick={() =>
                         info.file && handleDelete(info.file.pathname)
                       }
+                      loading={deleting.includes(info.file?.pathname || "")}
+                      loadingStyle="delete"
                       className="flex items-center gap-1 rounded-md bg-red-500 px-2.5 py-1.5 text-white hover:bg-red-600 dark:bg-red-600 dark:hover:bg-red-700 transition"
                     >
-                      <Trash2 className="h-4 w-4" /> Delete
-                    </button>
+                      {deleting.includes(info.file?.pathname || "") ? (
+                        "Deleting"
+                      ) : (
+                        <>
+                          <Trash2 className="h-4 w-4" /> Delete
+                        </>
+                      )}
+                    </LoadingButton>
                   </div>
                 </div>
               )

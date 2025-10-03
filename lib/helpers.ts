@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import prisma from "./utils";
 
 // ========= Utility & Helper Functions =========
@@ -700,8 +699,8 @@ export async function getTotalGP(
     source === "main"
       ? ["gp_data"]
       : source === "temp"
-      ? ["gp_data_temp"]
-      : ["gp_data", "gp_data_temp"]; // combined
+        ? ["gp_data_temp"]
+        : ["gp_data", "gp_data_temp"]; // combined
 
   for (const table of tables) {
     // Core query with joins to expose store/channel fields for WHERE
@@ -1653,8 +1652,8 @@ export async function getLastStoreBills(
   // ---- Fiscal Year filter logic (Jul–Jun) ----
   const yearFilter = year?.length
     ? `AND (CASE WHEN MONTH(document_date) >= 7 THEN YEAR(document_date)+1 ELSE YEAR(document_date) END) IN (${year
-        .map(() => "?")
-        .join(",")})`
+      .map(() => "?")
+      .join(",")})`
     : "";
   const monthFilter = month?.length
     ? `AND MONTH(document_date) IN (${month.map(() => "?").join(",")})`
@@ -1872,13 +1871,13 @@ export async function getStoreStats(
 
   const yearFilter = year?.length
     ? `AND (CASE WHEN MONTH(document_date) >= 7 THEN YEAR(document_date)+1 ELSE YEAR(document_date) END) IN (${year
-        .map(() => "?")
-        .join(",")})`
+      .map(() => "?")
+      .join(",")})`
     : "";
   const monthFilter = month?.length
     ? `AND (CASE WHEN MONTH(document_date) >= 7 THEN MONTH(document_date)-6 ELSE MONTH(document_date)+6 END) IN (${month
-        .map(() => "?")
-        .join(",")})`
+      .map(() => "?")
+      .join(",")})`
     : "";
 
   const filterParams = [...(year ?? []), ...(month ?? [])];
@@ -1967,25 +1966,25 @@ export async function getStoreStats(
   const averageRetailing =
     parsedMonthResults.length > 0
       ? parsedMonthResults.reduce((sum, r) => sum + r.total, 0) /
-        parsedMonthResults.length
+      parsedMonthResults.length
       : null;
 
   return {
     highestRetailingMonth: highestMonth
       ? {
-          year: highestMonth.year,
-          month: highestMonth.month,
-          monthName: monthNumberToName(highestMonth.month),
-          retailing: highestMonth.total,
-        }
+        year: highestMonth.year,
+        month: highestMonth.month,
+        monthName: monthNumberToName(highestMonth.month),
+        retailing: highestMonth.total,
+      }
       : null,
     lowestRetailingMonth: lowestMonth
       ? {
-          year: lowestMonth.year,
-          month: lowestMonth.month,
-          monthName: monthNumberToName(lowestMonth.month),
-          retailing: lowestMonth.total,
-        }
+        year: lowestMonth.year,
+        month: lowestMonth.month,
+        monthName: monthNumberToName(lowestMonth.month),
+        retailing: lowestMonth.total,
+      }
       : null,
     highestRetailingBrand: highestBrand
       ? { brand: highestBrand.brand, retailing: highestBrand.total }

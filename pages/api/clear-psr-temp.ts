@@ -1,5 +1,5 @@
-import { NextApiRequest, NextApiResponse } from "next";
 import prisma from "@/lib/utils";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
@@ -16,9 +16,15 @@ export default async function handler(
 
     return res.status(200).json({
       message: "PSR temp data and finalized temp data cleared successfully.",
+      success: true,
+      timeStamp: new Date().toISOString()
     });
-  } catch (err) {
-    console.error("Error clearing temp tables:", err);
-    return res.status(500).json({ error: "Failed to clear PSR temp tables." });
+  } catch (error: any) {
+    console.error("Error clearing temp tables:", error);
+    return res.status(error?.status || 500).json({
+      message: error?.message || error || "Failed to clear PSR temp tables.",
+      success: false,
+      timeStamp: new Date().toISOString()
+    });
   }
 }

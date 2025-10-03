@@ -1,7 +1,7 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { verify } from 'jsonwebtoken';
-import prisma from '@/lib/utils';
 import { UserModel } from '@/CustomModels/UserModel';
+import prisma from '@/lib/utils';
+import { verify } from 'jsonwebtoken';
+import { NextApiRequest, NextApiResponse } from 'next';
 
 export default async function GET(req: NextApiRequest, res: NextApiResponse) {
     try {
@@ -46,12 +46,11 @@ export default async function GET(req: NextApiRequest, res: NextApiResponse) {
                 permissions,
             },
         });
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         console.error('Auth verify error @ User:', error);
-        return res.status(401).json({
+        return res.status(error?.status || 500).json({
             success: false,
-            error: error?.message || error || 'Internal server error',
+            message: error?.message || error || 'Internal server error',
             timeStamp: new Date().toISOString(),
         });
     }

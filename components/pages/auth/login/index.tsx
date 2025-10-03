@@ -1,7 +1,8 @@
 "use client";
 
+import LoadingButton from "@/components/structures/LoadingButton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useAppContext } from "@/hooks/AppContext";
+import { useAppContext } from "@/context/AppContext";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -23,8 +24,8 @@ const LoginPage = () => {
           await new Promise((resolve) => setTimeout(resolve, 1500)); // Slight delay for better UX
           window.location.href = redirectTo;
         }
-      } catch (err) {
-        console.error("User verification failed:", err);
+      } catch (error: any) {
+        console.error("User verification failed:", error);
       }
     };
 
@@ -45,25 +46,22 @@ const LoginPage = () => {
       });
 
       const data = await res.json();
-      if (res.ok) {
-        const params = new URLSearchParams(window.location.search);
-        const redirectTo = params.get("from") || "/";
-        window.location.href = redirectTo;
-      } else {
-        toast.error(data.error || "Login failed");
-      }
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      console.error("Login error:", err);
-      toast.error(err?.message || "An error occurred during login");
+      if (!data.success) throw new Error(data.message);
+      toast.success(data.message || "Login successful");
+      await new Promise((resolve) => setTimeout(resolve, 1500)); // Slight delay for better UX
+      const params = new URLSearchParams(window.location.search);
+      const redirectTo = params.get("from") || "/";
+      window.location.href = redirectTo;
+    } catch (error: any) {
+      console.error("Login error:", error);
+      toast.error(error?.message || error);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex min-h-screen min-w-full items-center justify-center bg-gray-50 dark:bg-gray-950">
+    <div className="flex h-svh min-w-full items-center justify-center bg-gray-50 dark:bg-gray-950">
       <Card className="w-full max-w-sm border-0 shadow-sm bg-white dark:bg-gray-800">
         <CardHeader>
           <CardTitle className="text-center space-y-2 mb-3">
@@ -112,13 +110,14 @@ const LoginPage = () => {
               </div>
             </div>
 
-            <button
+            <LoadingButton
               type="submit"
-              disabled={loading}
+              loading={loading}
+              loadingStyle="dots"
               className="w-full bg-gray-900 dark:bg-gray-700 hover:bg-gray-600 dark:hover:bg-gray-600 text-white font-medium py-2.5 rounded-md cursor-pointer"
             >
-              {loading ? "Signing in..." : "Sign In"}
-            </button>
+              {loading ? "Signing in" : "Sign In"}
+            </LoadingButton>
           </form>
         </CardContent>
       </Card>

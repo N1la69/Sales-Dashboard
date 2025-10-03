@@ -1,0 +1,47 @@
+name: Promote Main to Production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    if: github.repository == 'ManmohanKhandelwal/sales-dashboard'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Set up Git
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ secrets.OWNER_EMAIL }}"
+        env:
+          GIT_AUTHOR_NAME: "${{ github.actor }}"
+          GIT_AUTHOR_EMAIL: "${{ secrets.OWNER_EMAIL }}"
+          GIT_COMMITTER_NAME: "${{ github.actor }}"
+          GIT_COMMITTER_EMAIL: "${{ secrets.OWNER_EMAIL }}"
+
+      - name: Fetch all branches
+        run: git fetch --all
+
+      - name: Switch to production branch (create if doesn't exist)
+        run: |
+          git checkout production || git checkout -b production
+
+      - name: Merge main into production with latest commit message
+        run: |
+          LATEST_MSG=$(git log origin/main -1 --pretty=%B)
+          git merge origin/main --no-ff -m "ci: promote main to production: $LATEST_MSG"
+
+      - name: Push production branch
+        run: |
+          git push origin production

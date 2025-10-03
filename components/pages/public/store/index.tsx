@@ -21,7 +21,7 @@ import { filters } from "@/constants/data";
 import { BillTable } from "@/components/structures/BillTable";
 import StoreGPTrendChart from "@/components/visuals/StoreGPTrendChart";
 import { StoreGPStatsCard } from "@/components/structures/StoreGPStatsCard";
-import { useAppContext } from "@/hooks/AppContext";
+import { useAppContext } from "@/context/AppContext";
 
 // ================= GraphQL Queries =================
 const GET_ALL_BRANCHES = gql`
@@ -252,7 +252,9 @@ const StorePage = () => {
     month: [],
   });
   const { state } = useAppContext();
-  const isUserAdmin = state?.user?.user?.role === "ADMIN" ? true : false;
+  const isUserAdmin = ["ADMIN", "OWNER"].includes(
+    state?.user?.user?.role || ""
+  );
 
   const yearFilter = filters.find((f) => f.key === "Year");
   const monthFilter = filters.find((f) => f.key === "Month");

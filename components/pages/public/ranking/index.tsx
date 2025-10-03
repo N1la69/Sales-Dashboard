@@ -29,7 +29,7 @@ import { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
 import ExcelJS from "exceljs";
 import { saveAs } from "file-saver";
-import { useAppContext } from "@/hooks/AppContext";
+import { useAppContext } from "@/context/AppContext";
 
 // ================= GraphQL Queries =================
 const GET_TOP_STORES = gql`
@@ -140,7 +140,9 @@ const RankingPage = () => {
   const [page, setPage] = useState(0);
   const pageSize = 20;
   const { state } = useAppContext();
-  const isUserAdmin = state?.user?.user?.role === "ADMIN" ? true : false;
+  const isUserAdmin = ["ADMIN", "OWNER"].includes(
+    state?.user?.user?.role || ""
+  );
 
   const handleSourceChange = (source: "combined" | "main" | "temp") => {
     setDataSource(source);

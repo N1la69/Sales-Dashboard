@@ -8,6 +8,7 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import UploadHistory from "./History";
 import UploadPopup from "./UploadPopUp";
+import LoadingButton from "@/components/structures/LoadingButton";
 const UploadPage = () => {
   const [channelFile, setChannelFile] = useState<File | null>(null);
   const [storeFile, setStoreFile] = useState<File | null>(null);
@@ -51,7 +52,7 @@ const UploadPage = () => {
         file,
         {
           access: "public",
-          handleUploadUrl: "/api/file", // backend route for signed upload URL
+          handleUploadUrl: "/api/file",
           onUploadProgress: (progress) => setPercentage(progress.percentage),
         }
       );
@@ -92,24 +93,13 @@ const UploadPage = () => {
         body: JSON.stringify(body),
       });
       const data = await response.json();
-      if (!data?.success) {
-        toast.error(data?.message);
-        return;
-      }
-      setSuccess(
-        data?.message || `${type.toUpperCase()} data uploaded successfully.`
-      );
-      toast.success(
-        data?.message || `${type.toUpperCase()} data uploaded successfully.`
-      );
-    } catch (err: any) {
-      console.error("❌ Upload error:", err?.message || err);
-      setError(
-        err?.message || err || `An error occurred while uploading ${type} data.`
-      );
-      toast.error(
-        err?.message || err || `An error occurred while uploading ${type} data.`
-      );
+      if (!data?.success) throw new Error(data?.message);
+      setSuccess(data?.message);
+      toast.success(data?.message);
+    } catch (error: any) {
+      console.error("❌ Upload error:", error?.message || error);
+      setError(error?.message || error);
+      toast.error(error?.message || error);
     } finally {
       setLoadingType("");
     }
@@ -123,20 +113,13 @@ const UploadPage = () => {
       const response = await fetch("/api/transform-psr", {
         method: "POST",
       });
-
-      if (!response.ok) {
-        const resData = await response.json();
-        throw new Error(resData.error || "Failed to transform PSR data.");
-      }
-
       const resData = await response.json();
+      if (!resData.success) throw new Error(resData.message);
       setSuccess(resData.message);
-      toast.success(resData.message || "PSR data transformed successfully.");
-    } catch (err: any) {
-      setError(err.message || "An error occurred while transforming data.");
-      toast.error(
-        err?.message || err || "An error occurred while transforming data."
-      );
+      toast.success(resData.message);
+    } catch (error: any) {
+      setError(error?.message || error);
+      toast.error(error?.message || error);
     } finally {
       setLoadingType("");
     }
@@ -150,20 +133,13 @@ const UploadPage = () => {
       const response = await fetch("/api/merge-psr", {
         method: "POST",
       });
-
-      if (!response.ok) {
-        const resData = await response.json();
-        throw new Error(resData.error || "Failed to merge PSR data");
-      }
-
       const resData = await response.json();
+      if (!resData.success) throw new Error(resData.message);
       setSuccess(resData.message);
-      toast.success(resData.message || "PSR data merged successfully.");
-    } catch (err: any) {
-      setError(err.message || "An error occurred while merging data.");
-      toast.error(
-        err?.message || err || "An error occurred while merging data."
-      );
+      toast.success(resData.message);
+    } catch (error: any) {
+      setError(error?.message || error);
+      toast.error(error?.message || error);
     } finally {
       setLoadingType("");
     }
@@ -178,20 +154,14 @@ const UploadPage = () => {
         method: "POST",
       });
 
-      if (!response.ok) {
-        const resData = await response.json();
-        throw new Error(resData.error || "Failed to merge GP data");
-      }
-
       const resData = await response.json();
+      if (!resData.success) throw new Error(resData?.message);
       setSuccess(resData.message);
 
-      toast.success(resData.message || "GP data merged successfully.");
+      toast.success(resData.message);
     } catch (error: any) {
-      setError(error.message || "An error occurred while merging data.");
-      toast.error(
-        error?.message || error || "An error occurred while merging data."
-      );
+      setError(error?.message || error);
+      toast.error(error?.message || error);
     } finally {
       setLoadingType("");
     }
@@ -206,21 +176,13 @@ const UploadPage = () => {
         method: "POST",
       });
 
-      if (!response.ok) {
-        const resData = await response.json();
-        throw new Error(resData.error || "Failed to clear PSR temp data.");
-      }
-
       const resData = await response.json();
+      if (!resData.success) throw new Error(resData?.message);
       setSuccess(resData.message);
-      toast.success(resData.message || "PSR temp data cleared successfully.");
-    } catch (err: any) {
-      setError(
-        err.message || "An error occurred while clearing PSR temp data."
-      );
-      toast.error(
-        err?.message || err || "An error occurred while clearing PSR temp data."
-      );
+      toast.success(resData.message);
+    } catch (error: any) {
+      setError(error?.message || error);
+      toast.error(error?.message || error);
     } finally {
       setLoadingType("");
     }
@@ -235,23 +197,14 @@ const UploadPage = () => {
         method: "POST",
       });
 
-      if (!response.ok) {
-        const resData = await response.json();
-        throw new Error(resData.error || "Failed to clear GP temp data.");
-      }
-
       const resData = await response.json();
+      if (!resData.success)
+        throw new Error(resData?.message || "Failed to clear GP temp data.");
       setSuccess(resData.message);
-      toast.success(resData.message || "GP temp data cleared successfully.");
+      toast.success(resData.message);
     } catch (error: any) {
-      setError(
-        error.message || "An error occurred while clearing GP temp data."
-      );
-      toast.error(
-        error?.message ||
-          error ||
-          "An error occurred while clearing GP temp data."
-      );
+      setError(error?.message || error);
+      toast.error(error?.message || error);
     } finally {
       setLoadingType("");
     }
@@ -460,41 +413,43 @@ const UploadPage = () => {
           </div>
 
           <div className="flex flex-wrap gap-3 mt-3">
-            <Button
+            <LoadingButton
               onClick={() => psrFile && uploadFile(psrFile, "psr", psrAction)}
-              disabled={loadingType === "psr"}
+              loading={loadingType === "psr"}
+              loadingStyle="dots"
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
-              {loadingType === "psr" ? "Uploading..." : "Upload"}
-            </Button>
+              {loadingType === "psr" ? "Uploading" : "Upload"}
+            </LoadingButton>
 
-            <Button
+            <LoadingButton
               onClick={handleTransformPsrData}
-              disabled={loadingType === "transform"}
+              loading={loadingType === "transform"}
+              loadingStyle="dots"
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
               {loadingType === "transform"
-                ? "Transforming..."
+                ? "Transforming"
                 : "Transform Temp Data"}
-            </Button>
+            </LoadingButton>
 
-            <Button
+            <LoadingButton
               onClick={handleMergePsrData}
-              disabled={loadingType === "merge-psr"}
+              loading={loadingType === "merge-psr"}
+              loadingStyle="dots"
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
-              {loadingType === "merge-psr"
-                ? "Merging..."
-                : "Merge to Main Data"}
-            </Button>
+              {loadingType === "merge-psr" ? "Merging" : "Merge to Main Data"}
+            </LoadingButton>
 
-            <Button
+            <LoadingButton
               onClick={handleClearPsrTemp}
-              disabled={loadingType === "clear"}
+              loading={loadingType === "clear"}
+              loadingStyle="dots"
               variant="destructive"
             >
-              {loadingType === "clear" ? "Clearing..." : "Clear Temp Data"}
-            </Button>
+              {loadingType === "clear" ? "Clearing" : "Clear Temp Data"}
+            </LoadingButton>
 
             <Button
               onClick={() => downloadTemplate("psr")}
@@ -554,29 +509,32 @@ const UploadPage = () => {
           </div>
 
           <div className="flex flex-wrap gap-3 mt-3">
-            <Button
+            <LoadingButton
               onClick={() => gpFile && uploadFile(gpFile, "gp", gpAction)}
-              disabled={loadingType === "gp"}
+              loading={loadingType === "gp"}
+              loadingStyle="dots"
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
-              {loadingType === "gp" ? "Uploading..." : "Upload"}
-            </Button>
+              {loadingType === "gp" ? "Uploading" : "Upload"}
+            </LoadingButton>
 
-            <Button
+            <LoadingButton
               onClick={handleMergeGpData}
-              disabled={loadingType === "merge-gp"}
+              loading={loadingType === "merge-gp"}
+              loadingStyle="dots"
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
-              {loadingType === "merge-gp" ? "Merging..." : "Merge to Main Data"}
-            </Button>
+              {loadingType === "merge-gp" ? "Merging" : "Merge to Main Data"}
+            </LoadingButton>
 
-            <Button
+            <LoadingButton
+              loading={loadingType === "clear"}
+              loadingStyle="dots"
               onClick={handleClearGpTemp}
-              disabled={loadingType === "clear"}
               variant="destructive"
             >
-              {loadingType === "clear" ? "Clearing..." : "Clear Temp Data"}
-            </Button>
+              {loadingType === "clear" ? "Clearing" : "Clear Temp Data"}
+            </LoadingButton>
 
             <Button
               onClick={() => downloadTemplate("gp")}
@@ -609,13 +567,14 @@ const UploadPage = () => {
             className="cursor-pointer border border-blue-200 dark:border-blue-700 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/20 file:text-blue-700 dark:file:text-blue-200 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/30"
           />
           <div className="flex flex-wrap gap-3">
-            <Button
+            <LoadingButton
               onClick={() => channelFile && uploadFile(channelFile, "channel")}
-              disabled={loadingType === "channel"}
+              loading={loadingType === "channel"}
+              loadingStyle="dots"
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
-              {loadingType === "channel" ? "Uploading..." : "Upload"}
-            </Button>
+              {loadingType === "channel" ? "Uploading" : "Upload"}
+            </LoadingButton>
 
             <Button
               variant="outline"
@@ -658,13 +617,14 @@ const UploadPage = () => {
             className="cursor-pointer border border-blue-200 dark:border-blue-700 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/20 file:text-blue-700 dark:file:text-blue-200 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/30"
           />
           <div className="flex flex-wrap gap-3">
-            <Button
+            <LoadingButton
+              loading={loadingType === "store"}
+              loadingStyle="dots"
               onClick={() => storeFile && uploadFile(storeFile, "store")}
-              disabled={loadingType === "store"}
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
-              {loadingType === "store" ? "Uploading..." : "Upload"}
-            </Button>
+              {loadingType === "store" ? "Uploading" : "Upload"}
+            </LoadingButton>
 
             <Button
               variant="outline"
@@ -707,13 +667,14 @@ const UploadPage = () => {
             className="cursor-pointer border border-blue-200 dark:border-blue-700 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 dark:file:bg-blue-900/20 file:text-blue-700 dark:file:text-blue-200 hover:file:bg-blue-100 dark:hover:file:bg-blue-900/30"
           />
           <div className="flex flex-wrap gap-3">
-            <Button
+            <LoadingButton
+              loading={loadingType === "product"}
+              loadingStyle="dots"
               onClick={() => productFile && uploadFile(productFile, "product")}
-              disabled={loadingType === "product"}
               className="bg-indigo text-white hover:bg-indigo-hover"
             >
-              {loadingType === "product" ? "Uploading..." : "Upload"}
-            </Button>
+              {loadingType === "product" ? "Uploading" : "Upload"}
+            </LoadingButton>
 
             <Button
               variant="outline"
