@@ -315,7 +315,7 @@ export default function Dashboard() {
       {/* HEADER */}
       <div className="text-left md:text-center space-y-1">
         <h1 className="text-2xl sm:text-3xl font-bold text-primary">
-          Sales Overview New
+          Sales Overview
         </h1>
         <p className="text-muted-foreground font-medium text-base sm:text-lg">
           Your current sales summary and activity
