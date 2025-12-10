@@ -1,15 +1,10 @@
 import { UserModel } from "@/CustomModels/UserModel";
-import prisma from "@/lib/utils";
+import prisma from "@/lib/prisma";
 import * as cookie from "cookie";
 import { NextApiRequest, NextApiResponse } from "next";
 
-
-export default async function POST(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function POST(req: NextApiRequest, res: NextApiResponse) {
   try {
-
     // Step 1. Extract email and password from request body
     const { email, password } = req.body;
 
@@ -22,7 +17,8 @@ export default async function POST(
     const foundUser = await prisma.user.findUnique({ where: { email } });
 
     if (!foundUser) throw { message: "User does not exist", status: 404 };
-    if (!foundUser.isActive) throw { message: "User is not active", status: 403 };
+    if (!foundUser.isActive)
+      throw { message: "User is not active", status: 403 };
 
     // Step 4. Create UserModel instance
     const userModel = new UserModel(foundUser);
@@ -68,7 +64,6 @@ export default async function POST(
         permissions,
       },
     });
-
   } catch (error: any) {
     console.error("Login error @ User:", error);
     return res.status(error?.status || 500).json({

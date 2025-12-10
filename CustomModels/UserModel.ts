@@ -1,5 +1,5 @@
 import { PermissionSet, User as PrismaUser } from "@/app/generated/prisma";
-import prisma from "@/lib/utils";
+import prisma from "@/lib/prisma";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 export type SafeUser = Omit<
@@ -169,11 +169,11 @@ export class UserModel {
    * Update user fields
    */
   async updateUser(data: Partial<PrismaUser> & { password?: string }) {
-    process.stdout.write('\x1Bc');
+    process.stdout.write("\x1Bc");
     console.log("Incoming data:", data);
     const updated = await prisma.user.update({
       where: { id: this.user.id },
-      data
+      data,
     });
     this.user = updated;
     return this.userDetails;
