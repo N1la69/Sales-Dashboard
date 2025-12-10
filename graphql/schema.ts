@@ -195,6 +195,12 @@ export const typeDefs = gql`
     stores: [TopStore!]!
   }
 
+  type CategoryDistribution {
+    category: String!
+    breakdown: [YearlyRetailing!]!
+    growth: Float
+  }
+
   type Query {
     retailingBreakdown(
       level: String!
@@ -292,5 +298,10 @@ export const typeDefs = gql`
       startDate: String
       endDate: String
     ): TopStoresResponse
+
+    categoryDistribution(
+      filters: FilterInput
+      source: String!
+    ): [CategoryDistribution!]!
   }
 `;
